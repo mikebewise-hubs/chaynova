@@ -268,10 +268,36 @@
         letter-spacing: 2px;
       }
     }
+    .music-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 20;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(90deg, #ff2fcf, #00d9ff);
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(0,217,255,.6);
+}
   </style>
 </head>
 
 <body>
+  <script>
+  const music = document.getElementById("bgMusic");
+
+  function toggleMusic() {
+    if (music.paused) {
+      music.volume = 0.35;
+      music.play();
+    } else {
+      music.pause();
+    }
+  }
+</script>
   <div class="stars"></div>
   <div class="glow-floor"></div>
 
@@ -299,5 +325,17 @@
       </div>
     </div>
   </main>
+  <script>
+  const music = document.getElementById("bgMusic");
+
+  function toggleMusic() {
+    if (music.paused) {
+      music.volume = 0.35;
+      music.play();
+    } else {
+      music.pause();
+    }
+  }
+</script>
 </body>
 </html>
