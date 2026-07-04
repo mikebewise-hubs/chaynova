@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAYNOVA | Story</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
+}
+
+.stars{
+    position:fixed;
+    inset:0;
+    background-image:radial-gradient(white 1px,transparent 1px);
+    background-size:90px 90px;
+    animation:twinkle 4s infinite alternate;
+    opacity:.6;
+    z-index:0;
+}
+
+@keyframes twinkle{
+    from{opacity:.3;}
+    to{opacity:.9;}
+}
+
+.page{
+    position:relative;
+    z-index:5;
+    min-height:100vh;
+    padding:30px 20px 60px;
+}
+
+.top-bar{
+    max-width:1100px;
+    margin:0 auto 45px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    text-decoration:none;
+    font-size:clamp(2.3rem,7vw,5rem);
+    font-weight:900;
+    letter-spacing:5px;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+    -webkit-text-stroke:1.5px rgba(255,255,255,.55);
+    text-shadow:
+        0 3px 0 rgba(0,0,0,.45),
+        0 0 18px rgba(0,217,255,.4);
+    animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
+}
+
+@keyframes rainbow{
+    from{background-position:0%;}
+    to{background-position:300%;}
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+.home-btn{
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+    padding:13px 22px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 18px rgba(0,217,255,.35);
+    transition:.3s;
+}
+
+.home-btn:hover{
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
+}
+
+.hero{
+    max-width:900px;
+    margin:0 auto 40px;
+    text-align:center;
+    padding:32px 28px;
+    border-radius:28px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 35px rgba(0,217,255,.28);
+}
+
+.hero h1{
+    font-size:clamp(2.2rem,7vw,4.5rem);
+    margin-bottom:15px;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+.hero p{
+    font-size:clamp(1rem,3vw,1.25rem);
+    line-height:1.7;
+    color:#eefcff;
+}
+
+.menu-row{
+    margin:28px auto 45px;
+    max-width:900px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+}
+
+.menu-row a{
+    position:relative;
+    min-width:145px;
+    padding:14px 22px;
+    text-align:center;
+    text-decoration:none;
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:white;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 15px rgba(255,255,255,.08);
+    overflow:hidden;
+    transition:.35s ease;
+}
+
+.menu-row a::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:60%;
+    height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-25deg);
+    transition:.7s;
+}
+
+.menu-row a:hover::before{
+    left:160%;
+}
+
+.menu-row a:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
+}
+
+.story-grid{
+    max-width:1100px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+}
+
+.story-card{
+    padding:28px;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 25px rgba(0,217,255,.18);
+    transition:.35s;
+}
+
+.story-card:hover{
+    transform:translateY(-8px);
+    box-shadow:
+        0 0 25px rgba(255,47,207,.75),
+        0 0 45px rgba(0,217,255,.75);
+}
+
+.story-card .emoji{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.story-card h2{
+    color:#8ef2ff;
+    margin-bottom:12px;
+    font-size:1.4rem;
+}
+
+.story-card p{
+    color:#eefcff;
+    line-height:1.7;
+    margin-bottom:22px;
+}
+
+.read-btn{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+    padding:11px 18px;
+    border-radius:15px;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+    transition:.3s;
+}
+
+.read-btn:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 28px rgba(255,47,207,.75);
+}
+
+.firework{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    animation:explode 2.8s infinite ease-out;
+    opacity:0;
+    z-index:1;
+}
+
+.firework:nth-child(2){
+    left:18%;
+    top:24%;
+    background:#ff2fcf;
+}
+
+.firework:nth-child(3){
+    left:80%;
+    top:22%;
+    background:#00d9ff;
+    animation-delay:.8s;
+}
+
+.firework:nth-child(4){
+    left:50%;
+    top:38%;
+    background:#ffaa00;
+    animation-delay:1.4s;
+}
+
+@keyframes explode{
+    0%{
+        opacity:1;
+        box-shadow:0 0 0 currentColor;
+    }
+    70%{
+        opacity:1;
+        box-shadow:
+        0 -80px currentColor,
+        60px -60px currentColor,
+        80px 0 currentColor,
+        60px 60px currentColor,
+        0 80px currentColor,
+        -60px 60px currentColor,
+        -80px 0 currentColor,
+        -60px -60px currentColor;
+    }
+    100%{opacity:0;}
+}
+
+footer{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    padding:40px 20px;
+    color:#9bdfff;
+}
+
+@media(max-width:700px){
+    .top-bar{
+        flex-direction:column;
+    }
+
+    .menu-row{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .menu-row a{
+        width:240px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
+
+<div class="page">
+
+    <div class="top-bar">
+
+        <a href="index.html" class="logo">CHAYNOVA</a>
+
+        <a href="index.html" class="home-btn">🏠 Home</a>
+
+    </div>
+
+    <section class="hero">
+
+        <h1>Watch</h1>
+
+        <p>
+            Watch fun videos, learn new skills, explore exciting adventures, 
+          and enjoy fresh content from CHAYNOVA.
+        </p>
+
+    </section>
+
+    <nav class="menu-row">
+
+    <a href="story.html">Vibe Story</a>
+    <a href="game.html">Play Zone</a>
+    <a href="music.html">Beats</a>
+    <a href="video.html">Watch</a>
+
+    </nav>
+
+    <section class="story-grid">
+
+        <div class="story-card">
+
+            <div class="emoji">✨</div>
+
+            <h2>Coming Soon</h2>
+
+            <p>
+                New CHAYNOVA stories are coming soon with fun characters,
+                exciting worlds, and learning adventures.
+            </p>
+
+            <a href="#" class="read-btn">Read Soon</a>
+
+        </div>
+
+        <div class="story-card">
+
+            <div class="emoji">🌎</div>
+
+            <h2>Learn & Explore</h2>
+
+            <p>
+                Discover stories about science, culture, nature, history,
+                and amazing places around the world.
+            </p>
+
+            <a href="#" class="read-btn">Explore</a>
+
+        </div>
+
+        <div class="story-card">
+
+            <div class="emoji">🚀</div>
+
+            <h2>Adventure Mode</h2>
+
+            <p>
+                Jump into creative adventures, solve mysteries,
+                and unlock new worlds through CHAYNOVA stories.
+            </p>
+
+            <a href="#" class="read-btn">Start</a>
+
+        </div>
+
+    </section>
+
+</div>
+
+<footer>
+    © 2026 CHAYNOVA
+</footer>
+
+</body>
+</html>
