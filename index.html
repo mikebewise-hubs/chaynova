@@ -1,233 +1,524 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CHAYNOVA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAYNOVA</title>
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    body {
-      min-height: 100vh;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      color: white;
-      background:
+body{
+    min-height:100vh;
+    overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    background:
         radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
         radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
-        linear-gradient(135deg, #030010, #080033, #001234);
+        linear-gradient(135deg,#030010,#080033,#001234);
+}
+
+/* Stars */
+
+.stars{
+    position:fixed;
+    inset:0;
+    background-image:radial-gradient(white 1px,transparent 1px);
+    background-size:90px 90px;
+    animation:twinkle 4s infinite alternate;
+    opacity:.6;
+}
+
+@keyframes twinkle{
+    from{opacity:.3;}
+    to{opacity:.9;}
+}
+
+/* Main */
+
+.container{
+    position:relative;
+    z-index:5;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+}
+
+/* Logo */
+
+.title{
+    font-size:clamp(3.5rem,12vw,9rem);
+    font-weight:900;
+    letter-spacing:6px;
+
+    background:linear-gradient(
+        90deg,
+        #ffb000,
+        #ff2fcf,
+        #7b2cff,
+        #00d9ff
+    );
+
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+
+    -webkit-text-stroke:2px rgba(255,255,255,.55);
+
+    text-shadow:
+        0 3px 0 rgba(0,0,0,.45),
+        0 0 18px rgba(0,217,255,.4);
+
+    animation:
+        float 3.5s ease-in-out infinite,
+        rainbow 6s linear infinite;
+}
+
+@keyframes rainbow{
+    from{
+        background-position:0%;
+    }
+    to{
+        background-position:300%;
+    }
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+/* Message */
+
+.message-box{
+
+    margin-top:35px;
+
+    padding:20px 30px;
+
+    border-radius:25px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    box-shadow:0 0 30px rgba(0,217,255,.35);
+
+    animation:glow 3s infinite alternate;
+}
+
+@keyframes glow{
+
+    from{
+        box-shadow:0 0 18px rgba(255,47,207,.5);
     }
 
-    .stars {
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(white 1px, transparent 1px);
-      background-size: 90px 90px;
-      animation: twinkle 4s infinite alternate;
-      opacity: .6;
+    to{
+        box-shadow:0 0 35px rgba(0,217,255,.75);
     }
 
-    @keyframes twinkle {
-      from { opacity: .3; }
-      to { opacity: .9; }
+}
+
+.message{
+
+    font-size:clamp(1.2rem,3vw,2rem);
+
+    font-weight:bold;
+
+    background:
+    linear-gradient(
+        90deg,
+        white,
+        #ff86df,
+        #8ef2ff,
+        white);
+
+    background-size:250%;
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+
+    animation:shine 3s linear infinite;
+
+}
+
+@keyframes shine{
+
+    from{
+        background-position:0%;
     }
 
-    .container {
-      position: relative;
-      z-index: 5;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 20px;
+    to{
+        background-position:250%;
     }
 
-    .title {
-      font-size: clamp(3.5rem, 12vw, 9rem);
-      font-weight: 900;
-      letter-spacing: 5px;
-      background: linear-gradient(90deg, #ffb000, #ff2fcf, #7b2cff, #00d9ff);
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-stroke: 2px rgba(255,255,255,.55);
-      text-shadow: 0 3px 0 rgba(0,0,0,.45);
-      animation: float 3.5s ease-in-out infinite;
+}
+
+/* Loading dots */
+
+.dots{
+
+    margin-top:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+}
+
+.dots span{
+
+    width:13px;
+    height:13px;
+
+    border-radius:50%;
+
+    background:#00d9ff;
+
+    box-shadow:0 0 15px #00d9ff;
+
+    animation:bounce 1.3s infinite;
+
+}
+
+.dots span:nth-child(2){
+    animation-delay:.2s;
+}
+
+.dots span:nth-child(3){
+    animation-delay:.4s;
+}
+
+@keyframes bounce{
+
+    0%,100%{
+        transform:translateY(0);
+        opacity:.5;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+    50%{
+        transform:translateY(-14px);
+        opacity:1;
     }
 
-    .message-box {
-      margin-top: 35px;
-      padding: 18px 28px;
-      border-radius: 25px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.2);
-      box-shadow: 0 0 30px rgba(0,217,255,.35);
-      animation: glow 3s infinite alternate;
+}
+
+/* Fireworks */
+
+.firework{
+
+    position:absolute;
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    animation:explode 2.8s infinite ease-out;
+
+    opacity:0;
+
+}
+
+.firework:nth-child(1){
+
+    left:18%;
+    top:20%;
+    background:#ff2fcf;
+
+}
+
+.firework:nth-child(2){
+
+    left:78%;
+    top:18%;
+    background:#00d9ff;
+
+    animation-delay:.8s;
+
+}
+
+.firework:nth-child(3){
+
+    left:50%;
+    top:30%;
+    background:#ffaa00;
+
+    animation-delay:1.4s;
+
+}
+
+@keyframes explode{
+
+    0%{
+        opacity:1;
+        box-shadow:0 0 0 currentColor;
     }
 
-    @keyframes glow {
-      from { box-shadow: 0 0 18px rgba(255,47,207,.4); }
-      to { box-shadow: 0 0 35px rgba(0,217,255,.7); }
-    }
+    70%{
 
-    .message {
-      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
-      font-weight: bold;
-      background: linear-gradient(90deg, white, #ff86df, #8ef2ff, white);
-      background-size: 250%;
-      -webkit-background-clip: text;
-      color: transparent;
-      animation: shine 3s linear infinite;
-    }
+        opacity:1;
 
-    @keyframes shine {
-      from { background-position: 0%; }
-      to { background-position: 250%; }
-    }
-
-    .dots {
-      margin-top: 22px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .dots span {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #00d9ff;
-      box-shadow: 0 0 15px #00d9ff;
-      animation: bounce 1.3s infinite;
-    }
-
-    .dots span:nth-child(2) { animation-delay: .2s; }
-    .dots span:nth-child(3) { animation-delay: .4s; }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); opacity: .5; }
-      50% { transform: translateY(-14px); opacity: 1; }
-    }
-
-    .firework {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      animation: explode 2.8s infinite ease-out;
-      opacity: 0;
-    }
-
-    .firework:nth-child(1) { left: 18%; top: 20%; background: #ff2fcf; }
-    .firework:nth-child(2) { left: 78%; top: 18%; background: #00d9ff; animation-delay: .8s; }
-    .firework:nth-child(3) { left: 50%; top: 30%; background: #ffaa00; animation-delay: 1.4s; }
-
-    @keyframes explode {
-      0% { opacity: 1; box-shadow: 0 0 0 currentColor; }
-      70% {
-        opacity: 1;
         box-shadow:
-          0 -80px currentColor,
-          60px -60px currentColor,
-          80px 0 currentColor,
-          60px 60px currentColor,
-          0 80px currentColor,
-          -60px 60px currentColor,
-          -80px 0 currentColor,
-          -60px -60px currentColor;
-      }
-      100% { opacity: 0; }
+
+        0 -80px currentColor,
+
+        60px -60px currentColor,
+
+        80px 0 currentColor,
+
+        60px 60px currentColor,
+
+        0 80px currentColor,
+
+        -60px 60px currentColor,
+
+        -80px 0 currentColor,
+
+        -60px -60px currentColor;
+
     }
 
-    .start-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: rgba(0,0,20,.88);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-      cursor: pointer;
-      transition: opacity .8s ease;
+    100%{
+
+        opacity:0;
+
     }
 
-    .start-screen.hide {
-      opacity: 0;
-      pointer-events: none;
+}
+
+/* Start screen */
+
+.start-screen{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:50;
+
+    background:rgba(0,0,20,.88);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-direction:column;
+
+    cursor:pointer;
+
+    transition:opacity .8s ease;
+
+}
+
+.start-screen.hide{
+
+    opacity:0;
+
+    pointer-events:none;
+
+}
+
+.start-text{
+
+    font-size:clamp(1.6rem,5vw,3rem);
+
+    font-weight:bold;
+
+    text-shadow:0 0 25px #00d9ff;
+
+    animation:pulse 1.5s infinite;
+
+}
+
+.tap-text{
+
+    margin-top:18px;
+
+    color:#d6f7ff;
+
+}
+
+@keyframes pulse{
+
+    0%,100%{
+        transform:scale(1);
+        opacity:.75;
     }
 
-    .start-text {
-      font-size: clamp(1.5rem, 5vw, 3rem);
-      font-weight: bold;
-      color: white;
-      text-shadow: 0 0 25px #00d9ff;
-      animation: pulse 1.6s infinite;
+    50%{
+        transform:scale(1.06);
+        opacity:1;
     }
 
-    .tap-text {
-      margin-top: 18px;
-      font-size: 1.1rem;
-      color: #d6f7ff;
-    }
+}
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: .75; }
-      50% { transform: scale(1.06); opacity: 1; }
-    }
-  </style>
+/* Floating music button */
+
+.music-btn{
+
+    position:fixed;
+
+    right:22px;
+    bottom:22px;
+
+    width:54px;
+    height:54px;
+
+    border:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:24px;
+
+    color:white;
+
+    background:rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    box-shadow:
+        0 0 18px rgba(0,217,255,.45),
+        inset 0 0 10px rgba(255,255,255,.15);
+
+    transition:.25s;
+
+    z-index:100;
+
+}
+
+.music-btn:hover{
+
+    transform:scale(1.12);
+
+    box-shadow:
+        0 0 30px rgba(255,0,180,.7),
+        inset 0 0 10px rgba(255,255,255,.3);
+
+}
+
+.music-btn:active{
+
+    transform:scale(.92);
+
+}
+</style>
+
 </head>
 
 <body>
 
-  <audio id="bgMusic" loop>
+<audio id="bgMusic" loop>
     <source src="audio/background.mp3" type="audio/mpeg">
-  </audio>
+</audio>
 
-  <div class="start-screen" id="startScreen">
+<div class="start-screen" id="startScreen">
     <div class="start-text">CHAYNOVA</div>
     <div class="tap-text">Tap anywhere to begin</div>
-  </div>
+</div>
 
-  <div class="stars"></div>
+<div class="stars"></div>
 
-  <div class="firework"></div>
-  <div class="firework"></div>
-  <div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
 
-  <main class="container">
-    <h1 class="title">CHAYNOVA</h1>
+<main class="container">
 
-    <div class="message-box">
-      <div class="message">Please wait,</div>
-      <div class="message">it will be coming up soon...</div>
+<h1 class="title">CHAYNOVA</h1>
 
-      <div class="dots">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-  </main>
+<div class="message-box">
 
-  <script>
-    const startScreen = document.getElementById("startScreen");
-    const music = document.getElementById("bgMusic");
+<div class="message">
+Please wait,
+</div>
 
-    startScreen.addEventListener("click", () => {
-      music.volume = 0.35;
-      music.play();
-      startScreen.classList.add("hide");
-    });
-  </script>
+<div class="message">
+it will be coming up soon...
+</div>
+
+<div class="dots">
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+</div>
+
+</main>
+
+<!-- Music Button -->
+
+<button id="musicBtn" class="music-btn" title="Pause Music">
+🔊
+</button>
+
+<script>
+
+const startScreen=document.getElementById("startScreen");
+const music=document.getElementById("bgMusic");
+const musicBtn=document.getElementById("musicBtn");
+
+startScreen.addEventListener("click",()=>{
+
+    music.volume=0.35;
+
+    music.play();
+
+    startScreen.classList.add("hide");
+
+    musicBtn.innerHTML="🔊";
+
+});
+
+musicBtn.addEventListener("click",(e)=>{
+
+    e.stopPropagation();
+
+    if(music.paused){
+
+        music.play();
+
+        musicBtn.innerHTML="🔊";
+
+        musicBtn.title="Pause Music";
+
+    }else{
+
+        music.pause();
+
+        musicBtn.innerHTML="🔇";
+
+        musicBtn.title="Play Music";
+
+    }
+
+});
+
+</script>
 
 </body>
 </html>
