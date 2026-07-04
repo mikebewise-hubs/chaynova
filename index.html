@@ -3,41 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CHAYNOVA - Coming Soon</title>
+  <title>CHAYNOVA</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       min-height: 100vh;
       overflow: hidden;
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at 20% 16%, rgba(255, 0, 170, 0.45), transparent 25%),
-        radial-gradient(circle at 80% 15%, rgba(0, 140, 255, 0.45), transparent 26%),
-        radial-gradient(circle at 50% 70%, rgba(170, 0, 255, 0.45), transparent 38%),
-        linear-gradient(135deg, #030010, #080033 45%, #001234);
+      font-family: Arial, sans-serif;
       color: white;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
+        linear-gradient(135deg, #030010, #080033, #001234);
     }
 
     .stars {
       position: fixed;
       inset: 0;
-      background-image:
-        radial-gradient(white 1px, transparent 1px),
-        radial-gradient(rgba(255,255,255,.75) 1px, transparent 1px);
-      background-size: 80px 80px, 135px 135px;
-      animation: twinkle 5s infinite alternate;
-      opacity: 0.65;
+      background-image: radial-gradient(white 1px, transparent 1px);
+      background-size: 90px 90px;
+      animation: twinkle 4s infinite alternate;
+      opacity: .6;
     }
 
     @keyframes twinkle {
-      from { opacity: 0.35; transform: scale(1); }
-      to { opacity: 0.85; transform: scale(1.04); }
+      from { opacity: .3; }
+      to { opacity: .9; }
     }
 
     .container {
@@ -45,144 +38,82 @@
       z-index: 5;
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 25px;
+      align-items: center;
       flex-direction: column;
+      text-align: center;
+      padding: 20px;
     }
 
     .title {
-      font-size: clamp(3.3rem, 12vw, 8.8rem);
+      font-size: clamp(3.5rem, 12vw, 9rem);
       font-weight: 900;
-      letter-spacing: 6px;
-      background: linear-gradient(90deg, #ffb000, #ff2fcf, #8538ff, #00d9ff);
+      letter-spacing: 5px;
+      background: linear-gradient(90deg, #ffb000, #ff2fcf, #7b2cff, #00d9ff);
       -webkit-background-clip: text;
-      background-clip: text;
       color: transparent;
-      -webkit-text-stroke: 2px rgba(255,255,255,0.6);
-      text-shadow:
-        0 3px 0 rgba(0,0,0,0.45),
-        0 0 9px rgba(255, 47, 207, 0.45);
-      animation: titleGlow 2.5s ease-in-out infinite alternate, float 4s ease-in-out infinite;
-    }
-
-    @keyframes titleGlow {
-      from { filter: drop-shadow(0 0 4px #ff2fcf); }
-      to { filter: drop-shadow(0 0 10px #00d9ff); }
+      -webkit-text-stroke: 2px rgba(255,255,255,.55);
+      text-shadow: 0 3px 0 rgba(0,0,0,.45);
+      animation: float 3.5s ease-in-out infinite;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-12px) scale(1.025); }
-    }
-
-    .orbit {
-      width: min(86vw, 980px);
-      height: 150px;
-      border: 3px solid rgba(255,255,255,0.13);
-      border-top-color: #ff2fcf;
-      border-bottom-color: #00d9ff;
-      border-radius: 50%;
-      position: absolute;
-      top: 44%;
-      animation: spinOrbit 7s linear infinite;
-      box-shadow:
-        0 0 32px rgba(255, 47, 207, 0.5),
-        inset 0 0 28px rgba(0, 217, 255, 0.3);
-    }
-
-    @keyframes spinOrbit {
-      from { transform: rotate(-8deg); }
-      to { transform: rotate(352deg); }
-    }
-
-    .message-wrap {
-      margin-top: 36px;
-      position: relative;
-      padding: 18px 28px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow:
-        0 0 25px rgba(255, 47, 207, 0.25),
-        inset 0 0 25px rgba(0, 217, 255, 0.08);
-      backdrop-filter: blur(6px);
-      animation: messageFloat 3.5s ease-in-out infinite;
-    }
-
-    .message-wrap::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      border-radius: 26px;
-      background: linear-gradient(90deg, #ff2fcf, #ffb000, #00d9ff, #7b2cff, #ff2fcf);
-      background-size: 300% 300%;
-      z-index: -1;
-      filter: blur(10px);
-      opacity: 0.6;
-      animation: borderMove 4s linear infinite;
-    }
-
-    @keyframes borderMove {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
-
-    @keyframes messageFloat {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
+      50% { transform: translateY(-12px); }
     }
 
-    .message-line {
-      display: block;
-      font-size: clamp(1.25rem, 3.5vw, 2.35rem);
-      font-weight: 700;
-      letter-spacing: 4px;
-      background: linear-gradient(90deg, #ffffff, #ff86df, #8ef2ff, #ffffff);
-      background-size: 250% 250%;
+    .message-box {
+      margin-top: 35px;
+      padding: 18px 28px;
+      border-radius: 25px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 0 30px rgba(0,217,255,.35);
+      animation: glow 3s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 18px rgba(255,47,207,.4); }
+      to { box-shadow: 0 0 35px rgba(0,217,255,.7); }
+    }
+
+    .message {
+      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+      font-weight: bold;
+      background: linear-gradient(90deg, white, #ff86df, #8ef2ff, white);
+      background-size: 250%;
       -webkit-background-clip: text;
-      background-clip: text;
       color: transparent;
-      text-shadow: 0 0 18px rgba(255,255,255,.28);
-      animation: textShine 3s linear infinite;
+      animation: shine 3s linear infinite;
     }
 
-    .message-line.second {
-      margin-top: 8px;
-      letter-spacing: 2px;
-      font-size: clamp(1.05rem, 3vw, 1.9rem);
-    }
-
-    @keyframes textShine {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 250% 50%; }
+    @keyframes shine {
+      from { background-position: 0%; }
+      to { background-position: 250%; }
     }
 
     .dots {
+      margin-top: 22px;
       display: flex;
       justify-content: center;
-      gap: 14px;
-      margin-top: 26px;
+      gap: 12px;
     }
 
     .dots span {
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ff2fcf, #00d9ff);
-      box-shadow: 0 0 18px currentColor;
-      animation: dotBounce 1.4s infinite ease-in-out;
+      background: #00d9ff;
+      box-shadow: 0 0 15px #00d9ff;
+      animation: bounce 1.3s infinite;
     }
 
-    .dots span:nth-child(2) { animation-delay: .15s; }
-    .dots span:nth-child(3) { animation-delay: .3s; }
-    .dots span:nth-child(4) { animation-delay: .45s; }
-    .dots span:nth-child(5) { animation-delay: .6s; }
+    .dots span:nth-child(2) { animation-delay: .2s; }
+    .dots span:nth-child(3) { animation-delay: .4s; }
 
-    @keyframes dotBounce {
-      0%, 100% { transform: translateY(0) scale(.85); opacity: .5; }
-      50% { transform: translateY(-14px) scale(1.25); opacity: 1; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: .5; }
+      50% { transform: translateY(-14px); opacity: 1; }
     }
 
     .firework {
@@ -192,139 +123,111 @@
       border-radius: 50%;
       animation: explode 2.8s infinite ease-out;
       opacity: 0;
-      z-index: 2;
     }
 
-    .firework:nth-child(1) { left: 15%; top: 18%; background: #ff2fcf; animation-delay: 0s; }
-    .firework:nth-child(2) { left: 82%; top: 17%; background: #00d9ff; animation-delay: .7s; }
-    .firework:nth-child(3) { left: 72%; top: 35%; background: #ffaa00; animation-delay: 1.4s; }
-    .firework:nth-child(4) { left: 26%; top: 36%; background: #9d4dff; animation-delay: 2s; }
-    .firework:nth-child(5) { left: 50%; top: 20%; background: #ffffff; animation-delay: 1s; }
+    .firework:nth-child(1) { left: 18%; top: 20%; background: #ff2fcf; }
+    .firework:nth-child(2) { left: 78%; top: 18%; background: #00d9ff; animation-delay: .8s; }
+    .firework:nth-child(3) { left: 50%; top: 30%; background: #ffaa00; animation-delay: 1.4s; }
 
     @keyframes explode {
-      0% {
-        opacity: 1;
-        box-shadow:
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor,
-          0 0 0 0 currentColor;
-      }
+      0% { opacity: 1; box-shadow: 0 0 0 currentColor; }
       70% {
         opacity: 1;
         box-shadow:
-          0 -85px 0 2px currentColor,
-          60px -60px 0 2px currentColor,
-          85px 0 0 2px currentColor,
-          60px 60px 0 2px currentColor,
-          0 85px 0 2px currentColor,
-          -60px 60px 0 2px currentColor,
-          -85px 0 0 2px currentColor,
-          -60px -60px 0 2px currentColor;
+          0 -80px currentColor,
+          60px -60px currentColor,
+          80px 0 currentColor,
+          60px 60px currentColor,
+          0 80px currentColor,
+          -60px 60px currentColor,
+          -80px 0 currentColor,
+          -60px -60px currentColor;
       }
-      100% {
-        opacity: 0;
-      }
+      100% { opacity: 0; }
     }
 
-    .glow-floor {
+    .start-screen {
       position: fixed;
-      left: 50%;
-      bottom: -18%;
-      width: 950px;
-      height: 430px;
-      transform: translateX(-50%);
-      background: radial-gradient(ellipse, rgba(0, 217, 255, 0.28), rgba(255, 47, 207, 0.18), transparent 70%);
-      filter: blur(10px);
-      z-index: 1;
-      animation: floorGlow 4s ease-in-out infinite alternate;
+      inset: 0;
+      z-index: 50;
+      background: rgba(0,0,20,.88);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      cursor: pointer;
+      transition: opacity .8s ease;
     }
 
-    @keyframes floorGlow {
-      from { opacity: 0.45; }
-      to { opacity: 1; }
+    .start-screen.hide {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    @media (max-width: 600px) {
-      .title {
-        letter-spacing: 2px;
-        -webkit-text-stroke: 1px rgba(255,255,255,0.55);
-      }
-
-      .orbit {
-        height: 85px;
-        top: 43%;
-      }
-
-      .message-wrap {
-        padding: 15px 18px;
-      }
-
-      .message-line {
-        letter-spacing: 2px;
-      }
+    .start-text {
+      font-size: clamp(1.5rem, 5vw, 3rem);
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 25px #00d9ff;
+      animation: pulse 1.6s infinite;
     }
-    .music-btn {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 20;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 999px;
-  color: white;
-  background: linear-gradient(90deg, #ff2fcf, #00d9ff);
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 0 18px rgba(0,217,255,.6);
-}
+
+    .tap-text {
+      margin-top: 18px;
+      font-size: 1.1rem;
+      color: #d6f7ff;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: .75; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
   </style>
 </head>
 
 <body>
-  <audio autoplay muted loop id="bgMusic">
+
+  <audio id="bgMusic" loop>
     <source src="audio/background.mp3" type="audio/mpeg">
-</audio>
+  </audio>
 
-<button class="music-btn" onclick="toggleMusic()">🎵 Music</button>
+  <div class="start-screen" id="startScreen">
+    <div class="start-text">CHAYNOVA</div>
+    <div class="tap-text">Tap anywhere to begin</div>
+  </div>
+
   <div class="stars"></div>
-  <div class="glow-floor"></div>
 
-  <div class="firework"></div>
-  <div class="firework"></div>
   <div class="firework"></div>
   <div class="firework"></div>
   <div class="firework"></div>
 
   <main class="container">
-    <div class="orbit"></div>
-
     <h1 class="title">CHAYNOVA</h1>
 
-    <div class="message-wrap">
-      <span class="message-line">Please wait,</span>
-      <span class="message-line second">it will be coming up soon...</span>
+    <div class="message-box">
+      <div class="message">Please wait,</div>
+      <div class="message">it will be coming up soon...</div>
 
-      <div class="dots" aria-hidden="true">
-        <span></span>
-        <span></span>
+      <div class="dots">
         <span></span>
         <span></span>
         <span></span>
       </div>
     </div>
   </main>
-  <script>
-const music = document.getElementById("bgMusic");
 
-document.addEventListener("click", () => {
-    music.muted = false;
-    music.play();
-}, { once: true });
-</script>
+  <script>
+    const startScreen = document.getElementById("startScreen");
+    const music = document.getElementById("bgMusic");
+
+    startScreen.addEventListener("click", () => {
+      music.volume = 0.35;
+      music.play();
+      startScreen.classList.add("hide");
+    });
+  </script>
+
 </body>
 </html>
