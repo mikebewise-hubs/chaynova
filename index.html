@@ -286,18 +286,11 @@
 </head>
 
 <body>
-  <script>
-  const music = document.getElementById("bgMusic");
+  <audio id="bgMusic" loop>
+  <source src="audio/background.mp3" type="audio/mpeg">
+</audio>
 
-  function toggleMusic() {
-    if (music.paused) {
-      music.volume = 0.35;
-      music.play();
-    } else {
-      music.pause();
-    }
-  }
-</script>
+<button class="music-btn" onclick="toggleMusic()">🎵 Music</button>
   <div class="stars"></div>
   <div class="glow-floor"></div>
 
