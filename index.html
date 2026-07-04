@@ -118,6 +118,19 @@ body{
     box-shadow:0 0 30px rgba(0,217,255,.35);
 
     animation:glow 3s infinite alternate;
+
+    transition:opacity 1s ease, transform 1s ease;
+
+}
+
+.message-box.hide-message{
+
+    opacity:0;
+
+    transform:translateY(20px);
+
+    pointer-events:none;
+
 }
 
 @keyframes glow{
@@ -450,7 +463,7 @@ body{
 
 <h1 class="title">CHAYNOVA</h1>
 
-<div class="message-box">
+<div class="message-box" id="messageBox">
 
 <div class="message">
 Please wait,
@@ -481,16 +494,21 @@ it will be coming up soon...
 const startScreen=document.getElementById("startScreen");
 const music=document.getElementById("bgMusic");
 const musicBtn=document.getElementById("musicBtn");
-
+const messageBox = document.getElementById("messageBox");
+    
 startScreen.addEventListener("click",()=>{
 
     music.volume=0.35;
-
     music.play();
 
     startScreen.classList.add("hide");
 
     musicBtn.innerHTML="🔊";
+
+    // Hide message after 3 seconds
+    setTimeout(()=>{
+        messageBox.classList.add("hide-message");
+    },3000);
 
 });
 
