@@ -286,8 +286,8 @@
 </head>
 
 <body>
-  <audio id="bgMusic" loop>
-  <source src="audio/background.mp3" type="audio/mpeg">
+  <audio autoplay muted loop id="bgMusic">
+    <source src="audio/background.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music-btn" onclick="toggleMusic()">🎵 Music</button>
@@ -319,16 +319,12 @@
     </div>
   </main>
   <script>
-  const music = document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
 
-  function toggleMusic() {
-    if (music.paused) {
-      music.volume = 0.35;
-      music.play();
-    } else {
-      music.pause();
-    }
-  }
+document.addEventListener("click", () => {
+    music.muted = false;
+    music.play();
+}, { once: true });
 </script>
 </body>
 </html>
