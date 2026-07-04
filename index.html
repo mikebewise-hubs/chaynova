@@ -438,6 +438,67 @@ body{
     transform:scale(.92);
 
 }
+
+    .welcome-box{
+
+    margin-top:35px;
+    max-width:700px;
+
+    padding:28px 35px;
+
+    border-radius:25px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:0 0 35px rgba(0,217,255,.3);
+
+    opacity:0;
+
+    transform:translateY(30px);
+
+    transition:1s;
+
+    pointer-events:none;
+
+}
+
+.welcome-box.show{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+    pointer-events:auto;
+
+}
+
+.welcome-box h2{
+
+    font-size:2rem;
+
+    margin-bottom:20px;
+
+    color:#00d9ff;
+
+    text-shadow:0 0 15px #00d9ff;
+
+}
+
+.welcome-box p{
+
+    font-size:1.15rem;
+
+    line-height:1.8;
+
+    margin-bottom:15px;
+
+    color:#eefcff;
+
+}
 </style>
 
 </head>
@@ -495,6 +556,7 @@ const startScreen=document.getElementById("startScreen");
 const music=document.getElementById("bgMusic");
 const musicBtn=document.getElementById("musicBtn");
 const messageBox = document.getElementById("messageBox");
+const welcomeBox = document.getElementById("welcomeBox");
     
 startScreen.addEventListener("click",()=>{
 
@@ -506,9 +568,17 @@ startScreen.addEventListener("click",()=>{
     musicBtn.innerHTML="🔊";
 
     // Hide message after 3 seconds
+   setTimeout(()=>{
+
+    messageBox.classList.add("hide-message");
+
     setTimeout(()=>{
-        messageBox.classList.add("hide-message");
-    },3000);
+
+        welcomeBox.classList.add("show");
+
+    },800);
+
+},3000);
 
 });
 
