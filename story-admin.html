@@ -64,7 +64,6 @@ img{
     color:#7CFC00;
 }
 </style>
-
 </head>
 
 <body>
@@ -72,70 +71,57 @@ img{
 <h1>CHAYNOVA Story Admin</h1>
 
 <label>Story Title</label>
-
-<input
-id="title"
-placeholder="Title">
+<input id="title" placeholder="Title">
 
 <label>Story</label>
-
-<textarea
-id="story"
-placeholder="Write your story..."></textarea>
+<textarea id="story" placeholder="Write your story..."></textarea>
 
 <label>Image</label>
-
-<input
-id="image"
-type="file"
-accept="image/*">
+<input id="image" type="file" accept="image/*">
 
 <img id="preview">
 
 <br><br>
 
-<button onclick="uploadStory()">
-Submit Story
-</button>
+<button onclick="uploadStory()">Submit Story</button>
 
 <div id="status"></div>
 
 <script>
+const workerURL = "https://chay1api.mikebewise.workers.dev";
 
-const workerURL="https://chay1api.mikebewise.workers.dev";
+image.onchange = () => {
+    const file = image.files[0];
+    if (!file) return;
 
-image.onchange=()=>{
-    const file=image.files[0];
-    if(!file) return;
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+};
 
-    preview.src=URL.createObjectURL(file);
-    preview.style.display="block";
-}
+async function uploadStory() {
+    status.innerHTML = "Uploading...";
 
-async function uploadStory(){
+    const fd = new FormData();
 
-    status.innerHTML="Uploading...";
+    fd.append("title", title.value);
+    fd.append("story", story.value);
 
-    const fd=new FormData();
+    if (image.files[0]) {
+        fd.append("image", image.files[0]);
+    }
 
-    fd.append("title",title.value);
-    fd.append("story",story.value);
-    fd.append("image",image.files[0]);
-
-    const r=await fetch(workerURL,{
-        method:"POST",
-        body:fd
+    const r = await fetch(workerURL, {
+        method: "POST",
+        body: fd
     });
 
-    status.innerHTML=await r.text();
+    const result = await r.text();
+    status.innerHTML = result;
 
-    title.value="";
-    story.value="";
-    image.value="";
-    preview.style.display="none";
-
+    if (r.ok) {
+        window.location.href = "story.html";
+    }
 }
-
 </script>
 
 </body>
