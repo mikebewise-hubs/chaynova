@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHAYNOVA | Story</title>
+<title>CHAYNOVA | Beats</title>
 
 <style>
 *{
@@ -282,6 +282,7 @@ body{
         opacity:1;
         box-shadow:0 0 0 currentColor;
     }
+
     70%{
         opacity:1;
         box-shadow:
@@ -294,6 +295,7 @@ body{
         -80px 0 currentColor,
         -60px -60px currentColor;
     }
+
     100%{opacity:0;}
 }
 
@@ -303,6 +305,103 @@ footer{
     text-align:center;
     padding:40px 20px;
     color:#9bdfff;
+}
+
+.hidden-admin-btn{
+    width:18px;
+    height:18px;
+    margin-left:6px;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.08);
+    cursor:pointer;
+}
+
+.hidden-admin-btn:hover{
+    color:#00d9ff;
+    text-shadow:0 0 12px #00d9ff;
+}
+
+/* Login popup */
+
+.login-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(0,0,20,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(92vw,420px);
+    padding:28px;
+    border-radius:24px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 0 35px rgba(0,217,255,.4);
+    text-align:center;
+}
+
+.login-box h2{
+    color:#8ef2ff;
+    margin-bottom:18px;
+}
+
+.login-box input{
+    width:100%;
+    margin:10px 0;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    outline:none;
+    font-size:16px;
+}
+
+.login-actions{
+    display:flex;
+    gap:12px;
+    margin-top:16px;
+}
+
+.login-actions button,
+.admin-panel a,
+.logout-btn{
+    flex:1;
+    border:none;
+    border-radius:14px;
+    padding:12px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    text-decoration:none;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+}
+
+.admin-panel{
+    display:none;
+    margin-top:18px;
+    gap:12px;
+    flex-direction:column;
+}
+
+.login-error{
+    margin-top:12px;
+    color:#ffd966;
+    min-height:20px;
+}
+
+.admin-note{
+    margin-top:12px;
+    font-size:13px;
+    color:#9bdfff;
+    line-height:1.5;
 }
 
 @media(max-width:700px){
@@ -336,7 +435,7 @@ footer{
 
         <a href="index.html" class="logo">CHAYNOVA</a>
 
-        <a href="index.html" class="home-btn"> Home</a>
+        <a href="index.html" class="home-btn">Home</a>
 
     </div>
 
@@ -353,10 +452,10 @@ footer{
 
     <nav class="menu-row">
 
-    <a href="story.html">Vibe Story</a>
-    <a href="game.html">Play Zone</a>
-    <a href="music.html">Beats</a>
-    <a href="video.html">Watch</a>
+        <a href="story.html">Vibe Story</a>
+        <a href="game.html">Play Zone</a>
+        <a href="music.html">Beats</a>
+        <a href="video.html">Watch</a>
 
     </nav>
 
@@ -369,23 +468,23 @@ footer{
             <h2>Coming Soon</h2>
 
             <p>
-                New CHAYNOVA stories are coming soon with fun characters,
-                exciting worlds, and learning adventures.
+                New CHAYNOVA music is coming soon with fun sounds,
+                relaxing beats, and creative vibes.
             </p>
 
-            <a href="#" class="read-btn">Read Soon</a>
+            <a href="#" class="read-btn">Listen Soon</a>
 
         </div>
 
         <div class="story-card">
 
-            <div class="emoji">🌎</div>
+            <div class="emoji">🎧</div>
 
-            <h2>Learn & Explore</h2>
+            <h2>Relax & Vibe</h2>
 
             <p>
-                Discover stories about science, culture, nature, history,
-                and amazing places around the world.
+                Enjoy calming melodies, cool background music,
+                and sounds that make learning feel fun.
             </p>
 
             <a href="#" class="read-btn">Explore</a>
@@ -396,11 +495,11 @@ footer{
 
             <div class="emoji">🚀</div>
 
-            <h2>Adventure Mode</h2>
+            <h2>Adventure Beats</h2>
 
             <p>
-                Jump into creative adventures, solve mysteries,
-                and unlock new worlds through CHAYNOVA stories.
+                Get ready for music that matches games, stories,
+                videos, and CHAYNOVA adventures.
             </p>
 
             <a href="#" class="read-btn">Start</a>
@@ -413,7 +512,138 @@ footer{
 
 <footer>
     © 2026 CHAYNOVA
+    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
 </footer>
+
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+
+        <h2>CHAYNOVA Admin</h2>
+
+        <div id="loginForm">
+            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+
+            <div class="login-actions">
+                <button onclick="checkLogin()">Login</button>
+                <button onclick="closeLogin()">Cancel</button>
+            </div>
+
+            <div id="loginError" class="login-error"></div>
+
+            <div class="admin-note">
+                Login is checked by your Cloudflare Worker.
+            </div>
+        </div>
+
+        <div id="adminPanel" class="admin-panel">
+            <a href="story-admin.html">Post New Story</a>
+            <a href="story.html">Open Story Page</a>
+            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+            <button class="logout-btn" onclick="closeLogin()">Close</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const API = "https://chay1api.mikebewise.workers.dev";
+
+function openLogin(){
+    document.getElementById("loginOverlay").style.display = "flex";
+    updateAdminPanel();
+
+    setTimeout(() => {
+        const usernameInput = document.getElementById("usernameInput");
+        if(usernameInput && usernameInput.offsetParent !== null){
+            usernameInput.focus();
+        }
+    }, 100);
+}
+
+function closeLogin(){
+    document.getElementById("loginOverlay").style.display = "none";
+    document.getElementById("loginError").innerText = "";
+}
+
+async function checkLogin(){
+    const username = document.getElementById("usernameInput").value.trim();
+    const password = document.getElementById("passwordInput").value.trim();
+    const errorBox = document.getElementById("loginError");
+
+    if(!username || !password){
+        errorBox.innerText = "Please enter username and password.";
+        return;
+    }
+
+    errorBox.innerText = "Checking login...";
+
+    try{
+        const response = await fetch(API + "/login", {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username:username,
+                password:password
+            })
+        });
+
+        const data = await response.json();
+
+        if(response.ok && data.success && data.token){
+            localStorage.setItem("chaynovaAdminToken", data.token);
+            errorBox.innerText = "";
+            updateAdminPanel();
+        }else{
+            localStorage.removeItem("chaynovaAdminToken");
+            errorBox.innerText = "Wrong username or password.";
+            updateAdminPanel();
+        }
+
+    }catch(error){
+        errorBox.innerText = "Login failed. Check your Worker API.";
+    }
+}
+
+function updateAdminPanel(){
+    const token = localStorage.getItem("chaynovaAdminToken");
+
+    if(token){
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("adminPanel").style.display = "flex";
+    }else{
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("adminPanel").style.display = "none";
+    }
+}
+
+function logoutAdmin(){
+    localStorage.removeItem("chaynovaAdminToken");
+    document.getElementById("usernameInput").value = "";
+    document.getElementById("passwordInput").value = "";
+    updateAdminPanel();
+}
+
+document.getElementById("passwordInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        checkLogin();
+    }
+});
+
+document.getElementById("usernameInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        document.getElementById("passwordInput").focus();
+    }
+});
+
+window.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+        closeLogin();
+    }
+});
+</script>
 
 </body>
 </html>
