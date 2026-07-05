@@ -14,7 +14,8 @@
 
 body{
     min-height:100vh;
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
     font-family:Arial,Helvetica,sans-serif;
     color:white;
     background:
@@ -26,10 +27,11 @@ body{
 .stars{
     position:fixed;
     inset:0;
-    background-image:radial-gradient(white 1px,transparent 1px);
+    background-image:radial-gradient white 1px,transparent 1px;
     background-size:90px 90px;
     animation:twinkle 4s infinite alternate;
     opacity:.6;
+    pointer-events:none;
 }
 
 @keyframes twinkle{
@@ -46,11 +48,11 @@ body{
     align-items:center;
     flex-direction:column;
     text-align:center;
-    padding:20px;
+    padding:20px 20px calc(100px + env(safe-area-inset-bottom));
 }
 
 .title{
-    font-size:clamp(3.5rem,12vw,9rem);
+    font-size:clamp(3rem,12vw,9rem);
     font-weight:900;
     letter-spacing:6px;
     background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
@@ -179,6 +181,7 @@ body{
     border-radius:50%;
     animation:explode 2.8s infinite ease-out;
     opacity:0;
+    pointer-events:none;
 }
 
 .firework:nth-child(1){
@@ -242,7 +245,7 @@ body{
 }
 
 .start-text{
-    font-size:clamp(1.6rem,5vw,3rem);
+    font-size:clamp(1.8rem,8vw,3rem);
     font-weight:bold;
     text-shadow:0 0 25px #00d9ff;
     animation:pulse 1.5s infinite;
@@ -260,10 +263,10 @@ body{
 
 .music-btn{
     position:fixed;
-    right:22px;
-    bottom:22px;
-    width:54px;
-    height:54px;
+    right:18px;
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    width:56px;
+    height:56px;
     border:none;
     border-radius:50%;
     cursor:pointer;
@@ -282,9 +285,6 @@ body{
 
 .music-btn:hover{
     transform:scale(1.12);
-    box-shadow:
-        0 0 30px rgba(255,0,180,.7),
-        inset 0 0 10px rgba(255,255,255,.3);
 }
 
 .music-btn:active{
@@ -311,13 +311,12 @@ body{
     color:white;
     border-radius:18px;
     border:1px solid rgba(255,255,255,.25);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,47,207,.35),
-            rgba(123,44,255,.35),
-            rgba(0,217,255,.35)
-        );
+    background:linear-gradient(
+        135deg,
+        rgba(255,47,207,.35),
+        rgba(123,44,255,.35),
+        rgba(0,217,255,.35)
+    );
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
     box-shadow:
@@ -327,48 +326,14 @@ body{
     transition:.35s ease;
 }
 
-.menu-bar a::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:60%;
-    height:100%;
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.55),
-            transparent
-        );
-    transform:skewX(-25deg);
-    transition:.7s;
-}
-
-.menu-bar a:hover::before{
-    left:160%;
-}
-
 .menu-bar a:hover{
     transform:translateY(-4px) scale(1.05);
-    background:
-        linear-gradient(
-            135deg,
-            #ff2fcf,
-            #7b2cff,
-            #00d9ff
-        );
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
 }
 
 .menu-bar a:active{
     transform:scale(.96);
 }
-
-/* Footer with hidden admin button */
 
 .site-footer{
     position:fixed;
@@ -380,6 +345,7 @@ body{
     color:#9bdfff;
     font-size:14px;
     pointer-events:none;
+    padding-bottom:env(safe-area-inset-bottom);
 }
 
 .hidden-admin-btn{
@@ -398,8 +364,6 @@ body{
     color:#00d9ff;
     text-shadow:0 0 12px #00d9ff;
 }
-
-/* Login popup */
 
 .login-overlay{
     display:none;
@@ -480,28 +444,97 @@ body{
     line-height:1.5;
 }
 
-@media(max-height:700px){
+/* iPhone friendly */
+@media screen and (max-width:768px){
+
+    .container{
+        justify-content:flex-start;
+        padding:42px 18px calc(120px + env(safe-area-inset-bottom));
+    }
+
+    .title{
+        font-size:clamp(2.3rem,13vw,4.2rem);
+        letter-spacing:2px;
+        -webkit-text-stroke:1px rgba(255,255,255,.45);
+        margin-top:20px;
+    }
+
+    .message-box{
+        width:100%;
+        max-width:360px;
+        margin-top:25px;
+        padding:18px;
+    }
+
+    .message{
+        font-size:1.2rem;
+    }
+
     .welcome-box{
-        margin-top:250px;
-        padding:20px 25px;
+        position:relative;
+        margin-top:35px;
+        max-width:100%;
+        width:100%;
+        padding:22px 18px;
+    }
+
+    .welcome-box h2{
+        font-size:1.55rem;
+        line-height:1.3;
     }
 
     .welcome-box p{
-        line-height:1.5;
-        margin-bottom:8px;
+        font-size:1rem;
+        line-height:1.6;
     }
-}
 
-@media(max-width:700px){
     .menu-bar{
         flex-direction:column;
-        align-items:center;
+        align-items:stretch;
+        gap:14px;
     }
 
     .menu-bar a{
-        width:240px;
+        width:100%;
+        min-width:0;
+        padding:16px;
+        font-size:1rem;
+    }
+
+    .music-btn{
+        right:16px;
+        bottom:calc(28px + env(safe-area-inset-bottom));
+    }
+
+    .site-footer{
+        position:relative;
+        bottom:auto;
+        margin:35px 0 10px;
+    }
+
+    .firework{
+        transform:scale(.65);
+    }
+
+    .login-actions{
+        flex-direction:column;
     }
 }
+
+@media screen and (max-width:390px){
+    .title{
+        font-size:2.5rem;
+    }
+
+    .welcome-box{
+        padding:20px 16px;
+    }
+
+    .start-text{
+        font-size:2rem;
+    }
+}
+
 </style>
 </head>
 
@@ -527,9 +560,7 @@ body{
     <h1 class="title">CHAYNOVA</h1>
 
     <div class="message-box" id="messageBox">
-
         <div class="message">Please wait,</div>
-
         <div class="message">it will be coming up soon...</div>
 
         <div class="dots">
@@ -537,24 +568,17 @@ body{
             <span></span>
             <span></span>
         </div>
-        <br>
     </div>
 
     <div class="welcome-box" id="welcomeBox">
 
         <h2>✨ Welcome to <strong>CHAYNOVA</strong>! ✨</h2>
 
-        <p>
-            Level up your fun with games.
-        </p>
+        <p>Level up your fun with games.</p>
 
-        <p>
-            Challenges, stories, music, and more.
-        </p>
+        <p>Challenges, stories, music, and more.</p>
 
-        <p>
-            🚀 New adventures are loading... Stay tuned for awesome updates and epic surprises!
-        </p>
+        <p>🚀 New adventures are loading... Stay tuned for awesome updates and epic surprises!</p>
 
         <div class="menu-bar">
             <a href="story.html">Vibe Story</a>
@@ -628,7 +652,6 @@ startScreen.addEventListener("click", () => {
     musicBtn.innerHTML = "🔊";
 
     setTimeout(() => {
-
         messageBox.classList.add("hide-message");
 
         setTimeout(() => {
@@ -644,17 +667,13 @@ musicBtn.addEventListener("click", (e) => {
     e.stopPropagation();
 
     if(music.paused){
-
         music.play();
         musicBtn.innerHTML = "🔊";
         musicBtn.title = "Pause Music";
-
     }else{
-
         music.pause();
         musicBtn.innerHTML = "🔇";
         musicBtn.title = "Play Music";
-
     }
 
 });
