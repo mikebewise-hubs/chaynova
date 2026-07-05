@@ -489,7 +489,7 @@ async function loadStories(){
         if(item.image){
 
             imageHTML = `
-<img src="https://chay1api.mikebewise.workers.dev/image/${item.image}">
+<img src="https://chay1api.mikebewise.workers.dev/image/${encodeURIComponent(item.image)}">
 `;
         }
 
