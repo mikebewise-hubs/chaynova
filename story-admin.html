@@ -221,7 +221,7 @@ async function loadStoryForEdit(){
         dateLineBox.innerHTML = formatDate(item.created_at);
 
         if(item.updated_at){
-            dateLineBox.innerHTML += `<br>Edited by ${item.edited_by || "Michael"} • ${formatDate(item.updated_at)}`;
+            dateLineBox.innerHTML += `<br>(Edited) • ${formatDate(item.updated_at)}`;
         }
 
         if(oldImage){
@@ -254,7 +254,7 @@ async function saveStory(){
                 body:JSON.stringify({
                     title:titleInput.value,
                     story:storyInput.value,
-                    edited_by:"Michael"
+                    edited_by:"Admin01"
                 })
             });
 
