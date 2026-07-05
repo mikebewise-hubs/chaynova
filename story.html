@@ -514,7 +514,7 @@ async function loadStories(){
         if(isAdmin){
             adminButtons = `
             <div class="admin-buttons">
-                <button onclick="editStory(${item.id}, '${escapeText(item.title)}', '${escapeText(item.story)}')">Edit</button>
+                <button onclick="window.location.href='story-admin.html?id=${item.id}'">Edit</button>
                 <button onclick="deleteStory(${item.id})">Delete</button>
             </div>
             `;
