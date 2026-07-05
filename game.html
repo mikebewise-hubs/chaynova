@@ -6,11 +6,7 @@
 <title>CHAYNOVA | Play Zone</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
     min-height:100vh;
@@ -33,10 +29,9 @@ body{
     z-index:0;
 }
 
-@keyframes twinkle{
-    from{opacity:.3;}
-    to{opacity:.9;}
-}
+@keyframes twinkle{from{opacity:.3;}to{opacity:.9;}}
+@keyframes rainbow{from{background-position:0%;}to{background-position:300%;}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 
 .page{
     position:relative;
@@ -64,20 +59,8 @@ body{
     -webkit-background-clip:text;
     color:transparent;
     -webkit-text-stroke:1.5px rgba(255,255,255,.55);
-    text-shadow:
-        0 3px 0 rgba(0,0,0,.45),
-        0 0 18px rgba(0,217,255,.4);
+    text-shadow:0 3px 0 rgba(0,0,0,.45),0 0 18px rgba(0,217,255,.4);
     animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
-}
-
-@keyframes rainbow{
-    from{background-position:0%;}
-    to{background-position:300%;}
-}
-
-@keyframes float{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
 }
 
 .home-btn{
@@ -96,10 +79,7 @@ body{
 
 .home-btn:hover{
     transform:translateY(-4px) scale(1.05);
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
+    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
 }
 
 .hero{
@@ -155,9 +135,7 @@ body{
     background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.08);
+    box-shadow:0 0 18px rgba(0,217,255,.35),inset 0 0 15px rgba(255,255,255,.08);
     overflow:hidden;
     transition:.35s ease;
 }
@@ -174,17 +152,12 @@ body{
     transition:.7s;
 }
 
-.menu-row a:hover::before{
-    left:160%;
-}
+.menu-row a:hover::before{left:160%;}
 
 .menu-row a:hover{
     transform:translateY(-4px) scale(1.05);
     background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
+    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
 }
 
 .story-grid{
@@ -208,9 +181,7 @@ body{
 
 .story-card:hover{
     transform:translateY(-8px);
-    box-shadow:
-        0 0 25px rgba(255,47,207,.75),
-        0 0 45px rgba(0,217,255,.75);
+    box-shadow:0 0 25px rgba(255,47,207,.75),0 0 45px rgba(0,217,255,.75);
 }
 
 .story-card .emoji{
@@ -257,32 +228,12 @@ body{
     z-index:1;
 }
 
-.firework:nth-child(2){
-    left:18%;
-    top:24%;
-    background:#ff2fcf;
-}
-
-.firework:nth-child(3){
-    left:80%;
-    top:22%;
-    background:#00d9ff;
-    animation-delay:.8s;
-}
-
-.firework:nth-child(4){
-    left:50%;
-    top:38%;
-    background:#ffaa00;
-    animation-delay:1.4s;
-}
+.firework:nth-child(2){left:18%;top:24%;background:#ff2fcf;}
+.firework:nth-child(3){left:80%;top:22%;background:#00d9ff;animation-delay:.8s;}
+.firework:nth-child(4){left:50%;top:38%;background:#ffaa00;animation-delay:1.4s;}
 
 @keyframes explode{
-    0%{
-        opacity:1;
-        box-shadow:0 0 0 currentColor;
-    }
-
+    0%{opacity:1;box-shadow:0 0 0 currentColor;}
     70%{
         opacity:1;
         box-shadow:
@@ -295,7 +246,6 @@ body{
         -80px 0 currentColor,
         -60px -60px currentColor;
     }
-
     100%{opacity:0;}
 }
 
@@ -322,8 +272,6 @@ footer{
     color:#00d9ff;
     text-shadow:0 0 12px #00d9ff;
 }
-
-/* Login popup */
 
 .login-overlay{
     display:none;
@@ -405,18 +353,9 @@ footer{
 }
 
 @media(max-width:700px){
-    .top-bar{
-        flex-direction:column;
-    }
-
-    .menu-row{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .menu-row a{
-        width:240px;
-    }
+    .top-bar{flex-direction:column;}
+    .menu-row{flex-direction:column;align-items:center;}
+    .menu-row a{width:240px;}
 }
 </style>
 </head>
@@ -432,30 +371,23 @@ footer{
 <div class="page">
 
     <div class="top-bar">
-
         <a href="index.html" class="logo">CHAYNOVA</a>
-
         <a href="index.html" class="home-btn">Home</a>
-
     </div>
 
     <section class="hero">
-
-        <h1>Play Zone</h1>
-
+        <h1>Watch</h1>
         <p>
-            Play, Learn, Explore, Challenge yourself and have fun with games designed for everyone.
+            Watch fun videos, learn new skills, explore exciting adventures,
+            and enjoy fresh content from CHAYNOVA.
         </p>
-
     </section>
 
     <nav class="menu-row">
-
         <a href="story.html">Vibe Story</a>
         <a href="game.html">Play Zone</a>
         <a href="music.html">Beats</a>
         <a href="video.html">Watch</a>
-
     </nav>
 
     <section class="story-grid">
