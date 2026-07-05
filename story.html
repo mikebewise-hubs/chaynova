@@ -386,7 +386,7 @@ async function loadStories(){
             <div class="story-card">
                 ${imageHTML}
                 <h2>${item.title}</h2>
-                <div class="story-date">📅 ${formatDate(item.created_at)}</div>
+                <div class="story-date"> ${formatDate(item.created_at)}</div>
                 <p>${item.story.substring(0,180)}...</p>
                 <button class="read-btn" onclick="openStory(${item.id})">Read Story</button>
                 ${adminButtons}
@@ -407,7 +407,7 @@ function openStory(id){
     if(!item) return;
 
     fullTitle.innerText = item.title;
-    fullDate.innerText = "📅 " + formatDate(item.created_at);
+    fullDate.innerText = " " + formatDate(item.created_at);
     fullText.innerText = item.story;
 
     if(item.image){
