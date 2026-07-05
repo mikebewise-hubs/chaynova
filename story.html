@@ -334,7 +334,7 @@ async function loadStories(){
             if(editedDate){
                 editedHTML = `
                 <div class="story-edited">
-                    Edited by ${item.edited_by || "Michael"} • ${editedDate}
+                    Edited ${editedDate}
                 </div>`;
             }
 
@@ -381,7 +381,7 @@ function openStory(id){
     fullText.innerText = item.story;
 
     if(editedDate){
-        fullEdited.innerText = `Edited by ${item.edited_by || "Michael"} • ${editedDate}`;
+        fullEdited.innerText = `Edited • ${editedDate}`;
     }else{
         fullEdited.innerText = "";
     }
