@@ -128,7 +128,7 @@ img{
 <label>Story Title</label>
 <input id="title" placeholder="Title">
 
-<div id="dateLine" class="date-line">📅 New story</div>
+<div id="dateLine" class="date-line"> New story</div>
 
 <label>Story</label>
 <textarea id="story" placeholder="Write your story..."></textarea>
@@ -171,7 +171,7 @@ function formatDate(dateString){
 }
 
 if(!editId){
-    dateLine.innerHTML = `📅 ${formatDate(new Date().toISOString())}`;
+    dateLine.innerHTML = ` ${formatDate(new Date().toISOString())}`;
 }
 
 image.onchange = () => {
@@ -202,7 +202,7 @@ async function loadStoryForEdit(){
         title.value = item.title || "";
         story.value = item.story || "";
         oldImage = item.image || "";
-        dateLine.innerHTML = `📅 ${formatDate(item.created_at)}`;
+        dateLine.innerHTML = ` ${formatDate(item.created_at)}`;
 
         if(oldImage){
             preview.src = `${API}/image/${encodeURIComponent(oldImage)}`;
