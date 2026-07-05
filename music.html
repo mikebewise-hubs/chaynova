@@ -86,9 +86,7 @@ body{
     transition:.3s;
 }
 
-.home-btn{
-    padding:13px 22px;
-}
+.home-btn{padding:13px 22px;}
 
 .home-btn:hover,
 .menu-row a:hover,
@@ -266,10 +264,12 @@ footer{
         <h2>🎵 CHAYNOVA Shuffle</h2>
 
         <div id="nowPlaying" class="now-playing">
-            Click Play Music to start
+            Ready: Strawberry Elephant
         </div>
 
-        <audio id="player" controls></audio>
+        <audio id="player" controls>
+            <source src="audio/strawberryElephant.mp3" type="audio/mpeg">
+        </audio>
 
         <div class="controls">
             <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
@@ -278,7 +278,7 @@ footer{
         </div>
 
         <p class="start-note">
-            Music will continue playing and shuffle to the next song automatically.
+            Default song is Strawberry Elephant. After it ends, CHAYNOVA will shuffle forever.
             Browser needs one click first to allow sound.
         </p>
     </section>
@@ -330,8 +330,22 @@ const songs = [
 const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
 
-let currentSong = -1;
-let historySongs = [];
+let currentSong = 1;
+let historySongs = [1];
+
+function playSong(index){
+    currentSong = index;
+    player.src = songs[currentSong].file;
+    nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
+
+    player.play().catch(() => {
+        nowPlaying.innerText = "Click Play Music to start Strawberry Elephant";
+    });
+}
+
+function startMusic(){
+    playSong(1);
+}
 
 function randomSong(){
     let next;
@@ -341,22 +355,6 @@ function randomSong(){
     }while(songs.length > 1 && next === currentSong);
 
     return next;
-}
-
-function playSong(index){
-    currentSong = index;
-    player.src = songs[currentSong].file;
-    nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
-
-    player.play().catch(() => {
-        nowPlaying.innerText = "Click Play Music to start";
-    });
-}
-
-function startMusic(){
-    const next = randomSong();
-    historySongs.push(next);
-    playSong(next);
 }
 
 function nextSong(){
