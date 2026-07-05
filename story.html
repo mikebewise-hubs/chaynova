@@ -341,6 +341,28 @@ footer{
     margin-bottom:18px;
     box-shadow:0 0 20px rgba(0,217,255,.35);
 }
+.admin-buttons{
+    margin-top:18px;
+    display:flex;
+    gap:12px;
+}
+
+.admin-buttons button{
+    border:none;
+    padding:10px 16px;
+    border-radius:14px;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 15px rgba(0,217,255,.45);
+}
+
+.admin-buttons button:hover{
+    transform:scale(1.06);
+}
+
+
     
 </style>
 </head>
@@ -458,61 +480,91 @@ footer{
 </footer>
 
 <script>
-const API="https://chay1api.mikebewise.workers.dev";
+const API = "https://chay1api.mikebewise.workers.dev";
+const isAdmin = new URLSearchParams(window.location.search).get("admin") === "1";
 
 async function loadStories(){
+    const response = await fetch(API);
+    const stories = await response.json();
+    const list = document.getElementById("storyList");
 
-    const response=await fetch(API);
+    list.innerHTML = "";
 
-    const stories=await response.json();
-
-    const list=document.getElementById("storyList");
-
-    list.innerHTML="";
-
-    if(stories.length===0){
-
-        list.innerHTML=`
+    if(stories.length === 0){
+        list.innerHTML = `
         <div class="story-card">
             <div class="emoji">📖</div>
             <h2>No Stories Yet</h2>
             <p>Be the first to publish a story on CHAYNOVA!</p>
         </div>`;
-
         return;
     }
 
-    stories.forEach(item=>{
-
-        let imageHTML="";
+    stories.forEach(item => {
+        let imageHTML = "";
 
         if(item.image){
-
             imageHTML = `
-<img src="https://chay1api.mikebewise.workers.dev/image/${encodeURIComponent(item.image)}">
-`;
+            <img src="${API}/image/${encodeURIComponent(item.image)}">
+            `;
         }
 
-        list.innerHTML+=`
+        let adminButtons = "";
 
+        if(isAdmin){
+            adminButtons = `
+            <div class="admin-buttons">
+                <button onclick="editStory(${item.id}, '${escapeText(item.title)}', '${escapeText(item.story)}')">Edit</button>
+                <button onclick="deleteStory(${item.id})">Delete</button>
+            </div>
+            `;
+        }
+
+        list.innerHTML += `
         <div class="story-card">
-
             ${imageHTML}
-
             <h2>${item.title}</h2>
-
             <p>${item.story.substring(0,180)}...</p>
-
-            <a class="read-btn" href="#">
-                Read Story
-            </a>
-
+            <a class="read-btn" href="#">Read Story</a>
+            ${adminButtons}
         </div>
-
         `;
+    });
+}
 
+function escapeText(text){
+    return String(text).replace(/'/g, "\\'").replace(/\n/g, "\\n");
+}
+
+async function deleteStory(id){
+    if(!confirm("Delete this story?")) return;
+
+    await fetch(`${API}/story/${id}`, {
+        method: "DELETE"
     });
 
+    loadStories();
+}
+
+async function editStory(id, oldTitle, oldStory){
+    const newTitle = prompt("Edit title:", oldTitle);
+    if(newTitle === null) return;
+
+    const newStory = prompt("Edit story:", oldStory);
+    if(newStory === null) return;
+
+    await fetch(`${API}/story/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: newTitle,
+            story: newStory
+        })
+    });
+
+    loadStories();
 }
 
 loadStories();
