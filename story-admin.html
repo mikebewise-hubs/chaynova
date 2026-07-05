@@ -148,6 +148,14 @@ img{
 </div>
 
 <script>
+const token = localStorage.getItem("chaynovaAdminToken");
+
+if (!token) {
+    window.location.replace("/");
+}
+</script>
+    
+<script>
 const API = "https://chay1api.mikebewise.workers.dev";
 
 const params = new URLSearchParams(window.location.search);
