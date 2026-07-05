@@ -543,15 +543,6 @@ footer{
 </div>
 
 <script>
-const player = document.getElementById("player");
-const playlist = document.getElementById("playlist");
-
-playlist.addEventListener("change", function () {
-    player.src = this.value;
-    player.play();
-});
-
-<script>
 const songs = [
     "audio/background.mp3",
     "audio/strawberryElephant.mp3",
@@ -563,30 +554,21 @@ const shuffleBtn = document.getElementById("shuffleBtn");
 
 let currentSong = -1;
 
-function playRandomSong() {
-
+function playRandomSong(){
     let next;
 
-    do {
+    do{
         next = Math.floor(Math.random() * songs.length);
-    } while (songs.length > 1 && next === currentSong);
+    }while(songs.length > 1 && next === currentSong);
 
     currentSong = next;
-
     player.src = songs[currentSong];
     player.play();
 }
 
-// Play first random song
-playRandomSong();
-
-// When one song ends, play another random one
-player.addEventListener("ended", playRandomSong);
-
-// Shuffle button
 shuffleBtn.addEventListener("click", playRandomSong);
-</script>
-    
+
+player.addEventListener("ended", playRandomSong);
 </script>
     
     <section class="story-grid">
