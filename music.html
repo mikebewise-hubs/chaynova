@@ -450,7 +450,46 @@ footer{
         drop-shadow(0 0 8px #00d9ff)
         drop-shadow(0 0 12px #7b2cff);
 }
+.music-player{
+    max-width:900px;
+    margin:30px auto;
+    padding:25px;
+    text-align:center;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 0 25px rgba(0,217,255,.35);
+}
 
+.music-player h3{
+    color:#8ef2ff;
+    margin-bottom:15px;
+}
+
+.music-player audio{
+    width:100%;
+    max-width:700px;
+}
+
+#shuffleBtn{
+    margin-bottom:15px;
+    padding:12px 28px;
+    border:none;
+    border-radius:18px;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 18px #00d9ff;
+    transition:.3s;
+}
+
+#shuffleBtn:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 30px #00d9ff;
+}
+    
     
 </style>
 </head>
@@ -495,17 +534,11 @@ footer{
 
 <div class="music-player">
 
-    <h3>🎵 CHAYNOVA Playlist</h3>
+    <h3>🎵 CHAYNOVA Shuffle</h3>
 
-    <select id="playlist">
-        <option value="audio/strawberryElephant.mp3">Strawberry Elephant.</option>
-        <option value="audio/the25thFloor.mp3">The 25th Floor.</option>
-        <option value="audio/background.mp3">I miss you everyday.</option>
-    </select>
+    <button id="shuffleBtn">🔀 Shuffle Play</button>
 
-    <audio id="player" controls>
-        <source src="audio/background.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="player" controls></audio>
 
 </div>
 
@@ -517,6 +550,45 @@ playlist.addEventListener("change", function () {
     player.src = this.value;
     player.play();
 });
+
+<script>
+const songs = [
+    "audio/song1.mp3",
+    "audio/song2.mp3",
+    "audio/song3.mp3",
+    "audio/song4.mp3",
+    "audio/song5.mp3"
+];
+
+const player = document.getElementById("player");
+const shuffleBtn = document.getElementById("shuffleBtn");
+
+let currentSong = -1;
+
+function playRandomSong() {
+
+    let next;
+
+    do {
+        next = Math.floor(Math.random() * songs.length);
+    } while (songs.length > 1 && next === currentSong);
+
+    currentSong = next;
+
+    player.src = songs[currentSong];
+    player.play();
+}
+
+// Play first random song
+playRandomSong();
+
+// When one song ends, play another random one
+player.addEventListener("ended", playRandomSong);
+
+// Shuffle button
+shuffleBtn.addEventListener("click", playRandomSong);
+</script>
+    
 </script>
     
     <section class="story-grid">
