@@ -6,7 +6,11 @@
 <title>CHAYNOVA | Story</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 body{
     min-height:100vh;
@@ -51,7 +55,10 @@ body{
     to{background-position:300%}
 }
 
-.home-btn,.read-btn,.admin-buttons button,.close-btn{
+.home-btn,
+.read-btn,
+.close-btn,
+.admin-buttons button{
     border:none;
     text-decoration:none;
     color:white;
@@ -141,6 +148,8 @@ body{
 
 .story-card img{
     width:100%;
+    height:190px;
+    object-fit:cover;
     border-radius:18px;
     margin-bottom:18px;
     box-shadow:0 0 20px rgba(0,217,255,.35);
@@ -222,10 +231,22 @@ footer{
 }
 
 @media(max-width:700px){
-    .top-bar{flex-direction:column}
-    .menu-row{flex-direction:column;align-items:center}
-    .menu-row a{width:240px}
-    .full-content{padding:10px}
+    .top-bar{
+        flex-direction:column;
+    }
+
+    .menu-row{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .menu-row a{
+        width:240px;
+    }
+
+    .full-content{
+        padding:10px;
+    }
 }
 </style>
 </head>
@@ -275,7 +296,7 @@ footer{
         <h1 id="fullTitle"></h1>
         <div id="fullDate" class="story-date"></div>
         <div id="fullEdited" class="story-edited"></div>
-        <img id="fullImage">
+        <img id="fullImage" alt="Story image">
         <p id="fullText"></p>
     </div>
 </div>
@@ -284,6 +305,20 @@ footer{
 const API = "https://chay1api.mikebewise.workers.dev";
 const isAdmin = new URLSearchParams(window.location.search).get("admin") === "1";
 let allStories = [];
+
+function safeText(text){
+    return String(text || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function shortStory(text){
+    const story = String(text || "");
+    return story.length > 180 ? story.substring(0,180) + "..." : story;
+}
 
 function formatDate(dateString){
     if(!dateString) return "";
@@ -310,12 +345,13 @@ async function loadStories(){
 
         list.innerHTML = "";
 
-        if(allStories.length === 0){
+        if(!Array.isArray(allStories) || allStories.length === 0){
             list.innerHTML = `
-            <div class="story-card">
-                <h2>No Stories Yet</h2>
-                <p>Be the first to publish a story on CHAYNOVA!</p>
-            </div>`;
+                <div class="story-card">
+                    <h2>No Stories Yet</h2>
+                    <p>Be the first to publish a story on CHAYNOVA!</p>
+                </div>
+            `;
             return;
         }
 
@@ -326,83 +362,98 @@ async function loadStories(){
             let imageHTML = "";
 
             if(item.image){
-                imageHTML = `<img src="${API}/image/${encodeURIComponent(item.image)}" alt="Story image">`;
+                imageHTML = `
+                    <img src="${API}/image/${encodeURIComponent(item.image)}" alt="Story image">
+                `;
             }
 
             let editedHTML = "";
 
             if(editedDate){
                 editedHTML = `
-                <div class="story-edited">
-                    (Edited) ${editedDate}
-                </div>`;
+                    <div class="story-edited">
+                        Edited: ${editedDate}
+                    </div>
+                `;
             }
 
             let adminButtons = "";
 
             if(isAdmin){
                 adminButtons = `
-                <div class="admin-buttons">
-                    <button onclick="window.location.href='story-admin.html?id=${item.id}'">Edit</button>
-                    <button onclick="deleteStory(${item.id})">Delete</button>
-                </div>`;
+                    <div class="admin-buttons">
+                        <button onclick="editStory(${item.id})">Edit</button>
+                        <button onclick="deleteStory(${item.id})">Delete</button>
+                    </div>
+                `;
             }
 
             list.innerHTML += `
-            <div class="story-card">
-                ${imageHTML}
-                <h2>${item.title}</h2>
-                <div class="story-date">${createdDate}</div>
-                ${editedHTML}
-                <p>${item.story.substring(0,180)}...</p>
-                <button class="read-btn" onclick="openStory(${item.id})">Read Story</button>
-                ${adminButtons}
-            </div>`;
+                <div class="story-card">
+                    ${imageHTML}
+                    <h2>${safeText(item.title)}</h2>
+                    <div class="story-date">${createdDate}</div>
+                    ${editedHTML}
+                    <p>${safeText(shortStory(item.story))}</p>
+                    <button class="read-btn" onclick="openStory(${item.id})">Read Story</button>
+                    ${adminButtons}
+                </div>
+            `;
         });
 
     }catch(error){
         list.innerHTML = `
-        <div class="story-card">
-            <h2>Something went wrong</h2>
-            <p>Stories could not load right now.</p>
-        </div>`;
+            <div class="story-card">
+                <h2>Something went wrong</h2>
+                <p>Stories could not load right now. Please check your Worker code.</p>
+            </div>
+        `;
     }
 }
 
 function openStory(id){
     const item = allStories.find(s => String(s.id) === String(id));
+
     if(!item) return;
 
     const createdDate = formatDate(item.created_at);
     const editedDate = formatDate(item.updated_at);
 
-    fullTitle.innerText = item.title;
-    fullDate.innerText = createdDate;
-    fullText.innerText = item.story;
+    document.getElementById("fullTitle").innerText = item.title || "";
+    document.getElementById("fullDate").innerText = createdDate;
+    document.getElementById("fullText").innerText = item.story || "";
 
     if(editedDate){
-        fullEdited.innerText = `(Edited) • ${editedDate}`;
+        document.getElementById("fullEdited").innerText = "Edited: " + editedDate;
     }else{
-        fullEdited.innerText = "";
+        document.getElementById("fullEdited").innerText = "";
     }
+
+    const fullImage = document.getElementById("fullImage");
 
     if(item.image){
         fullImage.src = `${API}/image/${encodeURIComponent(item.image)}`;
         fullImage.style.display = "block";
     }else{
+        fullImage.removeAttribute("src");
         fullImage.style.display = "none";
     }
 
-    fullScreenStory.style.display = "block";
+    document.getElementById("fullScreenStory").style.display = "block";
     document.body.style.overflow = "hidden";
 }
 
 function closeStory(){
-    fullScreenStory.style.display = "none";
+    document.getElementById("fullScreenStory").style.display = "none";
     document.body.style.overflow = "auto";
 }
 
+function editStory(id){
+    window.location.href = `story-admin.html?id=${id}`;
+}
+
 async function deleteStory(id){
+    if(!isAdmin) return;
     if(!confirm("Delete this story?")) return;
 
     await fetch(`${API}/story/${id}`, {
@@ -412,70 +463,14 @@ async function deleteStory(id){
     loadStories();
 }
 
-loadStories();
-</script>
-
-</body>
-</html>        : `<div class="emoji">✨</div>`;
-
-      const adminHTML = isAdmin
-        ? `<div class="admin-buttons"><button onclick="editStory(${item.id})">Edit</button><button onclick="deleteStory(${item.id})">Delete</button></div>`
-        : "";
-
-      list.innerHTML += `
-        <div class="story-card">
-          ${imageHTML}
-          <h2>${safeText(item.title)}</h2>
-          <p>${safeText(shortStory(item.story))}</p>
-          <button class="read-btn" onclick="openReader(${item.id})">Read Story</button>
-          ${adminHTML}
-        </div>`;
-    });
-  }catch(err){
-    list.innerHTML = `<div class="story-card"><h2>Could not load stories</h2><p class="error">Check your Worker code and make sure it is deployed.</p></div>`;
-  }
-}
-
-function openReader(id){
-  const item = allStories.find(s => String(s.id) === String(id));
-  if(!item) return;
-
-  const imageHTML = item.image
-    ? `<img class="reader-img" src="${API}/image/${encodeURIComponent(item.image)}" alt="${safeText(item.title)}">`
-    : "";
-
-  document.getElementById("readerContent").innerHTML = `
-    ${imageHTML}
-    <h1 class="reader-title">${safeText(item.title)}</h1>
-    <div class="reader-story">${safeText(item.story)}</div>
-  `;
-
-  document.getElementById("readerOverlay").style.display = "block";
-  document.body.classList.add("no-scroll");
-  document.getElementById("readerOverlay").scrollTop = 0;
-}
-
-function closeReader(){
-  document.getElementById("readerOverlay").style.display = "none";
-  document.body.classList.remove("no-scroll");
-}
-
-function editStory(id){
-  window.location.href = `story-admin.html?id=${id}`;
-}
-
-async function deleteStory(id){
-  if(!isAdmin) return;
-  if(!confirm("Delete this story?")) return;
-  await fetch(`${API}/story/${id}`, { method:"DELETE" });
-  loadStories();
-}
-
-window.addEventListener("keydown", e => {
-  if(e.key === "Escape") closeReader();
+window.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+        closeStory();
+    }
 });
 
 loadStories();
 </script>
+
 </body>
 </html>
