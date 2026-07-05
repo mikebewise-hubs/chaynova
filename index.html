@@ -206,6 +206,7 @@ body{
         opacity:1;
         box-shadow:0 0 0 currentColor;
     }
+
     70%{
         opacity:1;
         box-shadow:
@@ -218,6 +219,7 @@ body{
         -80px 0 currentColor,
         -60px -60px currentColor;
     }
+
     100%{opacity:0;}
 }
 
@@ -289,6 +291,184 @@ body{
     transform:scale(.92);
 }
 
+.menu-bar{
+    margin-top:28px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+}
+
+.menu-bar a{
+    position:relative;
+    min-width:145px;
+    padding:14px 22px;
+    text-align:center;
+    text-decoration:none;
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:white;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.25);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,47,207,.35),
+            rgba(123,44,255,.35),
+            rgba(0,217,255,.35)
+        );
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 15px rgba(255,255,255,.08);
+    overflow:hidden;
+    transition:.35s ease;
+}
+
+.menu-bar a::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:60%;
+    height:100%;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.55),
+            transparent
+        );
+    transform:skewX(-25deg);
+    transition:.7s;
+}
+
+.menu-bar a:hover::before{
+    left:160%;
+}
+
+.menu-bar a:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:
+        linear-gradient(
+            135deg,
+            #ff2fcf,
+            #7b2cff,
+            #00d9ff
+        );
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
+}
+
+.menu-bar a:active{
+    transform:scale(.96);
+}
+
+.site-footer{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:10px;
+    z-index:90;
+    text-align:center;
+    color:#9bdfff;
+    font-size:14px;
+    pointer-events:none;
+}
+
+.hidden-admin-btn{
+    width:18px;
+    height:18px;
+    margin-left:6px;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.08);
+    cursor:pointer;
+    pointer-events:auto;
+}
+
+.hidden-admin-btn:hover{
+    color:#00d9ff;
+    text-shadow:0 0 12px #00d9ff;
+}
+
+.login-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:rgba(0,0,20,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(92vw,420px);
+    padding:28px;
+    border-radius:24px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 0 35px rgba(0,217,255,.4);
+    text-align:center;
+}
+
+.login-box h2{
+    color:#8ef2ff;
+    margin-bottom:18px;
+}
+
+.login-box input{
+    width:100%;
+    margin:10px 0;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    outline:none;
+    font-size:16px;
+}
+
+.login-actions{
+    display:flex;
+    gap:12px;
+    margin-top:16px;
+}
+
+.login-actions button,
+.admin-panel a,
+.logout-btn{
+    flex:1;
+    border:none;
+    border-radius:14px;
+    padding:12px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    text-decoration:none;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+}
+
+.admin-panel{
+    display:none;
+    margin-top:18px;
+    gap:12px;
+    flex-direction:column;
+}
+
+.login-error{
+    margin-top:12px;
+    color:#ffd966;
+    min-height:20px;
+}
+
 @media(max-height:700px){
     .welcome-box{
         margin-top:250px;
@@ -300,134 +480,17 @@ body{
         margin-bottom:8px;
     }
 }
- .menu-bar{
-    margin-top:28px;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:16px;
-}
-
-.menu-bar a{
-
-    position:relative;
-
-    min-width:145px;
-
-    padding:14px 22px;
-
-    text-align:center;
-
-    text-decoration:none;
-
-    font-size:1rem;
-
-    font-weight:700;
-
-    letter-spacing:.6px;
-
-    color:white;
-
-    border-radius:18px;
-
-    border:1px solid rgba(255,255,255,.25);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,47,207,.35),
-            rgba(123,44,255,.35),
-            rgba(0,217,255,.35)
-        );
-
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.08);
-
-    overflow:hidden;
-
-    transition:.35s ease;
-
-}
-
-/* Moving shine */
-
-.menu-bar a::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:0;
-    left:-120%;
-
-    width:60%;
-    height:100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.55),
-            transparent
-        );
-
-    transform:skewX(-25deg);
-
-    transition:.7s;
-
-}
-
-.menu-bar a:hover::before{
-
-    left:160%;
-
-}
-
-.menu-bar a:hover{
-
-    transform:translateY(-4px) scale(1.05);
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff2fcf,
-            #7b2cff,
-            #00d9ff
-        );
-
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
-
-}
-
-.menu-bar a:active{
-
-    transform:scale(.96);
-
-}
 
 @media(max-width:700px){
-
     .menu-bar{
-
         flex-direction:column;
         align-items:center;
-
     }
 
     .menu-bar a{
-
         width:240px;
-
     }
-
-}   
+}
 </style>
 </head>
 
@@ -463,12 +526,13 @@ body{
             <span></span>
             <span></span>
         </div>
-<br>
+        <br>
     </div>
 
     <div class="welcome-box" id="welcomeBox">
 
-        <h2>✨ Welcome to <strong>CHAYNOVA</strong>!✨</h2>
+        <h2>✨ Welcome to <strong>CHAYNOVA</strong>! ✨</h2>
+
         <p>
             Level up your fun with games.
         </p>
@@ -480,12 +544,14 @@ body{
         <p>
             🚀 New adventures are loading... Stay tuned for awesome updates and epic surprises!
         </p>
-<div class="menu-bar">
-    <a href="story.html">Vibe Story</a>
-    <a href="game.html">Play Zone</a>
-    <a href="music.html">Beats</a>
-    <a href="video.html">Watch</a>
-</div>
+
+        <div class="menu-bar">
+            <a href="story.html">Vibe Story</a>
+            <a href="game.html">Play Zone</a>
+            <a href="music.html">Beats</a>
+            <a href="video.html">Watch</a>
+        </div>
+
     </div>
 
 </main>
@@ -494,6 +560,38 @@ body{
 🔊
 </button>
 
+<footer class="site-footer">
+    © 2026 CHAYNOVA
+    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
+</footer>
+
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+
+        <h2>CHAYNOVA Admin</h2>
+
+        <div id="loginForm">
+            <input id="usernameInput" type="text" placeholder="Username">
+            <input id="passwordInput" type="password" placeholder="Password">
+
+            <div class="login-actions">
+                <button onclick="checkLogin()">Login</button>
+                <button onclick="closeLogin()">Cancel</button>
+            </div>
+
+            <div id="loginError" class="login-error"></div>
+        </div>
+
+        <div id="adminPanel" class="admin-panel">
+            <a href="story-admin.html">Post New Story</a>
+            <a href="story.html?admin=1">Open Story Admin View</a>
+            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+            <button class="logout-btn" onclick="closeLogin()">Close</button>
+        </div>
+
+    </div>
+</div>
+
 <script>
 const startScreen = document.getElementById("startScreen");
 const music = document.getElementById("bgMusic");
@@ -501,10 +599,22 @@ const musicBtn = document.getElementById("musicBtn");
 const messageBox = document.getElementById("messageBox");
 const welcomeBox = document.getElementById("welcomeBox");
 
+/*
+    Change your admin username and password here.
+    Example:
+    const ADMIN_USERNAME = "michael";
+    const ADMIN_PASSWORD = "MySecretPassword123!";
+*/
+const ADMIN_USERNAME = "chai";
+const ADMIN_PASSWORD = "nova2026";
+
 startScreen.addEventListener("click", () => {
 
     music.volume = 0.35;
-    music.play();
+
+    music.play().catch(() => {
+        console.log("Music could not start.");
+    });
 
     startScreen.classList.add("hide");
     musicBtn.innerHTML = "🔊";
@@ -539,6 +649,54 @@ musicBtn.addEventListener("click", (e) => {
 
     }
 
+});
+
+function openLogin(){
+    document.getElementById("loginOverlay").style.display = "flex";
+    updateAdminPanel();
+}
+
+function closeLogin(){
+    document.getElementById("loginOverlay").style.display = "none";
+    document.getElementById("loginError").innerText = "";
+}
+
+function checkLogin(){
+    const username = document.getElementById("usernameInput").value.trim();
+    const password = document.getElementById("passwordInput").value.trim();
+
+    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+        localStorage.setItem("chaynovaAdmin","yes");
+        document.getElementById("loginError").innerText = "";
+        updateAdminPanel();
+    }else{
+        document.getElementById("loginError").innerText = "Wrong username or password.";
+    }
+}
+
+function updateAdminPanel(){
+    const isAdmin = localStorage.getItem("chaynovaAdmin") === "yes";
+
+    if(isAdmin){
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("adminPanel").style.display = "flex";
+    }else{
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("adminPanel").style.display = "none";
+    }
+}
+
+function logoutAdmin(){
+    localStorage.removeItem("chaynovaAdmin");
+    document.getElementById("usernameInput").value = "";
+    document.getElementById("passwordInput").value = "";
+    updateAdminPanel();
+}
+
+window.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+        closeLogin();
+    }
 });
 </script>
 
