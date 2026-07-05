@@ -128,7 +128,7 @@ img{
 <label>Story Title</label>
 <input id="title" placeholder="Title">
 
-<div id="dateLine" class="date-line"> New story</div>
+<div id="dateLine" class="date-line">New story</div>
 
 <label>Story</label>
 <textarea id="story" placeholder="Write your story..."></textarea>
@@ -140,7 +140,7 @@ img{
 
 <br>
 
-<button onclick="saveStory()" id="saveBtn">Submit Story</button>
+<button type="button" onclick="saveStory()" id="saveBtn">Submit Story</button>
 <a href="story.html?admin=1" class="link-btn">Back to Stories</a>
 
 <div id="status"></div>
@@ -149,8 +149,18 @@ img{
 
 <script>
 const API = "https://chay1api.mikebewise.workers.dev";
+
 const params = new URLSearchParams(window.location.search);
 const editId = params.get("id");
+
+const titleInput = document.getElementById("title");
+const storyInput = document.getElementById("story");
+const imageInput = document.getElementById("image");
+const previewImg = document.getElementById("preview");
+const statusBox = document.getElementById("status");
+const dateLineBox = document.getElementById("dateLine");
+const pageTitleBox = document.getElementById("pageTitle");
+const saveBtnBox = document.getElementById("saveBtn");
 
 let oldImage = "";
 
@@ -171,85 +181,101 @@ function formatDate(dateString){
 }
 
 if(!editId){
-    dateLine.innerHTML = ` ${formatDate(new Date().toISOString())}`;
+    dateLineBox.innerHTML = formatDate(new Date().toISOString());
 }
 
-image.onchange = () => {
-    const file = image.files[0];
+imageInput.onchange = () => {
+    const file = imageInput.files[0];
     if (!file) return;
 
-    preview.src = URL.createObjectURL(file);
-    preview.style.display = "block";
+    previewImg.src = URL.createObjectURL(file);
+    previewImg.style.display = "block";
 };
 
 async function loadStoryForEdit(){
     if(!editId) return;
 
-    pageTitle.innerText = "Edit CHAYNOVA Story";
-    saveBtn.innerText = "Update Story";
-    status.innerHTML = "Loading story...";
+    pageTitleBox.innerText = "Edit CHAYNOVA Story";
+    saveBtnBox.innerText = "Update Story";
+    statusBox.innerHTML = "Loading story...";
 
     try{
         const response = await fetch(API);
+
+        if(!response.ok){
+            statusBox.innerHTML = "Could not connect to API.";
+            return;
+        }
+
         const stories = await response.json();
         const item = stories.find(s => String(s.id) === String(editId));
 
         if(!item){
-            status.innerHTML = "Story not found.";
+            statusBox.innerHTML = "Story not found.";
             return;
         }
 
-        title.value = item.title || "";
-        story.value = item.story || "";
+        titleInput.value = item.title || "";
+        storyInput.value = item.story || "";
         oldImage = item.image || "";
-        dateLine.innerHTML = ` ${formatDate(item.created_at)}`;
+        dateLineBox.innerHTML = formatDate(item.created_at);
 
-        if(oldImage){
-            preview.src = `${API}/image/${encodeURIComponent(oldImage)}`;
-            preview.style.display = "block";
+        if(item.updated_at){
+            dateLineBox.innerHTML += `<br>Edited by ${item.edited_by || "Michael"} • ${formatDate(item.updated_at)}`;
         }
 
-        status.innerHTML = "";
+        if(oldImage){
+            previewImg.src = `${API}/image/${encodeURIComponent(oldImage)}`;
+            previewImg.style.display = "block";
+        }
+
+        statusBox.innerHTML = "";
     }catch(error){
-        status.innerHTML = "Could not load story.";
+        statusBox.innerHTML = "Could not load story.";
     }
 }
 
 async function saveStory(){
-    if(!title.value.trim() || !story.value.trim()){
-        status.innerHTML = "Please add title and story.";
+    if(!titleInput.value.trim() || !storyInput.value.trim()){
+        statusBox.innerHTML = "Please add title and story.";
         return;
     }
 
-    status.innerHTML = editId ? "Updating..." : "Uploading...";
+    statusBox.innerHTML = editId ? "Updating..." : "Uploading...";
+    saveBtnBox.disabled = true;
 
     try{
         if(editId){
             const r = await fetch(`${API}/story/${editId}`, {
                 method:"PUT",
-                headers:{"Content-Type":"application/json"},
+                headers:{
+                    "Content-Type":"application/json"
+                },
                 body:JSON.stringify({
-                    title:title.value,
-                    story:story.value
+                    title:titleInput.value,
+                    story:storyInput.value,
+                    edited_by:"Michael"
                 })
             });
 
             if(!r.ok){
-                status.innerHTML = "Update failed.";
+                statusBox.innerHTML = "Update failed.";
+                saveBtnBox.disabled = false;
                 return;
             }
 
-            status.innerHTML = "Story updated!";
+            statusBox.innerHTML = "Story updated!";
             window.location.href = "story.html?admin=1";
             return;
         }
 
         const fd = new FormData();
-        fd.append("title", title.value);
-        fd.append("story", story.value);
+        fd.append("title", titleInput.value);
+        fd.append("story", storyInput.value);
+        fd.append("created_at", new Date().toISOString());
 
-        if(image.files[0]){
-            fd.append("image", image.files[0]);
+        if(imageInput.files[0]){
+            fd.append("image", imageInput.files[0]);
         }
 
         const r = await fetch(API, {
@@ -257,13 +283,18 @@ async function saveStory(){
             body:fd
         });
 
-        status.innerHTML = await r.text();
+        const text = await r.text();
+        statusBox.innerHTML = text;
 
         if(r.ok){
             window.location.href = "story.html?admin=1";
+        }else{
+            saveBtnBox.disabled = false;
         }
+
     }catch(error){
-        status.innerHTML = "Something went wrong. Please try again.";
+        statusBox.innerHTML = "Something went wrong. Please try again.";
+        saveBtnBox.disabled = false;
     }
 }
 
