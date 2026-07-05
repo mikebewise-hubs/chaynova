@@ -368,6 +368,8 @@ body{
     transform:scale(.96);
 }
 
+/* Footer with hidden admin button */
+
 .site-footer{
     position:fixed;
     left:0;
@@ -396,6 +398,8 @@ body{
     color:#00d9ff;
     text-shadow:0 0 12px #00d9ff;
 }
+
+/* Login popup */
 
 .login-overlay{
     display:none;
@@ -467,6 +471,13 @@ body{
     margin-top:12px;
     color:#ffd966;
     min-height:20px;
+}
+
+.admin-note{
+    margin-top:12px;
+    font-size:13px;
+    color:#9bdfff;
+    line-height:1.5;
 }
 
 @media(max-height:700px){
@@ -571,8 +582,8 @@ body{
         <h2>CHAYNOVA Admin</h2>
 
         <div id="loginForm">
-            <input id="usernameInput" type="text" placeholder="Username">
-            <input id="passwordInput" type="password" placeholder="Password">
+            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
             <div class="login-actions">
                 <button onclick="checkLogin()">Login</button>
@@ -580,6 +591,10 @@ body{
             </div>
 
             <div id="loginError" class="login-error"></div>
+
+            <div class="admin-note">
+                Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
+            </div>
         </div>
 
         <div id="adminPanel" class="admin-panel">
@@ -593,20 +608,13 @@ body{
 </div>
 
 <script>
+const API = "https://chay1api.mikebewise.workers.dev";
+
 const startScreen = document.getElementById("startScreen");
 const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 const messageBox = document.getElementById("messageBox");
 const welcomeBox = document.getElementById("welcomeBox");
-
-/*
-    Change your admin username and password here.
-    Example:
-    const ADMIN_USERNAME = "michael";
-    const ADMIN_PASSWORD = "MySecretPassword123!";
-*/
-const ADMIN_USERNAME = "chai";
-const ADMIN_PASSWORD = "nova2026";
 
 startScreen.addEventListener("click", () => {
 
@@ -654,6 +662,13 @@ musicBtn.addEventListener("click", (e) => {
 function openLogin(){
     document.getElementById("loginOverlay").style.display = "flex";
     updateAdminPanel();
+
+    setTimeout(() => {
+        const usernameInput = document.getElementById("usernameInput");
+        if(usernameInput && usernameInput.offsetParent !== null){
+            usernameInput.focus();
+        }
+    }, 100);
 }
 
 function closeLogin(){
@@ -661,23 +676,50 @@ function closeLogin(){
     document.getElementById("loginError").innerText = "";
 }
 
-function checkLogin(){
+async function checkLogin(){
     const username = document.getElementById("usernameInput").value.trim();
     const password = document.getElementById("passwordInput").value.trim();
+    const errorBox = document.getElementById("loginError");
 
-    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
-        localStorage.setItem("chaynovaAdmin","yes");
-        document.getElementById("loginError").innerText = "";
-        updateAdminPanel();
-    }else{
-        document.getElementById("loginError").innerText = "Wrong username or password.";
+    if(!username || !password){
+        errorBox.innerText = "Please enter username and password.";
+        return;
+    }
+
+    errorBox.innerText = "Checking login...";
+
+    try{
+        const response = await fetch(API + "/login", {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username:username,
+                password:password
+            })
+        });
+
+        const data = await response.json();
+
+        if(response.ok && data.success && data.token){
+            localStorage.setItem("chaynovaAdminToken", data.token);
+            errorBox.innerText = "";
+            updateAdminPanel();
+        }else{
+            localStorage.removeItem("chaynovaAdminToken");
+            errorBox.innerText = "Wrong username or password.";
+        }
+
+    }catch(error){
+        errorBox.innerText = "Login failed. Check your Worker API.";
     }
 }
 
 function updateAdminPanel(){
-    const isAdmin = localStorage.getItem("chaynovaAdmin") === "yes";
+    const token = localStorage.getItem("chaynovaAdminToken");
 
-    if(isAdmin){
+    if(token){
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("adminPanel").style.display = "flex";
     }else{
@@ -687,11 +729,23 @@ function updateAdminPanel(){
 }
 
 function logoutAdmin(){
-    localStorage.removeItem("chaynovaAdmin");
+    localStorage.removeItem("chaynovaAdminToken");
     document.getElementById("usernameInput").value = "";
     document.getElementById("passwordInput").value = "";
     updateAdminPanel();
 }
+
+document.getElementById("passwordInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        checkLogin();
+    }
+});
+
+document.getElementById("usernameInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        document.getElementById("passwordInput").focus();
+    }
+});
 
 window.addEventListener("keydown", function(e){
     if(e.key === "Escape"){
