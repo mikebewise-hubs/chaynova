@@ -6,15 +6,10 @@
 <title>CHAYNOVA | Beats</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
     min-height:100vh;
-    overflow-x:hidden;
     font-family:Arial,Helvetica,sans-serif;
     color:white;
     background:
@@ -64,9 +59,6 @@ body{
     -webkit-background-clip:text;
     color:transparent;
     -webkit-text-stroke:1.5px rgba(255,255,255,.55);
-    text-shadow:
-        0 3px 0 rgba(0,0,0,.45),
-        0 0 18px rgba(0,217,255,.4);
     animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
 }
 
@@ -80,38 +72,40 @@ body{
     50%{transform:translateY(-10px);}
 }
 
-.home-btn{
+.home-btn,
+.menu-row a,
+.control-btn{
     text-decoration:none;
     color:white;
     font-weight:bold;
-    padding:13px 22px;
+    border:none;
+    cursor:pointer;
     border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 18px rgba(0,217,255,.35);
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 18px rgba(0,217,255,.45);
     transition:.3s;
 }
 
-.home-btn:hover{
+.home-btn{
+    padding:13px 22px;
+}
+
+.home-btn:hover,
+.menu-row a:hover,
+.control-btn:hover{
     transform:translateY(-4px) scale(1.05);
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
+    box-shadow:0 0 25px #ff2fcf,0 0 40px #00d9ff;
 }
 
 .hero{
     max-width:900px;
-    margin:0 auto 40px;
+    margin:0 auto 30px;
     text-align:center;
     padding:32px 28px;
     border-radius:28px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.2);
     backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 35px rgba(0,217,255,.28);
 }
 
@@ -132,7 +126,7 @@ body{
 }
 
 .menu-row{
-    margin:28px auto 45px;
+    margin:28px auto 30px;
     max-width:900px;
     display:flex;
     justify-content:center;
@@ -141,50 +135,57 @@ body{
 }
 
 .menu-row a{
-    position:relative;
     min-width:145px;
     padding:14px 22px;
     text-align:center;
-    text-decoration:none;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.6px;
-    color:white;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+}
+
+.music-player{
+    max-width:900px;
+    margin:0 auto 45px;
+    padding:28px;
+    text-align:center;
+    border-radius:28px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
     backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.08);
-    overflow:hidden;
-    transition:.35s ease;
+    box-shadow:0 0 30px rgba(0,217,255,.35);
 }
 
-.menu-row a::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:60%;
-    height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
-    transform:skewX(-25deg);
-    transition:.7s;
+.music-player h2{
+    color:#8ef2ff;
+    margin-bottom:10px;
 }
 
-.menu-row a:hover::before{
-    left:160%;
+.now-playing{
+    margin:15px 0;
+    color:#ffd966;
+    font-weight:bold;
 }
 
-.menu-row a:hover{
-    transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
+audio{
+    width:100%;
+    max-width:700px;
+    margin:18px 0;
+}
+
+.controls{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:15px;
+}
+
+.control-btn{
+    padding:12px 22px;
+    font-size:1rem;
+}
+
+.start-note{
+    margin-top:15px;
+    color:#9bdfff;
+    line-height:1.5;
 }
 
 .story-grid{
@@ -201,16 +202,7 @@ body{
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.18);
     backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 25px rgba(0,217,255,.18);
-    transition:.35s;
-}
-
-.story-card:hover{
-    transform:translateY(-8px);
-    box-shadow:
-        0 0 25px rgba(255,47,207,.75),
-        0 0 45px rgba(0,217,255,.75);
 }
 
 .story-card .emoji{
@@ -221,82 +213,11 @@ body{
 .story-card h2{
     color:#8ef2ff;
     margin-bottom:12px;
-    font-size:1.4rem;
 }
 
 .story-card p{
     color:#eefcff;
     line-height:1.7;
-    margin-bottom:22px;
-}
-
-.read-btn{
-    display:inline-block;
-    text-decoration:none;
-    color:white;
-    font-weight:bold;
-    padding:11px 18px;
-    border-radius:15px;
-    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 16px rgba(0,217,255,.45);
-    transition:.3s;
-}
-
-.read-btn:hover{
-    transform:scale(1.08);
-    box-shadow:0 0 28px rgba(255,47,207,.75);
-}
-
-.firework{
-    position:absolute;
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    animation:explode 2.8s infinite ease-out;
-    opacity:0;
-    z-index:1;
-}
-
-.firework:nth-child(2){
-    left:18%;
-    top:24%;
-    background:#ff2fcf;
-}
-
-.firework:nth-child(3){
-    left:80%;
-    top:22%;
-    background:#00d9ff;
-    animation-delay:.8s;
-}
-
-.firework:nth-child(4){
-    left:50%;
-    top:38%;
-    background:#ffaa00;
-    animation-delay:1.4s;
-}
-
-@keyframes explode{
-    0%{
-        opacity:1;
-        box-shadow:0 0 0 currentColor;
-    }
-
-    70%{
-        opacity:1;
-        box-shadow:
-        0 -80px currentColor,
-        60px -60px currentColor,
-        80px 0 currentColor,
-        60px 60px currentColor,
-        0 80px currentColor,
-        -60px 60px currentColor,
-        -80px 0 currentColor,
-        -60px -60px currentColor;
-    }
-
-    100%{opacity:0;}
 }
 
 footer{
@@ -307,190 +228,11 @@ footer{
     color:#9bdfff;
 }
 
-.hidden-admin-btn{
-    width:18px;
-    height:18px;
-    margin-left:6px;
-    border:none;
-    border-radius:50%;
-    background:transparent;
-    color:rgba(255,255,255,.08);
-    cursor:pointer;
-}
-
-.hidden-admin-btn:hover{
-    color:#00d9ff;
-    text-shadow:0 0 12px #00d9ff;
-}
-
-/* Login popup */
-
-.login-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:2000;
-    background:rgba(0,0,20,.82);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.login-box{
-    width:min(92vw,420px);
-    padding:28px;
-    border-radius:24px;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.25);
-    box-shadow:0 0 35px rgba(0,217,255,.4);
-    text-align:center;
-}
-
-.login-box h2{
-    color:#8ef2ff;
-    margin-bottom:18px;
-}
-
-.login-box input{
-    width:100%;
-    margin:10px 0;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    outline:none;
-    font-size:16px;
-}
-
-.login-actions{
-    display:flex;
-    gap:12px;
-    margin-top:16px;
-}
-
-.login-actions button,
-.admin-panel a,
-.logout-btn{
-    flex:1;
-    border:none;
-    border-radius:14px;
-    padding:12px;
-    font-weight:bold;
-    color:white;
-    cursor:pointer;
-    text-decoration:none;
-    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 16px rgba(0,217,255,.45);
-}
-
-.admin-panel{
-    display:none;
-    margin-top:18px;
-    gap:12px;
-    flex-direction:column;
-}
-
-.login-error{
-    margin-top:12px;
-    color:#ffd966;
-    min-height:20px;
-}
-
-.admin-note{
-    margin-top:12px;
-    font-size:13px;
-    color:#9bdfff;
-    line-height:1.5;
-}
-
 @media(max-width:700px){
-    .top-bar{
-        flex-direction:column;
-    }
-
-    .menu-row{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .menu-row a{
-        width:240px;
-    }
+    .top-bar{flex-direction:column;}
+    .menu-row{flex-direction:column;align-items:center;}
+    .menu-row a{width:240px;}
 }
-
-.music-player{
-    max-width:900px;
-    margin:0 auto 45px;
-    padding:22px;
-    text-align:center;
-
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.2);
-    border-radius:24px;
-
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-
-    box-shadow:0 0 25px rgba(0,217,255,.3);
-}
-
-.music-player h3{
-    margin-bottom:15px;
-    color:#8ef2ff;
-    font-size:1.3rem;
-    letter-spacing:1px;
-}
-
-.music-player audio{
-    width:100%;
-    max-width:650px;
-    border-radius:18px;
-    filter:
-        drop-shadow(0 0 8px #00d9ff)
-        drop-shadow(0 0 12px #7b2cff);
-}
-.music-player{
-    max-width:900px;
-    margin:30px auto;
-    padding:25px;
-    text-align:center;
-    border-radius:25px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,.2);
-    box-shadow:0 0 25px rgba(0,217,255,.35);
-}
-
-.music-player h3{
-    color:#8ef2ff;
-    margin-bottom:15px;
-}
-
-.music-player audio{
-    width:100%;
-    max-width:700px;
-}
-
-#shuffleBtn{
-    margin-bottom:15px;
-    padding:12px 28px;
-    border:none;
-    border-radius:18px;
-    cursor:pointer;
-    color:white;
-    font-weight:bold;
-    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 18px #00d9ff;
-    transition:.3s;
-}
-
-#shuffleBtn:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 30px #00d9ff;
-}
-    
-    
 </style>
 </head>
 
@@ -498,120 +240,67 @@ footer{
 
 <div class="stars"></div>
 
-<div class="firework"></div>
-<div class="firework"></div>
-<div class="firework"></div>
-
 <div class="page">
 
     <div class="top-bar">
-
         <a href="index.html" class="logo">CHAYNOVA</a>
-
         <a href="index.html" class="home-btn">Home</a>
-
     </div>
 
     <section class="hero">
-
         <h1>Beats</h1>
-
         <p>
-            Discover relaxing melodies, and original music that brings every story, game, 
-            and adventure to life.
+            Discover relaxing melodies and original music that brings every story,
+            game, and adventure to life.
         </p>
-
     </section>
 
     <nav class="menu-row">
-
         <a href="story.html">Vibe Story</a>
         <a href="game.html">Play Zone</a>
         <a href="music.html">Beats</a>
         <a href="video.html">Watch</a>
-
     </nav>
 
-<div class="music-player">
-    <h3>🎵 CHAYNOVA Shuffle</h3>
-    <button id="shuffleBtn">🔀</button>
-    <audio id="player" controls></audio>
-</div>
+    <section class="music-player">
+        <h2>🎵 CHAYNOVA Shuffle</h2>
 
-<script>
-const songs = [
-    "audio/background.mp3",
-    "audio/strawberryElephant.mp3",
-    "audio/the25thFloor.mp3"
-];
+        <div id="nowPlaying" class="now-playing">
+            Click Play Music to start
+        </div>
 
-const player = document.getElementById("player");
-const shuffleBtn = document.getElementById("shuffleBtn");
+        <audio id="player" controls></audio>
 
-let currentSong = -1;
+        <div class="controls">
+            <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
+            <button class="control-btn" onclick="startMusic()">▶ Play Music</button>
+            <button class="control-btn" onclick="nextSong()">⏭ Next</button>
+        </div>
 
-function playRandomSong(){
-    let next;
+        <p class="start-note">
+            Music will continue playing and shuffle to the next song automatically.
+            Browser needs one click first to allow sound.
+        </p>
+    </section>
 
-    do{
-        next = Math.floor(Math.random() * songs.length);
-    }while(songs.length > 1 && next === currentSong);
-
-    currentSong = next;
-    player.src = songs[currentSong];
-    player.play();
-}
-
-shuffleBtn.addEventListener("click", playRandomSong);
-
-player.addEventListener("ended", playRandomSong);
-</script>
-    
     <section class="story-grid">
 
         <div class="story-card">
-
             <div class="emoji">✨</div>
-
             <h2>Coming Soon</h2>
-
-            <p>
-                New CHAYNOVA music is coming soon with fun sounds,
-                relaxing beats, and creative vibes.
-            </p>
-
-            <a href="#" class="read-btn">Listen Soon</a>
-
+            <p>New CHAYNOVA music is coming soon with fun sounds, relaxing beats, and creative vibes.</p>
         </div>
 
         <div class="story-card">
-
             <div class="emoji">🎧</div>
-
             <h2>Relax & Vibe</h2>
-
-            <p>
-                Enjoy calming melodies, cool background music,
-                and sounds that make learning feel fun.
-            </p>
-
-            <a href="#" class="read-btn">Explore</a>
-
+            <p>Enjoy calming melodies, cool background music, and sounds that make learning feel fun.</p>
         </div>
 
         <div class="story-card">
-
             <div class="emoji">🚀</div>
-
             <h2>Adventure Beats</h2>
-
-            <p>
-                Get ready for music that matches games, stories,
-                videos, and CHAYNOVA adventures.
-            </p>
-
-            <a href="#" class="read-btn">Start</a>
-
+            <p>Get ready for music that matches games, stories, videos, and CHAYNOVA adventures.</p>
         </div>
 
     </section>
@@ -620,136 +309,72 @@ player.addEventListener("ended", playRandomSong);
 
 <footer>
     © 2026 CHAYNOVA
-    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
 </footer>
 
-<div id="loginOverlay" class="login-overlay">
-    <div class="login-box">
-
-        <h2>CHAYNOVA Admin</h2>
-
-        <div id="loginForm">
-            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
-
-            <div class="login-actions">
-                <button onclick="checkLogin()">Login</button>
-                <button onclick="closeLogin()">Cancel</button>
-            </div>
-
-            <div id="loginError" class="login-error"></div>
-
-            <div class="admin-note">
-                Login is checked by your Cloudflare Worker.
-            </div>
-        </div>
-
-        <div id="adminPanel" class="admin-panel">
-            <a href="story-admin.html">Post New Story</a>
-            <a href="story.html">Open Story Page</a>
-            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-            <button class="logout-btn" onclick="closeLogin()">Close</button>
-        </div>
-
-    </div>
-</div>
-
 <script>
-const API = "https://chay1api.mikebewise.workers.dev";
-
-function openLogin(){
-    document.getElementById("loginOverlay").style.display = "flex";
-    updateAdminPanel();
-
-    setTimeout(() => {
-        const usernameInput = document.getElementById("usernameInput");
-        if(usernameInput && usernameInput.offsetParent !== null){
-            usernameInput.focus();
-        }
-    }, 100);
-}
-
-function closeLogin(){
-    document.getElementById("loginOverlay").style.display = "none";
-    document.getElementById("loginError").innerText = "";
-}
-
-async function checkLogin(){
-    const username = document.getElementById("usernameInput").value.trim();
-    const password = document.getElementById("passwordInput").value.trim();
-    const errorBox = document.getElementById("loginError");
-
-    if(!username || !password){
-        errorBox.innerText = "Please enter username and password.";
-        return;
+const songs = [
+    {
+        title: "Background",
+        file: "audio/background.mp3"
+    },
+    {
+        title: "Strawberry Elephant",
+        file: "audio/strawberryElephant.mp3"
+    },
+    {
+        title: "The 25th Floor",
+        file: "audio/the25thFloor.mp3"
     }
+];
 
-    errorBox.innerText = "Checking login...";
+const player = document.getElementById("player");
+const nowPlaying = document.getElementById("nowPlaying");
 
-    try{
-        const response = await fetch(API + "/login", {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                username:username,
-                password:password
-            })
-        });
+let currentSong = -1;
+let historySongs = [];
 
-        const data = await response.json();
+function randomSong(){
+    let next;
 
-        if(response.ok && data.success && data.token){
-            localStorage.setItem("chaynovaAdminToken", data.token);
-            errorBox.innerText = "";
-            updateAdminPanel();
-        }else{
-            localStorage.removeItem("chaynovaAdminToken");
-            errorBox.innerText = "Wrong username or password.";
-            updateAdminPanel();
-        }
+    do{
+        next = Math.floor(Math.random() * songs.length);
+    }while(songs.length > 1 && next === currentSong);
 
-    }catch(error){
-        errorBox.innerText = "Login failed. Check your Worker API.";
-    }
+    return next;
 }
 
-function updateAdminPanel(){
-    const token = localStorage.getItem("chaynovaAdminToken");
+function playSong(index){
+    currentSong = index;
+    player.src = songs[currentSong].file;
+    nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
 
-    if(token){
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("adminPanel").style.display = "flex";
-    }else{
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("adminPanel").style.display = "none";
+    player.play().catch(() => {
+        nowPlaying.innerText = "Click Play Music to start";
+    });
+}
+
+function startMusic(){
+    const next = randomSong();
+    historySongs.push(next);
+    playSong(next);
+}
+
+function nextSong(){
+    const next = randomSong();
+    historySongs.push(next);
+    playSong(next);
+}
+
+function previousSong(){
+    if(historySongs.length > 1){
+        historySongs.pop();
+        const previous = historySongs[historySongs.length - 1];
+        playSong(previous);
     }
 }
 
-function logoutAdmin(){
-    localStorage.removeItem("chaynovaAdminToken");
-    document.getElementById("usernameInput").value = "";
-    document.getElementById("passwordInput").value = "";
-    updateAdminPanel();
-}
-
-document.getElementById("passwordInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        checkLogin();
-    }
-});
-
-document.getElementById("usernameInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        document.getElementById("passwordInput").focus();
-    }
-});
-
-window.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-        closeLogin();
-    }
+player.addEventListener("ended", function(){
+    nextSong();
 });
 </script>
 
