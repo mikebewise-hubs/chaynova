@@ -6,30 +6,47 @@
 <title>CHAYNOVA Story Admin</title>
 
 <style>
+*{box-sizing:border-box;}
+
 body{
     font-family:Arial,sans-serif;
-    background:#060020;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
     color:white;
     max-width:900px;
     margin:auto;
     padding:30px;
+    min-height:100vh;
 }
 
 h1{
-    color:#00d4ff;
     text-align:center;
+    font-size:2.5rem;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.admin-box{
+    padding:28px;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 0 35px rgba(0,217,255,.28);
 }
 
 input,textarea{
     width:100%;
-    padding:12px;
+    padding:14px;
     margin-top:8px;
     margin-bottom:20px;
     background:#111;
     color:white;
     border:1px solid #00d4ff;
-    border-radius:8px;
-    box-sizing:border-box;
+    border-radius:10px;
+    font-size:16px;
 }
 
 textarea{
@@ -37,38 +54,45 @@ textarea{
     resize:vertical;
 }
 
-button{
-    background:#00d4ff;
-    color:#000;
+button,.link-btn{
+    display:inline-block;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    color:white;
     border:none;
-    padding:15px 40px;
-    border-radius:30px;
-    font-size:18px;
+    padding:14px 28px;
+    border-radius:25px;
+    font-size:17px;
+    font-weight:bold;
     cursor:pointer;
+    text-decoration:none;
+    margin-right:10px;
 }
 
-button:hover{
-    background:#00ffff;
+button:hover,.link-btn:hover{
+    transform:scale(1.05);
 }
 
 img{
-    max-width:250px;
-    margin-top:15px;
+    max-width:260px;
+    margin:15px 0;
     display:none;
-    border-radius:10px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,217,255,.45);
 }
 
 #status{
-    margin-top:20px;
-    font-size:18px;
+    margin-top:18px;
     color:#7CFC00;
+    font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>CHAYNOVA Story Admin</h1>
+<h1 id="pageTitle">CHAYNOVA Story Admin</h1>
+
+<div class="admin-box">
 
 <label>Story Title</label>
 <input id="title" placeholder="Title">
@@ -81,14 +105,21 @@ img{
 
 <img id="preview">
 
-<br><br>
+<br>
 
-<button onclick="uploadStory()">Submit Story</button>
+<button onclick="saveStory()" id="saveBtn">Submit Story</button>
+<a href="story.html?admin=1" class="link-btn">Back to Stories</a>
 
 <div id="status"></div>
 
+</div>
+
 <script>
-const workerURL = "https://chay1api.mikebewise.workers.dev";
+const API = "https://chay1api.mikebewise.workers.dev";
+const params = new URLSearchParams(window.location.search);
+const editId = params.get("id");
+
+let oldImage = "";
 
 image.onchange = () => {
     const file = image.files[0];
@@ -98,30 +129,81 @@ image.onchange = () => {
     preview.style.display = "block";
 };
 
-async function uploadStory() {
-    status.innerHTML = "Uploading...";
+async function loadStoryForEdit(){
+    if(!editId) return;
+
+    pageTitle.innerText = "Edit CHAYNOVA Story";
+    saveBtn.innerText = "Update Story";
+    status.innerHTML = "Loading story...";
+
+    const response = await fetch(API);
+    const stories = await response.json();
+
+    const item = stories.find(s => String(s.id) === String(editId));
+
+    if(!item){
+        status.innerHTML = "Story not found.";
+        return;
+    }
+
+    title.value = item.title;
+    story.value = item.story;
+    oldImage = item.image || "";
+
+    if(oldImage){
+        preview.src = `${API}/image/${encodeURIComponent(oldImage)}`;
+        preview.style.display = "block";
+    }
+
+    status.innerHTML = "";
+}
+
+async function saveStory(){
+    if(!title.value.trim() || !story.value.trim()){
+        status.innerHTML = "Please add title and story.";
+        return;
+    }
+
+    status.innerHTML = editId ? "Updating..." : "Uploading...";
+
+    if(editId){
+        await fetch(`${API}/story/${editId}`, {
+            method:"PUT",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                title:title.value,
+                story:story.value
+            })
+        });
+
+        status.innerHTML = "Story updated!";
+        window.location.href = "story.html?admin=1";
+        return;
+    }
 
     const fd = new FormData();
-
     fd.append("title", title.value);
     fd.append("story", story.value);
 
-    if (image.files[0]) {
+    if(image.files[0]){
         fd.append("image", image.files[0]);
     }
 
-    const r = await fetch(workerURL, {
-        method: "POST",
-        body: fd
+    const r = await fetch(API, {
+        method:"POST",
+        body:fd
     });
 
-    const result = await r.text();
-    status.innerHTML = result;
+    status.innerHTML = await r.text();
 
-    if (r.ok) {
-        window.location.href = "story.html";
+    if(r.ok){
+        window.location.href = "story.html?admin=1";
     }
 }
+
+loadStoryForEdit();
 </script>
 
 </body>
