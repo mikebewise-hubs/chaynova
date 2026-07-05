@@ -41,7 +41,10 @@ async function loadStories(){
     stories.forEach(item => {
       const imageHTML = item.image ? `<img src="${API}/image/${encodeURIComponent(item.image)}" alt="${safeText(item.title)}">` : `<div class="emoji">✨</div>`;
       const adminHTML = isAdmin ? `<div class="admin-buttons"><button onclick="editStory(${item.id})">Edit</button><button onclick="deleteStory(${item.id})">Delete</button></div>` : "";
-      list.innerHTML += `<div class="story-card">${imageHTML}<h2>${safeText(item.title)}</h2><p>${safeText(shortStory(item.story))}</p><a class="read-btn" href="story-admin.html?id=${item.id}">Read Story</a>${adminHTML}</div>`;
+      list.innerHTML += `<div class="story-card">${imageHTML}<h2>${safeText(item.title)}</h2><p>${safeText(shortStory(item.story))}</p><a class="read-btn"
+   href="story-view.html?id=${item.id}">
+    Read Story
+</a>${adminHTML}</div>`;
     });
   }catch(err){
     list.innerHTML = `<div class="story-card"><h2>Could not load stories</h2><p class="error">Check your Worker code and make sure it is deployed.</p></div>`;
