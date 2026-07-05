@@ -457,5 +457,66 @@ footer{
     © 2026 CHAYNOVA
 </footer>
 
+<script>
+const API="https://chay1api.mikebewise.workers.dev";
+
+async function loadStories(){
+
+    const response=await fetch(API);
+
+    const stories=await response.json();
+
+    const list=document.getElementById("storyList");
+
+    list.innerHTML="";
+
+    if(stories.length===0){
+
+        list.innerHTML=`
+        <div class="story-card">
+            <div class="emoji">📖</div>
+            <h2>No Stories Yet</h2>
+            <p>Be the first to publish a story on CHAYNOVA!</p>
+        </div>`;
+
+        return;
+    }
+
+    stories.forEach(item=>{
+
+        let imageHTML="";
+
+        if(item.image){
+
+            imageHTML=`
+            <img src="https://YOUR_ACCOUNT_ID.r2.dev/${item.image}">
+            `;
+        }
+
+        list.innerHTML+=`
+
+        <div class="story-card">
+
+            ${imageHTML}
+
+            <h2>${item.title}</h2>
+
+            <p>${item.story.substring(0,180)}...</p>
+
+            <a class="read-btn" href="#">
+                Read Story
+            </a>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+loadStories();
+</script>
+    
 </body>
 </html>
