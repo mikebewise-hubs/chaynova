@@ -23,10 +23,17 @@ body{
 
 h1{
     text-align:center;
-    font-size:2.5rem;
+    font-size:clamp(2rem,7vw,3rem);
     background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
     -webkit-background-clip:text;
     color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+@keyframes rainbow{
+    from{background-position:0%;}
+    to{background-position:300%;}
 }
 
 .admin-box{
@@ -35,13 +42,21 @@ h1{
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.2);
     box-shadow:0 0 35px rgba(0,217,255,.28);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#c9f7ff;
 }
 
 input,textarea{
     width:100%;
     padding:14px;
-    margin-top:8px;
-    margin-bottom:20px;
+    margin-bottom:18px;
     background:#111;
     color:white;
     border:1px solid #00d4ff;
@@ -52,6 +67,14 @@ input,textarea{
 textarea{
     height:300px;
     resize:vertical;
+    line-height:1.5;
+}
+
+.date-line{
+    margin:-8px 0 22px;
+    color:#8ef2ff;
+    font-size:14px;
+    font-style:italic;
 }
 
 button,.link-btn{
@@ -65,7 +88,8 @@ button,.link-btn{
     font-weight:bold;
     cursor:pointer;
     text-decoration:none;
-    margin-right:10px;
+    margin:8px 10px 8px 0;
+    box-shadow:0 0 16px rgba(0,217,255,.45);
 }
 
 button:hover,.link-btn:hover{
@@ -74,6 +98,7 @@ button:hover,.link-btn:hover{
 
 img{
     max-width:260px;
+    width:100%;
     margin:15px 0;
     display:none;
     border-radius:15px;
@@ -84,6 +109,12 @@ img{
     margin-top:18px;
     color:#7CFC00;
     font-size:18px;
+}
+
+@media(max-width:600px){
+    body{padding:18px;}
+    .admin-box{padding:20px;}
+    button,.link-btn{width:100%;text-align:center;margin-right:0;}
 }
 </style>
 </head>
@@ -97,13 +128,15 @@ img{
 <label>Story Title</label>
 <input id="title" placeholder="Title">
 
+<div id="dateLine" class="date-line">📅 New story</div>
+
 <label>Story</label>
 <textarea id="story" placeholder="Write your story..."></textarea>
 
 <label>Image</label>
 <input id="image" type="file" accept="image/*">
 
-<img id="preview">
+<img id="preview" alt="Story image preview">
 
 <br>
 
@@ -121,6 +154,26 @@ const editId = params.get("id");
 
 let oldImage = "";
 
+function formatDate(dateString){
+    if(!dateString) return "New story";
+
+    const d = new Date(dateString);
+
+    if(isNaN(d.getTime())) return "New story";
+
+    return d.toLocaleString("en-US",{
+        month:"short",
+        day:"numeric",
+        year:"numeric",
+        hour:"numeric",
+        minute:"2-digit"
+    });
+}
+
+if(!editId){
+    dateLine.innerHTML = `📅 ${formatDate(new Date().toISOString())}`;
+}
+
 image.onchange = () => {
     const file = image.files[0];
     if (!file) return;
@@ -136,26 +189,30 @@ async function loadStoryForEdit(){
     saveBtn.innerText = "Update Story";
     status.innerHTML = "Loading story...";
 
-    const response = await fetch(API);
-    const stories = await response.json();
+    try{
+        const response = await fetch(API);
+        const stories = await response.json();
+        const item = stories.find(s => String(s.id) === String(editId));
 
-    const item = stories.find(s => String(s.id) === String(editId));
+        if(!item){
+            status.innerHTML = "Story not found.";
+            return;
+        }
 
-    if(!item){
-        status.innerHTML = "Story not found.";
-        return;
+        title.value = item.title || "";
+        story.value = item.story || "";
+        oldImage = item.image || "";
+        dateLine.innerHTML = `📅 ${formatDate(item.created_at)}`;
+
+        if(oldImage){
+            preview.src = `${API}/image/${encodeURIComponent(oldImage)}`;
+            preview.style.display = "block";
+        }
+
+        status.innerHTML = "";
+    }catch(error){
+        status.innerHTML = "Could not load story.";
     }
-
-    title.value = item.title;
-    story.value = item.story;
-    oldImage = item.image || "";
-
-    if(oldImage){
-        preview.src = `${API}/image/${encodeURIComponent(oldImage)}`;
-        preview.style.display = "block";
-    }
-
-    status.innerHTML = "";
 }
 
 async function saveStory(){
@@ -166,40 +223,47 @@ async function saveStory(){
 
     status.innerHTML = editId ? "Updating..." : "Uploading...";
 
-    if(editId){
-        await fetch(`${API}/story/${editId}`, {
-            method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                title:title.value,
-                story:story.value
-            })
+    try{
+        if(editId){
+            const r = await fetch(`${API}/story/${editId}`, {
+                method:"PUT",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    title:title.value,
+                    story:story.value
+                })
+            });
+
+            if(!r.ok){
+                status.innerHTML = "Update failed.";
+                return;
+            }
+
+            status.innerHTML = "Story updated!";
+            window.location.href = "story.html?admin=1";
+            return;
+        }
+
+        const fd = new FormData();
+        fd.append("title", title.value);
+        fd.append("story", story.value);
+
+        if(image.files[0]){
+            fd.append("image", image.files[0]);
+        }
+
+        const r = await fetch(API, {
+            method:"POST",
+            body:fd
         });
 
-        status.innerHTML = "Story updated!";
-        window.location.href = "story.html?admin=1";
-        return;
-    }
+        status.innerHTML = await r.text();
 
-    const fd = new FormData();
-    fd.append("title", title.value);
-    fd.append("story", story.value);
-
-    if(image.files[0]){
-        fd.append("image", image.files[0]);
-    }
-
-    const r = await fetch(API, {
-        method:"POST",
-        body:fd
-    });
-
-    status.innerHTML = await r.text();
-
-    if(r.ok){
-        window.location.href = "story.html?admin=1";
+        if(r.ok){
+            window.location.href = "story.html?admin=1";
+        }
+    }catch(error){
+        status.innerHTML = "Something went wrong. Please try again.";
     }
 }
 
