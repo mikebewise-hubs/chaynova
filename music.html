@@ -161,101 +161,7 @@ body{
     font-weight:bold;
 }
 
-audio{
-    width:100%;
-    max-width:700px;
-    margin:18px 0;
-}
-
-.controls{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:14px;
-    margin-top:15px;
-}
-
-.control-btn{
-    padding:12px 22px;
-    font-size:1rem;
-}
-
-.start-note{
-    margin-top:15px;
-    color:#9bdfff;
-    line-height:1.5;
-}
-
-.story-grid{
-    max-width:1100px;
-    margin:auto;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:24px;
-}
-
-.story-card{
-    padding:28px;
-    border-radius:25px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.18);
-    backdrop-filter:blur(14px);
-    box-shadow:0 0 25px rgba(0,217,255,.18);
-}
-
-.story-card .emoji{
-    font-size:3rem;
-    margin-bottom:15px;
-}
-
-.story-card h2{
-    color:#8ef2ff;
-    margin-bottom:12px;
-}
-
-.story-card p{
-    color:#eefcff;
-    line-height:1.7;
-}
-
-footer{
-    position:relative;
-    z-index:5;
-    text-align:center;
-    padding:40px 20px;
-    color:#9bdfff;
-}
-
-@media(max-width:700px){
-    .top-bar{flex-direction:column;}
-    .menu-row{flex-direction:column;align-items:center;}
-    .menu-row a{width:240px;}
-}
-.song-list{
-    margin-top:18px;
-    display:grid;
-    gap:12px;
-}
-
-.song-item{
-    padding:12px 16px;
-    border-radius:14px;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.18);
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.song-item:hover,
-.song-item.active{
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 18px rgba(0,217,255,.55);
-    transform:scale(1.03);
-}
-
-    .lyrics-box{
+.lyrics-box{
     margin:18px auto 0;
     padding:22px;
     max-width:760px;
@@ -289,7 +195,69 @@ footer{
     0%,100%{transform:translateY(0);}
     50%{transform:translateY(-5px);}
 }
-    
+
+audio{
+    width:100%;
+    max-width:700px;
+    margin:18px 0;
+}
+
+.controls{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:15px;
+}
+
+.control-btn{
+    padding:12px 22px;
+    font-size:1rem;
+}
+
+.song-list{
+    margin-top:18px;
+    display:grid;
+    gap:12px;
+}
+
+.song-item{
+    padding:12px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.18);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.song-item:hover,
+.song-item.active{
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 18px rgba(0,217,255,.55);
+    transform:scale(1.03);
+}
+
+.start-note{
+    margin-top:15px;
+    color:#9bdfff;
+    line-height:1.5;
+}
+
+footer{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    padding:40px 20px;
+    color:#9bdfff;
+}
+
+@media(max-width:700px){
+    .top-bar{flex-direction:column;}
+    .menu-row{flex-direction:column;align-items:center;}
+    .menu-row a{width:240px;}
+}
 </style>
 </head>
 
@@ -328,42 +296,19 @@ footer{
 
         <div id="lyricsBox" class="lyrics-box"></div>
 
-       <audio id="player" controls preload="auto"></audio>
+        <audio id="player" controls preload="metadata"></audio>
 
         <div class="controls">
             <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
             <button class="control-btn" onclick="startMusic()">▶ Play Music</button>
             <button class="control-btn" onclick="nextSong()">⏭ Next</button>
         </div>
-        
+
         <div id="songList" class="song-list"></div>
-        
+
         <p class="start-note">
-            Default song is Strawberry Elephant. After it ends, CHAYNOVA will shuffle forever.
-            Browser needs one click first to allow sound.
+            Default song is Strawberry Elephant. Browser needs one click first to allow sound.
         </p>
-    </section>
-
-    <section class="story-grid">
-
-        <div class="story-card">
-            <div class="emoji">✨</div>
-            <h2>Coming Soon</h2>
-            <p>New CHAYNOVA music is coming soon with fun sounds, relaxing beats, and creative vibes.</p>
-        </div>
-
-        <div class="story-card">
-            <div class="emoji">🎧</div>
-            <h2>Relax & Vibe</h2>
-            <p>Enjoy calming melodies, cool background music, and sounds that make learning feel fun.</p>
-        </div>
-
-        <div class="story-card">
-            <div class="emoji">🚀</div>
-            <h2>Adventure Beats</h2>
-            <p>Get ready for music that matches games, stories, videos, and CHAYNOVA adventures.</p>
-        </div>
-
     </section>
 
 </div>
@@ -605,11 +550,10 @@ Just promise you’ll come back tonight.
 `
     }
 ];
-
 const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
-const songList = document.getElementById("songList");
 const lyricsBox = document.getElementById("lyricsBox");
+const songList = document.getElementById("songList");
 
 let currentSong = 1;
 let historySongs = [1];
@@ -627,12 +571,30 @@ function showSongList(){
         }
 
         item.onclick = function(){
-    historySongs.push(index);
-    playSong(index);
-};
+            historySongs.push(index);
+            playSong(index);
+        };
 
         songList.appendChild(item);
     });
+}
+
+function updateLyrics(){
+    lyricsBox.innerText = songs[currentSong].lyrics;
+    lyricsBox.scrollTop = 0;
+
+    lyricsBox.style.animation = "none";
+    lyricsBox.offsetHeight;
+    lyricsBox.style.animation = "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
+}
+
+function loadDefaultSong(){
+    player.src = songs[currentSong].file;
+    player.load();
+
+    nowPlaying.innerText = "Ready: " + songs[currentSong].title;
+    updateLyrics();
+    showSongList();
 }
 
 function playSong(index){
@@ -643,8 +605,7 @@ function playSong(index){
     player.load();
 
     nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
-    lyricsBox.innerText = songs[currentSong].lyrics;
-
+    updateLyrics();
     showSongList();
 
     player.play().catch(() => {
@@ -684,7 +645,7 @@ player.addEventListener("ended", function(){
     nextSong();
 });
 
-showSongList();
+window.addEventListener("load", loadDefaultSong);
 </script>
 
 </body>
