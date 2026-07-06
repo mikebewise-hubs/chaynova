@@ -638,7 +638,7 @@ function showSongList(){
 }
 
 function playSong(index){
-    lyricsBox.innerText = songs[currentSong-1].lyrics;
+    lyricsBox.innerText = songs[currentSong].lyrics;
     lyricsBox.style.animation = "none";
     lyricsBox.offsetHeight;
     lyricsBox.style.animation = "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
