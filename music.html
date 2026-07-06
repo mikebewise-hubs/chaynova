@@ -59,6 +59,9 @@ body{
     -webkit-background-clip:text;
     color:transparent;
     -webkit-text-stroke:1.5px rgba(255,255,255,.55);
+    text-shadow:
+        0 3px 0 rgba(0,0,0,.45),
+        0 0 18px rgba(0,217,255,.4);
     animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
 }
 
@@ -72,6 +75,7 @@ body{
     50%{transform:translateY(-10px);}
 }
 
+/* MIRROR GLASS BUTTONS */
 .home-btn,
 .menu-row a,
 .control-btn{
@@ -138,6 +142,15 @@ body{
     padding:13px 22px;
 }
 
+.menu-row{
+    margin:28px auto 30px;
+    max-width:900px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+}
+
 .menu-row a{
     min-width:145px;
     padding:14px 22px;
@@ -158,6 +171,7 @@ body{
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.2);
     backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 35px rgba(0,217,255,.28);
 }
 
@@ -177,21 +191,6 @@ body{
     color:#eefcff;
 }
 
-.menu-row{
-    margin:28px auto 30px;
-    max-width:900px;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:16px;
-}
-
-.menu-row a{
-    min-width:145px;
-    padding:14px 22px;
-    text-align:center;
-}
-
 .music-player{
     max-width:900px;
     margin:0 auto 45px;
@@ -201,6 +200,7 @@ body{
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.2);
     backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 30px rgba(0,217,255,.35);
 }
 
@@ -230,6 +230,7 @@ body{
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.22);
     backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
     box-shadow:0 0 25px rgba(0,217,255,.35);
 
     background-image:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
@@ -262,11 +263,6 @@ audio{
     flex-wrap:wrap;
     gap:14px;
     margin-top:15px;
-}
-
-.control-btn{
-    padding:12px 22px;
-    font-size:1rem;
 }
 
 .song-list{
@@ -308,9 +304,27 @@ footer{
 }
 
 @media(max-width:700px){
-    .top-bar{flex-direction:column;}
-    .menu-row{flex-direction:column;align-items:center;}
-    .menu-row a{width:240px;}
+    .top-bar{
+        flex-direction:column;
+    }
+
+    .menu-row{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .menu-row a{
+        width:240px;
+    }
+
+    .controls{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .control-btn{
+        width:240px;
+    }
 }
 </style>
 </head>
