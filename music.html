@@ -580,12 +580,20 @@ function showSongList(){
 }
 
 function updateLyrics(){
-    lyricsBox.innerText = songs[currentSong].lyrics;
-    lyricsBox.scrollTop = 0;
 
+    lyricsBox.innerText = songs[currentSong].lyrics;
+
+    // Scroll to top
+    lyricsBox.scrollTo({
+    top: 0,
+    behavior: "smooth"
+});
+
+    // Restart animation
     lyricsBox.style.animation = "none";
-    lyricsBox.offsetHeight;
-    lyricsBox.style.animation = "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
+    void lyricsBox.offsetWidth;
+    lyricsBox.style.animation =
+        "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
 }
 
 function loadDefaultSong(){
