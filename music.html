@@ -328,9 +328,7 @@ footer{
 
         <div id="lyricsBox" class="lyrics-box"></div>
 
-        <audio id="player" controls>
-            <source src="audio/strawberryElephant.mp3" type="audio/mpeg">
-        </audio>
+       <audio id="player" controls></audio>
 
         <div class="controls">
             <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
@@ -629,17 +627,20 @@ function showSongList(){
         }
 
         item.onclick = function(){
-            historySongs.push(index);
-            playSong(index);
-        };
+    historySongs.push(index);
+    playSong(index);
+};
 
         songList.appendChild(item);
     });
 }
 
 function playSong(index){
-    currentSong = index;
+    currentSong = Number(index);
+
+    player.pause();
     player.src = songs[currentSong].file;
+    player.load();
 
     nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
     lyricsBox.innerText = songs[currentSong].lyrics;
@@ -647,7 +648,7 @@ function playSong(index){
     showSongList();
 
     player.play().catch(() => {
-        nowPlaying.innerText = "Click Play Music to start: " + songs[currentSong].title;
+        nowPlaying.innerText = "Ready: " + songs[currentSong].title;
     });
 }
 
