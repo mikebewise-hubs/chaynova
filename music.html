@@ -255,6 +255,40 @@ footer{
     transform:scale(1.03);
 }
 
+    .lyrics-box{
+    margin:18px auto 0;
+    padding:22px;
+    max-width:760px;
+    max-height:380px;
+    overflow:auto;
+    white-space:pre-wrap;
+    text-align:left;
+    line-height:1.8;
+    font-size:1rem;
+    font-weight:600;
+    border-radius:22px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.22);
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 25px rgba(0,217,255,.35);
+
+    background-image:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+
+    animation:lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite;
+}
+
+@keyframes lyricRainbow{
+    from{background-position:0%;}
+    to{background-position:300%;}
+}
+
+@keyframes lyricFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-5px);}
+}
     
 </style>
 </head>
@@ -291,6 +325,8 @@ footer{
         <div id="nowPlaying" class="now-playing">
             Ready: Strawberry Elephant
         </div>
+
+        <div id="lyricsBox" class="lyrics-box"></div>
 
         <audio id="player" controls>
             <source src="audio/strawberryElephant.mp3" type="audio/mpeg">
@@ -342,25 +378,238 @@ footer{
 const songs = [
     {
         title: "I miss you every day",
-        file: "audio/background.mp3"
+        file: "audio/background.mp3",
+        lyrics: `
+คิดถึงเธอในแต่ละวัน
+อยากให้มาหาฉันทุกวัน
+รอให้เธอเห็นความสำคัญ
+Grow a garden เลย public ทุกวัน รอเธอ...
+
+อยากได้เธอเป็นแสงตะวัน
+ต้นไม้ฉันจะได้โตขึ้นทุกวัน
+
+เธอคือความรัก ที่ฉันนั้นรอ
+ดอกไม้จะบาน ถ้าเธอยังรอ
+สวนแห่งใจ เต็มไปด้วยรักที่มี
+รอเธอคนดี ช่วยมาดูแลฉันที
+
+หว่านเม็ด seeds ไว้ในสล็อต
+เปิด mailbox เอาไว้ไม่ล็อก
+ไม่ต้อง knock เพราะไม่ได้ล็อก
+Join Roblox แล้วเธอจะช็อค
+
+มีความรักที่ต้องการน้ำ
+รักที่มีหนามกันไว้รอเธอ
+นอนละเมอเธอยังไม่ join
+ยังจะคอย ให้เธอมาหา… อยากชวนเธอมา
+
+รักอย่างแรงแรงเหมือนไฟลุกโชน
+ตะโกนดัง ๆ ว่ามีแค่เธอเท่านั้น
+แม้พายุจะพัด ฉันยังยืนหยัด
+สวนรักของเรา จะไม่ล้มสลาย!
+
+เธอคือความรัก ที่ฉันนั้นรอ
+ดอกไม้จะบาน ถ้าเธอยังรอ
+สวนแห่งใจ เต็มไปด้วยรักที่มี
+รอเธอคนดี ช่วยมาดูแลฉันที
+`
     },
     {
         title: "Strawberry Elephant",
-        file: "audio/strawberryElephant.mp3"
+        file: "audio/strawberryElephant.mp3",
+        lyrics: `
+เธอออนไลน์แล้ว อดยิ้มไม่ไหว
+หัวใจสั่นไหว เหมือนไฟช็อตใจ
+
+Met you in a game where brains get stolen,
+You smiled at me, my world got golden.
+I dropped all loot just to see your laugh,
+My mom yelled “Stop!” but I skipped her path.
+
+No snacks, no time, but I’m still online,
+My heart’s in pixels, girl, you’re mine.
+“One more round, mom, please I swear!”
+I’d trade my chips just to meet you there.
+
+I gave you all my plays and hearts,
+Even if the screen goes dark.
+You stole my time, my mind, my spot,
+In Steal a Brainrot.
+
+You said, “Let’s grow something new.”
+So I left the Brainrot just for you.
+We watered dreams in pixel bloom,
+But something changed, I felt the gloom.
+
+Then one day, I saw who you are,
+No filter lights, no avatar.
+You turned away, said, “Don’t look far,”
+But I still whisper where you are.
+
+I don’t care if you’re real or clay,
+You’re my sunlight in pixel gray.
+You don’t have to hide,
+Don’t have to run,
+You’re my “Strawberry Elephant,” my only one.
+
+You stole my world, but I don’t mind,
+You left your smile inside my mind.
+I’ll play alone, I’ll wait tonight,
+In the glow of Brainrot’s light.
+
+“User not found.”
+
+I built a house with no player two,
+Kept your seat beside me, still blue.
+The garden’s quiet, my flowers cry,
+I still press “Join” every night.
+
+เธอสวยอย่างที่เธอเป็น
+Strawberry Elephant ที่ฉันได้เห็น
+ไม่ได้หาง่ายอย่างที่ใครเป็น…
+ออนไลน์ให้เห็นอีกครั้งเถอะเธอ
+`
     },
     {
         title: "The 25th Floor",
-        file: "audio/the25thFloor.mp3"
+        file: "audio/the25thFloor.mp3",
+        lyrics: `
+First login night, shadows breathe
+Danny World pulling me in
+Heart beats fast, I hesitate
+Fear whispers, don’t begin
+
+Spooky halls, the silence cries
+Only a few floors, I barely rise
+When lights go blackout, I freeze inside
+Twisters spin, nowhere to hide
+I fall again, I lose my way
+Every step feels too far away
+Then I hear your voice so clear
+“You’re stronger than your fear”
+
+You join again, you don’t retreat
+Pull me up to my shaking feet
+One more task, one more door
+I reach the next floor
+
+I was afraid, but I survived
+Through the dark, I stayed alive
+From the blackout, I found my flame
+Danny World knows my name
+Even when the night feels cold
+I won’t break, I won’t fold
+I believed, I tried, I soared
+Till I touched the next floor
+
+One day you never came online
+No green light, no sign
+Without you there, I lost my drive
+Didn’t want to play, just wanted to hide
+Invites ring, again and again
+Friends say, “Come back in”
+I breathe in deep, I choose to stay
+This fear won’t rule my way
+
+Yeah
+Blackout hit, but I didn’t break
+Heart still racing, hands still shake
+No carry, no save, no guide
+Just me and the floor, do or die
+Comfort zone is a padded cage
+Dreams don’t live if you’re scared to rage
+Boxten start, yeah I was low
+Finn in my grip, now watch me go
+Fall, reset, learn the pain
+Every loss feeds my brain
+I don’t quit, I recalibrate
+Fear steps back when I dominate
+
+I’m not afraid, not anymore
+I found my strength on every floor
+If you stay safe, you’ll never know
+How far your courage grows
+I never quit, I never bend
+I find the path until the end
+From the dark to victory’s roar
+Solo… to the 25th floor
+`
     },
     {
         title: "Love Defenders Do",
-        file: "audio/LoveDefendersDo.mp3"
+        file: "audio/LoveDefendersDo.mp3",
+        lyrics: `
+ฉันยังอยู่ตรงนี้ base ยังเปิดไว้
+ไฟยังส่องไกล... แต่เธอกลับไป rebornin’
+
+“Los Crocodillitos.
+Strawberry Elephant.”
+
+Bought these Brainrots, one by one,
+Didn’t care if I lost, I just wanted you to come.
+Every upgrade, every bills I save,
+So when you steal it, girl, I’d still behave.
+
+You said “wait for me, I’ll rebirth soon,”
+Now I’m guarding your shadow under this moon.
+My base half broken, my walls fallin’ down,
+But I still stand tall when your name’s around.
+
+ฉันเก็บ Brainrots ไว้มากมาย
+ให้เธอขโมย และไม่เคยขาย
+เธอไม่ต้องอาย ฉันลูกผู้ชาย
+หัวใจร่างกาย รักไม่ละลาย
+รอเธอจนตายคืนนี้ why
+
+I defend your base like it’s my own,
+Even when my world’s overgrown.
+You steal my Brainrots, take my soul,
+That’s the love I can’t control.
+You rebirth, but I stay still,
+Waitin’ here, I always will,
+Everything I earn, I give to you.
+That’s what love defenders do.
+
+Other players laugh, say I’m dumb,
+Why defend when she never come?
+But they don’t see, this is my peace,
+Your memory’s my masterpiece.
+Every steal, every raid, I see your name,
+Every silence still feels the same.
+You taught me that love’s not a game.
+But I still play it, all the same.
+
+[Bridge – Electric Guitar, Light Thai-pop Vibe]
+If loving you means losing all,
+Then I’ll reset when you call.
+My base, my heart, my faith, my pain,
+All for you to steal again.
+
+[Soft Piano]
+ถ้าเธอขโมยอีกครั้ง ฉันจะไม่สู้
+แค่สัญญาให้รู้... ว่าคืนนี้จะกลับมา
+
+I defend your base like it’s my own,
+Even when my light is gone.
+You steal my Brainrots, take my soul,
+That’s the price of love I know.
+You rebirth, and I still wait,
+Call it foolish, call it fate.
+Everything I have, I give to you,
+Forever in this game of two.
+
+ถ้าเธอขโมยอีกครั้ง ฉันจะไม่สู้
+แค่สัญญาให้รู้... ว่าคืนนี้จะกลับมา
+If you steal again, I won’t fight…
+Just promise you’ll come back tonight.
+`
     }
 ];
 
 const player = document.getElementById("player");
 const nowPlaying = document.getElementById("nowPlaying");
 const songList = document.getElementById("songList");
+const lyricsBox = document.getElementById("lyricsBox");
 
 let currentSong = 1;
 let historySongs = [1];
@@ -387,6 +636,10 @@ function showSongList(){
 }
 
 function playSong(index){
+    lyricsBox.innerText = songs[currentSong].lyrics;
+    lyricsBox.style.animation = "none";
+    lyricsBox.offsetHeight;
+    lyricsBox.style.animation = "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
     currentSong = index;
     player.src = songs[currentSong].file;
     nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
