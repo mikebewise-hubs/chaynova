@@ -638,13 +638,11 @@ function showSongList(){
 }
 
 function playSong(index){
-    lyricsBox.innerText = songs[currentSong].lyrics;
-    lyricsBox.style.animation = "none";
-    lyricsBox.offsetHeight;
-    lyricsBox.style.animation = "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
     currentSong = index;
     player.src = songs[currentSong].file;
+
     nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
+    lyricsBox.innerText = songs[currentSong].lyrics;
 
     showSongList();
 
