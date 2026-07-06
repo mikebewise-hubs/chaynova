@@ -63,23 +63,81 @@ body{
     animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
 }
 
-.home-btn{
+.home-btn,
+.menu-row a,
+.control-btn{
+    position:relative;
+    overflow:hidden;
     text-decoration:none;
     color:white;
     font-weight:bold;
-    padding:13px 22px;
+    border:none;
+    cursor:pointer;
     border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+    background:linear-gradient(
+        135deg,
+        rgba(255,47,207,.35),
+        rgba(123,44,255,.35),
+        rgba(0,217,255,.35)
+    );
+    border:1px solid rgba(255,255,255,.28);
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 18px rgba(0,217,255,.35);
-    transition:.3s;
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 15px rgba(255,255,255,.12);
+    transition:.35s ease;
 }
 
-.home-btn:hover{
+.home-btn::before,
+.menu-row a::before,
+.control-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:65%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.65),
+        transparent
+    );
+    transform:skewX(-25deg);
+    transition:.75s;
+}
+
+.home-btn:hover::before,
+.menu-row a:hover::before,
+.control-btn:hover::before{
+    left:160%;
+}
+
+.home-btn:hover,
+.menu-row a:hover,
+.control-btn:hover{
     transform:translateY(-4px) scale(1.05);
-    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
+}
+
+.home-btn{
+    padding:13px 22px;
+}
+
+.menu-row a{
+    min-width:145px;
+    padding:14px 22px;
+    text-align:center;
+}
+
+.control-btn{
+    padding:12px 22px;
+    font-size:1rem;
 }
 
 .hero{
