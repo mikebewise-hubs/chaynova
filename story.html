@@ -23,7 +23,26 @@ body{
         linear-gradient(135deg,#030010,#080033,#001234);
 }
 
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:radial-gradient(white 1px,transparent 1px);
+    background-size:90px 90px;
+    animation:twinkle 4s infinite alternate;
+    opacity:.6;
+    z-index:0;
+    pointer-events:none;
+}
+
+@keyframes twinkle{
+    from{opacity:.3;}
+    to{opacity:.9;}
+}
+
 .page{
+    position:relative;
+    z-index:5;
     min-height:100vh;
     padding:30px 20px 60px;
 }
@@ -47,30 +66,104 @@ body{
     -webkit-background-clip:text;
     color:transparent;
     -webkit-text-stroke:1.5px rgba(255,255,255,.55);
-    animation:rainbow 6s linear infinite;
+    text-shadow:
+        0 3px 0 rgba(0,0,0,.45),
+        0 0 18px rgba(0,217,255,.4);
+    animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
 }
 
 @keyframes rainbow{
-    from{background-position:0%}
-    to{background-position:300%}
+    from{background-position:0%;}
+    to{background-position:300%;}
 }
 
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+/* MIRROR GLASS BUTTON STYLE */
 .home-btn,
+.menu-row a,
 .read-btn,
 .close-btn,
 .admin-buttons button,
 .login-actions button,
 .admin-panel a,
 .logout-btn{
+    position:relative;
+    overflow:hidden;
     border:none;
     text-decoration:none;
     color:white;
     font-weight:bold;
     padding:12px 18px;
-    border-radius:16px;
-    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 16px rgba(0,217,255,.45);
+    border-radius:18px;
     cursor:pointer;
+    border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(
+        135deg,
+        rgba(255,47,207,.35),
+        rgba(123,44,255,.35),
+        rgba(0,217,255,.35)
+    );
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 15px rgba(255,255,255,.1);
+    transition:.35s ease;
+}
+
+.home-btn::before,
+.menu-row a::before,
+.read-btn::before,
+.close-btn::before,
+.admin-buttons button::before,
+.login-actions button::before,
+.admin-panel a::before,
+.logout-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:60%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.6),
+        transparent
+    );
+    transform:skewX(-25deg);
+    transition:.7s;
+}
+
+.home-btn:hover::before,
+.menu-row a:hover::before,
+.read-btn:hover::before,
+.close-btn:hover::before,
+.admin-buttons button:hover::before,
+.login-actions button:hover::before,
+.admin-panel a:hover::before,
+.logout-btn:hover::before{
+    left:160%;
+}
+
+.home-btn:hover,
+.menu-row a:hover,
+.read-btn:hover,
+.close-btn:hover,
+.admin-buttons button:hover,
+.login-actions button:hover,
+.admin-panel a:hover,
+.logout-btn:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
 }
 
 .hero{
@@ -81,6 +174,8 @@ body{
     border-radius:28px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 35px rgba(0,217,255,.28);
 }
 
@@ -113,13 +208,8 @@ body{
     min-width:145px;
     padding:14px 22px;
     text-align:center;
-    text-decoration:none;
-    font-weight:700;
-    color:white;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
-    box-shadow:0 0 18px rgba(0,217,255,.35);
+    font-size:1rem;
+    letter-spacing:.6px;
 }
 
 .section-title{
@@ -146,7 +236,17 @@ body{
     border-radius:25px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 25px rgba(0,217,255,.18);
+    transition:.35s ease;
+}
+
+.story-card:hover{
+    transform:translateY(-8px);
+    box-shadow:
+        0 0 25px rgba(255,47,207,.75),
+        0 0 45px rgba(0,217,255,.75);
 }
 
 .story-card img{
@@ -195,7 +295,10 @@ body{
     position:fixed;
     inset:0;
     z-index:999;
-    background:linear-gradient(135deg,#030010,#080033,#001234);
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,0,180,.35), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,200,255,.35), transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
     overflow-y:auto;
     padding:20px;
 }
@@ -212,6 +315,7 @@ body{
     object-fit:cover;
     border-radius:20px;
     margin:20px 0;
+    box-shadow:0 0 28px rgba(0,217,255,.35);
 }
 
 .full-content h1{
@@ -228,6 +332,8 @@ body{
 }
 
 footer{
+    position:relative;
+    z-index:5;
     text-align:center;
     padding:40px 20px;
     color:#9bdfff;
@@ -249,8 +355,7 @@ footer{
     text-shadow:0 0 12px #00d9ff;
 }
 
-/* Login popup */
-
+/* LOGIN POPUP */
 .login-overlay{
     display:none;
     position:fixed;
@@ -270,6 +375,8 @@ footer{
     border-radius:24px;
     background:rgba(255,255,255,.1);
     border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
     box-shadow:0 0 35px rgba(0,217,255,.4);
     text-align:center;
 }
@@ -335,6 +442,10 @@ footer{
 
     .full-content{
         padding:10px;
+    }
+
+    .login-actions{
+        flex-direction:column;
     }
 }
 </style>
