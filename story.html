@@ -83,7 +83,7 @@ body::before{
 }
 
 /* MIRROR GLASS BUTTON STYLE */
-.-btn,
+.home-btn,
 .menu-row a,
 .read-btn,
 .close-btn,
@@ -115,7 +115,7 @@ body::before{
     transition:.35s ease;
 }
 
-.-btn::before,
+.home-btn::before,
 .menu-row a::before,
 .read-btn::before,
 .close-btn::before,
@@ -139,7 +139,7 @@ body::before{
     transition:.7s;
 }
 
-.-btn:hover::before,
+.home-btn:hover::before,
 .menu-row a:hover::before,
 .read-btn:hover::before,
 .close-btn:hover::before,
@@ -150,7 +150,7 @@ body::before{
     left:160%;
 }
 
-.-btn:hover,
+.home-btn:hover,
 .menu-row a:hover,
 .read-btn:hover,
 .close-btn:hover,
@@ -193,6 +193,10 @@ body::before{
     font-size:1.1rem;
     line-height:1.7;
     color:#eefcff;
+}
+
+.home-btn{
+    padding:13px 22px;
 }
 
 .menu-row{
@@ -331,6 +335,37 @@ body::before{
     color:#eefcff;
 }
 
+.firework{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    animation:explode 2.8s infinite ease-out;
+    opacity:0;
+    z-index:1;
+}
+
+.firework:nth-child(2){left:18%;top:24%;background:#ff2fcf;}
+.firework:nth-child(3){left:80%;top:22%;background:#00d9ff;animation-delay:.8s;}
+.firework:nth-child(4){left:50%;top:38%;background:#ffaa00;animation-delay:1.4s;}
+
+@keyframes explode{
+    0%{opacity:1;box-shadow:0 0 0 currentColor;}
+    70%{
+        opacity:1;
+        box-shadow:
+        0 -80px currentColor,
+        60px -60px currentColor,
+        80px 0 currentColor,
+        60px 60px currentColor,
+        0 80px currentColor,
+        -60px 60px currentColor,
+        -80px 0 currentColor,
+        -60px -60px currentColor;
+    }
+    100%{opacity:0;}
+}
+
 footer{
     position:relative;
     z-index:5;
@@ -453,11 +488,16 @@ footer{
 
 <body>
 
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
+
+
 <div class="page">
 
      <div class="top-bar">
         <a href="index.html" class="logo">CHAYNOVA</a>
-        <a href="index.html" class="-btn">Home</a>
+        <a href="index.html" class="home-btn">Home</a>
     </div>
     
 
