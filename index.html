@@ -569,6 +569,26 @@ body{
         font-size:2rem;
     }
 }
+.start-logo{
+    width:min(320px,80vw);
+    height:auto;
+    margin:28px 0;
+    filter:
+        drop-shadow(0 0 10px rgba(255,255,255,.35))
+        drop-shadow(0 0 25px rgba(0,217,255,.45));
+    animation:logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+    
 </style>
 </head>
 
@@ -579,8 +599,21 @@ body{
 </audio>
 
 <div class="start-screen" id="startScreen">
-    <div class="start-text">CHAYNOVA</div>
-    <div class="tap-text">Tap anywhere to begin</div>
+
+    <div class="start-text">
+        CHAYNOVA
+    </div>
+
+    <img
+        src="logo/DYNAMICFULLSLEEK.png"
+        alt="CHAYNOVA Logo"
+        class="start-logo"
+    >
+
+    <div class="tap-text">
+        Tap anywhere to begin
+    </div>
+
 </div>
 
 <div class="stars"></div>
