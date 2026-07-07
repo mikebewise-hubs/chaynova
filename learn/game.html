@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAYNOVA | Play Zone</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
+}
+
+.stars{
+    position:fixed;
+    inset:0;
+    background-image:radial-gradient(white 1px,transparent 1px);
+    background-size:90px 90px;
+    animation:twinkle 4s infinite alternate;
+    opacity:.6;
+    z-index:0;
+}
+
+@keyframes twinkle{from{opacity:.3;}to{opacity:.9;}}
+@keyframes rainbow{from{background-position:0%;}to{background-position:300%;}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+.page{
+    position:relative;
+    z-index:5;
+    min-height:100vh;
+    padding:30px 20px 60px;
+}
+
+.top-bar{
+    max-width:1100px;
+    margin:0 auto 45px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    text-decoration:none;
+    font-size:clamp(2.3rem,7vw,5rem);
+    font-weight:900;
+    letter-spacing:5px;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+    -webkit-text-stroke:1.5px rgba(255,255,255,.55);
+    text-shadow:0 3px 0 rgba(0,0,0,.45),0 0 18px rgba(0,217,255,.4);
+    animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
+}
+
+.home-btn,
+.menu-row a,
+.control-btn{
+    position:relative;
+    overflow:hidden;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+    border:none;
+    cursor:pointer;
+    border-radius:18px;
+    background:linear-gradient(
+        135deg,
+        rgba(255,47,207,.35),
+        rgba(123,44,255,.35),
+        rgba(0,217,255,.35)
+    );
+    border:1px solid rgba(255,255,255,.28);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 15px rgba(255,255,255,.12);
+    transition:.35s ease;
+}
+
+.home-btn::before,
+.menu-row a::before,
+.control-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:65%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.65),
+        transparent
+    );
+    transform:skewX(-25deg);
+    transition:.75s;
+}
+
+.home-btn:hover::before,
+.menu-row a:hover::before,
+.control-btn:hover::before{
+    left:160%;
+}
+
+.home-btn:hover,
+.menu-row a:hover,
+.control-btn:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
+}
+
+.home-btn{
+    padding:13px 22px;
+}
+
+.menu-row a{
+    min-width:145px;
+    padding:14px 22px;
+    text-align:center;
+}
+
+.control-btn{
+    padding:12px 22px;
+    font-size:1rem;
+}
+
+.hero{
+    max-width:900px;
+    margin:0 auto 40px;
+    text-align:center;
+    padding:32px 28px;
+    border-radius:28px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 35px rgba(0,217,255,.28);
+}
+
+.hero h1{
+    font-size:clamp(2.2rem,7vw,4.5rem);
+    margin-bottom:15px;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+.hero p{
+    font-size:clamp(1rem,3vw,1.25rem);
+    line-height:1.7;
+    color:#eefcff;
+}
+
+.menu-row{
+    margin:28px auto 45px;
+    max-width:900px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+}
+
+.menu-row a{
+    position:relative;
+    min-width:145px;
+    padding:14px 22px;
+    text-align:center;
+    text-decoration:none;
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:white;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 18px rgba(0,217,255,.35),inset 0 0 15px rgba(255,255,255,.08);
+    overflow:hidden;
+    transition:.35s ease;
+}
+
+.menu-row a::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:60%;
+    height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-25deg);
+    transition:.7s;
+}
+
+.menu-row a:hover::before{left:160%;}
+
+.menu-row a:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
+}
+
+.story-grid{
+    max-width:1100px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+}
+
+.story-card{
+    padding:28px;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 25px rgba(0,217,255,.18);
+    transition:.35s;
+}
+
+.story-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 0 25px rgba(255,47,207,.75),0 0 45px rgba(0,217,255,.75);
+}
+
+.story-card .emoji{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.story-card h2{
+    color:#8ef2ff;
+    margin-bottom:12px;
+    font-size:1.4rem;
+}
+
+.story-card p{
+    color:#eefcff;
+    line-height:1.7;
+    margin-bottom:22px;
+}
+
+.read-btn{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+    padding:11px 18px;
+    border-radius:15px;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+    transition:.3s;
+}
+
+.read-btn:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 28px rgba(255,47,207,.75);
+}
+
+.firework{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    animation:explode 2.8s infinite ease-out;
+    opacity:0;
+    z-index:1;
+}
+
+.firework:nth-child(2){left:18%;top:24%;background:#ff2fcf;}
+.firework:nth-child(3){left:80%;top:22%;background:#00d9ff;animation-delay:.8s;}
+.firework:nth-child(4){left:50%;top:38%;background:#ffaa00;animation-delay:1.4s;}
+
+@keyframes explode{
+    0%{opacity:1;box-shadow:0 0 0 currentColor;}
+    70%{
+        opacity:1;
+        box-shadow:
+        0 -80px currentColor,
+        60px -60px currentColor,
+        80px 0 currentColor,
+        60px 60px currentColor,
+        0 80px currentColor,
+        -60px 60px currentColor,
+        -80px 0 currentColor,
+        -60px -60px currentColor;
+    }
+    100%{opacity:0;}
+}
+
+footer{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    padding:40px 20px;
+    color:#9bdfff;
+}
+
+.hidden-admin-btn{
+    width:18px;
+    height:18px;
+    margin-left:6px;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.08);
+    cursor:pointer;
+}
+
+.hidden-admin-btn:hover{
+    color:#00d9ff;
+    text-shadow:0 0 12px #00d9ff;
+}
+
+.login-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(0,0,20,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(92vw,420px);
+    padding:28px;
+    border-radius:24px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 0 35px rgba(0,217,255,.4);
+    text-align:center;
+}
+
+.login-box h2{
+    color:#8ef2ff;
+    margin-bottom:18px;
+}
+
+.login-box input{
+    width:100%;
+    margin:10px 0;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    outline:none;
+    font-size:16px;
+}
+
+.login-actions{
+    display:flex;
+    gap:12px;
+    margin-top:16px;
+}
+
+.login-actions button,
+.admin-panel a,
+.logout-btn{
+    flex:1;
+    border:none;
+    border-radius:14px;
+    padding:12px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    text-decoration:none;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+}
+
+.admin-panel{
+    display:none;
+    margin-top:18px;
+    gap:12px;
+    flex-direction:column;
+}
+
+.login-error{
+    margin-top:12px;
+    color:#ffd966;
+    min-height:20px;
+}
+
+.admin-note{
+    margin-top:12px;
+    font-size:13px;
+    color:#9bdfff;
+    line-height:1.5;
+}
+
+@media(max-width:700px){
+    .top-bar{flex-direction:column;}
+    .menu-row{flex-direction:column;align-items:center;}
+    .menu-row a{width:240px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
+
+<div class="page">
+
+    <div class="top-bar">
+        <a href="index.html" class="logo">CHAYNOVA</a>
+        <a href="index.html" class="home-btn">Home</a>
+    </div>
+
+    <section class="hero">
+        <h1>Play Zone</h1>
+        <p>
+            Ready to level up? Discover arcade games, puzzles, quizzes, and exciting adventures.
+            improve your skills, and enjoy endless fun!
+        </p>
+    </section>
+
+    <nav class="menu-row">
+        <a href="story.html">Vibe Story</a>
+        <a href="game.html">Play Zone</a>
+        <a href="music.html">Beats</a>
+        <a href="video.html">Watch</a>
+    </nav>
+
+    <section class="story-grid">
+
+        <div class="story-card">
+
+            <div class="emoji">🎮</div>
+
+            <h2>Coming Soon</h2>
+
+            <p>
+                New CHAYNOVA games are coming soon with fun challenges,
+                cool rewards, and learning adventures.
+            </p>
+
+            <a href="#" class="read-btn">Play Soon</a>
+
+        </div>
+
+        <div class="story-card">
+
+            <div class="emoji">🧠</div>
+
+            <h2>Learn & Play</h2>
+
+            <p>
+                Play games that help you learn words, ideas,
+                problem-solving, and creative thinking.
+            </p>
+
+            <a href="#" class="read-btn">Explore</a>
+
+        </div>
+
+        <div class="story-card">
+
+            <div class="emoji">🚀</div>
+
+            <h2>Challenge Mode</h2>
+
+            <p>
+                Jump into fun challenges, unlock new levels,
+                and test your skills with CHAYNOVA games.
+            </p>
+
+            <a href="#" class="read-btn">Start</a>
+
+        </div>
+
+    </section>
+
+</div>
+
+<footer>
+    © 2026 CHAYNOVA
+    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
+</footer>
+
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+
+        <h2>CHAYNOVA Admin</h2>
+
+        <div id="loginForm">
+            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+
+            <div class="login-actions">
+                <button onclick="checkLogin()">Login</button>
+                <button onclick="closeLogin()">Cancel</button>
+            </div>
+
+            <div id="loginError" class="login-error"></div>
+
+            <div class="admin-note">
+                Login is checked by your Cloudflare Worker.
+            </div>
+        </div>
+
+        <div id="adminPanel" class="admin-panel">
+            <a href="story-admin.html">Post New Story</a>
+            <a href="story.html">Open Story Page</a>
+            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+            <button class="logout-btn" onclick="closeLogin()">Close</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const API = "https://chay1api.mikebewise.workers.dev";
+
+function openLogin(){
+    document.getElementById("loginOverlay").style.display = "flex";
+    updateAdminPanel();
+
+    setTimeout(() => {
+        const usernameInput = document.getElementById("usernameInput");
+        if(usernameInput && usernameInput.offsetParent !== null){
+            usernameInput.focus();
+        }
+    }, 100);
+}
+
+function closeLogin(){
+    document.getElementById("loginOverlay").style.display = "none";
+    document.getElementById("loginError").innerText = "";
+}
+
+async function checkLogin(){
+    const username = document.getElementById("usernameInput").value.trim();
+    const password = document.getElementById("passwordInput").value.trim();
+    const errorBox = document.getElementById("loginError");
+
+    if(!username || !password){
+        errorBox.innerText = "Please enter username and password.";
+        return;
+    }
+
+    errorBox.innerText = "Checking login...";
+
+    try{
+        const response = await fetch(API + "/login", {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username:username,
+                password:password
+            })
+        });
+
+        const data = await response.json();
+
+        if(response.ok && data.success && data.token){
+            localStorage.setItem("chaynovaAdminToken", data.token);
+            errorBox.innerText = "";
+            updateAdminPanel();
+        }else{
+            localStorage.removeItem("chaynovaAdminToken");
+            errorBox.innerText = "Wrong username or password.";
+            updateAdminPanel();
+        }
+
+    }catch(error){
+        errorBox.innerText = "Login failed. Check your Worker API.";
+    }
+}
+
+function updateAdminPanel(){
+    const token = localStorage.getItem("chaynovaAdminToken");
+
+    if(token){
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("adminPanel").style.display = "flex";
+    }else{
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("adminPanel").style.display = "none";
+    }
+}
+
+function logoutAdmin(){
+    localStorage.removeItem("chaynovaAdminToken");
+    document.getElementById("usernameInput").value = "";
+    document.getElementById("passwordInput").value = "";
+    updateAdminPanel();
+}
+
+document.getElementById("passwordInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        checkLogin();
+    }
+});
+
+document.getElementById("usernameInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        document.getElementById("passwordInput").focus();
+    }
+});
+
+window.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+        closeLogin();
+    }
+});
+</script>
+
+</body>
+</html>
