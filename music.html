@@ -326,12 +326,36 @@ footer{
         width:240px;
     }
 }
+
+.firework{
+    position:fixed;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    animation:explode 2.8s infinite ease-out;
+    opacity:0;
+    z-index:1;
+    pointer-events:none;
+}
+.firework:nth-of-type(2){left:18%;top:24%;background:#ff2fcf;}
+.firework:nth-of-type(3){left:80%;top:22%;background:#00d9ff;animation-delay:.8s;}
+.firework:nth-of-type(4){left:50%;top:38%;background:#ffaa00;animation-delay:1.4s;}
+@keyframes explode{
+0%{opacity:1;box-shadow:0 0 0 currentColor;}
+70%{opacity:1;box-shadow:0 -80px currentColor,60px -60px currentColor,80px 0 currentColor,60px 60px currentColor,0 80px currentColor,-60px 60px currentColor,-80px 0 currentColor,-60px -60px currentColor;}
+100%{opacity:0;}
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="stars"></div>
+
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
 
 <div class="page">
 
@@ -429,7 +453,7 @@ Join Roblox แล้วเธอจะช็อค
         title: "Strawberry Elephant",
         file: "audio/strawberryElephant.mp3",
         lyrics: ` 🎶 Strawberry Elephant 🎶
-Loading… Steal a Brainrot… ping! 
+Loading… Steal a Brainrot…ping!
 Yo, she’s online again!
 เธอออนไลน์แล้ว อดยิ้มไม่ไหว
 หัวใจสั่นไหว เหมือนไฟช็อตใจ
