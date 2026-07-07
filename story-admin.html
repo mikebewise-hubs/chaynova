@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAYNOVA Story Admin</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+    font-family:Arial,sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
+    color:white;
+    max-width:900px;
+    margin:auto;
+    padding:30px;
+    min-height:100vh;
+}
+
+h1{
+    text-align:center;
+    font-size:clamp(2rem,7vw,3rem);
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+@keyframes rainbow{
+    from{background-position:0%;}
+    to{background-position:300%;}
+}
+
+.admin-box{
+    padding:28px;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 0 35px rgba(0,217,255,.28);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#c9f7ff;
+}
+
+input,textarea{
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    background:#111;
+    color:white;
+    border:1px solid #00d4ff;
+    border-radius:10px;
+    font-size:16px;
+}
+
+textarea{
+    height:300px;
+    resize:vertical;
+    line-height:1.5;
+}
+
+.date-line{
+    margin:-8px 0 22px;
+    color:#8ef2ff;
+    font-size:14px;
+    font-style:italic;
+}
+
+button,.link-btn{
+    display:inline-block;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    color:white;
+    border:none;
+    padding:14px 28px;
+    border-radius:25px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    margin:8px 10px 8px 0;
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+}
+
+button:hover,.link-btn:hover{
+    transform:scale(1.05);
+}
+
+img{
+    max-width:260px;
+    width:100%;
+    margin:15px 0;
+    display:none;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,217,255,.45);
+}
+
+#status{
+    margin-top:18px;
+    color:#7CFC00;
+    font-size:18px;
+}
+
+@media(max-width:600px){
+    body{padding:18px;}
+    .admin-box{padding:20px;}
+    button,.link-btn{width:100%;text-align:center;margin-right:0;}
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="pageTitle">CHAYNOVA Story Admin</h1>
+
+<div class="admin-box">
+
+<label>Story Title</label>
+<input id="title" placeholder="Title">
+
+<div id="dateLine" class="date-line">New story</div>
+
+<label>Story</label>
+<textarea id="story" placeholder="Write your story..."></textarea>
+
+<label>Image</label>
+<input id="image" type="file" accept="image/*">
+
+<img id="preview" alt="Story image preview">
+
+<br>
+
+<button type="button" onclick="saveStory()" id="saveBtn">Submit Story</button>
+<a href="story.html?admin=1" class="link-btn">Back to Stories</a>
+
+<div id="status"></div>
+
+</div>
+
+<script>
+const token = localStorage.getItem("chaynovaAdminToken");
+
+if (!token) {
+    window.location.replace("/");
+}
+</script>
+    
+<script>
+const API = "https://chay1api.mikebewise.workers.dev";
+
+const params = new URLSearchParams(window.location.search);
+const editId = params.get("id");
+
+const titleInput = document.getElementById("title");
+const storyInput = document.getElementById("story");
+const imageInput = document.getElementById("image");
+const previewImg = document.getElementById("preview");
+const statusBox = document.getElementById("status");
+const dateLineBox = document.getElementById("dateLine");
+const pageTitleBox = document.getElementById("pageTitle");
+const saveBtnBox = document.getElementById("saveBtn");
+
+let oldImage = "";
+
+function formatDate(dateString){
+    if(!dateString) return "New story";
+
+    const d = new Date(dateString);
+
+    if(isNaN(d.getTime())) return "New story";
+
+    return d.toLocaleString("en-US",{
+        month:"short",
+        day:"numeric",
+        year:"numeric",
+        hour:"numeric",
+        minute:"2-digit"
+    });
+}
+
+if(!editId){
+    dateLineBox.innerHTML = formatDate(new Date().toISOString());
+}
+
+imageInput.onchange = () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+
+    previewImg.src = URL.createObjectURL(file);
+    previewImg.style.display = "block";
+};
+
+async function loadStoryForEdit(){
+    if(!editId) return;
+
+    pageTitleBox.innerText = "Edit CHAYNOVA Story";
+    saveBtnBox.innerText = "Update Story";
+    statusBox.innerHTML = "Loading story...";
+
+    try{
+        const response = await fetch(API);
+
+        if(!response.ok){
+            statusBox.innerHTML = "Could not connect to API.";
+            return;
+        }
+
+        const stories = await response.json();
+        const item = stories.find(s => String(s.id) === String(editId));
+
+        if(!item){
+            statusBox.innerHTML = "Story not found.";
+            return;
+        }
+
+        titleInput.value = item.title || "";
+        storyInput.value = item.story || "";
+        oldImage = item.image || "";
+        dateLineBox.innerHTML = formatDate(item.created_at);
+
+        if(item.updated_at){
+            dateLineBox.innerHTML += `<br>(Edited) • ${formatDate(item.updated_at)}`;
+        }
+
+        if(oldImage){
+            previewImg.src = `${API}/image/${encodeURIComponent(oldImage)}`;
+            previewImg.style.display = "block";
+        }
+
+        statusBox.innerHTML = "";
+    }catch(error){
+        statusBox.innerHTML = "Could not load story.";
+    }
+}
+
+async function saveStory(){
+    if(!titleInput.value.trim() || !storyInput.value.trim()){
+        statusBox.innerHTML = "Please add title and story.";
+        return;
+    }
+
+    statusBox.innerHTML = editId ? "Updating..." : "Uploading...";
+    saveBtnBox.disabled = true;
+
+    try{
+        if(editId){
+            const r = await fetch(`${API}/story/${editId}`, {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    title:titleInput.value,
+                    story:storyInput.value,
+                    edited_by:"Admin01"
+                })
+            });
+
+            if(!r.ok){
+                statusBox.innerHTML = "Update failed.";
+                saveBtnBox.disabled = false;
+                return;
+            }
+
+            statusBox.innerHTML = "Story updated!";
+            window.location.href = "story.html?admin=1";
+            return;
+        }
+
+        const fd = new FormData();
+        fd.append("title", titleInput.value);
+        fd.append("story", storyInput.value);
+        fd.append("created_at", new Date().toISOString());
+
+        if(imageInput.files[0]){
+            fd.append("image", imageInput.files[0]);
+        }
+
+        const r = await fetch(API, {
+            method:"POST",
+            body:fd
+        });
+
+        const text = await r.text();
+        statusBox.innerHTML = text;
+
+        if(r.ok){
+            window.location.href = "story.html?admin=1";
+        }else{
+            saveBtnBox.disabled = false;
+        }
+
+    }catch(error){
+        statusBox.innerHTML = "Something went wrong. Please try again.";
+        saveBtnBox.disabled = false;
+    }
+}
+
+loadStoryForEdit();
+</script>
+
+</body>
+</html>
