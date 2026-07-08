@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CHAYNOVA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    font-family:"Oxanium", Arial, sans-serif;
+    color:white;
+    background:
+        radial-gradient(circle at 12% 10%, rgba(255,150,0,.9), transparent 22%),
+        radial-gradient(circle at 20% 45%, rgba(255,47,207,.35), transparent 38%),
+        radial-gradient(circle at 85% 18%, rgba(0,217,255,.55), transparent 35%),
+        radial-gradient(circle at 70% 95%, rgba(120,55,255,.55), transparent 38%),
+        linear-gradient(135deg,#ff8a00 0%,#982ccf 42%,#0059d9 100%);
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        radial-gradient(circle, rgba(255,255,255,.9) 0 1px, transparent 2px) 12% 18%/180px 180px,
+        radial-gradient(circle, rgba(255,255,255,.75) 0 1px, transparent 2px) 70% 22%/130px 130px,
+        radial-gradient(circle, rgba(255,255,255,.6) 0 1px, transparent 2px) 50% 80%/160px 160px;
+    animation:twinkle 2.5s ease-in-out infinite alternate;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:-20%;
+    pointer-events:none;
+    background:
+        conic-gradient(from 180deg at 20% 80%, transparent, rgba(255,47,207,.35), transparent 25%),
+        conic-gradient(from 20deg at 90% 25%, transparent, rgba(0,217,255,.35), transparent 22%);
+    filter:blur(10px);
+    opacity:.8;
+    animation:slowSpin 16s linear infinite;
+}
+
+.start-screen{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:rgba(0,0,25,.86);
+    cursor:pointer;
+    transition:opacity .8s ease, visibility .8s ease;
+}
+
+.start-screen.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.start-title{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    animation:pulse 1.7s ease-in-out infinite;
+}
+
+.start-logo{
+    width:min(90vw,700px);
+    max-height:220px;
+    object-fit:contain;
+
+}
+
+.tap-text{
+    margin-top:24px;
+    font-size:clamp(1rem,4vw,1.35rem);
+    color:#ccf7ff;
+    letter-spacing:2px;
+    text-shadow:0 0 14px #00d9ff;
+}
+
+.firework{
+    position:absolute;
+    width:14px;
+    height:14px;
+    color:white;
+    opacity:0;
+    z-index:2;
+    animation:starExplode 3.2s infinite ease-out;
+}
+
+.firework::before{
+    content:"★";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    font-size:34px;
+    line-height:1;
+    text-shadow:0 0 8px currentColor, 0 0 20px currentColor;
+}
+
+.firework:nth-child(1){
+    left:18%;
+    top:18%;
+    color:#ff55d8;
+}
+.firework:nth-child(2){
+    left:50%;
+    top:26%;
+    color:#ffb400;
+    animation-delay:.7s;
+}
+.firework:nth-child(3){
+    left:80%;
+    top:18%;
+    color:#00d9ff;
+    animation-delay:1.4s;
+}
+
+/* Extra little floating stars */
+.sparkle{
+    position:absolute;
+    color:white;
+    font-size:18px;
+    text-shadow:0 0 10px currentColor;
+    opacity:.8;
+    animation:floatSparkle 4s ease-in-out infinite alternate;
+    z-index:1;
+}
+.sparkle:nth-of-type(4){left:7%; top:42%; color:#fff59c;}
+.sparkle:nth-of-type(5){left:28%; top:75%; color:#ff7cff; animation-delay:1s;}
+.sparkle:nth-of-type(6){left:90%; top:46%; color:#85f5ff; animation-delay:1.7s;}
+.sparkle:nth-of-type(7){left:75%; top:82%; color:#ffd166; animation-delay:2.2s;}
+
+.container{
+    position:relative;
+    z-index:5;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:40px 18px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .8s ease, transform .8s ease;
+}
+
+.container.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.logo-mark{
+    width:150px;
+    height:150px;
+    margin-top:90px;
+    margin-bottom:20px;
+    object-fit:contain;
+    animation:logoFloat 3s ease-in-out infinite;
+    filter:drop-shadow(0 0 12px rgba(255,255,255,.7))
+           drop-shadow(0 0 25px #00d9ff);
+}
+
+
+h1{
+    font-size:clamp(3rem,12vw,6.5rem);
+    letter-spacing:7px;
+    font-weight:800;
+    color:white;
+    text-shadow:0 0 8px #fff, 0 0 25px #00d9ff, 0 0 45px #006dff;
+}
+
+.tagline{
+    margin-top:8px;
+    margin-bottom:34px;
+    font-size:clamp(.9rem,3vw,1.25rem);
+    letter-spacing:7px;
+    color:#bff8ff;
+    text-shadow:0 0 12px #00d9ff;
+}
+
+.tagline span{
+    color:#ffb400;
+}
+
+.menu-bar{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:18px;
+    width:100%;
+    max-width:980px;
+}
+
+.menu-bar a{
+    min-width:140px;
+    padding:18px 18px;
+    border-radius:20px;
+    text-decoration:none;
+    color:white;
+    font-weight:800;
+    letter-spacing:.6px;
+    background:linear-gradient(135deg, rgba(255,47,207,.75), rgba(0,217,255,.55));
+    border:1px solid rgba(255,255,255,.55);
+    box-shadow:0 0 18px rgba(255,255,255,.4), inset 0 0 20px rgba(255,255,255,.18);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    transition:.3s ease;
+}
+
+.menu-bar a:nth-child(2){background:linear-gradient(135deg,rgba(143,70,255,.8),rgba(255,47,207,.55));}
+.menu-bar a:nth-child(3){background:linear-gradient(135deg,rgba(0,150,255,.8),rgba(0,217,255,.5));}
+.menu-bar a:nth-child(4){background:linear-gradient(135deg,rgba(255,180,0,.85),rgba(255,47,207,.45));}
+
+.menu-icon{
+    width:166px;
+    height:166px;
+    display:block;
+    margin:0 auto 10px;
+    object-fit:contain;
+}
+
+.menu-bar a:hover{
+    transform:translateY(-6px) scale(1.05);
+    box-shadow:0 0 22px #fff, 0 0 45px #00d9ff, 0 0 65px #ff2fcf;
+}
+
+.bottom-note{
+    margin-top:55px;
+    font-size:18px;
+    color:white;
+    text-shadow:0 0 12px #00d9ff;
+}
+
+.music-btn{
+    position:fixed;
+    right:22px;
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    z-index:80;
+    width:68px;
+    height:68px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.55);
+    color:white;
+    font-size:29px;
+    cursor:pointer;
+    background:rgba(0,120,255,.28);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 20px #00d9ff, inset 0 0 18px rgba(255,255,255,.18);
+    transition:.25s;
+}
+.music-btn:hover{transform:scale(1.08);}
+
+@keyframes starExplode{
+    0%{
+        opacity:1;
+        transform:scale(.3) rotate(0deg);
+        text-shadow:0 0 0 currentColor;
+    }
+    65%{
+        opacity:1;
+        transform:scale(1) rotate(180deg);
+        text-shadow:
+            0 -90px 0 currentColor,
+            45px -78px 0 currentColor,
+            78px -45px 0 currentColor,
+            95px 0 0 currentColor,
+            78px 45px 0 currentColor,
+            45px 78px 0 currentColor,
+            0 95px 0 currentColor,
+            -45px 78px 0 currentColor,
+            -78px 45px 0 currentColor,
+            -95px 0 0 currentColor,
+            -78px -45px 0 currentColor,
+            -45px -78px 0 currentColor;
+    }
+    100%{
+        opacity:0;
+        transform:scale(1.15) rotate(360deg);
+    }
+}
+
+@keyframes twinkle{
+    from{opacity:.5;}
+    to{opacity:1;}
+}
+
+@keyframes pulse{
+    0%,100%{transform:scale(1); opacity:.8;}
+    50%{transform:scale(1.06); opacity:1;}
+}
+
+@keyframes logoFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes floatSparkle{
+    from{transform:translateY(0) scale(.9); opacity:.45;}
+    to{transform:translateY(-20px) scale(1.25); opacity:1;}
+}
+
+@keyframes slowSpin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+@media(max-width:760px){
+    body{overflow-y:auto;}
+    .logo-mark{width:115px; height:115px; margin-top:60px;}
+    .logo-mark::before{font-size:72px;}
+    .logo-mark::after{font-size:34px;}
+    h1{letter-spacing:3px;}
+    .tagline{letter-spacing:3px;}
+    .menu-bar{max-width:360px;}
+    .menu-bar a{width:100%;}
+    .music-btn{width:58px; height:58px; font-size:25px;}
+}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+    <source src="audio/background.mp3" type="audio/mpeg">
+</audio>
+
+<div class="start-screen" id="startScreen">
+    <div class="start-title">
+    <img src="logo/WHITEDYNAMICTRANS.png"
+         alt="CHAYNOVA Logo"
+         class="start-logo">
+</div>
+    <div class="tap-text">TAP ANYWHERE TO START</div>
+</div>
+
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="sparkle">✦</div>
+<div class="sparkle">✧</div>
+<div class="sparkle">✦</div>
+<div class="sparkle">✧</div>
+
+<main class="container" id="mainContent">
+    <img src="logo/DYNAMICTRANS.png"
+     alt="DYNAMICTRANS Logo"
+     class="logo-mark">
+    <div class="tagline">SPORT WEAR <span>•</span> PLAY <span>•</span> LEARN</div>
+
+   <nav class="menu-bar">
+    <a href="story.html">
+        <img src="logo/SPORTWEARTRANS.png" class="menu-icon" alt="">
+        Shop Sportswear
+    </a>
+
+    <a href="game.html">
+        <img src="logo/PLAYZTRANS.png" class="menu-icon" alt="">
+        Play Zone
+    </a>
+
+    <a href="music.html">
+        <img src="logo/BEATSTRANS.png" class="menu-icon" alt="">
+        Beats
+    </a>
+
+    <a href="video.html">
+        <img src="logo/WATCHTRANS.png" class="menu-icon" alt="">
+        Watch
+    </a>
+</nav>
+
+    <div class="bottom-note">Thank you for visiting! ✨</div>
+</main>
+
+<button id="musicBtn" class="music-btn" title="Pause Music">🔊</button>
+
+<script>
+const startScreen = document.getElementById("startScreen");
+const mainContent = document.getElementById("mainContent");
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+
+startScreen.addEventListener("click", () => {
+    music.volume = 0.35;
+    music.play().catch(() => console.log("Music could not start."));
+    startScreen.classList.add("hide");
+    mainContent.classList.add("show");
+    musicBtn.innerHTML = "🔊";
+    musicBtn.title = "Pause Music";
+});
+
+musicBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if(music.paused){
+        music.play();
+        musicBtn.innerHTML = "🔊";
+        musicBtn.title = "Pause Music";
+    }else{
+        music.pause();
+        musicBtn.innerHTML = "🔇";
+        musicBtn.title = "Play Music";
+    }
+});
+</script>
+</body>
+</html>
