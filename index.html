@@ -185,11 +185,11 @@ body{
 
 .menu-bar a:hover{
     transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#f977db,#9c67f7,#70e0f4);
+    background:linear-gradient(135deg,#ef94da,#a97df6,#70e0f4);
     box-shadow:
-        0 0 20px #efe8ea,
-        0 0 35px #1554f3,
-        0 0 50px #b5ebf4;
+        0 0 10px #bab4b6,
+        0 0 20px #768cc2,
+        0 0 30px #2a9fb4;
 }
 
 .menu-bar a:active{
@@ -402,6 +402,16 @@ body{
         flex-direction:column;
     }
 }
+
+.menu-icon{
+    width:280px;
+    height:280px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 12px;
+}
+
+
 </style>
 </head>
 
@@ -436,12 +446,27 @@ body{
         class="main-logo"
     >
 
-    <div class="menu-bar">
-        <a href="story.html">Vibe Story</a>
-        <a href="game.html">Play Zone</a>
-        <a href="music.html">Beats</a>
-        <a href="video.html">Watch</a>
-    </div>
+    <nav class="menu-bar">
+    <a href="story.html">
+        <img src="logo/SPORTWEARTRANS.png" class="menu-icon" alt="">
+        Shop Sportswear
+    </a>
+
+    <a href="game.html">
+        <img src="logo/PLAYZCTRANS.png" class="menu-icon" alt="">
+        Play Zone
+    </a>
+
+    <a href="music.html">
+        <img src="logo/BEATSTRANS.png" class="menu-icon" alt="">
+        Beats
+    </a>
+
+    <a href="video.html">
+        <img src="logo/WATCHTRANS.png" class="menu-icon" alt="">
+        Watch
+    </a>
+</nav>
 </main>
 
 <button id="musicBtn" class="music-btn" title="Pause Music">🔊</button>
