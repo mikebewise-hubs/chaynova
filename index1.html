@@ -25,6 +25,62 @@ body{
         radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
         linear-gradient(135deg,#da7b06,#7864eb,#72a1f8);
 }
+/* Header */
+header{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(92vw,1050px);
+    z-index:20;
+    display:flex;
+    justify-content:center;
+    padding:12px 18px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    box-shadow:0 0 28px rgba(0,217,255,.25);
+}
+
+header nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+header a{
+    font-family:"Oxanium", sans-serif;
+    font-size:.95rem;
+    font-weight:700;
+    color:white;
+    text-decoration:none;
+    letter-spacing:.6px;
+    transition:.25s ease;
+}
+
+header a:hover{
+    color:#001019;
+    text-shadow:0 0 14px rgba(255,255,255,.9);
+}
+
+@media (max-width:560px){
+    header{
+        top:12px;
+        border-radius:24px;
+    }
+
+    header nav{
+        gap:13px;
+    }
+
+    header a{
+        font-size:.82rem;
+    }
+}
 
 /* BACKGROUND */
 .stars{
@@ -406,17 +462,76 @@ body{
 .menu-icon{
     width:280px;
     height:280px;
-    object-fit:contain;
+    object-fit:cover;
     display:block;
-    margin:0 auto 12px;
+    margin:0 auto 28px;
 }
+
+.logo-text{
+    font-family: "Oxanium", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: .6px;
+    color: #000;
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 30px;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,.35),
+        0 0 20px rgba(0,217,255,.45);
+}
+
+.logo-text{
+    font-family: "Oxanium", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: .6px;
+    color: #000;
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 30px;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,.35),
+        0 0 20px rgba(0,217,255,.45);
+}
+
+.launching-red{
+    color:#870303;
+    animation: launchGlow 1.2s infinite;
+}
+
+@keyframes launchGlow{
+    0%,100%{
+        opacity:1;
+        text-shadow:
+            0 0 5px #ff4d4d,
+            0 0 12px #9c4a4a,
+            0 0 22px #e8dcdc;
+    }
+    50%{
+        opacity:.35;
+        text-shadow:none;
+    }
+}
+
+
 
 
 </style>
 </head>
 
 <body>
-
+<header class="top-header">
+    <nav class="top-nav">
+        <a href="shop.html">Store</a>
+        <a href="fun.html">Fun</a>
+        <a href="support.html">Support</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
 <audio id="bgMusic" loop>
     <source src="audio/background.mp3" type="audio/mpeg">
 </audio>
@@ -445,26 +560,31 @@ body{
         alt="CHAYNOVA Logo"
         class="main-logo"
     >
+<div class="logo-text">
+ CHAYNOVA ATHLETICS, Premium sportswear inspired by Thailand.
+Performance • Comfort • Style  | Based in New York |&nbsp;&nbsp; 🚀
+    <span class="launching-red">Launching Soon</span>
+</div>
 
     <nav class="menu-bar">
     <a href="shop.html">
         <img src="logo/SPORTWEARTRANS.png" class="menu-icon" alt="">
-        Shop Sportswear
+        SHOP SPORTSWEAR
     </a>
 
     <a href="game.html">
         <img src="logo/PLAYZCTRANS.png" class="menu-icon" alt="">
-        Play Zone
+        PLAY ZONE
     </a>
 
     <a href="music.html">
         <img src="logo/BEATSTRANS.png" class="menu-icon" alt="">
-        Beats
+        BEATS
     </a>
 
     <a href="video.html">
         <img src="logo/WATCHTRANS.png" class="menu-icon" alt="">
-        Watch
+        WATCH
     </a>
 </nav>
 </main>
