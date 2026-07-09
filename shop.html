@@ -7,7 +7,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHAYNOVA</title>
+<title>CHAYNOVA ATHLESTICS STORE</title>
 
 <style>
 *{
@@ -25,6 +25,63 @@ body{
         radial-gradient(circle at 20% 20%, rgba(255, 204, 0, 0.4), transparent 30%),
         radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
         linear-gradient(135deg,#da7b06,#7864eb,#72a1f8);
+}
+
+/* Header */
+header{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(92vw,1050px);
+    z-index:20;
+    display:flex;
+    justify-content:center;
+    padding:12px 18px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    box-shadow:0 0 28px rgba(0,217,255,.25);
+}
+
+header nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+header a{
+    font-family:"Oxanium", sans-serif;
+    font-size:.95rem;
+    font-weight:700;
+    color:white;
+    text-decoration:none;
+    letter-spacing:.6px;
+    transition:.25s ease;
+}
+
+header a:hover{
+    color:#001019;
+    text-shadow:0 0 14px rgba(255,255,255,.9);
+}
+
+@media (max-width:560px){
+    header{
+        top:12px;
+        border-radius:24px;
+    }
+
+    header nav{
+        gap:13px;
+    }
+
+    header a{
+        font-size:.82rem;
+    }
 }
 
 /* BACKGROUND */
@@ -72,13 +129,13 @@ body{
 }
 
 .main-logo{
-    width:min(320px,80vw);
+    width:100%;
+    max-width:420px;
     height:auto;
-    margin:28px 0;
-    filter:
-        drop-shadow(0 0 10px rgba(255,255,255,.35))
-        drop-shadow(0 0 25px rgba(0,217,255,.45));
-    animation:logoFloat 3s ease-in-out infinite;
+    margin:0 auto 20px;
+    padding:0;
+    display:block;
+    object-fit:contain;
 }
 
 /* MENU */
@@ -428,6 +485,7 @@ body{
 
 }
 
+
 </style>
 </head>
 
@@ -436,10 +494,19 @@ body{
 <audio id="bgMusic" loop>
     <source src="audio/background.mp3" type="audio/mpeg">
 </audio>
+<header class="top-header">
+    <nav class="top-nav">
+        <a href="shop.html">Store</a>
+        <a href="fun.html">Fun</a>
+        <a href="support.html">Support</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+<div class="firework"></div>
+<div class="firework"></div>
+<div class="firework"></div>
 
-<div class="firework"></div>
-<div class="firework"></div>
-<div class="firework"></div>
 
 <main class="container" id="mainContent">
   <div class="categories">
