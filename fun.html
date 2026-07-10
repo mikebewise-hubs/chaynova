@@ -613,7 +613,7 @@ footer{
     <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
 </footer>
 
-<div id="loginOverlay" class="login-overlay">
+<div id="loginOverlay" class="login-overlay" aria-hidden="true">
     <div class="login-box">
 
         <h2>CHAYNOVA Admin</h2>
@@ -623,8 +623,8 @@ footer{
             <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
             <div class="login-actions">
-                <button onclick="checkLogin()">Login</button>
-                <button onclick="closeLogin()">Cancel</button>
+                <button type="button" onclick="checkLogin()">Login</button>
+                <button type="button" onclick="closeLogin()">Cancel</button>
             </div>
 
             <div id="loginError" class="login-error"></div>
@@ -637,8 +637,8 @@ footer{
         <div id="adminPanel" class="admin-panel">
             <a href="admin-edit-post.html">Admin edit post</a>
             <a href="index.html">Home</a>
-            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-            <button class="logout-btn" onclick="closeLogin()">Close</button>
+            <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
+            <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
         </div>
 
     </div>
@@ -841,10 +841,14 @@ stories.forEach(story=>{
   document.body.appendChild(storyWindow);
 }
 
-const API = "https://chay1api.mikebewise.workers.dev";
+const AUTH_WORKER_URL = "/api/admin-login";
+const ADMIN_SESSION_KEY = "chaynovaAdminAuthenticated";
 
 function openLogin(){
-    document.getElementById("loginOverlay").style.display = "flex";
+    const overlay = document.getElementById("loginOverlay");
+    overlay.style.display = "flex";
+    overlay.setAttribute("aria-hidden", "false");
+    document.getElementById("loginError").innerText = "";
     updateAdminPanel();
 
     setTimeout(() => {
@@ -856,13 +860,17 @@ function openLogin(){
 }
 
 function closeLogin(){
-    document.getElementById("loginOverlay").style.display = "none";
+    const overlay = document.getElementById("loginOverlay");
+    overlay.style.display = "none";
+    overlay.setAttribute("aria-hidden", "true");
     document.getElementById("loginError").innerText = "";
 }
 
 async function checkLogin(){
-    const username = document.getElementById("usernameInput").value.trim();
-    const password = document.getElementById("passwordInput").value.trim();
+    const usernameInput = document.getElementById("usernameInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
     const errorBox = document.getElementById("loginError");
 
     if(!username || !password){
@@ -873,50 +881,56 @@ async function checkLogin(){
     errorBox.innerText = "Checking login...";
 
     try{
-        const response = await fetch(API + "/login", {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch(AUTH_WORKER_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({
-                username:username,
-                password:password
-            })
+            credentials: "include",
+            body: JSON.stringify({ username, password })
         });
 
-        const data = await response.json();
-
-        if(response.ok && data.success && data.token){
-            localStorage.setItem("chaynovaAdminToken", data.token);
-            errorBox.innerText = "";
-            updateAdminPanel();
-        }else{
-            localStorage.removeItem("chaynovaAdminToken");
-            errorBox.innerText = "Wrong username or password.";
-            updateAdminPanel();
+        let data = {};
+        try{
+            data = await response.json();
+        }catch(_){
+            data = {};
         }
 
+        if(!response.ok || data.success === false){
+            throw new Error(data.message || "Wrong username or password.");
+        }
+
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
+        passwordInput.value = "";
+        errorBox.innerText = "";
+        updateAdminPanel();
     }catch(error){
-        errorBox.innerText = "Login failed. Check your Worker API.";
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        updateAdminPanel();
+        errorBox.innerText = error.message || "Login failed. Check your Worker API.";
     }
 }
 
 function updateAdminPanel(){
-    const token = localStorage.getItem("chaynovaAdminToken");
+    const loggedIn = sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes";
+    const loginForm = document.getElementById("loginForm");
+    const adminPanel = document.getElementById("adminPanel");
 
-    if(token){
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("adminPanel").style.display = "flex";
+    if(loggedIn){
+        loginForm.style.display = "none";
+        adminPanel.style.display = "flex";
     }else{
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("adminPanel").style.display = "none";
+        loginForm.style.display = "block";
+        adminPanel.style.display = "none";
     }
 }
 
 function logoutAdmin(){
-    localStorage.removeItem("chaynovaAdminToken");
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
     document.getElementById("usernameInput").value = "";
     document.getElementById("passwordInput").value = "";
+    document.getElementById("loginError").innerText = "";
     updateAdminPanel();
 }
 
@@ -932,11 +946,24 @@ document.getElementById("usernameInput").addEventListener("keydown", function(e)
     }
 });
 
+document.getElementById("loginOverlay").addEventListener("click", function(e){
+    if(e.target === this){
+        closeLogin();
+    }
+});
+
 window.addEventListener("keydown", function(e){
     if(e.key === "Escape"){
         closeLogin();
     }
 });
+
+window.openLogin = openLogin;
+window.closeLogin = closeLogin;
+window.checkLogin = checkLogin;
+window.logoutAdmin = logoutAdmin;
+
+updateAdminPanel();
 
 
     setInterval(showRandomStory, 3000);
