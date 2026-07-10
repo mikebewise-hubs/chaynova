@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>index 1 Home| CHAYNOVA ⚡ Coming This August</title>
+<title>1048Home| CHAYNOVA ⚡ Coming This August</title>
 
 <style>
 *{
@@ -784,6 +784,18 @@ header a:hover{
     }
 }
 
+/* volume bar hide on iOS */
+.music-control.ios {
+    width: 56px;
+    padding: 0;
+}
+
+.music-control.ios .volume-slider {
+    display: none;
+}
+
+
+
 
 </style>
 </head>
@@ -923,6 +935,18 @@ const music = document.getElementById("bgMusic");
 const volumeSlider = document.getElementById("volumeSlider");
 const musicBtn = document.getElementById("musicBtn");
 const siteFooter = document.getElementById("siteFooter");
+// Detect iPhone/iPad (Safari & Chrome on iOS)
+const isiOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+if (isiOS) {
+    document.querySelector(".music-control").classList.add("ios");
+    musicBtn.title = "Use your iPhone volume buttons";
+}
+
+
+
 
 startScreen.addEventListener("click", () => {
     music.volume = 0.35;
