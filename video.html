@@ -191,6 +191,16 @@ body{
     white-space:pre-wrap;
 }
 
+.story-card iframe,
+.story-card video{
+    width:100%;
+    aspect-ratio:16/9;
+    border:none;
+    border-radius:18px;
+    margin-bottom:18px;
+    background:#000;
+}
+
 .read-btn{
     display:inline-block;
     text-decoration:none;
@@ -483,6 +493,59 @@ function isExternalUrl(url){
     }
 }
 
+function getVideoInfo(value = ""){
+    const raw = String(value).trim();
+    if(!raw) return null;
+
+    try{
+        const parsed = new URL(raw,location.href);
+        const host = parsed.hostname.replace(/^www\./,"").toLowerCase();
+
+        if(host === "youtu.be"){
+            const id = parsed.pathname.split("/").filter(Boolean)[0];
+            if(id){
+                return {
+                    type:"youtube",
+                    url:`https://www.youtube.com/embed/${encodeURIComponent(id)}`
+                };
+            }
+        }
+
+        if(host.endsWith("youtube.com")){
+            let id = parsed.searchParams.get("v");
+
+            if(!id){
+                const parts = parsed.pathname.split("/").filter(Boolean);
+                const markerIndex = parts.findIndex(part =>
+                    ["embed","shorts","live"].includes(part)
+                );
+                if(markerIndex !== -1 && parts[markerIndex + 1]){
+                    id = parts[markerIndex + 1];
+                }
+            }
+
+            if(id){
+                return {
+                    type:"youtube",
+                    url:`https://www.youtube.com/embed/${encodeURIComponent(id)}`
+                };
+            }
+        }
+
+        if(/\.mp4(?:$|[?#])/i.test(parsed.href)){
+            return {type:"mp4",url:parsed.href};
+        }
+
+        if(["http:","https:"].includes(parsed.protocol)){
+            return {type:"external",url:parsed.href};
+        }
+    }catch(_){
+        return null;
+    }
+
+    return null;
+}
+
 async function loadWatchCards(){
     try{
         const response = await fetch(WATCH_API,{cache:"no-store"});
@@ -511,20 +574,50 @@ async function loadWatchCards(){
         });
 
         watchGrid.innerHTML = cards.map(card => {
-            const url = safeUrl(card.button_url);
-            const externalAttributes = isExternalUrl(url)
+            const video = getVideoInfo(card.video_url || card.button_url);
+            const buttonUrl = safeUrl(card.button_url);
+            const externalAttributes = isExternalUrl(buttonUrl)
                 ? ' target="_blank" rel="noopener noreferrer"'
+                : "";
+
+            let playerHtml = "";
+
+            if(video?.type === "youtube"){
+                playerHtml = `
+                    <iframe
+                        src="${escapeHtml(video.url)}"
+                        title="${escapeHtml(card.title || "CHAYNOVA video")}"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                `;
+            }else if(video?.type === "mp4"){
+                playerHtml = `
+                    <video controls preload="metadata">
+                        <source src="${escapeHtml(video.url)}" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                `;
+            }
+
+            const buttonHtml = buttonUrl !== "#"
+                ? `
+                    <a href="${escapeHtml(buttonUrl)}"
+                       class="read-btn"${externalAttributes}>
+                        ${escapeHtml(card.button_text || "More")}
+                    </a>
+                `
                 : "";
 
             return `
                 <article class="story-card">
+                    ${playerHtml}
                     <div class="emoji">${escapeHtml(card.emoji || "🎬")}</div>
                     <h2>${escapeHtml(card.title || "Untitled")}</h2>
                     <p>${escapeHtml(card.description || "")}</p>
-                    <a href="${escapeHtml(url)}"
-                       class="read-btn"${externalAttributes}>
-                        ${escapeHtml(card.button_text || "Watch")}
-                    </a>
+                    ${buttonHtml}
                 </article>
             `;
         }).join("");
