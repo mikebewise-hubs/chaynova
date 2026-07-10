@@ -82,21 +82,60 @@ header a:hover{
 }
 
 /* BACKGROUND */
-
 .firework{
     position:fixed;
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    animation:explode 2.8s infinite ease-out;
-    opacity:0;
+    width:20px;
+    height:20px;
+    color:white;
     z-index:1;
     pointer-events:none;
 }
-@keyframes explode{
-0%{opacity:1;box-shadow:0 0 0 currentColor;}
-70%{opacity:1;box-shadow:0 -80px currentColor,60px -60px currentColor,80px 0 currentColor,60px 60px currentColor,0 80px currentColor,-60px 60px currentColor,-80px 0 currentColor,-60px -60px currentColor;}
-100%{opacity:0;}
+
+.firework span{
+    position:absolute;
+    left:50%;
+    top:50%;
+    font-size:18px;
+    color:currentColor;
+    opacity:0;
+    transform:translate(-50%, -50%);
+    animation:starExplode 2.8s ease-out;
+}
+
+.firework span:nth-child(1){ --x:0px;   --y:-80px; }
+.firework span:nth-child(2){ --x:60px;  --y:-60px; }
+.firework span:nth-child(3){ --x:80px;  --y:0px; }
+.firework span:nth-child(4){ --x:60px;  --y:60px; }
+.firework span:nth-child(5){ --x:0px;   --y:80px; }
+.firework span:nth-child(6){ --x:-60px; --y:60px; }
+.firework span:nth-child(7){ --x:-80px; --y:0px; }
+.firework span:nth-child(8){ --x:-60px; --y:-60px; }
+
+@keyframes starExplode{
+    0%{
+        opacity:1;
+        transform:translate(-50%, -50%) scale(.3);
+    }
+
+    70%{
+        opacity:1;
+        transform:
+            translate(
+                calc(-50% + var(--x)),
+                calc(-50% + var(--y))
+            )
+            scale(1);
+    }
+
+    100%{
+        opacity:0;
+        transform:
+            translate(
+                calc(-50% + var(--x)),
+                calc(-50% + var(--y))
+            )
+            scale(.5);
+    }
 }
 
 /* START SCREEN */
@@ -596,29 +635,6 @@ header a:hover{
     50%{transform:translateY(-8px);}
 }
 
-@keyframes explode{
-    0%{
-        opacity:1;
-        box-shadow:0 0 0 currentColor;
-    }
-
-    70%{
-        opacity:1;
-        box-shadow:
-            0 -80px currentColor,
-            60px -60px currentColor,
-            80px 0 currentColor,
-            60px 60px currentColor,
-            0 80px currentColor,
-            -60px 60px currentColor,
-            -80px 0 currentColor,
-            -60px -60px currentColor;
-    }
-
-    100%{
-        opacity:0;
-    }
-}
 
 /* MOBILE */
 @media screen and (max-width:768px){
@@ -735,7 +751,7 @@ header a:hover{
     }
 }
 
-/* Add texxt under each FIREWORK | .firework - @keyframes */
+/* Add text under each FIREWORK | .firework - @keyframes */
 .firework::after{
     content:"⚡ Coming This August";
     position:absolute;
@@ -860,8 +876,25 @@ header a:hover{
     <div class="tap-text">Tap anywhere to begin</div>
 </div>
 
-<div class="firework"></div>
-<div class="firework"></div>
+<div class="firework">
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+</div><div class="firework">
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+    <span>✮</span>
+</div>
 
 
 <main class="container" id="mainContent">
@@ -1124,12 +1157,15 @@ const colors = [
 function randomizeFirework(fw) {
     fw.style.left = Math.random() * 90 + "%";
     fw.style.top = Math.random() * 70 + "%";
-    fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+    fw.style.color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Restart animation
-    fw.style.animation = "none";
-    void fw.offsetWidth;
-    fw.style.animation = "explode 2.8s ease-out";
+    const stars = fw.querySelectorAll("span");
+
+    stars.forEach(star => {
+        star.style.animation = "none";
+        void star.offsetWidth;
+        star.style.animation = "starExplode 2.8s ease-out";
+    });
 }
 
 // Start each firework at a different time
