@@ -263,6 +263,207 @@ header a:hover{
     transform:scale(.92);
 }
 
+
+/* MUSIC CONTROL FRAME */
+
+.music-control{
+    position:fixed;
+    right:18px;
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    z-index:90;
+
+    width:22px;
+    padding:9px 0 0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.25);
+
+    background:rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:
+        0 0 18px rgba(0,217,255,.45),
+        inset 0 0 10px rgba(255,255,255,.15);
+
+    overflow:hidden;
+}
+
+
+/* SHORT VERTICAL VOLUME BAR */
+
+.volume-slider{
+    appearance:none;
+    -webkit-appearance:none;
+
+    writing-mode:vertical-lr;
+    direction:rtl;
+
+    width:6px;
+    height:58px;
+
+    margin:0 0 2px;
+
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.3);
+
+    background:rgba(255,255,255,.2);
+
+    box-shadow:
+        inset 0 0 5px rgba(255,255,255,.2),
+        0 0 8px rgba(0,217,255,.3);
+
+    cursor:pointer;
+}
+
+
+/* SLIDER CIRCLE */
+
+.volume-slider::-webkit-slider-thumb{
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:15px;
+    height:15px;
+
+    border-radius:50%;
+    border:2px solid white;
+
+    background:linear-gradient(
+        135deg,
+        #ff72cf,
+        #9f7dff,
+        #66e8ff
+    );
+
+    box-shadow:0 0 10px rgba(0,217,255,.7);
+
+    cursor:pointer;
+}
+
+.volume-slider::-moz-range-thumb{
+    width:15px;
+    height:15px;
+
+    border-radius:50%;
+    border:2px solid white;
+
+    background:linear-gradient(
+        135deg,
+        #ff72cf,
+        #9f7dff,
+        #66e8ff
+    );
+
+    box-shadow:0 0 10px rgba(0,217,255,.7);
+
+    cursor:pointer;
+}
+
+
+/* MUSIC BUTTON INSIDE SAME FRAME */
+
+.music-btn{
+    position:static;
+
+    width:56px;
+    height:50px;
+
+    border:none;
+    border-top:1px solid rgba(255,255,255,.15);
+
+    border-radius:0;
+
+    cursor:pointer;
+    font-size:24px;
+    color:white;
+
+    background:transparent;
+
+    transition:.25s;
+}
+
+.music-btn:hover{
+    background:rgba(255,255,255,.12);
+    transform:none;
+}
+
+.music-btn:active{
+    transform:scale(.9);
+}
+
+/* keep your existing .music-btn exactly the same */
+
+.volume-slider{
+
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:6px;
+    height:72px;
+
+    writing-mode:vertical-lr;
+    direction:rtl;
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:999px;
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 8px rgba(255,255,255,.12);
+
+    cursor:pointer;
+}
+
+/* Chrome */
+
+.volume-slider::-webkit-slider-thumb{
+
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:16px;
+    height:16px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #ff72cf,
+        #9f7dff,
+        #66e8ff
+    );
+
+    border:2px solid white;
+
+    box-shadow:
+        0 0 12px rgba(0,217,255,.6);
+
+    cursor:pointer;
+}
+
+/* Firefox */
+
+.volume-slider::-moz-range-thumb{
+
+    width:16px;
+    height:16px;
+    border:none;
+    border-radius:50%;
+    background:#66e8ff;
+}
+
 /* FOOTER */
 .site-footer{
     position:fixed;
@@ -659,7 +860,23 @@ Performance • Comfort • Style  | Based in New York |&nbsp;&nbsp; 🚀
 </nav>
 </main>
 
-<button id="musicBtn" class="music-btn" title="Pause Music">🔊</button>
+<div class="music-control">
+
+    <input
+        type="range"
+        id="volumeSlider"
+        class="volume-slider"
+        min="0"
+        max="100"
+        value="35"
+        aria-label="Music volume"
+    >
+
+    <button id="musicBtn" class="music-btn" title="Pause Music">
+        🔊
+    </button>
+
+</div>
 
 <footer class="site-footer" id="siteFooter">
     © 2026 CHAYNOVA
@@ -703,12 +920,13 @@ const API = "https://chay1api.mikebewise.workers.dev";
 const startScreen = document.getElementById("startScreen");
 const mainContent = document.getElementById("mainContent");
 const music = document.getElementById("bgMusic");
+const volumeSlider = document.getElementById("volumeSlider");
 const musicBtn = document.getElementById("musicBtn");
 const siteFooter = document.getElementById("siteFooter");
 
 startScreen.addEventListener("click", () => {
     music.volume = 0.35;
-
+    volumeSlider.value = 35;
     music.play().catch(() => {
         console.log("Music could not start.");
     });
@@ -734,6 +952,17 @@ musicBtn.addEventListener("click", (e) => {
         musicBtn.title = "Play Music";
     }
 });
+volumeSlider.addEventListener("input", () => {
+    music.volume = volumeSlider.value / 100;
+
+    if(music.volume === 0){
+        musicBtn.innerHTML = "🔇";
+        musicBtn.title = "Play Music";
+    }else{
+        musicBtn.innerHTML = music.paused ? "🔇" : "🔊";
+    }
+});
+
 
 function openLogin(){
     document.getElementById("loginOverlay").style.display = "flex";
@@ -863,6 +1092,9 @@ fireworks.forEach((fw, i) => {
 
     }, i * 900);
 });
+
+
+
 
 
 </script>
