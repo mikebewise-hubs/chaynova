@@ -253,13 +253,32 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 
 .saved-card{
     display:grid;
-    grid-template-columns:70px 1fr auto;
+    grid-template-columns:35px 70px 1fr auto;
     gap:15px;
     align-items:center;
     padding:15px;
     border-radius:18px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.18);
+    transition:transform .2s ease, opacity .2s ease, border-color .2s ease;
+}
+
+.saved-card.dragging{
+    opacity:.45;
+    border-color:#00d9ff;
+}
+
+.drag-handle{
+    cursor:grab;
+    font-size:25px;
+    color:#8ef2ff;
+    user-select:none;
+    touch-action:none;
+    text-align:center;
+}
+
+.drag-handle:active{
+    cursor:grabbing;
 }
 
 .saved-emoji{
@@ -370,6 +389,21 @@ footer .hidden-admin-btn:hover{
     transform:none;
 }
 
+.drag-handle{
+    cursor:grab;
+    font-size:24px;
+    color:#8ef2ff;
+    user-select:none;
+}
+
+.saved-card.dragging{
+    opacity:.5;
+}
+
+.saved-card{
+    transition:0.2s;
+}
+
 
 
 
@@ -402,7 +436,8 @@ footer .hidden-admin-btn:hover{
             <div class="two-column">
                 <div>
                     <label for="emoji">Emoji or Icon</label>
-                    <input id="emoji" maxlength="12" value="🎬" required placeholder="🎬">
+                    <input id="emoji" maxlength="32" value="🎬" required placeholder="🎬" autocomplete="off" spellcheck="false" aria-describedby="emojiNote">
+                    <span id="emojiNote" class="small-note">Only one emoji or icon is allowed.</span>
                 </div>
 
                 <div>
@@ -774,43 +809,170 @@ function renderWatchCards(){
         return new Date(b.created_at || 0) - new Date(a.created_at || 0);
     });
 
-    watchList.innerHTML = sorted.map(item => {
-        const description = item.description || "";
-        const preview =
-            description.length > 150 ? `${description.slice(0,150)}...` : description;
+   watchList.innerHTML = sorted.map(item => {
+    const description = item.description || "";
+    const preview =
+        description.length > 150
+            ? `${description.slice(0,150)}...`
+            : description;
 
-        const updated = item.updated_at
-            ? `<br>Updated: ${escapeHtml(formatDate(item.updated_at))}`
-            : "";
+    const updated = item.updated_at
+        ? `<br>Updated: ${escapeHtml(formatDate(item.updated_at))}`
+        : "";
 
-        return `
-            <article class="saved-card">
-                <div class="saved-emoji">${escapeHtml(item.emoji || "🎬")}</div>
+    return `
+        <article class="saved-card" data-id="${escapeHtml(item.id)}">
+            <div class="drag-handle"
+                 draggable="true"
+                 title="Drag to rearrange"
+                 aria-label="Drag to rearrange">☰</div>
 
-                <div class="saved-info">
-                    <h3>${escapeHtml(item.title || "Untitled")}</h3>
-                    <p>${escapeHtml(preview)}</p>
-                    <div class="saved-meta">
-                        Button: ${escapeHtml(item.button_text || "Watch")}
-                        <br>
-                        Created: ${escapeHtml(formatDate(item.created_at))}${updated}
-                    </div>
+            <div class="saved-emoji">
+                ${escapeHtml(item.emoji || "🎬")}
+            </div>
+
+            <div class="saved-info">
+                <h3>${escapeHtml(item.title || "Untitled")}</h3>
+                <p>${escapeHtml(preview)}</p>
+
+                <div class="saved-meta">
+                    Button: ${escapeHtml(item.button_text || "Watch")}
+                    <br>
+                    Created: ${escapeHtml(formatDate(item.created_at))}
+                    ${updated}
                 </div>
+            </div>
 
-                <div class="saved-actions">
-                    <button type="button"
-                        onclick="editWatchCard('${String(item.id).replaceAll("'","\\'")}')">
-                        Edit
-                    </button>
+            <div class="saved-actions">
+                <button type="button"
+                    onclick="editWatchCard('${String(item.id).replaceAll("'","\\'")}')">
+                    Edit
+                </button>
 
-                    <button type="button" class="danger"
-                        onclick="deleteWatchCard('${String(item.id).replaceAll("'","\\'")}')">
-                        Delete
-                    </button>
-                </div>
-            </article>
-        `;
-    }).join("");
+                <button type="button"
+                    class="danger"
+                    onclick="deleteWatchCard('${String(item.id).replaceAll("'","\\'")}')">
+                    Delete
+                </button>
+            </div>
+        </article>
+    `;
+}).join("");
+
+enableDragDrop();
+}
+function enableDragDrop(){
+    const handles = document.querySelectorAll(".drag-handle");
+    let draggedCard = null;
+
+    handles.forEach(handle => {
+        const card = handle.closest(".saved-card");
+
+        handle.addEventListener("dragstart",event => {
+            draggedCard = card;
+            card.classList.add("dragging");
+
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain",card.dataset.id);
+        });
+
+        handle.addEventListener("dragend",async () => {
+            if(!draggedCard) return;
+
+            draggedCard.classList.remove("dragging");
+            draggedCard = null;
+
+            await saveOrder();
+        });
+    });
+
+    watchList.addEventListener("dragover",event => {
+        event.preventDefault();
+
+        if(!draggedCard) return;
+
+        event.dataTransfer.dropEffect = "move";
+
+        const cardAfterPointer = getCardAfterPointer(
+            watchList,
+            event.clientY
+        );
+
+        if(cardAfterPointer){
+            watchList.insertBefore(draggedCard,cardAfterPointer);
+        }else{
+            watchList.appendChild(draggedCard);
+        }
+    });
+}
+function getCardAfterPointer(container,pointerY){
+    const cards = [
+        ...container.querySelectorAll(".saved-card:not(.dragging)")
+    ];
+
+    return cards.reduce((closest,card) => {
+        const box = card.getBoundingClientRect();
+        const offset = pointerY - box.top - box.height / 2;
+
+        if(offset < 0 && offset > closest.offset){
+            return {
+                offset,
+                element:card
+            };
+        }
+
+        return closest;
+    },{
+        offset:Number.NEGATIVE_INFINITY,
+        element:null
+    }).element;
+}
+async function saveOrder(){
+    const order = [...watchList.querySelectorAll(".saved-card")]
+        .map((card,index) => ({
+            id:card.dataset.id,
+            position:index + 1
+        }));
+
+    showStatus("Saving card order...");
+
+    try{
+        const response = await apiFetch(
+            `${WATCH_DATA_API}/reorder`,
+            {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({items:order})
+            }
+        );
+
+        const text = await response.text();
+
+        if(!response.ok){
+            throw new Error(
+                text || `Could not save order. Server error ${response.status}.`
+            );
+        }
+
+        order.forEach(orderItem => {
+            const cachedCard = watchCache.find(
+                card => String(card.id) === String(orderItem.id)
+            );
+
+            if(cachedCard){
+                cachedCard.position = orderItem.position;
+            }
+        });
+
+        showStatus("Card order saved!");
+    }catch(error){
+        showStatus(
+            error.message || "The cards moved, but the order could not be saved.",
+            true
+        );
+    }
 }
 
 function editWatchCard(id){
@@ -965,7 +1127,29 @@ async function deleteWatchCard(id){
     }
 }
 
-[emojiInput,titleInput,descriptionInput,buttonTextInput,buttonUrlInput]
+function limitEmojiInput(){
+    const value = emojiInput.value;
+
+    if(!value){
+        updatePreview();
+        return;
+    }
+
+    // Keep exactly one visible character, including combined emojis such as ❤️ or 👨‍👩‍👧‍👦.
+    if(typeof Intl !== "undefined" && Intl.Segmenter){
+        const segmenter = new Intl.Segmenter(undefined,{granularity:"grapheme"});
+        const firstCharacter = segmenter.segment(value)[Symbol.iterator]().next().value?.segment || "";
+        emojiInput.value = firstCharacter;
+    }else{
+        emojiInput.value = Array.from(value)[0] || "";
+    }
+
+    updatePreview();
+}
+
+emojiInput.addEventListener("input",limitEmojiInput);
+
+[titleInput,descriptionInput,buttonTextInput,buttonUrlInput]
     .forEach(element => element.addEventListener("input",updatePreview));
 
 loginBtn.addEventListener("click",checkLogin);
