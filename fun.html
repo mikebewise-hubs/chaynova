@@ -841,8 +841,8 @@ stories.forEach(story=>{
   document.body.appendChild(storyWindow);
 }
 
-const AUTH_WORKER_URL = "/api/admin-login";
-const ADMIN_SESSION_KEY = "chaynovaAdminAuthenticated";
+const API = "https://chay1api.mikebewise.workers.dev";
+const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
 
 function openLogin(){
     const overlay = document.getElementById("loginOverlay");
@@ -881,12 +881,11 @@ async function checkLogin(){
     errorBox.innerText = "Checking login...";
 
     try{
-        const response = await fetch(AUTH_WORKER_URL, {
+        const response = await fetch(`${API}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include",
             body: JSON.stringify({ username, password })
         });
 
@@ -894,30 +893,32 @@ async function checkLogin(){
         try{
             data = await response.json();
         }catch(_){
-            data = {};
+            throw new Error("The login API returned an invalid response.");
         }
 
-        if(!response.ok || data.success === false){
-            throw new Error(data.message || "Wrong username or password.");
+        if(response.ok && data.success && data.token){
+            localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+            passwordInput.value = "";
+            errorBox.innerText = "";
+            updateAdminPanel();
+        }else{
+            localStorage.removeItem(ADMIN_TOKEN_KEY);
+            updateAdminPanel();
+            errorBox.innerText = data.message || "Wrong username or password.";
         }
-
-        sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
-        passwordInput.value = "";
-        errorBox.innerText = "";
-        updateAdminPanel();
     }catch(error){
-        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        localStorage.removeItem(ADMIN_TOKEN_KEY);
         updateAdminPanel();
         errorBox.innerText = error.message || "Login failed. Check your Worker API.";
     }
 }
 
 function updateAdminPanel(){
-    const loggedIn = sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes";
+    const token = localStorage.getItem(ADMIN_TOKEN_KEY);
     const loginForm = document.getElementById("loginForm");
     const adminPanel = document.getElementById("adminPanel");
 
-    if(loggedIn){
+    if(token){
         loginForm.style.display = "none";
         adminPanel.style.display = "flex";
     }else{
@@ -927,7 +928,7 @@ function updateAdminPanel(){
 }
 
 function logoutAdmin(){
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
     document.getElementById("usernameInput").value = "";
     document.getElementById("passwordInput").value = "";
     document.getElementById("loginError").innerText = "";
