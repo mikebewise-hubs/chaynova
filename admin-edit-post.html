@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Edit Post | CHAYNOVA</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --glass: rgba(255,255,255,.14);
+      --glass-border: rgba(255,255,255,.28);
+      --text: #ffffff;
+      --dark: #16131d;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 208, 64, .42), transparent 28%),
+        radial-gradient(circle at 85% 18%, rgba(0, 229, 255, .38), transparent 30%),
+        radial-gradient(circle at 50% 85%, rgba(255, 73, 206, .30), transparent 34%),
+        linear-gradient(135deg, #dd7a13 0%, #f32708 48%, #e41877 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: .35;
+    }
+
+    header {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(92vw, 1050px);
+      z-index: 50;
+      display: flex;
+      justify-content: center;
+      padding: 8px 18px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 0 28px rgba(0,217,255,.25);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    nav a {
+      font-size: .95rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      letter-spacing: .6px;
+      transition: .25s ease;
+    }
+
+    nav a:hover {
+      color: #001019;
+      text-shadow: 0 0 14px rgba(255,255,255,.9);
+    }
+
+    .nav-logo img {
+      height: 22px;
+      width: auto;
+      vertical-align: middle;
+      transition: transform .2s ease;
+    }
+
+    .nav-logo img:hover {
+      transform: scale(1.1);
+    }
+
+    main {
+      position: relative;
+      z-index: 5;
+      width: min(1100px, 94vw);
+      margin: 0 auto;
+      padding: 120px 0 70px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      text-shadow: 0 5px 20px rgba(0,0,0,.25);
+    }
+
+    .panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 26px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 15px 40px rgba(0,0,0,.25);
+      margin-bottom: 30px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 700;
+      letter-spacing: .25px;
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 15px;
+      padding: 13px 15px;
+      color: #111;
+      background: rgba(255,255,255,.92);
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      box-shadow: 0 0 0 4px rgba(0,229,255,.25);
+      border-color: white;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .small-note {
+      font-size: .84rem;
+      opacity: .82;
+    }
+
+    .time-line {
+      padding: 12px 15px;
+      border-radius: 15px;
+      background: rgba(10,15,25,.26);
+      border: 1px solid rgba(255,255,255,.22);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    #photoPreview {
+      display: none;
+      width: min(100%, 380px);
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.35);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    button,
+    .file-button {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 20px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+
+    button:hover,
+    .file-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+    }
+
+    .save-btn {
+      background: white;
+      color: #111;
+    }
+
+    .clear-btn {
+      background: rgba(255,255,255,.18);
+      color: white;
+      border: 1px solid rgba(255,255,255,.32);
+    }
+
+    .delete-current-btn,
+    .delete-btn {
+      background: #8b101d;
+      color: white;
+    }
+
+    .delete-current-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+
+    .status {
+      min-height: 24px;
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    .table-title {
+      margin-bottom: 18px;
+      text-align: center;
+      font-size: 1.7rem;
+    }
+
+    .post-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .post-card {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+
+    .post-card img {
+      width: 100px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 14px;
+      background: rgba(255,255,255,.15);
+    }
+
+    .no-photo {
+      width: 100px;
+      height: 80px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(255,255,255,.14);
+      font-size: .78rem;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .post-content h3 {
+      margin-bottom: 7px;
+      overflow-wrap: anywhere;
+    }
+
+    .post-content p {
+      line-height: 1.45;
+      opacity: .92;
+      overflow-wrap: anywhere;
+    }
+
+    .post-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-top: 10px;
+      font-size: .78rem;
+      opacity: .82;
+    }
+
+    .post-actions {
+      display: grid;
+      gap: 9px;
+    }
+
+    .edit-btn {
+      background: white;
+      color: #111;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 28px 10px;
+      opacity: .82;
+    }
+
+    footer {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 0 20px 24px;
+      font-size: 14px;
+      text-shadow: 0 0 12px rgba(0,217,255,.6);
+    }
+
+
+
+    .site-footer {
+      position: relative;
+      z-index: 60;
+    }
+
+    .hidden-admin-btn {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.38);
+      padding: 0 5px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .hidden-admin-btn:hover {
+      color: white;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(7, 8, 14, .72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .login-overlay.open { display: grid; }
+
+    .login-box {
+      width: min(440px, 94vw);
+      padding: 28px;
+      border-radius: 26px;
+      background: rgba(20, 18, 30, .94);
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow: 0 24px 70px rgba(0,0,0,.45);
+    }
+
+    .login-box h2 { text-align: center; margin-bottom: 20px; }
+
+    #loginForm { display: grid; gap: 13px; }
+
+    .login-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .login-actions button,
+    .admin-panel a,
+    .admin-panel button {
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 800;
+    }
+
+    .login-error {
+      min-height: 22px;
+      text-align: center;
+      color: #ffb7bf;
+      font-weight: 700;
+    }
+
+    .admin-note {
+      font-size: .82rem;
+      line-height: 1.45;
+      opacity: .72;
+      text-align: center;
+    }
+
+    .admin-panel {
+      display: none;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .admin-panel.open { display: grid; }
+
+    .admin-panel a {
+      display: block;
+      background: white;
+      color: #111;
+      text-decoration: none;
+    }
+
+    .logout-btn { background: rgba(255,255,255,.16); color: white; }
+
+    body.admin-locked main,
+    body.admin-locked header {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        top: 12px;
+        border-radius: 24px;
+      }
+
+      nav {
+        gap: 13px;
+      }
+
+      nav a {
+        font-size: .82rem;
+      }
+
+      main {
+        padding-top: 130px;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+
+      .post-card {
+        grid-template-columns: 78px 1fr;
+      }
+
+      .post-card img,
+      .no-photo {
+        width: 78px;
+        height: 70px;
+      }
+
+      .post-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-locked">
+  <header>
+    <nav>
+      <a href="shop.html">Store</a>
+      <a href="fun.html">Fun</a>
+      <a href="support.html">Support</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="index.html" class="nav-logo">
+        <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Admin Edit Post</h1>
+
+    <section class="panel">
+      <form id="postForm" class="form-grid">
+        <input type="hidden" id="postId">
+
+        <div class="field">
+          <label for="photo">Attach Photo</label>
+          <input id="photo" type="file" accept="image/*">
+          <span class="small-note">The photo and post are saved automatically in this browser.</span>
+          <img id="photoPreview" alt="Selected photo preview">
+        </div>
+
+        <div class="field">
+          <label for="title">1. Short Title</label>
+          <input id="title" type="text" maxlength="80" required placeholder="Enter a short post title">
+          <span class="small-note"><span id="titleCount">0</span>/80 characters</span>
+        </div>
+
+        <div class="field">
+          <label for="detail">2. Details</label>
+          <textarea id="detail" required placeholder="Enter the full post details"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="linkName">3. Link or Name (optional)</label>
+          <input id="linkName" type="text" placeholder="Example: https://example.com or Michael">
+          <span class="small-note">Leaving this empty saves an empty value.</span>
+        </div>
+
+        <div class="field">
+          <label>4. Created Date and Time</label>
+          <div id="createdTimeLine" class="time-line">Not saved yet</div>
+        </div>
+
+        <div class="field">
+          <label for="displayDateTime">5. Date and Time to Show Post</label>
+          <input id="displayDateTime" type="datetime-local" required>
+        </div>
+
+        <div class="button-row">
+          <button class="save-btn" type="submit" id="saveButton">Save Post</button>
+          <button class="clear-btn" type="button" id="clearButton">Clear Form</button>
+          <button class="delete-current-btn" type="button" id="deleteCurrentButton" disabled>Delete Selected</button>
+        </div>
+
+        <div id="status" class="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2 class="table-title">Saved Posts</h2>
+      <div id="postList" class="post-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter">
+    © 2026 CHAYNOVA
+    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin" aria-label="Open admin login">•</button>
+  </footer>
+
+  <div id="loginOverlay" class="login-overlay" aria-hidden="true">
+    <div class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">CHAYNOVA Admin</h2>
+
+      <div id="loginForm">
+        <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+        <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+
+        <div class="login-actions">
+          <button type="button" onclick="checkLogin()">Login</button>
+          <button type="button" onclick="closeLogin()">Cancel</button>
+        </div>
+
+        <div id="loginError" class="login-error"></div>
+
+        <div class="admin-note">
+          Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
+        </div>
+      </div>
+
+      <div id="adminPanel" class="admin-panel">
+        <a href="admin-edit-post.html">Edit Posts</a>
+        <a href="fun.html">Return to Fun Page</a>
+        <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
+        <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Change this only if your Worker login route uses a different address.
+    const AUTH_WORKER_URL = "/api/admin-login";
+    const ADMIN_SESSION_KEY = "chaynovaAdminAuthenticated";
+
+    const loginOverlay = document.getElementById("loginOverlay");
+    const loginForm = document.getElementById("loginForm");
+    const adminPanel = document.getElementById("adminPanel");
+    const usernameInput = document.getElementById("usernameInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const loginError = document.getElementById("loginError");
+
+    function unlockAdmin() {
+      document.body.classList.remove("admin-locked");
+      loginForm.style.display = "none";
+      adminPanel.classList.add("open");
+    }
+
+    function lockAdmin() {
+      document.body.classList.add("admin-locked");
+      loginForm.style.display = "grid";
+      adminPanel.classList.remove("open");
+    }
+
+    function openLogin() {
+      loginOverlay.classList.add("open");
+      loginOverlay.setAttribute("aria-hidden", "false");
+      loginError.textContent = "";
+      if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes") {
+        unlockAdmin();
+      } else {
+        lockAdmin();
+        setTimeout(() => usernameInput.focus(), 50);
+      }
+    }
+
+    function closeLogin() {
+      loginOverlay.classList.remove("open");
+      loginOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    async function checkLogin() {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        loginError.textContent = "Enter your username and password.";
+        return;
+      }
+
+      loginError.textContent = "Checking login…";
+
+      try {
+        const response = await fetch(AUTH_WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username, password })
+        });
+
+        let result = {};
+        try { result = await response.json(); } catch (_) {}
+
+        if (!response.ok || result.success === false) {
+          throw new Error(result.message || "Incorrect username or password.");
+        }
+
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
+        passwordInput.value = "";
+        loginError.textContent = "";
+        unlockAdmin();
+        closeLogin();
+      } catch (error) {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        lockAdmin();
+        loginError.textContent = error.message || "Login failed.";
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      usernameInput.value = "";
+      passwordInput.value = "";
+      lockAdmin();
+    }
+
+    passwordInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") checkLogin();
+    });
+
+    loginOverlay.addEventListener("click", event => {
+      if (event.target === loginOverlay) closeLogin();
+    });
+
+    window.openLogin = openLogin;
+    window.closeLogin = closeLogin;
+    window.checkLogin = checkLogin;
+    window.logoutAdmin = logoutAdmin;
+
+    if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes") {
+      document.body.classList.remove("admin-locked");
+    } else {
+      openLogin();
+    }
+
+    const STORAGE_KEY = "chaynovaAdminPosts";
+
+    const form = document.getElementById("postForm");
+    const postIdInput = document.getElementById("postId");
+    const photoInput = document.getElementById("photo");
+    const photoPreview = document.getElementById("photoPreview");
+    const titleInput = document.getElementById("title");
+    const titleCount = document.getElementById("titleCount");
+    const detailInput = document.getElementById("detail");
+    const linkNameInput = document.getElementById("linkName");
+    const createdTimeLine = document.getElementById("createdTimeLine");
+    const displayDateTimeInput = document.getElementById("displayDateTime");
+    const saveButton = document.getElementById("saveButton");
+    const clearButton = document.getElementById("clearButton");
+    const deleteCurrentButton = document.getElementById("deleteCurrentButton");
+    const status = document.getElementById("status");
+    const postList = document.getElementById("postList");
+
+    let selectedPhotoData = "";
+
+    function loadPosts() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : [];
+      } catch (error) {
+        console.error("Could not read saved posts:", error);
+        return [];
+      }
+    }
+
+    function savePosts(posts) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    }
+
+    function pad(number) {
+      return String(number).padStart(2, "0");
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+
+      return `${pad(date.getMonth() + 1)}:${pad(date.getDate())}:${String(date.getFullYear()).slice(-2)} ` +
+             `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function toDateTimeLocalValue(date = new Date()) {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+             `T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function makeId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function escapeHtml(value = "") {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showStatus(message, isError = false) {
+      status.textContent = message;
+      status.style.color = isError ? "#2c0010" : "#ffffff";
+      clearTimeout(showStatus.timer);
+      showStatus.timer = setTimeout(() => {
+        status.textContent = "";
+      }, 3500);
+    }
+
+    function resetForm() {
+      form.reset();
+      postIdInput.value = "";
+      selectedPhotoData = "";
+      photoPreview.removeAttribute("src");
+      photoPreview.style.display = "none";
+      createdTimeLine.textContent = "Not saved yet";
+      saveButton.textContent = "Save Post";
+      deleteCurrentButton.disabled = true;
+      titleCount.textContent = "0";
+      displayDateTimeInput.value = toDateTimeLocalValue();
+    }
+
+    function renderPosts() {
+      const posts = loadPosts().sort((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+
+      if (posts.length === 0) {
+        postList.innerHTML = '<div class="empty-message">No saved posts yet.</div>';
+        return;
+      }
+
+      postList.innerHTML = posts.map(post => {
+        const shortDetail = post.detail.length > 145
+          ? `${post.detail.slice(0, 145)}...`
+          : post.detail;
+
+        const imageHtml = post.photo
+          ? `<img src="${post.photo}" alt="${escapeHtml(post.title)}">`
+          : '<div class="no-photo">No photo</div>';
+
+        const updatedHtml = post.updatedAt
+          ? `<span>Updated: ${formatDateTime(post.updatedAt)}</span>`
+          : "";
+
+        return `
+          <article class="post-card">
+            ${imageHtml}
+            <div class="post-content">
+              <h3>${escapeHtml(post.title)}</h3>
+              <p>${escapeHtml(shortDetail)}</p>
+              <div class="post-meta">
+                <span>Created: ${formatDateTime(post.createdAt)}</span>
+                ${updatedHtml}
+                <span>Show: ${formatDateTime(post.displayAt)}</span>
+                ${post.linkName ? `<span>Link/Name: ${escapeHtml(post.linkName)}</span>` : ""}
+              </div>
+            </div>
+            <div class="post-actions">
+              <button class="edit-btn" type="button" onclick="editPost('${post.id}')">Edit</button>
+              <button class="delete-btn" type="button" onclick="deletePost('${post.id}')">Delete</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function editPost(id) {
+      const posts = loadPosts();
+      const post = posts.find(item => item.id === id);
+      if (!post) return;
+
+      postIdInput.value = post.id;
+      titleInput.value = post.title;
+      detailInput.value = post.detail;
+      linkNameInput.value = post.linkName || "";
+      selectedPhotoData = post.photo || "";
+      displayDateTimeInput.value = post.displayAt
+        ? toDateTimeLocalValue(new Date(post.displayAt))
+        : toDateTimeLocalValue();
+
+      createdTimeLine.textContent = post.updatedAt
+        ? `${formatDateTime(post.createdAt)} — Updated ${formatDateTime(post.updatedAt)}`
+        : formatDateTime(post.createdAt);
+
+      if (selectedPhotoData) {
+        photoPreview.src = selectedPhotoData;
+        photoPreview.style.display = "block";
+      } else {
+        photoPreview.removeAttribute("src");
+        photoPreview.style.display = "none";
+      }
+
+      titleCount.textContent = String(post.title.length);
+      saveButton.textContent = "Update Post";
+      deleteCurrentButton.disabled = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      showStatus("Post loaded into the form.");
+    }
+
+    function deletePost(id) {
+      const posts = loadPosts();
+      const post = posts.find(item => item.id === id);
+      if (!post) return;
+
+      const confirmed = confirm(`Delete “${post.title}”?`);
+      if (!confirmed) return;
+
+      const nextPosts = posts.filter(item => item.id !== id);
+      savePosts(nextPosts);
+
+      if (postIdInput.value === id) resetForm();
+      renderPosts();
+      showStatus("Post deleted.");
+    }
+
+    photoInput.addEventListener("change", () => {
+      const file = photoInput.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        showStatus("Please choose an image file.", true);
+        photoInput.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = event => {
+        selectedPhotoData = event.target.result;
+        photoPreview.src = selectedPhotoData;
+        photoPreview.style.display = "block";
+      };
+      reader.onerror = () => showStatus("Could not read the selected photo.", true);
+      reader.readAsDataURL(file);
+    });
+
+    titleInput.addEventListener("input", () => {
+      titleCount.textContent = String(titleInput.value.length);
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const title = titleInput.value.trim();
+      const detail = detailInput.value.trim();
+      const linkName = linkNameInput.value.trim();
+      const displayAt = displayDateTimeInput.value;
+
+      if (!title || !detail || !displayAt) {
+        showStatus("Please complete the title, details, and show date/time.", true);
+        return;
+      }
+
+      const posts = loadPosts();
+      const editingId = postIdInput.value;
+      const now = new Date().toISOString();
+
+      if (editingId) {
+        const index = posts.findIndex(item => item.id === editingId);
+        if (index === -1) {
+          showStatus("The selected post could not be found.", true);
+          return;
+        }
+
+        posts[index] = {
+          ...posts[index],
+          title,
+          detail,
+          linkName,
+          photo: selectedPhotoData,
+          displayAt: new Date(displayAt).toISOString(),
+          updatedAt: now
+        };
+
+        savePosts(posts);
+        renderPosts();
+        resetForm();
+        showStatus("Post updated.");
+      } else {
+        const newPost = {
+          id: makeId(),
+          title,
+          detail,
+          linkName,
+          photo: selectedPhotoData,
+          createdAt: now,
+          updatedAt: "",
+          displayAt: new Date(displayAt).toISOString()
+        };
+
+        posts.push(newPost);
+        savePosts(posts);
+        renderPosts();
+        resetForm();
+        showStatus("Post saved.");
+      }
+    });
+
+    clearButton.addEventListener("click", () => {
+      resetForm();
+      showStatus("Form cleared.");
+    });
+
+    deleteCurrentButton.addEventListener("click", () => {
+      if (postIdInput.value) deletePost(postIdInput.value);
+    });
+
+
+    window.editPost = editPost;
+    window.deletePost = deletePost;
+
+    resetForm();
+    renderPosts();
+  </script>
+</body>
+</html>
