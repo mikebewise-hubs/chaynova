@@ -324,47 +324,12 @@ header a:hover{
 
 /* SLIDER CIRCLE */
 
-.volume-slider{
-    -webkit-appearance:none;
-    appearance:none;
-
-    width:58px;
-    height:6px;
-
-    /* Rotate the normal slider vertically for iPhone */
-    transform:rotate(-90deg);
-    transform-origin:center;
-
-    margin:26px 0;
-
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.3);
-
-    background:rgba(255,255,255,.2);
-
-    box-shadow:
-        inset 0 0 5px rgba(255,255,255,.2),
-        0 0 8px rgba(0,217,255,.3);
-
-    cursor:pointer;
-    touch-action:none;
-}
-
-.volume-slider::-webkit-slider-runnable-track{
-    width:100%;
-    height:6px;
-    border-radius:999px;
-    background:rgba(255,255,255,.25);
-}
-
 .volume-slider::-webkit-slider-thumb{
-    -webkit-appearance:none;
     appearance:none;
+    -webkit-appearance:none;
 
-    width:17px;
-    height:17px;
-
-    margin-top:-6px;
+    width:15px;
+    height:15px;
 
     border-radius:50%;
     border:2px solid white;
@@ -377,17 +342,13 @@ header a:hover{
     );
 
     box-shadow:0 0 10px rgba(0,217,255,.7);
-}
 
-.volume-slider::-moz-range-track{
-    height:6px;
-    border-radius:999px;
-    background:rgba(255,255,255,.25);
+    cursor:pointer;
 }
 
 .volume-slider::-moz-range-thumb{
-    width:17px;
-    height:17px;
+    width:15px;
+    height:15px;
 
     border-radius:50%;
     border:2px solid white;
@@ -400,7 +361,10 @@ header a:hover{
     );
 
     box-shadow:0 0 10px rgba(0,217,255,.7);
+
+    cursor:pointer;
 }
+
 
 /* MUSIC BUTTON INSIDE SAME FRAME */
 
