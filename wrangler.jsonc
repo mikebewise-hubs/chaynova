@@ -11,4 +11,6 @@
   "compatibility_flags": [
     "nodejs_compat"
   ]
+// wrangler.jsonc
+"name": "chaynova-api",
 }
