@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHAYNOVA</title>
+  <title>Fun| CHAYNOVA</title>
 
   <style>
     * {
@@ -45,7 +45,7 @@
       z-index: 50;
       display: flex;
       justify-content: center;
-      padding: 12px 18px;
+      padding: 8px 18px;
       border: 1px solid rgba(255,255,255,.25);
       border-radius: 999px;
       background: rgba(255,255,255,.12);
@@ -418,20 +418,40 @@ main{
     margin-top:4px;
 }
 
+.top-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav-logo img {
+    height: 22px;      /* Adjust size as needed */
+    width: auto;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+}
+
+.nav-logo img:hover {
+    transform: scale(1.1);
+}
+
 
   </style>
 </head>
 
 <body>
-  <header>
-    <nav>
-      <a href="shop.html">Store</a>
-      <a href="fun.html">Fun</a>
-      <a href="support.html">Support</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+ <header class="top-header">
+    <nav class="top-nav">
+        <a href="shop.html">Store</a>
+        <a href="fun.html">Fun</a>
+        <a href="support.html">Support</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+
+        <a href="index.html" class="nav-logo">
+            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+        </a>
     </nav>
-  </header>
+</header>
 
   <div id="musicPlayer">
     <div id="songTitle">Strawberry Elephant</div>
