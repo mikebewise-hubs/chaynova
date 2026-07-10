@@ -232,39 +232,7 @@ header a:hover{
     transform:scale(.96);
 }
 
-/* MUSIC BUTTON */
-.music-btn{
-    position:fixed;
-    right:18px;
-    bottom:calc(22px + env(safe-area-inset-bottom));
-    width:56px;
-    height:56px;
-    border:none;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:24px;
-    color:white;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,.25);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.45),
-        inset 0 0 10px rgba(255,255,255,.15);
-    transition:.25s;
-    z-index:90;
-}
-
-.music-btn:hover{
-    transform:scale(1.12);
-}
-
-.music-btn:active{
-    transform:scale(.92);
-}
-
-
-/* MUSIC CONTROL FRAME */
+/* MUSIC CONTROL — iPhone compatible */
 
 .music-control{
     position:fixed;
@@ -272,15 +240,17 @@ header a:hover{
     bottom:calc(22px + env(safe-area-inset-bottom));
     z-index:90;
 
-    width:22px;
-    padding:9px 0 0;
+    width:56px;
+    height:116px;
 
     display:flex;
     flex-direction:column;
     align-items:center;
+    justify-content:flex-end;
 
-    border-radius:28px;
     border:1px solid rgba(255,255,255,.25);
+    border-radius:28px;
+    overflow:hidden;
 
     background:rgba(255,255,255,.12);
 
@@ -290,46 +260,60 @@ header a:hover{
     box-shadow:
         0 0 18px rgba(0,217,255,.45),
         inset 0 0 10px rgba(255,255,255,.15);
-
-    overflow:hidden;
 }
 
-
-/* SHORT VERTICAL VOLUME BAR */
-
+/*
+    Safari on iPhone does not reliably support a true vertical
+    range input. This keeps it horizontal internally and rotates it.
+*/
 .volume-slider{
-    appearance:none;
     -webkit-appearance:none;
+    appearance:none;
 
-    writing-mode:vertical-lr;
-    direction:rtl;
+    width:58px;
+    height:6px;
 
-    width:6px;
-    height:58px;
+    position:absolute;
+    top:30px;
+    left:50%;
 
-    margin:0 0 2px;
+    transform:translateX(-50%) rotate(-90deg);
+    transform-origin:center;
+
+    margin:0;
+    padding:0;
+
+    border:none;
+    border-radius:999px;
+    background:transparent;
+
+    cursor:pointer;
+    touch-action:none;
+}
+
+/* Safari / Chrome track */
+.volume-slider::-webkit-slider-runnable-track{
+    width:100%;
+    height:6px;
 
     border-radius:999px;
-    border:1px solid rgba(255,255,255,.3);
+    border:1px solid rgba(255,255,255,.30);
 
-    background:rgba(255,255,255,.2);
+    background:rgba(255,255,255,.22);
 
     box-shadow:
-        inset 0 0 5px rgba(255,255,255,.2),
-        0 0 8px rgba(0,217,255,.3);
-
-    cursor:pointer;
+        inset 0 0 5px rgba(255,255,255,.20),
+        0 0 8px rgba(0,217,255,.30);
 }
 
-
-/* SLIDER CIRCLE */
-
+/* Safari / Chrome thumb */
 .volume-slider::-webkit-slider-thumb{
-    appearance:none;
     -webkit-appearance:none;
+    appearance:none;
 
-    width:15px;
-    height:15px;
+    width:17px;
+    height:17px;
+    margin-top:-6px;
 
     border-radius:50%;
     border:2px solid white;
@@ -341,14 +325,29 @@ header a:hover{
         #66e8ff
     );
 
-    box-shadow:0 0 10px rgba(0,217,255,.7);
-
+    box-shadow:0 0 10px rgba(0,217,255,.70);
     cursor:pointer;
 }
 
+/* Firefox track */
+.volume-slider::-moz-range-track{
+    width:100%;
+    height:6px;
+
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.30);
+
+    background:rgba(255,255,255,.22);
+
+    box-shadow:
+        inset 0 0 5px rgba(255,255,255,.20),
+        0 0 8px rgba(0,217,255,.30);
+}
+
+/* Firefox thumb */
 .volume-slider::-moz-range-thumb{
-    width:15px;
-    height:15px;
+    width:17px;
+    height:17px;
 
     border-radius:50%;
     border:2px solid white;
@@ -360,29 +359,26 @@ header a:hover{
         #66e8ff
     );
 
-    box-shadow:0 0 10px rgba(0,217,255,.7);
-
+    box-shadow:0 0 10px rgba(0,217,255,.70);
     cursor:pointer;
 }
 
-
-/* MUSIC BUTTON INSIDE SAME FRAME */
-
+/* Speaker button inside the same glass frame */
 .music-btn{
-    position:static;
+    position:absolute;
+    left:0;
+    bottom:0;
 
     width:56px;
     height:50px;
 
     border:none;
     border-top:1px solid rgba(255,255,255,.15);
-
     border-radius:0;
 
     cursor:pointer;
     font-size:24px;
     color:white;
-
     background:transparent;
 
     transition:.25s;
@@ -395,73 +391,6 @@ header a:hover{
 
 .music-btn:active{
     transform:scale(.9);
-}
-
-/* keep your existing .music-btn exactly the same */
-
-.volume-slider{
-
-    appearance:none;
-    -webkit-appearance:none;
-
-    width:6px;
-    height:72px;
-
-    writing-mode:vertical-lr;
-    direction:rtl;
-
-    background:rgba(255,255,255,.12);
-
-    border:1px solid rgba(255,255,255,.25);
-
-    border-radius:999px;
-
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 8px rgba(255,255,255,.12);
-
-    cursor:pointer;
-}
-
-/* Chrome */
-
-.volume-slider::-webkit-slider-thumb{
-
-    appearance:none;
-    -webkit-appearance:none;
-
-    width:16px;
-    height:16px;
-
-    border-radius:50%;
-
-    background:linear-gradient(
-        135deg,
-        #ff72cf,
-        #9f7dff,
-        #66e8ff
-    );
-
-    border:2px solid white;
-
-    box-shadow:
-        0 0 12px rgba(0,217,255,.6);
-
-    cursor:pointer;
-}
-
-/* Firefox */
-
-.volume-slider::-moz-range-thumb{
-
-    width:16px;
-    height:16px;
-    border:none;
-    border-radius:50%;
-    background:#66e8ff;
 }
 
 /* FOOTER */
@@ -868,6 +797,7 @@ Performance • Comfort • Style  | Based in New York |&nbsp;&nbsp; 🚀
         class="volume-slider"
         min="0"
         max="100"
+        step="1"
         value="35"
         aria-label="Music volume"
     >
@@ -952,15 +882,30 @@ musicBtn.addEventListener("click", (e) => {
         musicBtn.title = "Play Music";
     }
 });
-volumeSlider.addEventListener("input", () => {
-    music.volume = volumeSlider.value / 100;
+function updateVolume(){
+    const newVolume = Number(volumeSlider.value) / 100;
+    music.volume = newVolume;
 
-    if(music.volume === 0){
+    if(newVolume === 0){
+        musicBtn.innerHTML = "🔇";
+        musicBtn.title = "Muted";
+    }else if(music.paused){
         musicBtn.innerHTML = "🔇";
         musicBtn.title = "Play Music";
     }else{
-        musicBtn.innerHTML = music.paused ? "🔇" : "🔊";
+        musicBtn.innerHTML = "🔊";
+        musicBtn.title = "Pause Music";
     }
+}
+
+volumeSlider.addEventListener("input", updateVolume);
+volumeSlider.addEventListener("change", updateVolume);
+
+/* Keep slider touches from triggering anything behind it on iPhone */
+["touchstart", "touchmove", "pointerdown", "click"].forEach(eventName => {
+    volumeSlider.addEventListener(eventName, event => {
+        event.stopPropagation();
+    });
 });
 
 
