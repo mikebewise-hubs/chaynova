@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAYNOVA Watch Admin</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+    --glass:rgba(255,255,255,.10);
+    --glass-border:rgba(255,255,255,.24);
+    --cyan:#00d9ff;
+    --pink:#ff2fcf;
+    --purple:#7b2cff;
+    --green:#7CFC00;
+    --danger:#ff5f73;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,0,180,.4),transparent 30%),
+        radial-gradient(circle at 80% 20%,rgba(0,200,255,.4),transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
+    color:white;
+    min-height:100vh;
+    padding:110px 24px 55px;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:42px 42px;
+}
+
+header{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(94vw,1050px);
+    z-index:50;
+    display:flex;
+    justify-content:center;
+    padding:10px 18px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:999px;
+    background:rgba(255,255,255,.10);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    box-shadow:0 0 28px rgba(0,217,255,.25);
+}
+
+nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    font-size:.95rem;
+    letter-spacing:.4px;
+}
+
+nav a:hover{color:#8ef2ff;}
+
+.nav-logo img{
+    height:22px;
+    width:auto;
+    vertical-align:middle;
+}
+
+main{
+    position:relative;
+    z-index:2;
+    width:min(1000px,100%);
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    font-size:clamp(2rem,7vw,3.2rem);
+    margin-bottom:30px;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+@keyframes rainbow{
+    from{background-position:0%;}
+    to{background-position:300%;}
+}
+
+.panel{
+    padding:28px;
+    margin-bottom:28px;
+    border-radius:25px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    box-shadow:0 0 35px rgba(0,217,255,.22);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+.panel h2{
+    text-align:center;
+    margin-bottom:22px;
+    color:#c9f7ff;
+}
+
+.form-grid{display:grid;gap:18px;}
+
+.two-column{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    color:#c9f7ff;
+}
+
+input,textarea,button{font:inherit;}
+
+input,textarea{
+    width:100%;
+    padding:14px;
+    background:#111;
+    color:white;
+    border:1px solid var(--cyan);
+    border-radius:11px;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus,textarea:focus{
+    box-shadow:0 0 0 4px rgba(0,217,255,.16);
+}
+
+textarea{
+    min-height:150px;
+    resize:vertical;
+    line-height:1.55;
+}
+
+.small-note{
+    display:block;
+    margin-top:7px;
+    color:#9bdfff;
+    font-size:.84rem;
+    line-height:1.45;
+}
+
+.date-line{
+    color:#8ef2ff;
+    font-size:14px;
+    font-style:italic;
+    line-height:1.5;
+}
+
+.preview-card{
+    margin-top:5px;
+    padding:25px;
+    border-radius:24px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 0 25px rgba(0,217,255,.18);
+}
+
+.preview-card .emoji{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.preview-card h3{
+    color:#8ef2ff;
+    margin-bottom:12px;
+    font-size:1.4rem;
+}
+
+.preview-card p{
+    color:#eefcff;
+    line-height:1.7;
+    margin-bottom:20px;
+    white-space:pre-wrap;
+}
+
+.preview-card a{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+    padding:11px 18px;
+    border-radius:15px;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 16px rgba(0,217,255,.45);
+}
+
+.button-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:4px;
+}
+
+button,.link-btn{
+    display:inline-block;
+    background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan));
+    color:white;
+    border:none;
+    padding:13px 24px;
+    border-radius:25px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:0 0 16px rgba(0,217,255,.35);
+    transition:.2s ease;
+}
+
+button:hover,.link-btn:hover{transform:translateY(-2px);}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+
+.secondary{background:rgba(255,255,255,.15);}
+.danger{background:linear-gradient(90deg,#8b101d,#ff5f73);}
+
+#status{
+    min-height:24px;
+    margin-top:16px;
+    font-size:17px;
+    font-weight:700;
+}
+
+.watch-list{display:grid;gap:15px;}
+
+.saved-card{
+    display:grid;
+    grid-template-columns:70px 1fr auto;
+    gap:15px;
+    align-items:center;
+    padding:15px;
+    border-radius:18px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+}
+
+.saved-emoji{
+    width:70px;
+    height:70px;
+    display:grid;
+    place-items:center;
+    font-size:2.4rem;
+    border-radius:14px;
+    background:rgba(255,255,255,.10);
+}
+
+.saved-info h3{
+    margin-bottom:6px;
+    color:#c9f7ff;
+    overflow-wrap:anywhere;
+}
+
+.saved-info p{
+    opacity:.86;
+    line-height:1.4;
+    overflow-wrap:anywhere;
+}
+
+.saved-meta{
+    margin-top:8px;
+    font-size:.78rem;
+    color:#9bdfff;
+}
+
+.saved-actions{display:grid;gap:8px;}
+.saved-actions button{padding:9px 16px;font-size:14px;}
+
+.empty,.loading{
+    text-align:center;
+    padding:24px 10px;
+    color:#c9f7ff;
+}
+
+.login-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(0,0,20,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(92vw,420px);
+    padding:28px;
+    border-radius:24px;
+    background:rgba(20,18,30,.96);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 0 35px rgba(0,217,255,.4);
+    text-align:center;
+}
+
+.login-box h2{color:#8ef2ff;margin-bottom:18px;}
+.login-box input{margin:10px 0;}
+.login-actions{display:flex;gap:12px;margin-top:16px;}
+.login-actions button,.admin-panel a,.logout-btn{flex:1;}
+.login-error{min-height:22px;margin-top:14px;color:#ffd966;font-weight:700;}
+.admin-note{margin-top:12px;font-size:13px;color:#9bdfff;line-height:1.5;}
+.admin-panel{display:none;margin-top:18px;gap:12px;flex-direction:column;}
+
+#adminContent{display:none;}
+
+footer{
+    position:relative;
+    z-index:5;
+    text-align:center;
+    padding:40px 20px;
+    color:#9bdfff;
+}
+
+footer .hidden-admin-btn{
+    display:inline-block;
+    width:18px;
+    height:18px;
+    min-width:0;
+    margin:0 0 0 6px;
+    padding:0;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.08);
+    box-shadow:none;
+    font-size:14px;
+    font-weight:normal;
+    line-height:18px;
+    text-align:center;
+    vertical-align:middle;
+    cursor:pointer;
+    transform:none;
+    transition:color .2s ease, text-shadow .2s ease;
+}
+
+footer .hidden-admin-btn:hover{
+    background:transparent;
+    color:#00d9ff;
+    box-shadow:none;
+    text-shadow:0 0 12px #00d9ff;
+    transform:none;
+}
+
+
+
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <a href="shop.html">Store</a>
+        <a href="fun.html">Fun</a>
+        <a href="support.html">Support</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="index.html" class="nav-logo">
+            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+        </a>
+    </nav>
+</header>
+
+<main id="adminContent">
+    <h1 id="pageTitle">CHAYNOVA Watch Admin</h1>
+
+    <section class="panel">
+        <form id="watchForm" class="form-grid">
+            <input id="watchId" type="hidden">
+
+            <div class="two-column">
+                <div>
+                    <label for="emoji">Emoji or Icon</label>
+                    <input id="emoji" maxlength="12" value="🎬" required placeholder="🎬">
+                </div>
+
+                <div>
+                    <label for="title">Card Title</label>
+                    <input id="title" maxlength="120" required placeholder="Enter the card title">
+                </div>
+            </div>
+
+            <div id="dateLine" class="date-line">New Watch card</div>
+
+            <div>
+                <label for="description">Description</label>
+                <textarea id="description" maxlength="800" required placeholder="Write the card description..."></textarea>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <label for="buttonText">Button Text</label>
+                    <input id="buttonText" maxlength="40" required value="Watch Now" placeholder="Watch Now">
+                </div>
+
+                <div>
+                    <label for="buttonUrl">Video or Page URL</label>
+                    <input id="buttonUrl" type="text" maxlength="500" required placeholder="https://... or video-page.html">
+                    <span class="small-note">You may use a YouTube link, another website, or a page inside CHAYNOVA.</span>
+                </div>
+            </div>
+
+            <div>
+                <label>Live Preview</label>
+                <article class="preview-card">
+                    <div id="previewEmoji" class="emoji">🎬</div>
+                    <h3 id="previewTitle">Your title</h3>
+                    <p id="previewDescription">Your description will appear here.</p>
+                    <a id="previewButton" href="#" onclick="return false;">Watch Now</a>
+                </article>
+            </div>
+
+            <div class="button-row">
+                <button type="submit" id="saveBtn">Add Watch Card</button>
+                <button type="button" id="clearBtn" class="secondary">Clear Form</button>
+                <button type="button" id="deleteCurrentBtn" class="danger" disabled>Delete Selected</button>
+                <a href="video.html" class="link-btn secondary">Open Watch Page</a>
+                <button type="button" id="logoutBtn" class="secondary">Logout</button>
+            </div>
+
+            <div id="status" aria-live="polite"></div>
+            <div class="small-note">Server collection: <code id="endpointText"></code></div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <h2>Saved Watch Cards</h2>
+        <div id="watchList" class="watch-list">
+            <div class="loading">Loading Watch cards...</div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    © 2026 CHAYNOVA
+    <button type="button" class="hidden-admin-btn"
+            onclick="openLogin()"
+            title="Admin"
+            aria-label="Open admin login">•</button>
+</footer>
+
+
+<div id="loginOverlay" class="login-overlay" aria-hidden="true">
+    <div class="login-box">
+        <h2>CHAYNOVA Admin</h2>
+
+        <div id="loginForm">
+            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+
+            <div class="login-actions">
+                <button type="button" id="loginBtn">Login</button>
+                <a href="video.html" class="link-btn secondary">Cancel</a>
+            </div>
+
+            <div id="loginError" class="login-error"></div>
+            <div class="admin-note">Login is checked by your Cloudflare Worker.</div>
+        </div>
+
+        <div id="adminPanel" class="admin-panel">
+            <button type="button" onclick="showAdmin()">Open Watch Editor</button>
+            <a href="video.html" class="link-btn secondary">Open Watch Page</a>
+            <button type="button" class="logout-btn secondary" onclick="logoutAdmin()">Logout</button>
+            <button type="button" class="close-btn secondary" onclick="closeLogin()">
+            Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+const AUTH_API = "https://chay1api.mikebewise.workers.dev";
+const WATCH_DATA_API = "https://chay1api.mikebewise.workers.dev/watch";
+const LOGIN_URL = `${AUTH_API}/login`;
+const TOKEN_KEY = "chaynovaAdminToken";
+
+const loginOverlay = document.getElementById("loginOverlay");
+const loginForm = document.getElementById("loginForm");
+const adminPanel = document.getElementById("adminPanel");
+const adminContent = document.getElementById("adminContent");
+const usernameInput = document.getElementById("usernameInput");
+const passwordInput = document.getElementById("passwordInput");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
+
+const watchForm = document.getElementById("watchForm");
+const watchIdInput = document.getElementById("watchId");
+const emojiInput = document.getElementById("emoji");
+const titleInput = document.getElementById("title");
+const descriptionInput = document.getElementById("description");
+const buttonTextInput = document.getElementById("buttonText");
+const buttonUrlInput = document.getElementById("buttonUrl");
+const dateLineBox = document.getElementById("dateLine");
+const pageTitleBox = document.getElementById("pageTitle");
+const saveBtn = document.getElementById("saveBtn");
+const clearBtn = document.getElementById("clearBtn");
+const deleteCurrentBtn = document.getElementById("deleteCurrentBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const statusBox = document.getElementById("status");
+const watchList = document.getElementById("watchList");
+
+const previewEmoji = document.getElementById("previewEmoji");
+const previewTitle = document.getElementById("previewTitle");
+const previewDescription = document.getElementById("previewDescription");
+const previewButton = document.getElementById("previewButton");
+const endpointText = document.getElementById("endpointText");
+endpointText.textContent = WATCH_DATA_API;
+
+let watchCache = [];
+
+function getToken(){
+    return localStorage.getItem(TOKEN_KEY) || "";
+}
+
+function authHeaders(extra = {}){
+    const token = getToken();
+    return {
+        ...extra,
+        ...(token ? {Authorization:`Bearer ${token}`} : {})
+    };
+}
+
+function formatDate(dateString){
+    if(!dateString) return "New Watch card";
+    const d = new Date(dateString);
+    if(Number.isNaN(d.getTime())) return "New Watch card";
+
+    return d.toLocaleString("en-US",{
+        month:"short",
+        day:"numeric",
+        year:"numeric",
+        hour:"numeric",
+        minute:"2-digit"
+    });
+}
+
+function escapeHtml(value = ""){
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function safeUrl(value = ""){
+    const url = String(value).trim();
+
+    if(!url) return "#";
+
+    if(
+        url.startsWith("/") ||
+        url.startsWith("./") ||
+        url.startsWith("../") ||
+        /^[a-zA-Z0-9_-]+\.html(?:[?#].*)?$/.test(url)
+    ){
+        return url;
+    }
+
+    try{
+        const parsed = new URL(url);
+        if(parsed.protocol === "http:" || parsed.protocol === "https:"){
+            return parsed.href;
+        }
+    }catch(_){}
+
+    return "#";
+}
+
+function showStatus(message, isError = false){
+    statusBox.textContent = message;
+    statusBox.style.color = isError ? "#ffb7bf" : "#7CFC00";
+}
+
+function openLogin(message = ""){
+    loginOverlay.style.display = "flex";
+    loginOverlay.setAttribute("aria-hidden","false");
+    loginError.textContent = message;
+    updateLoginPanel();
+
+    setTimeout(() => {
+        if(!getToken()) usernameInput.focus();
+    },50);
+}
+
+function closeLogin(){
+    loginOverlay.style.display = "none";
+    loginOverlay.setAttribute("aria-hidden","true");
+    loginError.textContent = "";
+}
+
+function updateLoginPanel(){
+    const loggedIn = Boolean(getToken());
+    loginForm.style.display = loggedIn ? "none" : "block";
+    adminPanel.style.display = loggedIn ? "flex" : "none";
+}
+
+function showLogin(message = ""){
+    adminContent.style.display = "none";
+    openLogin(message);
+}
+
+function showAdmin(){
+    adminContent.style.display = "block";
+    updateLoginPanel();
+    closeLogin();
+}
+
+async function checkLogin(){
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if(!username || !password){
+        loginError.textContent = "Please enter username and password.";
+        return;
+    }
+
+    loginBtn.disabled = true;
+    loginError.textContent = "Checking login...";
+
+    try{
+        const response = await fetch(LOGIN_URL,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({username,password})
+        });
+
+        let data = {};
+        try{data = await response.json();}catch(_){}
+
+        if(!response.ok || !data.success || !data.token){
+            throw new Error(data.message || "Wrong username or password.");
+        }
+
+        localStorage.setItem(TOKEN_KEY,data.token);
+        passwordInput.value = "";
+        showAdmin();
+        await loadWatchCards();
+    }catch(error){
+        localStorage.removeItem(TOKEN_KEY);
+        loginError.textContent = error.message || "Login failed. Check your Worker API.";
+    }finally{
+        loginBtn.disabled = false;
+    }
+}
+
+function logoutAdmin(){
+    localStorage.removeItem(TOKEN_KEY);
+    usernameInput.value = "";
+    passwordInput.value = "";
+    resetForm();
+    showLogin("You have logged out.");
+}
+
+async function apiFetch(url,options = {}){
+    const response = await fetch(url,{
+        ...options,
+        headers:authHeaders(options.headers || {})
+    });
+
+    if(response.status === 401 || response.status === 403){
+        localStorage.removeItem(TOKEN_KEY);
+        showLogin("Your login expired. Please log in again.");
+        throw new Error("Unauthorized");
+    }
+
+    return response;
+}
+
+function updatePreview(){
+    previewEmoji.textContent = emojiInput.value.trim() || "🎬";
+    previewTitle.textContent = titleInput.value.trim() || "Your title";
+    previewDescription.textContent =
+        descriptionInput.value.trim() || "Your description will appear here.";
+    previewButton.textContent = buttonTextInput.value.trim() || "Watch Now";
+    previewButton.href = safeUrl(buttonUrlInput.value);
+}
+
+function resetForm(){
+    watchForm.reset();
+    watchIdInput.value = "";
+    emojiInput.value = "🎬";
+    buttonTextInput.value = "Watch Now";
+    dateLineBox.textContent = formatDate(new Date().toISOString());
+    pageTitleBox.textContent = "CHAYNOVA Watch Admin";
+    saveBtn.textContent = "Add Watch Card";
+    deleteCurrentBtn.disabled = true;
+    showStatus("");
+    updatePreview();
+}
+
+async function loadWatchCards(){
+    watchList.innerHTML = '<div class="loading">Loading Watch cards...</div>';
+
+    try{
+        const response = await apiFetch(WATCH_DATA_API,{
+            method:"GET",
+            cache:"no-store"
+        });
+
+        if(!response.ok){
+            const text = await response.text();
+            throw new Error(text || "Could not load Watch cards.");
+        }
+
+        const data = await response.json();
+
+        // Accept either a raw array or a wrapped server response.
+        // Examples supported:
+        //   [ {...} ]
+        //   { watch: [ {...} ] }
+        //   { cards: [ {...} ] }
+        //   { data: [ {...} ] }
+        //   { results: [ {...} ] }
+        const serverItems = Array.isArray(data)
+            ? data
+            : data.watch ?? data.cards ?? data.items ?? data.results ?? data.data ?? [];
+
+        watchCache = Array.isArray(serverItems) ? serverItems : [];
+
+        if(!watchCache.length && data && !Array.isArray(data)){
+            console.log("GET /watch response:", data);
+        }
+
+        renderWatchCards();
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            watchList.innerHTML =
+                `<div class="empty">${escapeHtml(error.message || "Could not load Watch cards.")}</div>`;
+        }
+    }
+}
+
+function renderWatchCards(){
+    if(!watchCache.length){
+        watchList.innerHTML = '<div class="empty">No Watch cards have been saved yet.</div>';
+        return;
+    }
+
+    const sorted = [...watchCache].sort((a,b) => {
+        const positionDifference = Number(a.position || 0) - Number(b.position || 0);
+        if(positionDifference !== 0) return positionDifference;
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    });
+
+    watchList.innerHTML = sorted.map(item => {
+        const description = item.description || "";
+        const preview =
+            description.length > 150 ? `${description.slice(0,150)}...` : description;
+
+        const updated = item.updated_at
+            ? `<br>Updated: ${escapeHtml(formatDate(item.updated_at))}`
+            : "";
+
+        return `
+            <article class="saved-card">
+                <div class="saved-emoji">${escapeHtml(item.emoji || "🎬")}</div>
+
+                <div class="saved-info">
+                    <h3>${escapeHtml(item.title || "Untitled")}</h3>
+                    <p>${escapeHtml(preview)}</p>
+                    <div class="saved-meta">
+                        Button: ${escapeHtml(item.button_text || "Watch")}
+                        <br>
+                        Created: ${escapeHtml(formatDate(item.created_at))}${updated}
+                    </div>
+                </div>
+
+                <div class="saved-actions">
+                    <button type="button"
+                        onclick="editWatchCard('${String(item.id).replaceAll("'","\\'")}')">
+                        Edit
+                    </button>
+
+                    <button type="button" class="danger"
+                        onclick="deleteWatchCard('${String(item.id).replaceAll("'","\\'")}')">
+                        Delete
+                    </button>
+                </div>
+            </article>
+        `;
+    }).join("");
+}
+
+function editWatchCard(id){
+    const item = watchCache.find(card => String(card.id) === String(id));
+
+    if(!item){
+        showStatus("Watch card not found.",true);
+        return;
+    }
+
+    watchIdInput.value = item.id;
+    emojiInput.value = item.emoji || "🎬";
+    titleInput.value = item.title || "";
+    descriptionInput.value = item.description || "";
+    buttonTextInput.value = item.button_text || "Watch";
+    buttonUrlInput.value = item.button_url || "#";
+
+    dateLineBox.innerHTML =
+        `Created: ${escapeHtml(formatDate(item.created_at))}`;
+
+    if(item.updated_at){
+        dateLineBox.innerHTML +=
+            `<br>Edited: ${escapeHtml(formatDate(item.updated_at))}`;
+    }
+
+    pageTitleBox.textContent = "Edit CHAYNOVA Watch Card";
+    saveBtn.textContent = "Update Watch Card";
+    deleteCurrentBtn.disabled = false;
+    showStatus("Watch card loaded for editing.");
+    updatePreview();
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function saveWatchCard(event){
+    event.preventDefault();
+
+    const id = watchIdInput.value;
+    const now = new Date().toISOString();
+
+    const payload = {
+        emoji:emojiInput.value.trim() || "🎬",
+        title:titleInput.value.trim(),
+        description:descriptionInput.value.trim(),
+        button_text:buttonTextInput.value.trim() || "Watch Now",
+        button_url:buttonUrlInput.value.trim(),
+        updated_at:now
+    };
+
+    if(!payload.title || !payload.description || !payload.button_url){
+        showStatus("Please complete the title, description, and URL.",true);
+        return;
+    }
+
+    if(safeUrl(payload.button_url) === "#"){
+        showStatus("Please enter a valid HTTPS link or local HTML page.",true);
+        return;
+    }
+
+    if(!getToken()){
+        showLogin("Please log in before saving a Watch card.");
+        return;
+    }
+
+    saveBtn.disabled = true;
+    showStatus(id ? "Updating Watch card..." : `Saving to ${WATCH_DATA_API}...`);
+
+    try{
+        if(!id){
+            payload.created_at = now;
+        }
+
+        const response = await apiFetch(
+            id ? `${WATCH_DATA_API}/${encodeURIComponent(id)}` : WATCH_DATA_API,
+            {
+                method:id ? "PUT" : "POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify(payload)
+            }
+        );
+
+        const responseText = await response.text();
+
+        if(!response.ok){
+            let message = responseText;
+            try{
+                const parsed = JSON.parse(responseText);
+                message = parsed.message || parsed.error || responseText;
+            }catch(_){}
+
+            if(response.status === 404){
+                throw new Error("The server does not have the /watch route yet (404). Add POST /watch to your Cloudflare Worker.");
+            }
+
+            if(response.status === 405){
+                throw new Error("The server found /watch but does not allow POST (405). Add the POST /watch method to your Worker.");
+            }
+
+            throw new Error(
+                `Server error ${response.status}: ${message || response.statusText || "Save failed"}`
+            );
+        }
+
+        resetForm();
+        showStatus(id ? "Watch card updated!" : "Watch card added!");
+        await loadWatchCards();
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            showStatus(
+                error.message || "Could not save the Watch card.",
+                true
+            );
+        }
+    }finally{
+        saveBtn.disabled = false;
+    }
+}
+
+async function deleteWatchCard(id){
+    const item = watchCache.find(card => String(card.id) === String(id));
+    if(!item) return;
+
+    const confirmed = confirm(`Delete “${item.title || "this Watch card"}”?`);
+    if(!confirmed) return;
+
+    showStatus("Deleting Watch card...");
+
+    try{
+        const response = await apiFetch(
+            `${WATCH_DATA_API}/${encodeURIComponent(id)}`,
+            {method:"DELETE"}
+        );
+
+        const text = await response.text();
+
+        if(!response.ok){
+            throw new Error(text || "Delete failed.");
+        }
+
+        if(String(watchIdInput.value) === String(id)){
+            resetForm();
+        }
+
+        showStatus("Watch card deleted.");
+        await loadWatchCards();
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            showStatus(
+                error.message || "Could not delete Watch card.",
+                true
+            );
+        }
+    }
+}
+
+[emojiInput,titleInput,descriptionInput,buttonTextInput,buttonUrlInput]
+    .forEach(element => element.addEventListener("input",updatePreview));
+
+loginBtn.addEventListener("click",checkLogin);
+passwordInput.addEventListener("keydown",event => {
+    if(event.key === "Enter") checkLogin();
+});
+usernameInput.addEventListener("keydown",event => {
+    if(event.key === "Enter") passwordInput.focus();
+});
+
+watchForm.addEventListener("submit",saveWatchCard);
+clearBtn.addEventListener("click",resetForm);
+deleteCurrentBtn.addEventListener("click",() => {
+    if(watchIdInput.value) deleteWatchCard(watchIdInput.value);
+});
+logoutBtn.addEventListener("click",logoutAdmin);
+
+window.editWatchCard = editWatchCard;
+window.deleteWatchCard = deleteWatchCard;
+window.showAdmin = showAdmin;
+window.logoutAdmin = logoutAdmin;
+
+resetForm();
+
+if(getToken()){
+    showAdmin();
+    loadWatchCards();
+}else{
+    showLogin();
+}
+
+
+</script>
+</body>
+</html>
