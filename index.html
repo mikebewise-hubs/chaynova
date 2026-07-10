@@ -512,6 +512,29 @@ header a:hover{
     transform: scale(1.1);
 }
 
+.preview-text{
+    margin-top: 8px;
+    color: #8B0000; /* Dark Red */
+    font-weight: bold;
+    font-size: 1rem;
+    text-shadow: 0 0 8px rgba(139,0,0,.6);
+    animation: blinkRed 1.2s infinite;
+}
+
+@keyframes blinkRed{
+    0%,100%{
+        opacity: 1;
+        text-shadow:
+            0 0 5px #8B0000,
+            0 0 10px #b22222;
+    }
+    50%{
+        opacity: .3;
+        text-shadow: none;
+    }
+}
+
+
 </style>
 </head>
 
@@ -536,14 +559,14 @@ header a:hover{
 </header>
 
 <div class="start-screen" id="startScreen">
-    <div class="start-text"> </div>
+    <div class="start-text"></div>
 
     <img
         src="logo/WHITEDYNAMICTRANS.png"
         alt="CHAYNOVA Logo"
         class="start-logo"
     >
-
+<div class="preview-text">🚧 Early Preview - Thanks for visiting!</div>
     <div class="tap-text">Tap anywhere to begin</div>
 </div>
 
