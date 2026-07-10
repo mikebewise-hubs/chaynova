@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch| CHAYNOVA</title>
+<title>Watch | CHAYNOVA</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -14,8 +14,8 @@ body{
     font-family:Arial,Helvetica,sans-serif;
     color:white;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
+        radial-gradient(circle at 20% 20%,rgba(255,0,180,.4),transparent 30%),
+        radial-gradient(circle at 80% 20%,rgba(0,200,255,.4),transparent 30%),
         linear-gradient(135deg,#030010,#080033,#001234);
 }
 
@@ -31,179 +31,57 @@ body{
 
 @keyframes twinkle{from{opacity:.3;}to{opacity:.9;}}
 @keyframes rainbow{from{background-position:0%;}to{background-position:300%;}}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 
 .page{
     position:relative;
     z-index:5;
     min-height:100vh;
-    padding:30px 20px 60px;
+    padding:115px 20px 60px;
 }
 
-/* ===== HEADER ===== */
 .top-header{
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(92vw, 1050px);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 8px 18px;
-
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 999px;
-
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-
-    box-shadow: 0 0 28px rgba(0,217,255,.25);
-
-    z-index: 1000;
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(92vw,1050px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:8px 18px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    box-shadow:0 0 28px rgba(0,217,255,.25);
+    z-index:1000;
 }
 
-/* ===== NAVIGATION ===== */
 .top-nav{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
 }
 
-/* ===== LINKS ===== */
 .top-nav a{
-    font-family: "Oxanium", sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
-    text-decoration: none;
-    letter-spacing: .6px;
-    transition: .25s ease;
+    font-size:.95rem;
+    font-weight:700;
+    color:#fff;
+    text-decoration:none;
+    letter-spacing:.6px;
+    transition:.25s ease;
 }
 
 .top-nav a:hover{
-    color: #001019;
-    text-shadow: 0 0 14px rgba(255,255,255,.9);
+    color:#8ef2ff;
+    text-shadow:0 0 14px rgba(255,255,255,.9);
 }
 
-/* ===== LOGO ===== */
-.nav-logo{
-    display: flex;
-    align-items: center;
-}
-
-.nav-logo img{
-    height: 22px;      /* Increase to 26px, 28px, etc. if desired */
-    width: auto;
-    display: block;
-    transition: transform .2s ease;
-}
-
-.nav-logo:hover img{
-    transform: scale(1.1);
-}
-
-/* ===== MOBILE ===== */
-@media (max-width:560px){
-
-    .top-header{
-        top:12px;
-        border-radius:24px;
-    }
-
-    .top-nav{
-        gap:13px;
-    }
-
-    .top-nav a{
-        font-size:.82rem;
-    }
-
-    .nav-logo img{
-        height:18px;
-    }
-}
-
-.menu-row a,
-.control-btn{
-    position:relative;
-    overflow:hidden;
-    text-decoration:none;
-    color:white;
-    font-weight:bold;
-    border:none;
-    cursor:pointer;
-    border-radius:18px;
-    background:linear-gradient(
-        135deg,
-        rgba(255,47,207,.35),
-        rgba(123,44,255,.35),
-        rgba(0,217,255,.35)
-    );
-    border:1px solid rgba(255,255,255,.28);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.12);
-    transition:.35s ease;
-}
-
-.home-btn::before,
-.menu-row a::before,
-.control-btn::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:65%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.65),
-        transparent
-    );
-    transform:skewX(-25deg);
-    transition:.75s;
-}
-
-.home-btn:hover::before,
-.menu-row a:hover::before,
-.control-btn:hover::before{
-    left:160%;
-}
-
-.home-btn:hover,
-.menu-row a:hover,
-.control-btn:hover{
-    transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
-}
-
-.home-btn{
-    padding:13px 22px;
-}
-
-.menu-row a{
-    min-width:145px;
-    padding:14px 22px;
-    text-align:center;
-}
-
-.control-btn{
-    padding:12px 22px;
-    font-size:1rem;
-}
+.nav-logo{display:flex;align-items:center;}
+.nav-logo img{height:22px;width:auto;display:block;}
 
 .hero{
     max-width:900px;
@@ -224,6 +102,7 @@ body{
     background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
     background-size:300%;
     -webkit-background-clip:text;
+    background-clip:text;
     color:transparent;
     animation:rainbow 6s linear infinite;
 }
@@ -255,32 +134,28 @@ body{
     color:white;
     border-radius:18px;
     border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+    background:linear-gradient(
+        135deg,
+        rgba(255,47,207,.35),
+        rgba(123,44,255,.35),
+        rgba(0,217,255,.35)
+    );
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 18px rgba(0,217,255,.35),inset 0 0 15px rgba(255,255,255,.08);
+    box-shadow:
+        0 0 18px rgba(0,217,255,.35),
+        inset 0 0 15px rgba(255,255,255,.08);
     overflow:hidden;
     transition:.35s ease;
 }
 
-.menu-row a::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:60%;
-    height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
-    transform:skewX(-25deg);
-    transition:.7s;
-}
-
-.menu-row a:hover::before{left:160%;}
-
 .menu-row a:hover{
     transform:translateY(-4px) scale(1.05);
     background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
+    box-shadow:
+        0 0 20px #ff2fcf,
+        0 0 35px #7b2cff,
+        0 0 50px #00d9ff;
 }
 
 .story-grid{
@@ -304,7 +179,9 @@ body{
 
 .story-card:hover{
     transform:translateY(-8px);
-    box-shadow:0 0 25px rgba(255,47,207,.75),0 0 45px rgba(0,217,255,.75);
+    box-shadow:
+        0 0 25px rgba(255,47,207,.75),
+        0 0 45px rgba(0,217,255,.75);
 }
 
 .story-card .emoji{
@@ -322,6 +199,7 @@ body{
     color:#eefcff;
     line-height:1.7;
     margin-bottom:22px;
+    white-space:pre-wrap;
 }
 
 .read-btn{
@@ -341,6 +219,19 @@ body{
     box-shadow:0 0 28px rgba(255,47,207,.75);
 }
 
+.loading-card,.empty-card,.error-card{
+    grid-column:1/-1;
+    text-align:center;
+    padding:35px;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    color:#c9f7ff;
+    line-height:1.6;
+}
+
+.error-card{color:#ffd1d7;}
+
 .firework{
     position:fixed;
     width:8px;
@@ -351,10 +242,22 @@ body{
     z-index:1;
     pointer-events:none;
 }
+
 @keyframes explode{
-0%{opacity:1;box-shadow:0 0 0 currentColor;}
-70%{opacity:1;box-shadow:0 -80px currentColor,60px -60px currentColor,80px 0 currentColor,60px 60px currentColor,0 80px currentColor,-60px 60px currentColor,-80px 0 currentColor,-60px -60px currentColor;}
-100%{opacity:0;}
+    0%{opacity:1;box-shadow:0 0 0 currentColor;}
+    70%{
+        opacity:1;
+        box-shadow:
+            0 -80px currentColor,
+            60px -60px currentColor,
+            80px 0 currentColor,
+            60px 60px currentColor,
+            0 80px currentColor,
+            -60px 60px currentColor,
+            -80px 0 currentColor,
+            -60px -60px currentColor;
+    }
+    100%{opacity:0;}
 }
 
 footer{
@@ -398,16 +301,13 @@ footer{
     width:min(92vw,420px);
     padding:28px;
     border-radius:24px;
-    background:rgba(255,255,255,.1);
+    background:rgba(20,18,30,.96);
     border:1px solid rgba(255,255,255,.25);
     box-shadow:0 0 35px rgba(0,217,255,.4);
     text-align:center;
 }
 
-.login-box h2{
-    color:#8ef2ff;
-    margin-bottom:18px;
-}
+.login-box h2{color:#8ef2ff;margin-bottom:18px;}
 
 .login-box input{
     width:100%;
@@ -460,41 +360,42 @@ footer{
     line-height:1.5;
 }
 
+@media(max-width:560px){
+    .top-header{top:12px;border-radius:24px;}
+    .top-nav{gap:13px;}
+    .top-nav a{font-size:.82rem;}
+    .nav-logo img{height:18px;}
+}
+
 @media(max-width:700px){
-    .top-bar{flex-direction:column;}
+    .page{padding-top:125px;}
     .menu-row{flex-direction:column;align-items:center;}
     .menu-row a{width:240px;}
 }
-
-
-
-
-
 </style>
 </head>
 
 <body>
 
+<div class="stars"></div>
 <div class="firework"></div>
 <div class="firework"></div>
 <div class="firework"></div>
-
 
 <div class="page">
+    <header class="top-header">
+        <nav class="top-nav">
+            <a href="shop.html">Store</a>
+            <a href="fun.html">Fun</a>
+            <a href="support.html">Support</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
 
-  <header class="top-header">
-    <nav class="top-nav">
-        <a href="shop.html">Store</a>
-        <a href="fun.html">Fun</a>
-        <a href="support.html">Support</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-
-        <a href="index.html" class="nav-logo">
-            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-        </a>
-    </nav>
-</header>
+            <a href="index.html" class="nav-logo">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+            </a>
+        </nav>
+    </header>
 
     <section class="hero">
         <h1>Watch</h1>
@@ -511,40 +412,9 @@ footer{
         <a href="video.html">Watch</a>
     </nav>
 
-    <section class="story-grid">
-
-        <div class="story-card">
-            <div class="emoji">🎬</div>
-            <h2>Coming Soon</h2>
-            <p>
-                New CHAYNOVA videos are coming soon with fun clips,
-                learning moments, and creative adventures.
-            </p>
-            <a href="#" class="read-btn">Watch Soon</a>
-        </div>
-
-        <div class="story-card">
-            <div class="emoji">🌎</div>
-            <h2>Learn & Explore</h2>
-            <p>
-                Watch videos about games, stories, creativity,
-                learning, and cool ideas from around the world.
-            </p>
-            <a href="#" class="read-btn">Explore</a>
-        </div>
-
-        <div class="story-card">
-            <div class="emoji">🚀</div>
-            <h2>Adventure Mode</h2>
-            <p>
-                Enjoy exciting video adventures, fun challenges,
-                and fresh CHAYNOVA updates.
-            </p>
-            <a href="#" class="read-btn">Start</a>
-        </div>
-
+    <section id="watchGrid" class="story-grid" aria-live="polite">
+        <div class="loading-card">Loading CHAYNOVA Watch content...</div>
     </section>
-
 </div>
 
 <footer>
@@ -554,7 +424,6 @@ footer{
 
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-
         <h2>CHAYNOVA Admin</h2>
 
         <div id="loginForm">
@@ -567,24 +436,118 @@ footer{
             </div>
 
             <div id="loginError" class="login-error"></div>
-
-            <div class="admin-note">
-                Login is checked by your Cloudflare Worker.
-            </div>
+            <div class="admin-note">Login is checked by your Cloudflare Worker.</div>
         </div>
 
         <div id="adminPanel" class="admin-panel">
-            <a href="story-admin.html">Post New Story</a>
-            <a href="story.html">Open Story Page</a>
+            <a href="watch-admin.html">Edit Watch Page</a>
+            <a href="video.html">Open Watch Page</a>
             <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
             <button class="logout-btn" onclick="closeLogin()">Close</button>
         </div>
-
     </div>
 </div>
 
 <script>
 const API = "https://chay1api.mikebewise.workers.dev";
+const WATCH_API = `${API}/watch`;
+const TOKEN_KEY = "chaynovaAdminToken";
+const watchGrid = document.getElementById("watchGrid");
+
+function escapeHtml(value = ""){
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function safeUrl(value = ""){
+    const url = String(value).trim();
+
+    if(!url) return "#";
+
+    if(
+        url.startsWith("/") ||
+        url.startsWith("./") ||
+        url.startsWith("../") ||
+        /^[a-zA-Z0-9_-]+\.html(?:[?#].*)?$/.test(url)
+    ){
+        return url;
+    }
+
+    try{
+        const parsed = new URL(url);
+        if(parsed.protocol === "http:" || parsed.protocol === "https:"){
+            return parsed.href;
+        }
+    }catch(_){}
+
+    return "#";
+}
+
+function isExternalUrl(url){
+    try{
+        return new URL(url,location.href).origin !== location.origin;
+    }catch(_){
+        return false;
+    }
+}
+
+async function loadWatchCards(){
+    try{
+        const response = await fetch(WATCH_API,{cache:"no-store"});
+
+        if(!response.ok){
+            throw new Error("Could not load Watch content.");
+        }
+
+        const data = await response.json();
+        const cards = Array.isArray(data) ? data : [];
+
+        if(!cards.length){
+            watchGrid.innerHTML =
+                '<div class="empty-card">New CHAYNOVA videos are coming soon.</div>';
+            return;
+        }
+
+        cards.sort((a,b) => {
+            const positionDifference =
+                Number(a.position || 0) - Number(b.position || 0);
+
+            if(positionDifference !== 0) return positionDifference;
+
+            return new Date(b.created_at || 0) -
+                   new Date(a.created_at || 0);
+        });
+
+        watchGrid.innerHTML = cards.map(card => {
+            const url = safeUrl(card.button_url);
+            const externalAttributes = isExternalUrl(url)
+                ? ' target="_blank" rel="noopener noreferrer"'
+                : "";
+
+            return `
+                <article class="story-card">
+                    <div class="emoji">${escapeHtml(card.emoji || "🎬")}</div>
+                    <h2>${escapeHtml(card.title || "Untitled")}</h2>
+                    <p>${escapeHtml(card.description || "")}</p>
+                    <a href="${escapeHtml(url)}"
+                       class="read-btn"${externalAttributes}>
+                        ${escapeHtml(card.button_text || "Watch")}
+                    </a>
+                </article>
+            `;
+        }).join("");
+
+    }catch(error){
+        watchGrid.innerHTML =
+            `<div class="error-card">${escapeHtml(
+                error.message || "Watch content is temporarily unavailable."
+            )}</div>`;
+    }
+}
 
 function openLogin(){
     document.getElementById("loginOverlay").style.display = "flex";
@@ -595,7 +558,7 @@ function openLogin(){
         if(usernameInput && usernameInput.offsetParent !== null){
             usernameInput.focus();
         }
-    }, 100);
+    },100);
 }
 
 function closeLogin(){
@@ -604,9 +567,14 @@ function closeLogin(){
 }
 
 async function checkLogin(){
-    const username = document.getElementById("usernameInput").value.trim();
-    const password = document.getElementById("passwordInput").value.trim();
-    const errorBox = document.getElementById("loginError");
+    const username =
+        document.getElementById("usernameInput").value.trim();
+
+    const password =
+        document.getElementById("passwordInput").value;
+
+    const errorBox =
+        document.getElementById("loginError");
 
     if(!username || !password){
         errorBox.innerText = "Please enter username and password.";
@@ -616,25 +584,20 @@ async function checkLogin(){
     errorBox.innerText = "Checking login...";
 
     try{
-        const response = await fetch(API + "/login", {
+        const response = await fetch(API + "/login",{
             method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                username:username,
-                password:password
-            })
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({username,password})
         });
 
         const data = await response.json();
 
         if(response.ok && data.success && data.token){
-            localStorage.setItem("chaynovaAdminToken", data.token);
+            localStorage.setItem(TOKEN_KEY,data.token);
             errorBox.innerText = "";
             updateAdminPanel();
         }else{
-            localStorage.removeItem("chaynovaAdminToken");
+            localStorage.removeItem(TOKEN_KEY);
             errorBox.innerText = "Wrong username or password.";
             updateAdminPanel();
         }
@@ -645,43 +608,37 @@ async function checkLogin(){
 }
 
 function updateAdminPanel(){
-    const token = localStorage.getItem("chaynovaAdminToken");
+    const token = localStorage.getItem(TOKEN_KEY);
 
-    if(token){
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("adminPanel").style.display = "flex";
-    }else{
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("adminPanel").style.display = "none";
-    }
+    document.getElementById("loginForm").style.display =
+        token ? "none" : "block";
+
+    document.getElementById("adminPanel").style.display =
+        token ? "flex" : "none";
 }
 
 function logoutAdmin(){
-    localStorage.removeItem("chaynovaAdminToken");
+    localStorage.removeItem(TOKEN_KEY);
     document.getElementById("usernameInput").value = "";
     document.getElementById("passwordInput").value = "";
     updateAdminPanel();
 }
 
-document.getElementById("passwordInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        checkLogin();
-    }
-});
+document.getElementById("passwordInput")
+    .addEventListener("keydown",function(e){
+        if(e.key === "Enter") checkLogin();
+    });
 
-document.getElementById("usernameInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        document.getElementById("passwordInput").focus();
-    }
-});
+document.getElementById("usernameInput")
+    .addEventListener("keydown",function(e){
+        if(e.key === "Enter"){
+            document.getElementById("passwordInput").focus();
+        }
+    });
 
-window.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-        closeLogin();
-    }
+window.addEventListener("keydown",function(e){
+    if(e.key === "Escape") closeLogin();
 });
-
-//fireworks animation
 
 const fireworks = document.querySelectorAll(".firework");
 
@@ -693,31 +650,26 @@ const colors = [
     "#00ff99",
     "#ff5555"
 ];
-function randomizeFirework(fw) {
+
+function randomizeFirework(fw){
     fw.style.left = Math.random() * 90 + "%";
     fw.style.top = Math.random() * 70 + "%";
-    fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+    fw.style.background =
+        colors[Math.floor(Math.random() * colors.length)];
 
-    // Restart animation
     fw.style.animation = "none";
     void fw.offsetWidth;
     fw.style.animation = "explode 2.8s ease-out";
 }
 
-// Start each firework at a different time
-fireworks.forEach((fw, i) => {
+fireworks.forEach((fw,i) => {
     setTimeout(() => {
         randomizeFirework(fw);
-
-        setInterval(() => {
-            randomizeFirework(fw);
-        }, 2800);
-
-    }, i * 900);
+        setInterval(() => randomizeFirework(fw),2800);
+    },i * 900);
 });
 
-
+loadWatchCards();
 </script>
-
 </body>
 </html>
