@@ -417,6 +417,51 @@ footer {
     transform:translateY(-2px);
 }
 
+
+.story-card-wrap{
+    width:100%;
+    display:grid;
+    gap:9px;
+}
+
+.story-admin-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    padding:0 4px;
+}
+
+.story-admin-actions button,
+.story-admin-actions a,
+.story-window-admin button,
+.story-window-admin a{
+    border:none;
+    border-radius:999px;
+    padding:8px 15px;
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+    cursor:pointer;
+    background:linear-gradient(90deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 12px rgba(0,217,255,.35);
+}
+
+.story-admin-actions .delete-story-btn,
+.story-window-admin .delete-story-btn{
+    background:linear-gradient(90deg,#8b101d,#ff5f73);
+}
+
+.story-window-admin{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+}
+
+.story-window-admin .storyClose{
+    margin-top:0;
+}
+
 .storyThumb{
     width:70px;
     height:70px;
@@ -668,57 +713,182 @@ footer{
       }
     ];
 
-  const stories = [
-  {
-    title: "Story 1",
-    text: "text 1",
-    photo: "images/story1.jpg"
-  },
-  {
-    title: "Story 2",
-    text: "text 2",
-    photo: "images/story2.jpg"
-  },
-  {
-    title: "Story 3",
-    text: "text 3",
-    photo: "images/story3.jpg"
-  },
-  {
-    title: "Story 4",
-    text: "text 4",
-    photo: "images/story4.jpg"
-  },
-  {
-    title: "Story 5",
-    text: "text 5",
-    photo: "images/story5.jpg"
-  }
-];
+  const API = "https://chay1api.mikebewise.workers.dev";
+const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
 
-const storyButtons=document.getElementById("storyButtons");
+let stories = [];
 
-stories.forEach(story=>{
+const storyButtons = document.getElementById("storyButtons");
 
-    const button=document.createElement("button");
+function escapeHtml(value = ""){
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
 
-    button.className="storyItem";
+function imageUrl(imageName){
+    if(!imageName) return "";
+    if(/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")){
+        return imageName;
+    }
+    return `${API}/image/${encodeURIComponent(imageName)}`;
+}
 
-    button.innerHTML=`
-        <img class="storyThumb" src="${story.photo}">
-        <div>
-            <div class="storyTitle">${story.title}</div>
-            <div class="storyPreview">
-                ${story.text.substring(0,80)}...
+function normalizeStory(item){
+    return {
+        id: item.id,
+        title: item.title || "Untitled",
+        text: item.story || "",
+        photo: imageUrl(item.image || ""),
+        created_at: item.created_at || ""
+    };
+}
+
+function isAdminLoggedIn(){
+    return Boolean(localStorage.getItem(ADMIN_TOKEN_KEY));
+}
+
+function openStoryEditor(storyId){
+    localStorage.setItem("chaynovaEditStoryId", String(storyId));
+    window.location.href = `admin-edit-post.html?edit=${encodeURIComponent(storyId)}`;
+}
+
+async function deleteSavedStory(story){
+    if(!isAdminLoggedIn()){
+        alert("Your admin login has expired. Please log in again.");
+        openLogin();
+        return;
+    }
+
+    const confirmed = confirm(`Delete “${story.title}”?`);
+    if(!confirmed) return;
+
+    try{
+        const response = await fetch(`${API}/story/${encodeURIComponent(story.id)}`,{
+            method:"DELETE",
+            headers:{
+                Authorization:`Bearer ${localStorage.getItem(ADMIN_TOKEN_KEY)}`
+            }
+        });
+
+        const message = await response.text();
+
+        if(response.status === 401 || response.status === 403){
+            localStorage.removeItem(ADMIN_TOKEN_KEY);
+            updateAdminPanel();
+            throw new Error("Your admin login expired. Please log in again.");
+        }
+
+        if(!response.ok){
+            throw new Error(message || "Could not delete the story.");
+        }
+
+        document.querySelector(".storyWindow")?.remove();
+        await loadSavedStories();
+    }catch(error){
+        alert(error.message || "Could not delete the story.");
+    }
+}
+
+function renderStoryList(){
+    storyButtons.innerHTML = "";
+
+    if(!stories.length){
+        storyButtons.innerHTML = `
+            <div style="padding:18px;text-align:center;opacity:.85;">
+                No saved stories yet.
             </div>
+        `;
+        return;
+    }
+
+    const showAdminActions = isAdminLoggedIn();
+
+    stories.forEach(story => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "story-card-wrap";
+
+        const button = document.createElement("button");
+        button.className = "storyItem";
+
+        const previewText = story.text.length > 80
+            ? `${story.text.substring(0,80)}...`
+            : story.text;
+
+        const imageHtml = story.photo
+            ? `<img class="storyThumb" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+            : `<div class="storyThumb" style="display:grid;place-items:center;background:rgba(255,255,255,.12);">📖</div>`;
+
+        button.innerHTML = `
+            ${imageHtml}
+            <div>
+                <div class="storyTitle">${escapeHtml(story.title)}</div>
+                <div class="storyPreview">${escapeHtml(previewText)}</div>
+            </div>
+        `;
+
+        button.onclick = () => openStoryWindow(story);
+        wrapper.appendChild(button);
+
+        if(showAdminActions){
+            const actions = document.createElement("div");
+            actions.className = "story-admin-actions";
+
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.textContent = "Edit";
+            editButton.onclick = () => openStoryEditor(story.id);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "delete-story-btn";
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = () => deleteSavedStory(story);
+
+            actions.append(editButton, deleteButton);
+            wrapper.appendChild(actions);
+        }
+
+        storyButtons.appendChild(wrapper);
+    });
+}
+
+async function loadSavedStories(){
+    storyButtons.innerHTML = `
+        <div style="padding:18px;text-align:center;opacity:.85;">
+            Loading saved stories...
         </div>
     `;
 
-    button.onclick=()=>openStoryWindow(story);
+    try{
+        const response = await fetch(API, {
+            method: "GET",
+            cache: "no-store"
+        });
 
-    storyButtons.appendChild(button);
+        if(!response.ok){
+            throw new Error("Could not load saved stories.");
+        }
 
-});
+        const data = await response.json();
+
+        stories = (Array.isArray(data) ? data : [])
+            .map(normalizeStory)
+            .sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+        renderStoryList();
+    }catch(error){
+        console.error(error);
+        storyButtons.innerHTML = `
+            <div style="padding:18px;text-align:center;color:#ffd966;">
+                ${escapeHtml(error.message || "Could not load saved stories.")}
+            </div>
+        `;
+    }
+}
 
     const music = document.getElementById("bgMusic");
     const musicBtn = document.getElementById("musicBtn");
@@ -782,6 +952,8 @@ stories.forEach(story=>{
     });
 
     function showRandomStory() {
+      if(!stories.length) return;
+
       const currentPopups = document.querySelectorAll(".storyBubble").length;
 
       if (currentPopups >= maxPopups) return;
@@ -827,22 +999,43 @@ stories.forEach(story=>{
   const storyWindow = document.createElement("div");
   storyWindow.className = "storyWindow";
 
+  const storyImage = story.photo
+    ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+    : "";
+
+  const adminButtons = isAdminLoggedIn()
+    ? `
+      <div class="story-window-admin">
+        <button type="button" class="edit-story-btn">Edit</button>
+        <button type="button" class="delete-story-btn">Delete</button>
+        <button type="button" class="storyClose">Close</button>
+      </div>
+    `
+    : `<button type="button" class="storyClose">Close</button>`;
+
   storyWindow.innerHTML = `
-    <img class="storyPhoto" src="${story.photo}" alt="${story.title}">
-    <h2>${story.title}</h2>
-    <p>${story.text}</p>
-    <button class="storyClose">Close</button>
+    ${storyImage}
+    <h2>${escapeHtml(story.title)}</h2>
+    <p>${escapeHtml(story.text)}</p>
+    ${adminButtons}
   `;
 
   storyWindow.querySelector(".storyClose").addEventListener("click", () => {
     storyWindow.remove();
   });
 
+  const editButton = storyWindow.querySelector(".edit-story-btn");
+  if(editButton){
+      editButton.addEventListener("click", () => openStoryEditor(story.id));
+  }
+
+  const deleteButton = storyWindow.querySelector(".delete-story-btn");
+  if(deleteButton){
+      deleteButton.addEventListener("click", () => deleteSavedStory(story));
+  }
+
   document.body.appendChild(storyWindow);
 }
-
-const API = "https://chay1api.mikebewise.workers.dev";
-const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
 
 function openLogin(){
     const overlay = document.getElementById("loginOverlay");
@@ -901,6 +1094,7 @@ async function checkLogin(){
             passwordInput.value = "";
             errorBox.innerText = "";
             updateAdminPanel();
+            renderStoryList();
         }else{
             localStorage.removeItem(ADMIN_TOKEN_KEY);
             updateAdminPanel();
@@ -933,6 +1127,7 @@ function logoutAdmin(){
     document.getElementById("passwordInput").value = "";
     document.getElementById("loginError").innerText = "";
     updateAdminPanel();
+    renderStoryList();
 }
 
 document.getElementById("passwordInput").addEventListener("keydown", function(e){
@@ -965,9 +1160,9 @@ window.checkLogin = checkLogin;
 window.logoutAdmin = logoutAdmin;
 
 updateAdminPanel();
+loadSavedStories();
 
-
-    setInterval(showRandomStory, 3000);
+setInterval(showRandomStory, 3000);
   </script>
 </body>
 </html>
