@@ -655,7 +655,7 @@ async function loadWatchCards(){
                     </a>
                 `
                 : "";
-
+/* Time that expected new tag tagging along  (3 * 24 * 60 * 60 * 1000) = days*/
 const isNew =
     card.created_at &&
     (Date.now() - new Date(card.created_at).getTime()) <
