@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home| CHAYNOVA</title>
+<title>Home| CHAYNOVA ⚡ Coming This August</title>
 
 <style>
 *{
@@ -486,8 +486,8 @@ header a:hover{
     0%,100%{
         opacity:1;
         text-shadow:
-            0 0 5px #ff4d4d,
-            0 0 12px #9c4a4a,
+            0 0 5px #f5d8d8,
+            0 0 12px #bf8c8c,
             0 0 22px #e8dcdc;
     }
     50%{
@@ -534,6 +534,55 @@ header a:hover{
     }
 }
 
+/* Add texxt under each FIREWORK | .firework - @keyframes */
+.firework::after{
+    content:"⚡ Coming This August";
+    position:absolute;
+    top:90px;
+    left:50%;
+    transform:translateX(-50%);
+    white-space:nowrap;
+
+    font-family:"Oxanium", sans-serif;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:1px;
+
+    background:linear-gradient(
+        90deg,
+        #ff84d8,
+        #b08cff,
+        #79e7ff,
+        #ffe27a
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    text-shadow:
+        0 0 8px rgba(255,132,216,.35),
+        0 0 16px rgba(121,231,255,.35),
+        0 0 24px rgba(255,226,122,.25);
+
+    animation:comingGlow 2.2s ease-in-out infinite;
+}
+
+@keyframes comingGlow{
+    0%,100%{
+        opacity:.75;
+        transform:translateX(-50%) scale(1);
+    }
+    50%{
+        opacity:1;
+        transform:translateX(-50%) scale(1.05);
+        text-shadow:
+            0 0 12px rgba(255,132,216,.6),
+            0 0 24px rgba(121,231,255,.6),
+            0 0 36px rgba(255,226,122,.45);
+    }
+}
+
 
 </style>
 </head>
@@ -555,6 +604,7 @@ header a:hover{
         <a href="index.html" class="nav-logo">
             <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
         </a>
+        
     </nav>
 </header>
 
@@ -566,13 +616,13 @@ header a:hover{
         alt="CHAYNOVA Logo"
         class="start-logo"
     >
-<div class="preview-text">🚧 Early Preview - Thanks for visiting!</div>
+<div class="preview-text">🚧 Early Preview • Official Launch: August 2026</div>
     <div class="tap-text">Tap anywhere to begin</div>
 </div>
 
 <div class="firework"></div>
 <div class="firework"></div>
-<div class="firework"></div>
+
 
 <main class="container" id="mainContent">
     <img
