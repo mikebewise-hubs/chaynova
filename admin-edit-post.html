@@ -219,14 +219,34 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 
 .story-card{
     display:grid;
-    grid-template-columns:95px 1fr auto;
+    grid-template-columns:34px 95px 1fr auto;
     gap:15px;
     align-items:center;
     padding:15px;
     border-radius:18px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.18);
+    transition:transform .18s ease,opacity .18s ease,border-color .18s ease,box-shadow .18s ease;
 }
+
+.drag-handle{
+    display:grid;
+    place-items:center;
+    width:34px;
+    height:48px;
+    border-radius:10px;
+    cursor:grab;
+    user-select:none;
+    color:#8ef2ff;
+    font-size:24px;
+    line-height:1;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+}
+.drag-handle:active{cursor:grabbing;}
+.story-card.dragging{opacity:.45;transform:scale(.985);}
+.story-card.drag-over{border-color:var(--cyan);box-shadow:0 0 22px rgba(0,217,255,.45);}
+.order-note{margin:-10px 0 16px;text-align:center;color:#9bdfff;font-size:.9rem;}
 
 .story-card img,.no-image{
     width:95px;
@@ -323,7 +343,8 @@ footer{
     nav{gap:13px;}
     nav a{font-size:.82rem;}
     .panel{padding:20px;}
-    .story-card{grid-template-columns:72px 1fr;}
+    .story-card{grid-template-columns:30px 72px 1fr;}
+    .drag-handle{width:30px;height:44px;font-size:21px;}
     .story-card img,.no-image{width:72px;height:65px;}
     .story-actions{grid-column:1/-1;display:flex;justify-content:flex-end;}
     .button-row button,.button-row .link-btn{width:100%;text-align:center;}
@@ -386,6 +407,7 @@ footer{
 
     <section class="panel">
         <h2>Saved Stories</h2>
+        <div class="order-note">Drag the ☰ handle to rearrange stories. The order saves automatically.</div>
         <div id="storyList" class="story-list">
             <div class="loading">Loading stories...</div>
         </div>
@@ -456,6 +478,8 @@ const storyList = document.getElementById("storyList");
 
 let storiesCache = [];
 let objectPreviewUrl = "";
+let draggedStoryId = null;
+let orderSaveTimer = null;
 
 function getToken(){
     return localStorage.getItem(TOKEN_KEY) || "";
@@ -675,8 +699,15 @@ function renderStories(){
     }
 
     const sorted = [...storiesCache].sort((a,b) => {
+        const aOrder = Number.isFinite(Number(a.position)) ? Number(a.position) : null;
+        const bOrder = Number.isFinite(Number(b.position)) ? Number(b.position) : null;
+        if(aOrder !== null && bOrder !== null && aOrder !== bOrder) return aOrder - bOrder;
+        if(aOrder !== null && bOrder === null) return -1;
+        if(aOrder === null && bOrder !== null) return 1;
         return new Date(b.created_at || 0) - new Date(a.created_at || 0);
     });
+
+    storiesCache = sorted;
 
     storyList.innerHTML = sorted.map(item => {
         const fullStory = item.story || "";
@@ -690,7 +721,8 @@ function renderStories(){
             : "";
 
         return `
-            <article class="story-card">
+            <article class="story-card" draggable="true" data-story-id="${escapeHtml(String(item.id))}">
+                <div class="drag-handle" title="Drag to reorder" aria-label="Drag to reorder">☰</div>
                 ${photo}
                 <div class="story-info">
                     <h3>${escapeHtml(item.title || "Untitled")}</h3>
@@ -706,6 +738,83 @@ function renderStories(){
             </article>
         `;
     }).join("");
+    enableStoryDragging();
+}
+
+function enableStoryDragging(){
+    const cards = [...storyList.querySelectorAll(".story-card")];
+
+    cards.forEach(card => {
+        card.addEventListener("dragstart", event => {
+            draggedStoryId = card.dataset.storyId;
+            card.classList.add("dragging");
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", draggedStoryId);
+        });
+
+        card.addEventListener("dragend", () => {
+            card.classList.remove("dragging");
+            storyList.querySelectorAll(".drag-over").forEach(el => el.classList.remove("drag-over"));
+            draggedStoryId = null;
+        });
+
+        card.addEventListener("dragover", event => {
+            event.preventDefault();
+            if(!draggedStoryId || draggedStoryId === card.dataset.storyId) return;
+            card.classList.add("drag-over");
+            event.dataTransfer.dropEffect = "move";
+        });
+
+        card.addEventListener("dragleave", () => card.classList.remove("drag-over"));
+
+        card.addEventListener("drop", event => {
+            event.preventDefault();
+            card.classList.remove("drag-over");
+            const draggedCard = [...storyList.querySelectorAll(".story-card")]
+                .find(item => item.dataset.storyId === draggedStoryId);
+            if(!draggedCard || draggedCard === card) return;
+
+            const box = card.getBoundingClientRect();
+            const insertAfter = event.clientY > box.top + box.height / 2;
+            storyList.insertBefore(draggedCard, insertAfter ? card.nextSibling : card);
+            syncCacheFromDom();
+            scheduleOrderSave();
+        });
+    });
+}
+
+function syncCacheFromDom(){
+    const ids = [...storyList.querySelectorAll(".story-card")].map(card => card.dataset.storyId);
+    const byId = new Map(storiesCache.map(item => [String(item.id),item]));
+    storiesCache = ids.map((id,index) => ({...byId.get(id),position:index + 1})).filter(item => item.id !== undefined);
+}
+
+function scheduleOrderSave(){
+    clearTimeout(orderSaveTimer);
+    showStatus("Saving story order...");
+    orderSaveTimer = setTimeout(saveStoryOrder,250);
+}
+
+async function saveStoryOrder(){
+    const order = storiesCache.map((item,index) => ({id:item.id,position:index + 1}));
+
+    try{
+        const response = await apiFetch(`${API}/story/reorder`,{
+            method:"PUT",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+    items: order
+})
+        });
+        const text = await response.text();
+        if(!response.ok) throw new Error(text || "Could not save story order.");
+        showStatus("Story order saved!");
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            showStatus(error.message || "Could not save story order.",true);
+            await loadStories();
+        }
+    }
 }
 
 function editStory(id){
