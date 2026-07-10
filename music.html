@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHAYNOVA | Beats</title>
+<title>Beats| CHAYNOVA</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -18,15 +18,7 @@ body{
         linear-gradient(135deg,#030010,#080033,#001234);
 }
 
-.stars{
-    position:fixed;
-    inset:0;
-    background-image:radial-gradient(white 1px,transparent 1px);
-    background-size:90px 90px;
-    animation:twinkle 4s infinite alternate;
-    opacity:.6;
-    z-index:0;
-}
+
 
 @keyframes twinkle{
     from{opacity:.3;}
@@ -40,43 +32,96 @@ body{
     padding:30px 20px 60px;
 }
 
-.top-bar{
-    max-width:1100px;
-    margin:0 auto 45px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
+/* ===== HEADER ===== */
+.top-header{
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92vw, 1050px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 8px 18px;
+
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    box-shadow: 0 0 28px rgba(0,217,255,.25);
+
+    z-index: 1000;
 }
 
-.logo{
-    text-decoration:none;
-    font-size:clamp(2.3rem,7vw,5rem);
-    font-weight:900;
-    letter-spacing:5px;
-    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
-    background-size:300%;
-    -webkit-background-clip:text;
-    color:transparent;
-    -webkit-text-stroke:1.5px rgba(255,255,255,.55);
-    text-shadow:
-        0 3px 0 rgba(0,0,0,.45),
-        0 0 18px rgba(0,217,255,.4);
-    animation:float 3.5s ease-in-out infinite, rainbow 6s linear infinite;
+/* ===== NAVIGATION ===== */
+.top-nav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-@keyframes rainbow{
-    from{background-position:0%;}
-    to{background-position:300%;}
+/* ===== LINKS ===== */
+.top-nav a{
+    font-family: "Oxanium", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: .6px;
+    transition: .25s ease;
 }
 
-@keyframes float{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
+.top-nav a:hover{
+    color: #001019;
+    text-shadow: 0 0 14px rgba(255,255,255,.9);
 }
 
-/* MIRROR GLASS BUTTONS */
-.home-btn,
+/* ===== LOGO ===== */
+.nav-logo{
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo img{
+    height: 22px;      /* Increase to 26px, 28px, etc. if desired */
+    width: auto;
+    display: block;
+    transition: transform .2s ease;
+}
+
+.nav-logo:hover img{
+    transform: scale(1.1);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width:560px){
+
+    .top-header{
+        top:12px;
+        border-radius:24px;
+    }
+
+    .top-nav{
+        gap:13px;
+    }
+
+    .top-nav a{
+        font-size:.82rem;
+    }
+
+    .nav-logo img{
+        height:18px;
+    }
+}
+
+
 .menu-row a,
 .control-btn{
     position:relative;
@@ -337,32 +382,41 @@ footer{
     z-index:1;
     pointer-events:none;
 }
-.firework:nth-of-type(2){left:18%;top:24%;background:#ff2fcf;}
-.firework:nth-of-type(3){left:80%;top:22%;background:#00d9ff;animation-delay:.8s;}
-.firework:nth-of-type(4){left:50%;top:38%;background:#ffaa00;animation-delay:1.4s;}
 @keyframes explode{
 0%{opacity:1;box-shadow:0 0 0 currentColor;}
 70%{opacity:1;box-shadow:0 -80px currentColor,60px -60px currentColor,80px 0 currentColor,60px 60px currentColor,0 80px currentColor,-60px 60px currentColor,-80px 0 currentColor,-60px -60px currentColor;}
 100%{opacity:0;}
 }
 
+
+
+
 </style>
 </head>
 
 <body>
 
-<div class="stars"></div>
 
 <div class="firework"></div>
 <div class="firework"></div>
 <div class="firework"></div>
+
 
 <div class="page">
 
-    <div class="top-bar">
-        <a href="index.html" class="logo">CHAYNOVA</a>
-        <a href="index.html" class="home-btn">Home</a>
-    </div>
+      <header class="top-header">
+    <nav class="top-nav">
+        <a href="shop.html">Store</a>
+        <a href="fun.html">Fun</a>
+        <a href="support.html">Support</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+
+        <a href="index.html" class="nav-logo">
+            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+        </a>
+    </nav>
+</header>
 
     <section class="hero">
         <h1>Beats</h1>
@@ -413,6 +467,8 @@ footer{
 <footer>
     © 2026 CHAYNOVA
 </footer>
+
+
 
 <script>
 const songs = [
@@ -805,6 +861,42 @@ player.addEventListener("ended", function(){
 });
 
 window.addEventListener("load", loadDefaultSong);
+
+const fireworks = document.querySelectorAll(".firework");
+
+const colors = [
+    "#ff2fcf",
+    "#00d9ff",
+    "#ffaa00",
+    "#7b2cff",
+    "#00ff99",
+    "#ff5555"
+];
+
+function randomizeFirework(fw) {
+    fw.style.left = Math.random() * 90 + "%";
+    fw.style.top = Math.random() * 70 + "%";
+    fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    // Restart animation
+    fw.style.animation = "none";
+    void fw.offsetWidth;
+    fw.style.animation = "explode 2.8s ease-out";
+}
+
+// Start each firework at a different time
+fireworks.forEach((fw, i) => {
+    setTimeout(() => {
+        randomizeFirework(fw);
+
+        setInterval(() => {
+            randomizeFirework(fw);
+        }, 2800);
+
+    }, i * 900);
+});
+
+
 </script>
 
 </body>
