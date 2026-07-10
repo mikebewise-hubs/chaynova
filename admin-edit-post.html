@@ -1,965 +1,919 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Edit Post | CHAYNOVA</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --glass: rgba(255,255,255,.14);
-      --glass-border: rgba(255,255,255,.28);
-      --text: #ffffff;
-      --dark: #16131d;
-    }
-
-    body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 15% 20%, rgba(255, 208, 64, .42), transparent 28%),
-        radial-gradient(circle at 85% 18%, rgba(0, 229, 255, .38), transparent 30%),
-        radial-gradient(circle at 50% 85%, rgba(255, 73, 206, .30), transparent 34%),
-        linear-gradient(135deg, #dd7a13 0%, #f32708 48%, #e41877 100%);
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-      background-size: 42px 42px;
-      opacity: .35;
-    }
-
-    header {
-      position: fixed;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(92vw, 1050px);
-      z-index: 50;
-      display: flex;
-      justify-content: center;
-      padding: 8px 18px;
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 999px;
-      background: rgba(255,255,255,.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 0 28px rgba(0,217,255,.25);
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    nav a {
-      font-size: .95rem;
-      font-weight: 700;
-      color: white;
-      text-decoration: none;
-      letter-spacing: .6px;
-      transition: .25s ease;
-    }
-
-    nav a:hover {
-      color: #001019;
-      text-shadow: 0 0 14px rgba(255,255,255,.9);
-    }
-
-    .nav-logo img {
-      height: 22px;
-      width: auto;
-      vertical-align: middle;
-      transition: transform .2s ease;
-    }
-
-    .nav-logo img:hover {
-      transform: scale(1.1);
-    }
-
-    main {
-      position: relative;
-      z-index: 5;
-      width: min(1100px, 94vw);
-      margin: 0 auto;
-      padding: 120px 0 70px;
-    }
-
-    .page-title {
-      text-align: center;
-      margin-bottom: 28px;
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      text-shadow: 0 5px 20px rgba(0,0,0,.25);
-    }
-
-    .panel {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 28px;
-      padding: 26px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 15px 40px rgba(0,0,0,.25);
-      margin-bottom: 30px;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-    }
-
-    label {
-      font-weight: 700;
-      letter-spacing: .25px;
-    }
-
-    input,
-    textarea,
-    button {
-      font: inherit;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      border: 1px solid rgba(255,255,255,.4);
-      border-radius: 15px;
-      padding: 13px 15px;
-      color: #111;
-      background: rgba(255,255,255,.92);
-      outline: none;
-    }
-
-    input:focus,
-    textarea:focus {
-      box-shadow: 0 0 0 4px rgba(0,229,255,.25);
-      border-color: white;
-    }
-
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-      line-height: 1.5;
-    }
-
-    .small-note {
-      font-size: .84rem;
-      opacity: .82;
-    }
-
-    .time-line {
-      padding: 12px 15px;
-      border-radius: 15px;
-      background: rgba(10,15,25,.26);
-      border: 1px solid rgba(255,255,255,.22);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-
-    #photoPreview {
-      display: none;
-      width: min(100%, 380px);
-      max-height: 260px;
-      object-fit: cover;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.35);
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 4px;
-    }
-
-    button,
-    .file-button {
-      border: none;
-      border-radius: 999px;
-      padding: 11px 20px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
-    }
-
-    button:hover,
-    .file-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,.2);
-    }
-
-    .save-btn {
-      background: white;
-      color: #111;
-    }
-
-    .clear-btn {
-      background: rgba(255,255,255,.18);
-      color: white;
-      border: 1px solid rgba(255,255,255,.32);
-    }
-
-    .delete-current-btn,
-    .delete-btn {
-      background: #8b101d;
-      color: white;
-    }
-
-    .delete-current-btn:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-
-    .status {
-      min-height: 24px;
-      margin-top: 12px;
-      font-weight: 700;
-    }
-
-    .table-title {
-      margin-bottom: 18px;
-      text-align: center;
-      font-size: 1.7rem;
-    }
-
-    .post-list {
-      display: grid;
-      gap: 16px;
-    }
-
-    .post-card {
-      display: grid;
-      grid-template-columns: 100px 1fr auto;
-      gap: 16px;
-      align-items: center;
-      padding: 16px;
-      border-radius: 20px;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.22);
-    }
-
-    .post-card img {
-      width: 100px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 14px;
-      background: rgba(255,255,255,.15);
-    }
-
-    .no-photo {
-      width: 100px;
-      height: 80px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: rgba(255,255,255,.14);
-      font-size: .78rem;
-      text-align: center;
-      padding: 8px;
-    }
-
-    .post-content h3 {
-      margin-bottom: 7px;
-      overflow-wrap: anywhere;
-    }
-
-    .post-content p {
-      line-height: 1.45;
-      opacity: .92;
-      overflow-wrap: anywhere;
-    }
-
-    .post-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-      margin-top: 10px;
-      font-size: .78rem;
-      opacity: .82;
-    }
-
-    .post-actions {
-      display: grid;
-      gap: 9px;
-    }
-
-    .edit-btn {
-      background: white;
-      color: #111;
-    }
-
-    .empty-message {
-      text-align: center;
-      padding: 28px 10px;
-      opacity: .82;
-    }
-
-    footer {
-      position: relative;
-      z-index: 5;
-      text-align: center;
-      padding: 0 20px 24px;
-      font-size: 14px;
-      text-shadow: 0 0 12px rgba(0,217,255,.6);
-    }
-
-
-
-    .site-footer {
-      position: relative;
-      z-index: 60;
-    }
-
-    .hidden-admin-btn {
-      border: 0;
-      background: transparent;
-      color: rgba(255,255,255,.38);
-      padding: 0 5px;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .hidden-admin-btn:hover {
-      color: white;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .login-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: none;
-      place-items: center;
-      padding: 20px;
-      background: rgba(7, 8, 14, .72);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .login-overlay.open { display: grid; }
-
-    .login-box {
-      width: min(440px, 94vw);
-      padding: 28px;
-      border-radius: 26px;
-      background: rgba(20, 18, 30, .94);
-      border: 1px solid rgba(255,255,255,.28);
-      box-shadow: 0 24px 70px rgba(0,0,0,.45);
-    }
-
-    .login-box h2 { text-align: center; margin-bottom: 20px; }
-
-    #loginForm { display: grid; gap: 13px; }
-
-    .login-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 4px;
-    }
-
-    .login-actions button,
-    .admin-panel a,
-    .admin-panel button {
-      border-radius: 999px;
-      padding: 11px 18px;
-      font-weight: 800;
-    }
-
-    .login-error {
-      min-height: 22px;
-      text-align: center;
-      color: #ffb7bf;
-      font-weight: 700;
-    }
-
-    .admin-note {
-      font-size: .82rem;
-      line-height: 1.45;
-      opacity: .72;
-      text-align: center;
-    }
-
-    .admin-panel {
-      display: none;
-      gap: 12px;
-      text-align: center;
-    }
-
-    .admin-panel.open { display: grid; }
-
-    .admin-panel a {
-      display: block;
-      background: white;
-      color: #111;
-      text-decoration: none;
-    }
-
-    .logout-btn { background: rgba(255,255,255,.16); color: white; }
-
-    body.admin-locked main,
-    body.admin-locked header {
-      display: none;
-    }
-
-    @media (max-width: 700px) {
-      header {
-        top: 12px;
-        border-radius: 24px;
-      }
-
-      nav {
-        gap: 13px;
-      }
-
-      nav a {
-        font-size: .82rem;
-      }
-
-      main {
-        padding-top: 130px;
-      }
-
-      .panel {
-        padding: 20px;
-      }
-
-      .post-card {
-        grid-template-columns: 78px 1fr;
-      }
-
-      .post-card img,
-      .no-photo {
-        width: 78px;
-        height: 70px;
-      }
-
-      .post-actions {
-        grid-column: 1 / -1;
-        display: flex;
-        justify-content: flex-end;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAYNOVA Story Admin</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+    --glass:rgba(255,255,255,.10);
+    --glass-border:rgba(255,255,255,.24);
+    --cyan:#00d9ff;
+    --pink:#ff2fcf;
+    --purple:#7b2cff;
+    --green:#7CFC00;
+    --danger:#ff5f73;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,0,180,.4),transparent 30%),
+        radial-gradient(circle at 80% 20%,rgba(0,200,255,.4),transparent 30%),
+        linear-gradient(135deg,#030010,#080033,#001234);
+    color:white;
+    min-height:100vh;
+    padding:110px 24px 55px;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:42px 42px;
+}
+
+header{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(94vw,1050px);
+    z-index:50;
+    display:flex;
+    justify-content:center;
+    padding:10px 18px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:999px;
+    background:rgba(255,255,255,.10);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    box-shadow:0 0 28px rgba(0,217,255,.25);
+}
+
+nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    font-size:.95rem;
+    letter-spacing:.4px;
+}
+
+nav a:hover{color:#8ef2ff;}
+
+.nav-logo img{
+    height:22px;
+    width:auto;
+    vertical-align:middle;
+}
+
+main{
+    position:relative;
+    z-index:2;
+    width:min(1000px,100%);
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    font-size:clamp(2rem,7vw,3.2rem);
+    margin-bottom:30px;
+    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
+    background-size:300%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+@keyframes rainbow{
+    from{background-position:0%;}
+    to{background-position:300%;}
+}
+
+.panel{
+    padding:28px;
+    margin-bottom:28px;
+    border-radius:25px;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    box-shadow:0 0 35px rgba(0,217,255,.22);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+.panel h2{
+    text-align:center;
+    margin-bottom:22px;
+    color:#c9f7ff;
+}
+
+.form-grid{display:grid;gap:18px;}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    color:#c9f7ff;
+}
+
+input,textarea,button{font:inherit;}
+
+input,textarea{
+    width:100%;
+    padding:14px;
+    background:#111;
+    color:white;
+    border:1px solid var(--cyan);
+    border-radius:11px;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus,textarea:focus{
+    box-shadow:0 0 0 4px rgba(0,217,255,.16);
+}
+
+textarea{
+    min-height:260px;
+    resize:vertical;
+    line-height:1.55;
+}
+
+.small-note{
+    display:block;
+    margin-top:7px;
+    color:#9bdfff;
+    font-size:.84rem;
+}
+
+.date-line{
+    color:#8ef2ff;
+    font-size:14px;
+    font-style:italic;
+    line-height:1.5;
+}
+
+#preview{
+    display:none;
+    max-width:320px;
+    width:100%;
+    max-height:270px;
+    object-fit:cover;
+    margin-top:14px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,217,255,.45);
+}
+
+.button-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:4px;
+}
+
+button,.link-btn{
+    display:inline-block;
+    background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan));
+    color:white;
+    border:none;
+    padding:13px 24px;
+    border-radius:25px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:0 0 16px rgba(0,217,255,.35);
+    transition:.2s ease;
+}
+
+button:hover,.link-btn:hover{transform:translateY(-2px);}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+
+.secondary{background:rgba(255,255,255,.15);}
+.danger{background:linear-gradient(90deg,#8b101d,#ff5f73);}
+
+#status{
+    min-height:24px;
+    margin-top:16px;
+    font-size:17px;
+    font-weight:700;
+}
+
+.story-list{display:grid;gap:15px;}
+
+.story-card{
+    display:grid;
+    grid-template-columns:95px 1fr auto;
+    gap:15px;
+    align-items:center;
+    padding:15px;
+    border-radius:18px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+}
+
+.story-card img,.no-image{
+    width:95px;
+    height:78px;
+    object-fit:cover;
+    border-radius:13px;
+    background:rgba(255,255,255,.12);
+}
+
+.no-image{
+    display:grid;
+    place-items:center;
+    font-size:.76rem;
+    text-align:center;
+    padding:5px;
+}
+
+.story-info h3{margin-bottom:6px;overflow-wrap:anywhere;}
+.story-info p{opacity:.86;line-height:1.4;overflow-wrap:anywhere;}
+.story-meta{margin-top:8px;font-size:.78rem;color:#9bdfff;}
+.story-actions{display:grid;gap:8px;}
+.story-actions button{padding:9px 16px;font-size:14px;}
+
+.empty,.loading{
+    text-align:center;
+    padding:24px 10px;
+    color:#c9f7ff;
+}
+
+.login-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(0,0,20,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(92vw,420px);
+    padding:28px;
+    border-radius:24px;
+    background:rgba(20,18,30,.96);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 0 35px rgba(0,217,255,.4);
+    text-align:center;
+}
+
+.login-box h2{color:#8ef2ff;margin-bottom:18px;}
+.login-box input{margin:10px 0;}
+.login-actions{display:flex;gap:12px;margin-top:16px;}
+.login-actions button,.admin-panel a,.logout-btn{flex:1;}
+.login-error{min-height:22px;margin-top:14px;text-align:center;color:#ffd966;font-weight:700;}
+.admin-note{margin-top:12px;font-size:13px;color:#9bdfff;line-height:1.5;}
+.admin-panel{display:none;margin-top:18px;gap:12px;flex-direction:column;}
+
+#adminContent{display:none;}
+
+footer{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:25px 20px 0;
+    color:#9bdfff;
+}
+
+.hidden-admin-btn{
+    width:18px;
+    height:18px;
+    margin-left:6px;
+    padding:0;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.10);
+    font-size:18px;
+    line-height:18px;
+    cursor:pointer;
+    box-shadow:none;
+}
+.hidden-admin-btn:hover{
+    color:#00d9ff;
+    text-shadow:0 0 12px #00d9ff;
+    transform:none;
+}
+
+@media(max-width:700px){
+    body{padding:120px 16px 40px;}
+    header{top:12px;border-radius:24px;}
+    nav{gap:13px;}
+    nav a{font-size:.82rem;}
+    .panel{padding:20px;}
+    .story-card{grid-template-columns:72px 1fr;}
+    .story-card img,.no-image{width:72px;height:65px;}
+    .story-actions{grid-column:1/-1;display:flex;justify-content:flex-end;}
+    .button-row button,.button-row .link-btn{width:100%;text-align:center;}
+}
+</style>
 </head>
+<body>
 
-<body class="admin-locked">
-  <header>
+<header>
     <nav>
-      <a href="shop.html">Store</a>
-      <a href="fun.html">Fun</a>
-      <a href="support.html">Support</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="index.html" class="nav-logo">
-        <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-      </a>
+        <a href="shop.html">Store</a>
+        <a href="fun.html">Fun</a>
+        <a href="support.html">Support</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="index.html" class="nav-logo">
+            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+        </a>
     </nav>
-  </header>
+</header>
 
-  <main>
-    <h1 class="page-title">Admin Edit Post</h1>
+<main id="adminContent">
+    <h1 id="pageTitle">CHAYNOVA Story Admin</h1>
 
     <section class="panel">
-      <form id="postForm" class="form-grid">
-        <input type="hidden" id="postId">
+        <form id="storyForm" class="form-grid">
+            <input id="storyId" type="hidden">
+            <input id="oldImage" type="hidden">
 
-        <div class="field">
-          <label for="photo">Attach Photo</label>
-          <input id="photo" type="file" accept="image/*">
-          <span class="small-note">The photo and post are saved automatically in this browser.</span>
-          <img id="photoPreview" alt="Selected photo preview">
-        </div>
+            <div>
+                <label for="title">Story Title</label>
+                <input id="title" maxlength="120" required placeholder="Enter the story title">
+            </div>
 
-        <div class="field">
-          <label for="title">1. Short Title</label>
-          <input id="title" type="text" maxlength="80" required placeholder="Enter a short post title">
-          <span class="small-note"><span id="titleCount">0</span>/80 characters</span>
-        </div>
+            <div id="dateLine" class="date-line">New story</div>
 
-        <div class="field">
-          <label for="detail">2. Details</label>
-          <textarea id="detail" required placeholder="Enter the full post details"></textarea>
-        </div>
+            <div>
+                <label for="story">Story</label>
+                <textarea id="story" required placeholder="Write your story..."></textarea>
+            </div>
 
-        <div class="field">
-          <label for="linkName">3. Link or Name (optional)</label>
-          <input id="linkName" type="text" placeholder="Example: https://example.com or Michael">
-          <span class="small-note">Leaving this empty saves an empty value.</span>
-        </div>
+            <div>
+                <label for="image">Image</label>
+                <input id="image" type="file" accept="image/*">
+                <span class="small-note">Choose an image for a new story. When editing, leave this empty to keep the existing image.</span>
+                <img id="preview" alt="Story image preview">
+            </div>
 
-        <div class="field">
-          <label>4. Created Date and Time</label>
-          <div id="createdTimeLine" class="time-line">Not saved yet</div>
-        </div>
+            <div class="button-row">
+                <button type="submit" id="saveBtn">Submit Story</button>
+                <button type="button" id="clearBtn" class="secondary">Clear Form</button>
+                <button type="button" id="deleteCurrentBtn" class="danger" disabled>Delete Selected</button>
+                <a href="fun.html" class="link-btn secondary">Back to Fun</a>
+                <button type="button" id="logoutBtn" class="secondary">Logout</button>
+            </div>
 
-        <div class="field">
-          <label for="displayDateTime">5. Date and Time to Show Post</label>
-          <input id="displayDateTime" type="datetime-local" required>
-        </div>
-
-        <div class="button-row">
-          <button class="save-btn" type="submit" id="saveButton">Save Post</button>
-          <button class="clear-btn" type="button" id="clearButton">Clear Form</button>
-          <button class="delete-current-btn" type="button" id="deleteCurrentButton" disabled>Delete Selected</button>
-        </div>
-
-        <div id="status" class="status" aria-live="polite"></div>
-      </form>
+            <div id="status" aria-live="polite"></div>
+        </form>
     </section>
 
     <section class="panel">
-      <h2 class="table-title">Saved Posts</h2>
-      <div id="postList" class="post-list"></div>
+        <h2>Saved Stories</h2>
+        <div id="storyList" class="story-list">
+            <div class="loading">Loading stories...</div>
+        </div>
     </section>
-  </main>
+</main>
 
-  <footer class="site-footer" id="siteFooter">
+<footer>
     © 2026 CHAYNOVA
-    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin" aria-label="Open admin login">•</button>
-  </footer>
+    <button class="hidden-admin-btn" type="button" onclick="openLogin()" title="Admin">•</button>
+</footer>
 
-  <div id="loginOverlay" class="login-overlay" aria-hidden="true">
-    <div class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-      <h2 id="loginTitle">CHAYNOVA Admin</h2>
+<div id="loginOverlay" class="login-overlay" aria-hidden="true">
+    <div class="login-box">
+        <h2>CHAYNOVA Admin</h2>
 
-      <div id="loginForm">
-        <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-        <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+        <div id="loginForm">
+            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
-        <div class="login-actions">
-          <button type="button" onclick="checkLogin()">Login</button>
-          <button type="button" onclick="closeLogin()">Cancel</button>
+            <div class="login-actions">
+                <button type="button" id="loginBtn">Login</button>
+                <button type="button" class="secondary" onclick="closeLogin()">Cancel</button>
+            </div>
+
+            <div id="loginError" class="login-error"></div>
+            <div class="admin-note">Login is checked by your Cloudflare Worker.</div>
         </div>
 
-        <div id="loginError" class="login-error"></div>
-
-        <div class="admin-note">
-          Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
+        <div id="adminPanel" class="admin-panel">
+            <a href="admin-edit-post.html" class="link-btn">Story Editor</a>
+            <a href="fun.html" class="link-btn secondary">Back to Fun</a>
+            <a href="index.html" class="link-btn secondary">Home</a>
+            <button class="logout-btn secondary" type="button" onclick="logoutAdmin()">Logout</button>
+            <button class="logout-btn secondary" type="button" onclick="closeLogin()">Close</button>
         </div>
-      </div>
-
-      <div id="adminPanel" class="admin-panel">
-        <a href="admin-edit-post.html">Edit Posts</a>
-        <a href="fun.html">Return to Fun Page</a>
-        <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
-        <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
-      </div>
     </div>
-  </div>
+</div>
 
-  <script>
-    // Change this only if your Worker login route uses a different address.
-    const AUTH_WORKER_URL = "/api/admin-login";
-    const ADMIN_SESSION_KEY = "chaynovaAdminAuthenticated";
+<script>
+const API = "https://chay1api.mikebewise.workers.dev";
+const LOGIN_URL = `${API}/login`;
+const TOKEN_KEY = "chaynovaAdminToken";
 
-    const loginOverlay = document.getElementById("loginOverlay");
-    const loginForm = document.getElementById("loginForm");
-    const adminPanel = document.getElementById("adminPanel");
-    const usernameInput = document.getElementById("usernameInput");
-    const passwordInput = document.getElementById("passwordInput");
-    const loginError = document.getElementById("loginError");
+const loginOverlay = document.getElementById("loginOverlay");
+const loginForm = document.getElementById("loginForm");
+const adminPanel = document.getElementById("adminPanel");
+const adminContent = document.getElementById("adminContent");
+const usernameInput = document.getElementById("usernameInput");
+const passwordInput = document.getElementById("passwordInput");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
 
-    function unlockAdmin() {
-      document.body.classList.remove("admin-locked");
-      loginForm.style.display = "none";
-      adminPanel.classList.add("open");
+const storyForm = document.getElementById("storyForm");
+const storyIdInput = document.getElementById("storyId");
+const oldImageInput = document.getElementById("oldImage");
+const titleInput = document.getElementById("title");
+const storyInput = document.getElementById("story");
+const imageInput = document.getElementById("image");
+const previewImg = document.getElementById("preview");
+const dateLineBox = document.getElementById("dateLine");
+const pageTitleBox = document.getElementById("pageTitle");
+const saveBtn = document.getElementById("saveBtn");
+const clearBtn = document.getElementById("clearBtn");
+const deleteCurrentBtn = document.getElementById("deleteCurrentBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const statusBox = document.getElementById("status");
+const storyList = document.getElementById("storyList");
+
+let storiesCache = [];
+let objectPreviewUrl = "";
+
+function getToken(){
+    return localStorage.getItem(TOKEN_KEY) || "";
+}
+
+function authHeaders(extra = {}){
+    const token = getToken();
+    return {
+        ...extra,
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+}
+
+function openLogin(message = ""){
+    loginOverlay.style.display = "flex";
+    loginOverlay.setAttribute("aria-hidden", "false");
+    loginError.textContent = message;
+    updateLoginPanel();
+
+    setTimeout(() => {
+        if(!getToken()) usernameInput.focus();
+    }, 50);
+}
+
+function closeLogin(){
+    loginOverlay.style.display = "none";
+    loginOverlay.setAttribute("aria-hidden", "true");
+    loginError.textContent = "";
+}
+
+function updateLoginPanel(){
+    const loggedIn = Boolean(getToken());
+    loginForm.style.display = loggedIn ? "none" : "block";
+    adminPanel.style.display = loggedIn ? "flex" : "none";
+}
+
+function showLogin(message = ""){
+    adminContent.style.display = "none";
+    openLogin(message);
+}
+
+function showAdmin(){
+    adminContent.style.display = "block";
+    updateLoginPanel();
+    closeLogin();
+}
+
+function formatDate(dateString){
+    if(!dateString) return "New story";
+    const d = new Date(dateString);
+    if(Number.isNaN(d.getTime())) return "New story";
+    return d.toLocaleString("en-US",{
+        month:"short",
+        day:"numeric",
+        year:"numeric",
+        hour:"numeric",
+        minute:"2-digit"
+    });
+}
+
+function escapeHtml(value = ""){
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function imageUrl(imageName){
+    if(!imageName) return "";
+    if(/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")) return imageName;
+    return `${API}/image/${encodeURIComponent(imageName)}`;
+}
+
+function showStatus(message, isError = false){
+    statusBox.textContent = message;
+    statusBox.style.color = isError ? "#ffb7bf" : "#7CFC00";
+}
+
+function clearObjectPreview(){
+    if(objectPreviewUrl){
+        URL.revokeObjectURL(objectPreviewUrl);
+        objectPreviewUrl = "";
     }
+}
 
-    function lockAdmin() {
-      document.body.classList.add("admin-locked");
-      loginForm.style.display = "grid";
-      adminPanel.classList.remove("open");
-    }
+function resetForm(){
+    clearObjectPreview();
+    storyForm.reset();
+    storyIdInput.value = "";
+    oldImageInput.value = "";
+    previewImg.removeAttribute("src");
+    previewImg.style.display = "none";
+    dateLineBox.textContent = formatDate(new Date().toISOString());
+    pageTitleBox.textContent = "CHAYNOVA Story Admin";
+    saveBtn.textContent = "Submit Story";
+    deleteCurrentBtn.disabled = true;
+    showStatus("");
+}
 
-    function openLogin() {
-      loginOverlay.classList.add("open");
-      loginOverlay.setAttribute("aria-hidden", "false");
-      loginError.textContent = "";
-      if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes") {
-        unlockAdmin();
-      } else {
-        lockAdmin();
-        setTimeout(() => usernameInput.focus(), 50);
-      }
-    }
+async function checkLogin(){
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
 
-    function closeLogin() {
-      loginOverlay.classList.remove("open");
-      loginOverlay.setAttribute("aria-hidden", "true");
-    }
-
-    async function checkLogin() {
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!username || !password) {
-        loginError.textContent = "Enter your username and password.";
+    if(!username || !password){
+        loginError.textContent = "Please enter username and password.";
         return;
-      }
+    }
 
-      loginError.textContent = "Checking login…";
+    loginBtn.disabled = true;
+    loginError.textContent = "Checking login...";
 
-      try {
-        const response = await fetch(AUTH_WORKER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ username, password })
+    try{
+        const response = await fetch(LOGIN_URL,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({username,password})
         });
 
-        let result = {};
-        try { result = await response.json(); } catch (_) {}
+        let data = {};
+        try{data = await response.json();}catch(_){ }
 
-        if (!response.ok || result.success === false) {
-          throw new Error(result.message || "Incorrect username or password.");
+        if(!response.ok || !data.success || !data.token){
+            throw new Error(data.message || "Wrong username or password.");
         }
 
-        sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
+        localStorage.setItem(TOKEN_KEY,data.token);
         passwordInput.value = "";
         loginError.textContent = "";
-        unlockAdmin();
-        closeLogin();
-      } catch (error) {
-        sessionStorage.removeItem(ADMIN_SESSION_KEY);
-        lockAdmin();
-        loginError.textContent = error.message || "Login failed.";
-      }
+        showAdmin();
+        await loadStories();
+    }catch(error){
+        localStorage.removeItem(TOKEN_KEY);
+        loginError.textContent = error.message || "Login failed. Check your Worker API.";
+    }finally{
+        loginBtn.disabled = false;
+    }
+}
+
+function logoutAdmin(){
+    localStorage.removeItem(TOKEN_KEY);
+    usernameInput.value = "";
+    passwordInput.value = "";
+    resetForm();
+    showLogin("You have logged out.");
+}
+
+async function apiFetch(url, options = {}){
+    const headers = authHeaders(options.headers || {});
+    const response = await fetch(url,{...options,headers});
+
+    if(response.status === 401 || response.status === 403){
+        localStorage.removeItem(TOKEN_KEY);
+        showLogin("Your login expired. Please log in again.");
+        throw new Error("Unauthorized");
     }
 
-    function logoutAdmin() {
-      sessionStorage.removeItem(ADMIN_SESSION_KEY);
-      usernameInput.value = "";
-      passwordInput.value = "";
-      lockAdmin();
+    return response;
+}
+
+function getRequestedEditStoryId(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get("edit") || localStorage.getItem("chaynovaEditStoryId") || "";
+}
+
+function clearRequestedEditStoryId(){
+    localStorage.removeItem("chaynovaEditStoryId");
+
+    const url = new URL(window.location.href);
+    if(url.searchParams.has("edit")){
+        url.searchParams.delete("edit");
+        window.history.replaceState({}, "", url.pathname + url.search + url.hash);
     }
+}
 
-    passwordInput.addEventListener("keydown", event => {
-      if (event.key === "Enter") checkLogin();
-    });
+function openRequestedStoryForEditing(){
+    const requestedId = getRequestedEditStoryId();
+    if(!requestedId) return;
 
-    loginOverlay.addEventListener("click", event => {
-      if (event.target === loginOverlay) closeLogin();
-    });
+    const itemExists = storiesCache.some(item => String(item.id) === String(requestedId));
 
-    window.openLogin = openLogin;
-    window.closeLogin = closeLogin;
-    window.checkLogin = checkLogin;
-    window.logoutAdmin = logoutAdmin;
-
-    if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes") {
-      document.body.classList.remove("admin-locked");
-    } else {
-      openLogin();
+    if(itemExists){
+        editStory(requestedId);
+        clearRequestedEditStoryId();
+    }else{
+        showStatus("The selected story could not be found.", true);
+        clearRequestedEditStoryId();
     }
+}
 
-    const STORAGE_KEY = "chaynovaAdminPosts";
+async function loadStories(){
+    storyList.innerHTML = '<div class="loading">Loading stories...</div>';
 
-    const form = document.getElementById("postForm");
-    const postIdInput = document.getElementById("postId");
-    const photoInput = document.getElementById("photo");
-    const photoPreview = document.getElementById("photoPreview");
-    const titleInput = document.getElementById("title");
-    const titleCount = document.getElementById("titleCount");
-    const detailInput = document.getElementById("detail");
-    const linkNameInput = document.getElementById("linkName");
-    const createdTimeLine = document.getElementById("createdTimeLine");
-    const displayDateTimeInput = document.getElementById("displayDateTime");
-    const saveButton = document.getElementById("saveButton");
-    const clearButton = document.getElementById("clearButton");
-    const deleteCurrentButton = document.getElementById("deleteCurrentButton");
-    const status = document.getElementById("status");
-    const postList = document.getElementById("postList");
+    try{
+        const response = await apiFetch(API,{method:"GET",cache:"no-store"});
 
-    let selectedPhotoData = "";
-
-    function loadPosts() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        return saved ? JSON.parse(saved) : [];
-      } catch (error) {
-        console.error("Could not read saved posts:", error);
-        return [];
-      }
-    }
-
-    function savePosts(posts) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-    }
-
-    function pad(number) {
-      return String(number).padStart(2, "0");
-    }
-
-    function formatDateTime(value) {
-      if (!value) return "";
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return "";
-
-      return `${pad(date.getMonth() + 1)}:${pad(date.getDate())}:${String(date.getFullYear()).slice(-2)} ` +
-             `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    }
-
-    function toDateTimeLocalValue(date = new Date()) {
-      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
-             `T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    }
-
-    function makeId() {
-      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-      return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    }
-
-    function escapeHtml(value = "") {
-      return value
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function showStatus(message, isError = false) {
-      status.textContent = message;
-      status.style.color = isError ? "#2c0010" : "#ffffff";
-      clearTimeout(showStatus.timer);
-      showStatus.timer = setTimeout(() => {
-        status.textContent = "";
-      }, 3500);
-    }
-
-    function resetForm() {
-      form.reset();
-      postIdInput.value = "";
-      selectedPhotoData = "";
-      photoPreview.removeAttribute("src");
-      photoPreview.style.display = "none";
-      createdTimeLine.textContent = "Not saved yet";
-      saveButton.textContent = "Save Post";
-      deleteCurrentButton.disabled = true;
-      titleCount.textContent = "0";
-      displayDateTimeInput.value = toDateTimeLocalValue();
-    }
-
-    function renderPosts() {
-      const posts = loadPosts().sort((a, b) => {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      });
-
-      if (posts.length === 0) {
-        postList.innerHTML = '<div class="empty-message">No saved posts yet.</div>';
-        return;
-      }
-
-      postList.innerHTML = posts.map(post => {
-        const shortDetail = post.detail.length > 145
-          ? `${post.detail.slice(0, 145)}...`
-          : post.detail;
-
-        const imageHtml = post.photo
-          ? `<img src="${post.photo}" alt="${escapeHtml(post.title)}">`
-          : '<div class="no-photo">No photo</div>';
-
-        const updatedHtml = post.updatedAt
-          ? `<span>Updated: ${formatDateTime(post.updatedAt)}</span>`
-          : "";
-
-        return `
-          <article class="post-card">
-            ${imageHtml}
-            <div class="post-content">
-              <h3>${escapeHtml(post.title)}</h3>
-              <p>${escapeHtml(shortDetail)}</p>
-              <div class="post-meta">
-                <span>Created: ${formatDateTime(post.createdAt)}</span>
-                ${updatedHtml}
-                <span>Show: ${formatDateTime(post.displayAt)}</span>
-                ${post.linkName ? `<span>Link/Name: ${escapeHtml(post.linkName)}</span>` : ""}
-              </div>
-            </div>
-            <div class="post-actions">
-              <button class="edit-btn" type="button" onclick="editPost('${post.id}')">Edit</button>
-              <button class="delete-btn" type="button" onclick="deletePost('${post.id}')">Delete</button>
-            </div>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function editPost(id) {
-      const posts = loadPosts();
-      const post = posts.find(item => item.id === id);
-      if (!post) return;
-
-      postIdInput.value = post.id;
-      titleInput.value = post.title;
-      detailInput.value = post.detail;
-      linkNameInput.value = post.linkName || "";
-      selectedPhotoData = post.photo || "";
-      displayDateTimeInput.value = post.displayAt
-        ? toDateTimeLocalValue(new Date(post.displayAt))
-        : toDateTimeLocalValue();
-
-      createdTimeLine.textContent = post.updatedAt
-        ? `${formatDateTime(post.createdAt)} — Updated ${formatDateTime(post.updatedAt)}`
-        : formatDateTime(post.createdAt);
-
-      if (selectedPhotoData) {
-        photoPreview.src = selectedPhotoData;
-        photoPreview.style.display = "block";
-      } else {
-        photoPreview.removeAttribute("src");
-        photoPreview.style.display = "none";
-      }
-
-      titleCount.textContent = String(post.title.length);
-      saveButton.textContent = "Update Post";
-      deleteCurrentButton.disabled = false;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      showStatus("Post loaded into the form.");
-    }
-
-    function deletePost(id) {
-      const posts = loadPosts();
-      const post = posts.find(item => item.id === id);
-      if (!post) return;
-
-      const confirmed = confirm(`Delete “${post.title}”?`);
-      if (!confirmed) return;
-
-      const nextPosts = posts.filter(item => item.id !== id);
-      savePosts(nextPosts);
-
-      if (postIdInput.value === id) resetForm();
-      renderPosts();
-      showStatus("Post deleted.");
-    }
-
-    photoInput.addEventListener("change", () => {
-      const file = photoInput.files[0];
-      if (!file) return;
-
-      if (!file.type.startsWith("image/")) {
-        showStatus("Please choose an image file.", true);
-        photoInput.value = "";
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = event => {
-        selectedPhotoData = event.target.result;
-        photoPreview.src = selectedPhotoData;
-        photoPreview.style.display = "block";
-      };
-      reader.onerror = () => showStatus("Could not read the selected photo.", true);
-      reader.readAsDataURL(file);
-    });
-
-    titleInput.addEventListener("input", () => {
-      titleCount.textContent = String(titleInput.value.length);
-    });
-
-    form.addEventListener("submit", event => {
-      event.preventDefault();
-
-      const title = titleInput.value.trim();
-      const detail = detailInput.value.trim();
-      const linkName = linkNameInput.value.trim();
-      const displayAt = displayDateTimeInput.value;
-
-      if (!title || !detail || !displayAt) {
-        showStatus("Please complete the title, details, and show date/time.", true);
-        return;
-      }
-
-      const posts = loadPosts();
-      const editingId = postIdInput.value;
-      const now = new Date().toISOString();
-
-      if (editingId) {
-        const index = posts.findIndex(item => item.id === editingId);
-        if (index === -1) {
-          showStatus("The selected post could not be found.", true);
-          return;
+        if(!response.ok){
+            throw new Error("Could not load stories.");
         }
 
-        posts[index] = {
-          ...posts[index],
-          title,
-          detail,
-          linkName,
-          photo: selectedPhotoData,
-          displayAt: new Date(displayAt).toISOString(),
-          updatedAt: now
-        };
+        const data = await response.json();
+        storiesCache = Array.isArray(data) ? data : [];
+        renderStories();
+        openRequestedStoryForEditing();
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            storyList.innerHTML = `<div class="empty">${escapeHtml(error.message || "Could not load stories.")}</div>`;
+        }
+    }
+}
 
-        savePosts(posts);
-        renderPosts();
+function renderStories(){
+    if(!storiesCache.length){
+        storyList.innerHTML = '<div class="empty">No stories have been saved yet.</div>';
+        return;
+    }
+
+    const sorted = [...storiesCache].sort((a,b) => {
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    });
+
+    storyList.innerHTML = sorted.map(item => {
+        const fullStory = item.story || "";
+        const preview = fullStory.length > 150 ? `${fullStory.slice(0,150)}...` : fullStory;
+        const photo = item.image
+            ? `<img src="${imageUrl(item.image)}" alt="${escapeHtml(item.title || "Story image")}">`
+            : '<div class="no-image">No image</div>';
+
+        const updated = item.updated_at
+            ? `<br>Updated: ${escapeHtml(formatDate(item.updated_at))}`
+            : "";
+
+        return `
+            <article class="story-card">
+                ${photo}
+                <div class="story-info">
+                    <h3>${escapeHtml(item.title || "Untitled")}</h3>
+                    <p>${escapeHtml(preview)}</p>
+                    <div class="story-meta">
+                        Created: ${escapeHtml(formatDate(item.created_at))}${updated}
+                    </div>
+                </div>
+                <div class="story-actions">
+                    <button type="button" onclick="editStory('${String(item.id).replaceAll("'","\\'")}')">Edit</button>
+                    <button type="button" class="danger" onclick="deleteStory('${String(item.id).replaceAll("'","\\'")}')">Delete</button>
+                </div>
+            </article>
+        `;
+    }).join("");
+}
+
+function editStory(id){
+    const item = storiesCache.find(story => String(story.id) === String(id));
+    if(!item){
+        showStatus("Story not found.",true);
+        return;
+    }
+
+    clearObjectPreview();
+    storyIdInput.value = item.id;
+    oldImageInput.value = item.image || "";
+    titleInput.value = item.title || "";
+    storyInput.value = item.story || "";
+    imageInput.value = "";
+
+    dateLineBox.innerHTML = `Created: ${escapeHtml(formatDate(item.created_at))}`;
+    if(item.updated_at){
+        dateLineBox.innerHTML += `<br>Edited: ${escapeHtml(formatDate(item.updated_at))}`;
+    }
+
+    if(item.image){
+        previewImg.src = imageUrl(item.image);
+        previewImg.style.display = "block";
+    }else{
+        previewImg.removeAttribute("src");
+        previewImg.style.display = "none";
+    }
+
+    pageTitleBox.textContent = "Edit CHAYNOVA Story";
+    saveBtn.textContent = "Update Story";
+    deleteCurrentBtn.disabled = false;
+    showStatus("Story loaded for editing.");
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function saveStory(event){
+    event.preventDefault();
+
+    const id = storyIdInput.value;
+    const title = titleInput.value.trim();
+    const story = storyInput.value.trim();
+
+    if(!title || !story){
+        showStatus("Please add a title and story.",true);
+        return;
+    }
+
+    saveBtn.disabled = true;
+    showStatus(id ? "Updating story..." : "Uploading story...");
+
+    try{
+        let response;
+
+        if(id){
+            const selectedFile = imageInput.files[0];
+
+            if(selectedFile){
+                const fd = new FormData();
+                fd.append("title",title);
+                fd.append("story",story);
+                fd.append("edited_by","Admin01");
+                fd.append("image",selectedFile);
+                fd.append("old_image",oldImageInput.value || "");
+
+                response = await apiFetch(`${API}/story/${encodeURIComponent(id)}`,{
+                    method:"PUT",
+                    body:fd
+                });
+            }else{
+                response = await apiFetch(`${API}/story/${encodeURIComponent(id)}`,{
+                    method:"PUT",
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify({
+                        title,
+                        story,
+                        edited_by:"Admin01",
+                        image:oldImageInput.value || ""
+                    })
+                });
+            }
+        }else{
+            const fd = new FormData();
+            fd.append("title",title);
+            fd.append("story",story);
+            fd.append("created_at",new Date().toISOString());
+
+            if(imageInput.files[0]){
+                fd.append("image",imageInput.files[0]);
+            }
+
+            response = await apiFetch(API,{
+                method:"POST",
+                body:fd
+            });
+        }
+
+        const responseText = await response.text();
+
+        if(!response.ok){
+            throw new Error(responseText || (id ? "Update failed." : "Upload failed."));
+        }
+
+        showStatus(id ? "Story updated!" : "Story uploaded!");
         resetForm();
-        showStatus("Post updated.");
-      } else {
-        const newPost = {
-          id: makeId(),
-          title,
-          detail,
-          linkName,
-          photo: selectedPhotoData,
-          createdAt: now,
-          updatedAt: "",
-          displayAt: new Date(displayAt).toISOString()
-        };
+        await loadStories();
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            showStatus(error.message || "Something went wrong. Please try again.",true);
+        }
+    }finally{
+        saveBtn.disabled = false;
+    }
+}
 
-        posts.push(newPost);
-        savePosts(posts);
-        renderPosts();
-        resetForm();
-        showStatus("Post saved.");
-      }
-    });
+async function deleteStory(id){
+    const item = storiesCache.find(story => String(story.id) === String(id));
+    if(!item) return;
 
-    clearButton.addEventListener("click", () => {
-      resetForm();
-      showStatus("Form cleared.");
-    });
+    const confirmed = confirm(`Delete “${item.title || "this story"}”?`);
+    if(!confirmed) return;
 
-    deleteCurrentButton.addEventListener("click", () => {
-      if (postIdInput.value) deletePost(postIdInput.value);
-    });
+    showStatus("Deleting story...");
 
+    try{
+        const response = await apiFetch(`${API}/story/${encodeURIComponent(id)}`,{
+            method:"DELETE"
+        });
 
-    window.editPost = editPost;
-    window.deletePost = deletePost;
+        const text = await response.text();
 
-    resetForm();
-    renderPosts();
-  </script>
+        if(!response.ok){
+            throw new Error(text || "Delete failed.");
+        }
+
+        if(String(storyIdInput.value) === String(id)){
+            resetForm();
+        }
+
+        showStatus("Story deleted.");
+        await loadStories();
+    }catch(error){
+        if(error.message !== "Unauthorized"){
+            showStatus(error.message || "Could not delete story.",true);
+        }
+    }
+}
+
+imageInput.addEventListener("change",() => {
+    clearObjectPreview();
+    const file = imageInput.files[0];
+
+    if(!file){
+        const oldImage = oldImageInput.value;
+        if(oldImage){
+            previewImg.src = imageUrl(oldImage);
+            previewImg.style.display = "block";
+        }
+        return;
+    }
+
+    if(!file.type.startsWith("image/")){
+        imageInput.value = "";
+        showStatus("Please choose an image file.",true);
+        return;
+    }
+
+    objectPreviewUrl = URL.createObjectURL(file);
+    previewImg.src = objectPreviewUrl;
+    previewImg.style.display = "block";
+});
+
+loginBtn.addEventListener("click",checkLogin);
+passwordInput.addEventListener("keydown",event => {
+    if(event.key === "Enter") checkLogin();
+});
+usernameInput.addEventListener("keydown",event => {
+    if(event.key === "Enter") passwordInput.focus();
+});
+storyForm.addEventListener("submit",saveStory);
+clearBtn.addEventListener("click",resetForm);
+deleteCurrentBtn.addEventListener("click",() => {
+    if(storyIdInput.value) deleteStory(storyIdInput.value);
+});
+logoutBtn.addEventListener("click",logoutAdmin);
+
+window.editStory = editStory;
+window.deleteStory = deleteStory;
+window.openLogin = openLogin;
+window.closeLogin = closeLogin;
+window.logoutAdmin = logoutAdmin;
+
+loginOverlay.addEventListener("click", event => {
+    if(event.target === loginOverlay && getToken()) closeLogin();
+});
+
+window.addEventListener("keydown", event => {
+    if(event.key === "Escape" && getToken()) closeLogin();
+});
+
+resetForm();
+
+if(getToken()){
+    showAdmin();
+    loadStories();
+}else{
+    showLogin();
+}
+</script>
 </body>
 </html>
