@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHAYNOVA</title>
+<title>Home| CHAYNOVA</title>
 
 <style>
 *{
@@ -35,7 +35,7 @@ header{
     z-index:20;
     display:flex;
     justify-content:center;
-    padding:12px 18px;
+    padding:8px 18px;
     border:1px solid rgba(255,255,255,.25);
     border-radius:999px;
     background:rgba(255,255,255,.12);
@@ -53,7 +53,6 @@ header nav{
 }
 
 header a{
-    font-family:"Oxanium", sans-serif;
     font-size:.95rem;
     font-weight:700;
     color:white;
@@ -83,40 +82,21 @@ header a:hover{
 }
 
 /* BACKGROUND */
-.stars{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-}
 
 .firework{
-    position:absolute;
+    position:fixed;
     width:8px;
     height:8px;
     border-radius:50%;
     animation:explode 2.8s infinite ease-out;
     opacity:0;
+    z-index:1;
     pointer-events:none;
 }
-
-.firework:nth-child(1){
-    left:18%;
-    top:20%;
-    background:#ff2fcf;
-}
-
-.firework:nth-child(2){
-    left:78%;
-    top:18%;
-    background:#00d9ff;
-    animation-delay:.8s;
-}
-
-.firework:nth-child(3){
-    left:50%;
-    top:30%;
-    background:#ffaa00;
-    animation-delay:1.4s;
+@keyframes explode{
+0%{opacity:1;box-shadow:0 0 0 currentColor;}
+70%{opacity:1;box-shadow:0 -80px currentColor,60px -60px currentColor,80px 0 currentColor,60px 60px currentColor,0 80px currentColor,-60px 60px currentColor,-80px 0 currentColor,-60px -60px currentColor;}
+100%{opacity:0;}
 }
 
 /* START SCREEN */
@@ -516,13 +496,31 @@ header a:hover{
     }
 }
 
+.top-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav-logo img {
+    height: 22px;      /* Adjust size as needed */
+    width: auto;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+}
 
-
+.nav-logo img:hover {
+    transform: scale(1.1);
+}
 
 </style>
 </head>
 
 <body>
+
+<audio id="bgMusic" loop>
+    <source src="audio/background.mp3" type="audio/mpeg">
+</audio>
+
 <header class="top-header">
     <nav class="top-nav">
         <a href="shop.html">Store</a>
@@ -530,11 +528,12 @@ header a:hover{
         <a href="support.html">Support</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
+
+        <a href="index.html" class="nav-logo">
+            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+        </a>
     </nav>
 </header>
-<audio id="bgMusic" loop>
-    <source src="audio/background.mp3" type="audio/mpeg">
-</audio>
 
 <div class="start-screen" id="startScreen">
     <div class="start-text"> </div>
@@ -547,8 +546,6 @@ header a:hover{
 
     <div class="tap-text">Tap anywhere to begin</div>
 </div>
-
-<div class="stars"></div>
 
 <div class="firework"></div>
 <div class="firework"></div>
@@ -758,6 +755,43 @@ window.addEventListener("keydown", function(e){
         closeLogin();
     }
 });
+
+//fireworks animation
+
+const fireworks = document.querySelectorAll(".firework");
+
+const colors = [
+    "#ff2fcf",
+    "#00d9ff",
+    "#ffaa00",
+    "#7b2cff",
+    "#00ff99",
+    "#ff5555"
+];
+function randomizeFirework(fw) {
+    fw.style.left = Math.random() * 90 + "%";
+    fw.style.top = Math.random() * 70 + "%";
+    fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    // Restart animation
+    fw.style.animation = "none";
+    void fw.offsetWidth;
+    fw.style.animation = "explode 2.8s ease-out";
+}
+
+// Start each firework at a different time
+fireworks.forEach((fw, i) => {
+    setTimeout(() => {
+        randomizeFirework(fw);
+
+        setInterval(() => {
+            randomizeFirework(fw);
+        }, 2800);
+
+    }, i * 900);
+});
+
+
 </script>
 
 </body>
