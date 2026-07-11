@@ -187,8 +187,10 @@ body{
     padding:13px 22px;
 }
 
+
+
 .menu-row{
-    margin:28px auto 30px;
+    margin:28px auto 45px;
     max-width:900px;
     display:flex;
     justify-content:center;
@@ -197,9 +199,43 @@ body{
 }
 
 .menu-row a{
+    position:relative;
     min-width:145px;
     padding:14px 22px;
     text-align:center;
+    text-decoration:none;
+    font-size:1rem;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:white;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 0 18px rgba(0,217,255,.35),inset 0 0 15px rgba(255,255,255,.08);
+    overflow:hidden;
+    transition:.35s ease;
+}
+
+.menu-row a::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:60%;
+    height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-25deg);
+    transition:.7s;
+}
+
+.menu-row a:hover::before{left:160%;}
+
+.menu-row a:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
+    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
 }
 
 .control-btn{
