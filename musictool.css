@@ -1,0 +1,168 @@
+/* MUSIC CONTROL FRAME */
+
+.music-control {
+    position: fixed;
+    right: 18px;
+    bottom: calc(22px + env(safe-area-inset-bottom));
+    z-index: 90;
+
+    width: 56px;
+    padding: 9px 0 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    background: rgba(255, 255, 255, 0.12);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 0 18px rgba(0, 217, 255, 0.45),
+        inset 0 0 10px rgba(255, 255, 255, 0.15);
+
+    overflow: hidden;
+}
+
+
+/* VOLUME SLIDER */
+
+.volume-slider {
+    appearance: none;
+    -webkit-appearance: none;
+
+    writing-mode: vertical-lr;
+    direction: rtl;
+
+    width: 6px;
+    height: 72px;
+    margin-bottom: 2px;
+
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    background: rgba(255, 255, 255, 0.2);
+
+    box-shadow:
+        inset 0 0 5px rgba(255, 255, 255, 0.2),
+        0 0 8px rgba(0, 217, 255, 0.3);
+
+    cursor: pointer;
+}
+
+
+/* CHROME AND SAFARI SLIDER BUTTON */
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+    border: 2px solid white;
+
+    background: linear-gradient(
+        135deg,
+        #ff72cf,
+        #9f7dff,
+        #66e8ff
+    );
+
+    box-shadow: 0 0 12px rgba(0, 217, 255, 0.6);
+
+    cursor: pointer;
+}
+
+
+/* FIREFOX SLIDER BUTTON */
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+    border: 2px solid white;
+
+    background: linear-gradient(
+        135deg,
+        #ff72cf,
+        #9f7dff,
+        #66e8ff
+    );
+
+    box-shadow: 0 0 12px rgba(0, 217, 255, 0.6);
+
+    cursor: pointer;
+}
+
+
+/* MUSIC BUTTON */
+
+.music-btn {
+    position: static;
+
+    width: 56px;
+    height: 50px;
+
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0;
+
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+
+    background: transparent;
+
+    transition: 0.25s;
+}
+
+.music-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.music-btn:active {
+    transform: scale(0.9);
+}
+
+
+/* IPHONE AND IPAD */
+
+.music-control.ios {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+
+    border: none;
+    background: transparent;
+    box-shadow: none;
+
+    overflow: visible;
+}
+
+.music-control.ios .volume-slider {
+    display: none;
+}
+
+.music-control.ios .music-btn {
+    width: 56px;
+    height: 56px;
+
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    background: rgba(255, 255, 255, 0.12);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 0 18px rgba(0, 217, 255, 0.45),
+        inset 0 0 10px rgba(255, 255, 255, 0.15);
+}
