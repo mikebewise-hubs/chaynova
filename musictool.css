@@ -6,7 +6,7 @@
     bottom: calc(22px + env(safe-area-inset-bottom));
     z-index: 90;
 
-    width: 56px;
+    width: 22px;
     padding: 9px 0 0;
 
     display: flex;
