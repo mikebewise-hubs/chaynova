@@ -23,6 +23,7 @@
                 radial-gradient(circle at 80% 20%, rgba(0, 200, 255, .4), transparent 30%),
                 linear-gradient(135deg, #030010, #080033, #001234);
         }
+
         .page {
             position: relative;
             z-index: 5;
@@ -136,10 +137,12 @@
         }
 
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-8px);
             }
@@ -506,6 +509,95 @@
                 width: 240px;
             }
         }
+
+        .watch-frame {
+            max-width: 1100px;
+            margin: 0 auto 45px;
+            padding: 28px;
+
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, .2);
+
+            background: rgba(255, 255, 255, .08);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            box-shadow: 0 0 30px rgba(0, 217, 255, .35);
+        }
+
+        .mainB-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+
+            font-size: 2rem;
+            color: white;
+
+            margin-bottom: 20px;
+        }
+
+        .mainB-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+
+            animation: logoPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .mainB-text {
+            display: inline-block;
+            animation: softBlink 0.8s ease-in-out infinite,
+                colorShift 4s linear infinite;
+        }
+
+        @keyframes colorShift {
+            0% {
+                color: #00E5FF;
+            }
+
+            25% {
+                color: #00FF88;
+            }
+
+            50% {
+                color: #FFD700;
+            }
+
+            75% {
+                color: #FF66CC;
+            }
+
+            100% {
+                color: #00E5FF;
+            }
+        }
+
+
+        @keyframes softBlink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.65;
+            }
+        }
     </style>
 </head>
 
@@ -550,8 +642,17 @@
             <a href="story.html">Vibe Story</a>
         </nav>
 
-        <section id="watchGrid" class="story-grid" aria-live="polite">
-            <div class="loading-card">Loading CHAYNOVA Watch content...</div>
+        <section class="watch-frame">
+            <h2 class="mainB-title">
+                <img src="logo/WATCHTRANSS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo">
+                <span class="mainB-text"> New Video Just Dropped! Watch Now</span>
+            </h2>
+            <section id="watchGrid" class="story-grid" aria-live="polite">
+                <div class="loading-card">
+                    Loading CHAYNOVA Watch content...
+                </div>
+            </section>
+
         </section>
     </div>
 
