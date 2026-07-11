@@ -459,6 +459,36 @@ footer{
 100%{opacity:0;}
 }
 
+.status{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin:12px 0 18px;
+    color:#9defff;
+    font-size:.92rem;
+    font-weight:600;
+}
+
+.dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00d9ff;
+    animation:blinkDot 1.8s infinite;
+}
+
+@keyframes blinkDot{
+    0%,100%{
+        opacity:1;
+        box-shadow:0 0 12px #00d9ff;
+    }
+    50%{
+        opacity:.25;
+        box-shadow:none;
+    }
+}
+
 
 
 </style>
@@ -507,9 +537,11 @@ footer{
         <div class="story-card">
 
             <div class="emoji">🎮</div>
-
+            <div class="status">
             <h2>Coming Soon</h2>
-
+ <span class="dot"></span>
+    🚧 Planned • No release date yet
+</div>
             <p>
                 New CHAYNOVA games are coming soon with fun challenges,
                 cool rewards, and learning adventures.
@@ -524,7 +556,11 @@ footer{
             <div class="emoji">📘</div>
 
             <h2>Learn & Play</h2>
-
+<div class="status">
+            <h2>Ready to Play</h2>
+ <span class="dot"></span>
+    Play now 🆕
+</div>
             <p>
                 Play games that help you learn words, ideas,
                 problem-solving, and creative thinking.
@@ -537,15 +573,17 @@ footer{
         <div class="story-card">
 
             <div class="emoji">🚀</div>
-
-            <h2>Challenge Mode</h2>
-
+             <div class="status">
+            <h2>Coming Soon</h2>
+ <span class="dot"></span>
+    🚧 Planned • No release date yet
+</div>
             <p>
                 Jump into fun challenges, unlock new levels,
-                and test your skills with CHAYNOVA games.
+                and test your skills with CHAYNOVA games are coming.
             </p>
 
-            <a href="#" class="read-btn">Start</a>
+            <a href="#" class="read-btn">Start coming soon</a>
 
         </div>
 
