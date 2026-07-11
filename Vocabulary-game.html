@@ -1,0 +1,5091 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Vocabulary Game</title>
+    <style>
+        :root {
+            --bg1: #eff6ff;
+            --bg2: #fdf2f8;
+            --ink: #111827;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --line: #e5e7eb;
+            --dark: #111827;
+            --soft: #f3f4f6;
+            --green: #16a34a;
+            --red: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(160deg, var(--bg1), var(--bg2));
+            color: var(--ink);
+            padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
+            min-height: 100vh;
+        }
+
+        .app {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 14px 0 24px
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 6px 0 14px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            font-size: 20px
+        }
+
+        .logoIcon {
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: #111827;
+            color: white;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .18)
+        }
+
+        .pill {
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .75);
+            border: 1px solid rgba(255, 255, 255, .8);
+            padding: 8px 12px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700
+        }
+
+        .card {
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(255, 255, 255, .75);
+            border-radius: 30px;
+            padding: 18px;
+            box-shadow: 0 16px 40px rgba(31, 41, 55, .12);
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin: 0 0 6px;
+            line-height: 1.1
+        }
+
+        .sub {
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 16px
+        }
+
+        .search {
+            width: 100%;
+            padding: 15px 16px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            font-size: 17px;
+            background: white;
+            margin-bottom: 14px
+        }
+
+        .setGrid {
+            display: grid;
+            gap: 12px
+        }
+
+        .setBtn {
+            width: 100%;
+            border: 0;
+            background: white;
+            color: var(--ink);
+            border-radius: 22px;
+            padding: 16px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 8px 20px rgba(31, 41, 55, .08);
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .setIcon {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            background: #e0f2fe;
+            display: grid;
+            place-items: center;
+            font-size: 27px;
+            flex: 0 0 auto
+        }
+
+        .setBtn small {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 13px
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 8px 0 12px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 800
+        }
+
+        .back {
+            width: auto;
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 13px;
+            background: white;
+            color: var(--ink);
+            font-weight: 900;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .08)
+        }
+
+        .hero {
+            border-radius: 30px;
+            padding: 20px 16px;
+            margin: 12px 0 14px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .7);
+        }
+
+        .hero:before {
+            content: "";
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, .9), transparent 45%);
+            pointer-events: none
+        }
+
+        .bigIcon {
+            font-size: 58px;
+            margin-bottom: 8px;
+            position: relative
+        }
+
+        .word {
+            font-size: 42px;
+            font-weight: 950;
+            letter-spacing: -.5px;
+            line-height: 1.05;
+            position: relative
+        }
+
+        .thai {
+            margin-top: 8px;
+            color: #374151;
+            font-size: 17px;
+            font-weight: 700;
+            position: relative
+        }
+
+        .soundBtn {
+            margin-top: 14px;
+            border: 0;
+            border-radius: 18px;
+            background: #111827;
+            color: white;
+            padding: 15px 18px;
+            font-size: 18px;
+            font-weight: 950;
+            width: 100%;
+        }
+
+        .sectionTitle {
+            font-size: 16px;
+            font-weight: 950;
+            margin: 18px 0 9px;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: .05em
+        }
+
+        .examples {
+            display: grid;
+            gap: 9px
+        }
+
+        .example {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 13px 14px;
+            font-size: 17px;
+            font-weight: 750;
+            line-height: 1.25;
+            box-shadow: 0 5px 14px rgba(0, 0, 0, .04)
+        }
+
+        .choiceRow {
+            display: grid;
+            grid-template-columns: 1fr 52px;
+            gap: 8px;
+            margin-bottom: 9px
+        }
+
+        .choice {
+            border: 2px solid var(--line);
+            border-radius: 18px;
+            background: white;
+            color: var(--ink);
+            padding: 13px 14px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 850;
+            line-height: 1.25;
+            min-height: 58px;
+        }
+
+        .choiceSpeak {
+            border: 0;
+            border-radius: 18px;
+            background: #111827;
+            color: white;
+            font-size: 22px;
+            font-weight: 950
+        }
+
+        .correct {
+            border-color: var(--green) !important;
+            background: #ecfdf5 !important
+        }
+
+        .wrong {
+            border-color: var(--red) !important;
+            background: #fef2f2 !important
+        }
+
+        .result {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 950;
+            min-height: 32px;
+            margin: 12px 0
+        }
+
+        .good {
+            color: var(--green)
+        }
+
+        .bad {
+            color: var(--red)
+        }
+
+.navBtns {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:8px;
+}
+
+.resultButtons .mainBtn{
+    padding:8px 6px;
+    font-size:13px;
+    border-radius:12px;
+}
+
+        .mainBtn {
+            border: 0;
+            border-radius: 18px;
+            padding: 15px;
+            font-size: 17px;
+            font-weight: 950;
+            background: #111827;
+            color: white
+        }
+
+        .lightBtn {
+    background: #fef3c7;  
+    color: #111827;
+    box-shadow: 0 7px 16px rgba(0, 0, 0, .07);
+}
+
+        .hidden {
+            display: none
+        }
+
+        .tap {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .tap:active,
+        button:active {
+            transform: scale(.98)
+        }
+
+        @media (max-width: 380px) {
+            .word {
+                font-size: 36px
+            }
+
+            .bigIcon {
+                font-size: 50px
+            }
+
+            .card {
+                padding: 14px;
+                border-radius: 26px
+            }
+        }
+
+        .summaryCard {
+            background: white;
+            border-radius: 26px;
+            padding: 18px;
+            margin-top: 14px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .08)
+        }
+
+
+        .summaryScore {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: #374151;
+            margin-bottom: 14px
+        }
+
+        .wordList {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px
+        }
+
+        .wordItem {
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            font-size: 16px;
+            font-weight: 800
+        }
+
+        .wordItem.goodItem {
+            background: #ecfdf5;
+            border-color: #16a34a
+        }
+
+        .wordItem.badItem {
+            background: #fef2f2;
+            border-color: #dc2626
+        }
+
+        .fireworks {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999
+        }
+
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: boom 1.2s ease-out forwards
+        }
+
+        @keyframes boom {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1
+            }
+
+            100% {
+                transform: translate(var(--x), var(--y)) scale(.2);
+                opacity: 0
+            }
+        }
+
+        .playerBox {
+            display: grid;
+            gap: 8px;
+            margin: 0 0 14px
+        }
+
+        .playerBox label {
+            font-size: 14px;
+            font-weight: 900;
+            color: #374151
+        }
+
+        .playerBox input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #16a34a;
+            border-radius: 18px;
+            font-size: 17px;
+            background: white;
+            color: #111827
+        }
+
+        .historyTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 14px;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden
+        }
+
+        .historyTable th,
+        .historyTable td {
+            border: 1px solid var(--line);
+            padding: 8px;
+            text-align: left;
+            vertical-align: top
+        }
+
+        .historyTable th {
+            background: #f3f4f6;
+            font-weight: 950
+        }
+
+        
+        .choice{
+    position:relative;
+}
+
+.choice::after{
+    content:"↙️ " attr(data-thai);
+    position:absolute;
+
+    bottom:100%;
+    margin-bottom:2px;
+    left:50%;
+    transform:translateX(-50%);
+
+    background:#111827;
+    color:white;
+
+    padding:4px 8px;
+    border-radius:8px;
+
+    font-size:12px;
+    font-weight:700;
+
+    white-space:nowrap;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:.15s;
+    z-index:999;
+}
+
+.choice[data-thai=""]::after{
+    display:none;
+}
+
+.choice:hover::after{
+    opacity:1;
+}
+
+.deleteBtn{
+    background:#fefce8;          /* soft yellow */
+    border:1px solid #fde68a;    /* soft yellow border */
+    color:#dc2626;               /* red text */
+    border-radius:4px;
+    font-size:10px;
+    font-weight:700;
+    padding:0 3px;
+    line-height:1.2;
+    cursor:pointer;
+}
+
+.setWord{
+    position:relative;
+}
+
+.setWord::after{
+    content:"↙️ " attr(data-thai);
+
+    position:absolute;
+    bottom:100%;
+    margin-bottom:2px;
+    left:50%;
+    transform:translateX(-50%);
+
+    background:#111827;
+    color:white;
+
+    padding:4px 8px;
+    border-radius:8px;
+
+    font-size:12px;
+    font-weight:700;
+
+    white-space:nowrap;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:.15s;
+    z-index:99999;
+}
+
+.setWord[data-thai=""]::after{
+    display:none;
+}
+
+.setWord:hover::after{
+    opacity:1;
+}
+.wordListTabs{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-bottom:12px;
+}
+.studyBtn{
+    background:linear-gradient(
+        135deg,
+        #ffffff,
+        #f8fbff,
+        #e0f2fe
+    );
+
+    color:#111827;
+    border:1px solid #dbeafe;
+    border-radius:22px;
+
+    box-shadow:0 6px 16px rgba(59,130,246,.10);
+
+    font-size:17px;
+    font-weight:900;
+}
+
+.studyModeBox{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+}
+
+.studySelect{
+    border:1px solid #dbeafe;
+    border-radius:18px;
+    padding:12px 8px;
+    font-size:16px;
+    font-weight:900;
+    background:white;
+    color:#111827;
+}
+
+.meaningGroupTitle{
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:16px;
+    background:#e0f2fe;
+    border:1px solid #bae6fd;
+    font-weight:900;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.pillProgress{
+    display:flex;
+    gap:6px;
+    margin:10px 0 12px;
+}
+
+.progressPill{
+    flex:1;
+    height:10px;
+    border-radius:999px;
+    background:#d1d5db;
+    position:relative;
+    cursor:pointer;
+}
+
+.progressPill.done{
+    background:linear-gradient(135deg,#22c55e,#06b6d4,#3b82f6);
+}
+
+.progressPill::after{
+    content:attr(data-word);
+    position:absolute;
+    bottom:140%;
+    left:50%;
+    transform:translateX(-50%);
+    background:#111827;
+    color:white;
+    padding:4px 8px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:800;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:.15s;
+    z-index:9999;
+}
+
+.progressPill:hover::after{
+    opacity:1;
+}
+
+.quickWordBtn{
+    width:100%;
+    border:1px solid #e5e7eb;
+    background:white;
+    border-radius:14px;
+    padding:10px 12px;
+    margin-bottom:6px;
+    font-weight:900;
+    text-align:left;
+}
+
+.quickWordBox{
+    background:#fff7ed;
+    border:1px solid #fdba74;
+    border-radius:18px;
+    padding:14px;
+    margin-top:10px;
+    font-size:15px;
+    font-weight:700;
+}
+
+.saveBtn{
+    background:white;
+    border:1px solid #fde68a;
+    border-radius:12px;
+    min-width:24px;
+    text-align:center;
+    font-size:14px;
+    font-weight:900;
+    padding:2px 8px;
+    cursor:pointer;
+}
+
+
+@keyframes wordMoveUp {
+    from {
+        transform: translateY(35px);
+        opacity: .3;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.bgBlob{
+    position:fixed;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.45;
+    z-index:-1;
+    pointer-events:none;
+    animation:blobFloat 18s ease-in-out infinite alternate;
+}
+
+.b1{
+    background:#3b82f6;   /* Blue */
+    top:-100px;
+    left:-80px;
+}
+
+.b2{
+    background:#ec4899;   /* Pink */
+    top:15%;
+    right:-120px;
+    animation-delay:3s;
+}
+
+.b3{
+    background:#22c55e;   /* Green */
+    bottom:-120px;
+    left:-80px;
+    animation-delay:6s;
+}
+
+.b4{
+    background:#f59e0b;   /* Orange */
+    bottom:10%;
+    right:-100px;
+    animation-delay:9s;
+}
+
+.b5{
+    background:#a855f7;   /* Purple */
+    top:45%;
+    left:35%;
+    width:220px;
+    height:220px;
+    animation-delay:12s;
+}
+
+.b6{
+    background:#06b6d4;   /* Cyan */
+    top:60%;
+    right:30%;
+    width:200px;
+    height:200px;
+    animation-delay:15s;
+}
+
+@keyframes blobFloat{
+    0%{
+        transform:
+            translate(0,0)
+            scale(1)
+            rotate(0deg);
+    }
+
+    50%{
+        transform:
+            translate(70px,-50px)
+            scale(1.2)
+            rotate(120deg);
+    }
+
+    100%{
+        transform:
+            translate(-40px,60px)
+            scale(.9)
+            rotate(240deg);
+    }
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+
+    background:linear-gradient(
+        135deg,
+        #dbeafe,
+        #fdf2f8,
+        #fef3c7,
+        #dcfce7,
+        #ede9fe
+    );
+
+    background-size:300% 300%;
+    animation:bgMove 20s ease infinite;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+#wordListPage{
+    max-width:520px;
+    width:100%;
+    margin:14px auto;
+}
+
+    </style>
+</head>
+
+<body>
+<div class="bgBlob b1"></div>
+<div class="bgBlob b2"></div>
+<div class="bgBlob b3"></div>
+<div class="bgBlob b4"></div>
+<div class="bgBlob b5"></div>
+<div class="bgBlob b6"></div>
+    <div class="app">
+        <div class="header">
+            <div class="logo">
+                <div class="logoIcon">📘</div>
+                <div>Vocab Game</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="pill tap" onclick="wakeVoice()" style="border:0;">🔊 iPhone Friendly</button>
+                <button id="wordListBtn" class="pill tap" onclick="toggleWordList()" style="border:0;"> 📖 Word List </button>
+                <button class="pill tap" onclick="toggleHistory()" style="border:0;">
+                    🏆 Score History
+                </button>
+            </div>
+        </div>
+
+        <div id="menuPage" class="card">
+            <h1>Choose a set</h1>
+            <div class="sub">
+    Pick one vocabulary set to practice, or 
+    <span onclick="showMeaningGameMenu()" style="color:#2563eb;font-weight:900;cursor:pointer;">
+        🖱📖 meaning set.
+    </span>
+</div>
+
+            <div class="playerBox">
+                <label for="playerName">Player name</label>
+                <input id="playerName" placeholder="Player Name" oninput="savePlayerName()">
+            </div>
+            <input class="search" id="searchBox" placeholder="Search set..." oninput="renderMenu()">
+            <div id="setList" class="setGrid"></div>
+        </div>
+        
+        <div id="meaningMenuPage" class="hidden card">
+    <button class="back" onclick="showMenu()" style="color: #22c55e !important;">  ← Back 📚</button>
+    <h1>Choose Meaning Set</h1>
+    <div class="sub"> Pick one meaning set to practice, or <span onclick="showMenu()" style="color:#2563eb;font-weight:900;cursor:pointer;">  🖱📚 vocabulary set. </span>
+   </div>
+
+<div class="playerBox">
+    <label for="meaningPlayerName">Player name</label>
+    <input id="meaningPlayerName" placeholder="Player Name" oninput="saveMeaningPlayerName()">
+</div>
+
+<input class="search" id="meaningSearchBox" placeholder="Search set..." oninput="showMeaningGameMenu()">
+
+<div id="meaningGameList" class="setGrid"></div>
+</div>
+
+        <div id="gamePage" class="hidden">
+            <button class="back" onclick="showMenu()">← Sets</button>
+            <div class="topbar">
+                <div id="setTitle">Set</div>
+                <div id="score">Score: 0</div>
+            </div>
+            <div class="card">
+                <div id="progress" class="pill" style="display:inline-block;margin-bottom:10px;">Word 1 / 20</div>
+                <div id="hero" class="hero tap" onclick="
+document.getElementById('thai').textContent=currentItem.thai;
+clearTimeout(thaiResetTimer);
+thaiResetTimer=setTimeout(()=>{
+document.getElementById('thai').textContent='Choose the correct word';
+},1000);
+gameMode==='meaning'?speak(currentItem.meaning):speak(currentItem.term);
+" style="position:relative;">
+
+<div
+    id="saveWordBtn"
+    class="saveBtn"
+    onclick="
+        event.stopPropagation();
+        toggleCurrentWord();
+    "
+    style="
+        position:absolute;
+        top:8px;
+        right:8px;
+        z-index:10;
+    ">
+    +
+</div>
+                    <div id="bigIcon" class="bigIcon">📘</div>
+                    <div id="word" class="word">Word</div>
+                    <div id="thai" class="thai">Thai</div>
+                </div>
+                <button class="soundBtn" onclick="sayCurrentItem()">
+    🔊 Say it
+</button>
+
+                <div class="sectionTitle">Choose the meaning</div>
+                <div id="choices"></div>
+
+                <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin:12px 0 8px;
+">
+
+    <div
+        id="examplesToggleBtn"
+        class="pill tap"
+        onclick="toggleExamples()"
+        style="
+            cursor:pointer;
+            font-size:13px;
+            font-weight:700;
+            margin:0;
+        ">
+        ➕ EXAMPLES
+    </div>
+
+    <div
+        class="pill tap"
+        onclick="showSetPositionPopup()"
+        style="
+            cursor:pointer;
+            font-size:13px;
+            font-weight:800;
+            color:gray;
+            background:#f5f3ff;
+            margin:0;
+        ">
+        🔍 View Set
+    </div>
+
+</div>
+<div id="pillProgress" class="pillProgress"></div>
+<div id="examples" class="examples hidden"></div>
+
+<input
+    id="quickWordSearch"
+    class="search"
+    placeholder="Search word..."
+    oninput="searchGameWords()"
+    style="margin-top:12px;margin-bottom:6px;"
+>
+
+<div id="quickWordResults"></div>
+<div id="quickWordDetail"></div>
+
+
+                <div id="result" class="result"></div>
+                <div class="navBtns">
+                    <button class="mainBtn lightBtn" onclick="restartGame()">Restart</button>
+                    <button class="mainBtn" onclick="nextQuestion()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultPage" class="hidden card">
+            <h1 id="finalTitle">Finished</h1>
+            <div id="finalScore" class="summaryScore"></div>
+            <div id="finalMessage" class="sub" style="text-align:center;"></div>
+            <div class="summaryCard">
+    <div class="sectionTitle">Correct Words</div>
+    <div id="correctList" class="wordList"></div>
+
+    <div class="sectionTitle">Wrong Words</div>
+    <div id="wrongList" class="wordList"></div>
+
+<div class="navBtns resultButtons">
+
+    <button class="mainBtn lightBtn"
+            onclick="goToPreviousSet()">
+         Pre
+    </button>
+    <button class="mainBtn lightBtn"
+            onclick="goToNextSet()">
+        Next
+    </button>
+
+</div>
+</div>
+          <div class="navBtns">
+    <button class="mainBtn lightBtn" onclick="showMenu()">
+        Main Page
+    </button>
+
+    <button class="mainBtn" onclick="restartSameSet()">
+        Play Again
+    </button>
+</div>
+        </div>
+        <div id="fireworks" class="fireworks hidden"></div>
+
+        <div id="historyPage" class="hidden card" style="margin-top:14px;">
+            <h1>Score History</h1>
+<div style="
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+">
+
+    <button class="pill tap"
+        onclick="startWrongHistoryGame()"
+        style="
+            border:1px solid rgba(255,255,255,.35);
+            background:linear-gradient(135deg,#f59e0b,#ef4444,#ec4899);
+            color:white;
+            font-weight:900;
+            border-radius:999px;
+            box-shadow:0 8px 24px rgba(239,68,68,.25);
+            backdrop-filter:blur(8px);
+        ">
+        🔥🏆 Top 10 Mistakes Challenge
+    </button>
+
+    <button class="pill tap"
+        onclick="startAllMistakesGame()"
+        style="
+            border:1px solid rgba(255,255,255,.35);
+            background:linear-gradient(135deg,#10b981,#06b6d4,#3b82f6);
+            color:white;
+            font-weight:900;
+            border-radius:999px;
+            box-shadow:0 8px 24px rgba(59,130,246,.25);
+            backdrop-filter:blur(8px);
+        ">
+        🎯📚 Play All Mistakes
+    </button>
+
+</div>
+
+            <div class="sub">Saved player scores</div>
+            <div id="historyList"></div>
+            <div style="margin-top:12px;"> 
+    
+    
+    <div style="
+    display:flex;
+    gap:10px;
+    align-items:center;
+">
+
+    <span
+        id="toggleMistakeBtn"
+        onclick="toggleMistakePattern()"
+        style="
+            flex:1;
+            text-align:center;
+            cursor:pointer;
+            color:black;
+            font-weight:900;
+        ">
+        (+) Wrong Words
+    </span>
+
+    <button class="pill tap"
+        onclick="startSavedWordsGame()"
+        style="
+            flex:1;
+            border:1px solid rgba(255,255,255,.35);
+            background:linear-gradient(135deg,#facc15,#f59e0b,#ef4444);
+            color:white;
+            font-weight:900;
+            border-radius:999px;
+        ">
+        [Play Saved Words]
+    </button>
+
+    <span
+        id="toggleSavedWordsBtn"
+        onclick="showSavedWordsEditor()"
+        style="
+            flex:1;
+            text-align:center;
+            cursor:pointer;
+            color:orange;
+            font-weight:600;
+        ">
+        (+) Saved Words
+    </span>
+
+</div>
+
+</div>
+
+    <div id="mistakePatternWrap" class="hidden">
+        <div id="mistakePatternHistory"
+             style="
+                margin-top:15px;
+                white-space:pre-line;
+                font-weight:700;
+                font-size:15px;
+                background:white;
+                padding:12px;
+                border-radius:12px;
+             ">
+        </div>
+    </div>
+          
+        <div id="savedWordsEditorWrap" class="hidden">
+    <div id="savedWordsEditorBox"
+     style="
+        margin-top:8px;
+        font-weight:700;
+        font-size:15px;
+        background:white;
+        padding:6px;
+        border-radius:12px;
+        line-height:1.1;
+     ">
+</div>
+</div>
+
+
+</div>
+            <div class="navBtns">
+                <button class="mainBtn lightBtn" onclick="clearScoreHistory()">Clear History</button>
+                <button class="mainBtn" onclick="toggleHistory()">Close</button>
+            </div>
+        </div>
+        <div id="wordListPage" class="hidden card" style="margin-top:14px;">
+            <h1>Word List</h1>
+            <div class="sub">Tap any word to hear it</div>
+                <div class="wordListTabs">
+                    <button class="mainBtn lightBtn" onclick="buildAllWordsAZ()">
+    All A-Z
+</button>
+
+<button class="mainBtn lightBtn" onclick="buildSetButtons()">
+    By Set
+</button>
+
+<button class="mainBtn lightBtn" onclick="buildMeaningGroups()">
+    By Meaning
+</button>
+
+<div style="
+    grid-column:1/-1;
+    text-align:center;
+    color:#6b7280;
+    font-size:12px;
+    font-weight:800;
+    margin:4px 0;
+">
+    ─── LISTENING MODES ───
+</div>
+
+<div class="studyModeBox">
+    <select id="studyOrderSelect" class="studySelect">
+        <option value="random">Random</option>
+        <option value="az">A-Z</option>
+    </select>
+
+    <select id="studyTypeSelect" class="studySelect">
+        <option value="word">Word Only</option>
+        <option value="wm">W+M</option>
+        <option value="wth">W+M+TH</option>
+    </select>
+
+    <button class="studyBtn" onclick="playSelectedStudyMode()">
+        ▶ Play
+    </button>
+</div>
+
+                    <input class="search" id="wordSearchBox" placeholder="Search word..."
+                        oninput="refreshWordListSearch()" style="margin-top:12px;">
+                        <button class="studyBtn" onclick="showSavedWordsMeanThaiAZLetterPopup()">
+    Saved 
+</button>
+<button class="studyBtn" onclick="startRandomSavedWordsWordMeanThaiStudy()">
+   Rnd Saved
+</button>
+                </div>
+            
+<div id="wordListTitle"
+     style="
+        margin:12px 0;
+        padding:12px;
+        border-radius:16px;
+        background:#e0f2fe;
+        font-size:18px;
+        font-weight:900;
+        text-align:center;
+     ">
+    Words A-Z
+</div>
+            <div id="wordListContent" class="wordList"></div>
+
+            <div class="navBtns">
+                <button class="mainBtn" onclick="toggleWordList()">← Back</button>
+            </div>
+        </div>
+    </div>
+    <script src="vocab-data.js"></script>
+    <script>
+    
+        // Remove words longer than 29 letters
+allSets.forEach(set => {
+    set.items = set.items.filter(item => {
+        return item.term.length <= 29;
+    });
+});
+
+let vocabulary = allSets[0].items;
+        let currentSetName = "Vocab: " + allSets[0].setName;
+        let order = [],
+            index = 0,
+            score = 0,
+            answered = false,
+            currentItem = vocabulary[0],
+            missedThisQuestion = false,
+            correctWords = [],
+            wrongWords = [],
+            wrongAnswerDetails = [];
+
+        let studyWords = [];
+        let studyIndex = 0;
+        let studyTimer = null;
+        let currentStudySet = [];
+
+        let studyTimeout1 = null;
+        let studyTimeout2 = null;
+        let studyRunning = false;
+        let studyMode = "flash"; // flash, speak, meaning
+
+        let gameMode = "word"; // word or meaning
+
+        let thaiResetTimer = null;
+        let wakeLock = null;
+
+        let lastSetIndex = null;
+        let lastGameType = "word"; // word or meaning
+
+        let savedWords = JSON.parse(
+            localStorage.getItem("savedWords") || "[]"
+            );
+
+allSets.forEach((set, setIndex) => {
+    set.items.forEach((item, itemIndex) => {
+        item.id = `s${setIndex}_w${itemIndex}`;
+    });
+});
+
+
+async function keepScreenOn() {
+    try {
+        if ("wakeLock" in navigator) {
+            wakeLock = await navigator.wakeLock.request("screen");
+            console.log("Screen wake lock ON");
+        } else {
+            alert("Wake Lock not supported. Please turn off Auto-Lock manually in Settings.");
+        }
+    } catch (err) {
+        console.log("Wake Lock failed:", err);
+    }
+}
+
+async function releaseScreenOn() {
+    if (wakeLock) {
+        await wakeLock.release();
+        wakeLock = null;
+        console.log("Screen wake lock OFF");
+    }
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && studyRunning) {
+        keepScreenOn();
+    }
+});
+
+        function startFlashStudy() {
+            studyMode = "flash";
+            keepScreenOn();
+            stopStudyMode();
+            studyRunning = true;
+
+            studyWords = [];
+
+            allSets.forEach(set => {
+                set.items.forEach(item => {
+                    studyWords.push(item);
+                });
+            });
+
+            studyWords.sort(() => Math.random() - 0.5);
+            studyIndex = 0;
+
+            openStudyOverlay();
+
+            clearInterval(studyTimer);
+
+            studyTimer = setInterval(() => {
+                if (!studyRunning) return;
+
+                studyIndex++;
+
+                if (studyIndex >= studyWords.length) {
+                    studyIndex = 0;
+                }
+
+                showStudyWord();
+            }, 1500);
+        }
+
+        function openStudyOverlay() {
+
+            const oldOverlay = document.getElementById("studyOverlay");
+            if (oldOverlay) oldOverlay.remove();
+
+            const overlay = document.createElement("div");
+            overlay.id = "studyOverlay";
+
+            overlay.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:#111827;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:99999;
+    text-align:center;
+    padding:20px;
+`;
+
+            overlay.innerHTML = `
+    <div id="studyWord"
+         style="font-size:48px;font-weight:900;color:#facc15;margin-bottom:20px;">
+    </div>
+<!-- 
+    <div style="font-size:18px;opacity:.8;">
+        Tap anywhere to return
+    </div> -->
+
+    <div class="navBtns" style="margin-top:14px;">
+    <button type="button" onclick="event.stopPropagation();studyPrev();">⬅️ Previous</button>
+    <button type="button" onclick="event.stopPropagation();studyNext();">Next ➡️</button>
+</div>
+
+<div id="studyWordStrip"
+     style="
+        margin-top:12px;
+        font-size:16px;
+        line-height:1.6;
+        text-align:center;
+        color:white;
+        font-weight:700;
+        max-width:90%;
+     ">
+</div>
+`;
+
+            overlay.onclick = () => {
+                stopStudyMode();
+            };
+
+            document.body.appendChild(overlay);
+            showStudyWord();
+        }
+        
+        
+
+  function showStudyWord() {
+
+    const item = studyWords[studyIndex];
+
+    const wordEl = document.getElementById("studyWord");
+    if (!wordEl) return;
+
+    wordEl.innerHTML = `
+        <div style="font-size:42px;font-weight:950;">
+            ${item.term}
+        </div>
+        <div style="font-size:20px;color:#fbbf24;margin-top:8px;">
+            ${item.thai || ""}
+        </div>
+        <div style="font-size:19px;font-weight:800;color:#d1d5db;margin-top:6px;">
+            ${item.meaning}
+        </div>
+
+        <div style="font-size:19px;color:green;margin-top:6px;">
+    ${(() => {
+        const ex = [...(item.examples || [])];
+
+        while (ex.length < 3) {
+            ex.push("&nbsp;");
+        }
+
+        return ex.slice(0, 3).join("<br>");
+    })()}
+</div>
+    `;
+
+    const strip = document.getElementById("studyWordStrip");
+
+if (strip) {
+
+    const getWord = (offset) => {
+        let i = studyIndex + offset;
+
+        if (i < 0) i = studyWords.length + i;
+        if (i >= studyWords.length) i = i - studyWords.length;
+
+        return studyWords[i]?.term || "";
+    };
+
+   strip.innerHTML = `
+<div id="studyWheelWrap"
+     onclick="event.stopPropagation();"
+     style="
+        height:300px;
+        width:100%;
+        max-width:320px;
+        margin:0 auto;
+        overflow:hidden;
+        position:relative;
+        perspective:900px;
+        touch-action:pan-y;
+        -webkit-mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+        mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+     ">
+
+    <div style="
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        width:230px;
+        height:44px;
+        border-radius:14px;
+        background:rgba(249,115,22,.95);
+        box-shadow:0 0 0 4px rgba(249,115,22,.25);
+        z-index:0;
+    "></div>
+
+    <div id="studyWheel"
+         style="
+            height:300px;
+            overflow-y:auto;
+            scroll-snap-type:y mandatory;
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+            padding:128px 0;
+            position:relative;
+            z-index:1;
+        ">
+        ${studyWords.map((word, i) => `
+            <div class="studyWheelItem"
+                 data-index="${i}"
+                 onclick="selectStudyWheelWord(event, ${i})"
+                 style="
+                    height:44px;
+                    line-height:44px;
+                    scroll-snap-align:center;
+                    text-align:center;
+                    font-size:${i === studyIndex ? 28 : 20}px;
+                    font-weight:${i === studyIndex ? 950 : 800};
+                    color:${i === studyIndex ? '#111827' : '#d1d5db'};
+                    cursor:pointer;
+                    transition:.2s;
+                    white-space:nowrap;
+                ">
+                ${i === studyIndex ? `✦ ${word.term} ✦` : word.term}
+            </div>
+        `).join("")}
+    </div>
+</div>
+`;
+setTimeout(setupStudyWheel, 0);
+
+}
+
+    speak(item.term);
+}
+
+
+        function savePlayerName() {
+            const name = document.getElementById("playerName").value.trim();
+            localStorage.setItem("vocabPlayerName", name);
+        }
+function findItemByTerm(term) {
+    let found = null;
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            if (item.term === term) found = item;
+        });
+    });
+
+    return found;
+}
+
+function findItemById(id) {
+
+    for (const set of allSets) {
+        for (const item of set.items) {
+            if (item.id === id) {
+                return item;
+            }
+        }
+    }
+
+    return null;
+}
+
+
+function buildWrongHistoryWords() {
+
+    const history = getScoreHistory();
+    const counts = {};
+
+    history.forEach(game => {
+        (game.wrongDetails || []).forEach(w => {
+            const id = w.wordId || findItemByTerm(w.word)?.id;
+            if (!id) return;
+
+            counts[id] = (counts[id] || 0) + 1;
+        });
+    });
+
+    return Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10)
+        .map(([id]) => findItemById(id))
+        .filter(item => item);
+}
+
+function buildAllMistakeWords() {
+
+    const history = getScoreHistory();
+    const mistakes = {};
+
+    history.forEach(game => {
+        (game.wrongDetails || []).forEach(w => {
+
+            const correctId = w.wordId || findItemByTerm(w.word)?.id;
+            const selectedId = w.selectedWordId || findItemByTerm(w.selectedWord)?.id;
+
+            if (!correctId) return;
+
+            if (!mistakes[correctId]) {
+                mistakes[correctId] = {
+                    count: 0,
+                    selectedIds: []
+                };
+            }
+
+            mistakes[correctId].count++;
+
+            if (selectedId && !mistakes[correctId].selectedIds.includes(selectedId)) {
+                mistakes[correctId].selectedIds.push(selectedId);
+            }
+        });
+    });
+
+    const result = [];
+
+    Object.entries(mistakes)
+        .sort((a, b) => b[1].count - a[1].count)
+        .forEach(([correctId, data]) => {
+
+            const correctItem = findItemById(correctId);
+            if (correctItem) result.push(correctItem);
+
+            data.selectedIds.forEach(selectedId => {
+                const selectedItem = findItemById(selectedId);
+                if (selectedItem) result.push(selectedItem);
+            });
+        });
+
+    return result;
+}
+
+function startAllMistakesGame() {
+  document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+
+  hideSavedWordsEditor();
+    const wrongItems = buildAllMistakeWords();
+
+    if (wrongItems.length === 0) {
+        alert("No wrong answers in history yet.");
+        return;
+    }
+
+    gameMode = "word";
+    vocabulary = wrongItems;
+    currentSetName = "All Mistakes";
+
+    document.getElementById("setTitle").textContent =
+        `🔁 All Mistakes (${wrongItems.length} words)`;
+
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("meaningMenuPage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("historyPage").classList.add("hidden");
+    document.getElementById("wordListPage").classList.add("hidden");
+    document.getElementById("gamePage").classList.remove("hidden");
+    
+
+    // IMPORTANT: no shuffle
+    order = [...Array(vocabulary.length).keys()];
+    index = 0;
+    score = 0;
+    correctWords = [];
+    wrongWords = [];
+    wrongAnswerDetails = [];
+
+    renderQuestion();
+}
+
+function startWrongHistoryGame() {
+  hideSavedWordsEditor();
+  document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+    const wrongItems = buildWrongHistoryWords();
+
+    if (wrongItems.length === 0) {
+        alert("No wrong answers in history yet.");
+        return;
+    }
+
+    gameMode = "word";
+    vocabulary = wrongItems;
+    currentSetName = "Retry Wrong Answers";
+
+    document.getElementById("setTitle").textContent =
+    `🏆 Top 10 Mistakes (${wrongItems.length} words)`;
+
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("meaningMenuPage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("historyPage").classList.add("hidden");
+    document.getElementById("wordListPage").classList.add("hidden");
+    document.getElementById("gamePage").classList.remove("hidden");
+
+    restartGame();
+}
+
+        function loadPlayerName() {
+            const savedName = localStorage.getItem("vocabPlayerName") || "";
+            const input = document.getElementById("playerName");
+            if (input)
+                input.value = savedName;
+        }
+
+        function getScoreHistory() {
+            try {
+                return JSON.parse(localStorage.getItem("vocabScoreHistory")) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveGameResult() {
+    let playerName = document.getElementById("playerName").value.trim();
+    if (playerName === "")
+        playerName = "No name";
+
+    const total = vocabulary.length;
+
+    let savedSetName = currentSetName;
+
+    if (gameMode === "word" && !savedSetName.startsWith("Vocab:")) {
+        savedSetName = "Vocab: " + savedSetName;
+    }
+
+    if (gameMode === "meaning" && !savedSetName.startsWith("Meaning:")) {
+        savedSetName = "Meaning: " + savedSetName;
+    }
+
+    const gameResult = {
+        name: playerName,
+        setName: savedSetName,
+        score: score,
+        total: total,
+        correct: correctWords.length,
+        wrong: wrongWords.length,
+        date: new Date().toLocaleString(),
+        wrongDetails: wrongAnswerDetails,
+    };
+
+    const history = getScoreHistory();
+    history.unshift(gameResult);
+    localStorage.setItem("vocabScoreHistory", JSON.stringify(history.slice(0, 50)));
+}
+
+       function renderScoreHistory(targetId = "scoreHistory") {
+
+    const box = document.getElementById(targetId);
+    if (!box) return;
+
+    const history = getScoreHistory();
+
+    if (history.length === 0) {
+        box.innerHTML =
+            '<div class="wordItem">No score history yet.</div>';
+        return;
+    }
+
+    box.innerHTML = `
+    <table class="historyTable">
+      <thead>
+        <tr>
+          <th>Name/Set</th>
+          <th>Score/Date</th>
+          <th>Wrong Answers</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${history.map((item,index) => `
+          <tr>
+            <td>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;">
+        <div>
+            <div style="font-weight:900;">
+                ${item.name}
+            </div>
+
+            <div style="
+    font-size:12px;
+    color:#6b7280;
+    margin-top:2px;
+">
+    ${
+    item.setName
+        .replace(
+            /^Vocab:\s*Set\s*(\d+):\s*(.*)$/i,
+            '<span style="color:#16a34a;font-weight:700;">Vocab $1:</span><br> $2'
+        )
+        .replace(
+            /^Meaning:\s*Set\s*(\d+):\s*(.*)$/i,
+            '<span style="color:#2563eb;font-weight:700;">Meaning $1:</span>$2'
+        )
+}
+</div>
+        </div>
+
+        <button class="deleteBtn"
+                onclick="deleteHistoryItem(${index})">
+            -
+        </button>
+    </div>
+</td>
+            <td><b>Score</b>:<span style="
+    font-size:12px;
+    color:${item.score === item.total ? 'green' : 'orange'};
+    margin-top:2px;
+">${item.score}</span>/<span style="
+    font-size:12px;
+    color:green;
+    margin-top:2px;
+">${item.total}</span><br>
+            <div style="
+    font-size:12px;
+    color:#6b7280;
+    margin-top:2px;
+">
+    ${(item.date || "No Date").replace(/,\s*/, ",<br>")}
+</div>
+</td><td>
+              ${(item.wrongDetails || []).length === 0
+                ? "None"
+                : item.wrongDetails.map((w, wrongIndex) => `
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:3px;">
+                        <span>
+                            <span style="color:#22c55e;"><b>${findItemById(w.wordId)?.term || w.word}</b></span>
+                            <span style="color:#ef4444;font-weight:bold;"> ≠ </span>
+                            ${findItemById(w.selectedWordId)?.term || w.selectedWord}
+                        </span>
+
+                        <button class="deleteBtn"
+                                onclick="deleteWrongDetail(${index}, ${wrongIndex})">
+                            -
+                        </button>
+                    </div>
+                  `).join("")
+              }
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+    `;
+    setTimeout(renderMistakePattern,0);
+    
+}
+
+        function clearScoreHistory() {
+            if (confirm("Clear all saved score history?")) {
+                localStorage.removeItem("vocabScoreHistory");
+                renderScoreHistory("scoreHistory");
+                renderScoreHistory("historyList");
+            }
+        }
+
+        function toggleHistory() {
+    const page = document.getElementById("historyPage");
+    if (!page) return;
+
+    if (page.classList.contains("hidden")) {
+        renderScoreHistory("historyList");
+        renderMistakePattern();
+
+        page.classList.remove("hidden");
+        page.scrollIntoView({
+            behavior: "smooth"
+        });
+    } else {
+      hideSavedWordsEditor();
+    page.classList.add("hidden");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+}
+
+        function shuffle(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]]
+            }
+            return copy;
+        }
+        function speak(text, lang = "en-US") {
+            if (!text)
+                return;
+
+            speechSynthesis.cancel();
+
+            const u = new SpeechSynthesisUtterance(text);
+
+            u.lang = lang;
+            u.rate = 0.72;
+            u.pitch = 1;
+            u.volume = 1;
+
+            // Better voice selection
+            const voices = speechSynthesis.getVoices();
+
+            // Try to use a more natural English voice
+            u.voice =
+                voices.find(v => v.name.includes("Voice 3")) ||
+                voices.find(v => v.name.includes("Samantha")) ||
+                voices.find(v => v.name.includes("Microsoft Ava Online")) ||
+                voices.find(v => v.name.includes("Google US English")) ||
+                voices.find(v => v.lang === "en-US");
+
+            speechSynthesis.speak(u);
+        }
+
+        function renderMenu() {
+            const q = document.getElementById("searchBox").value.toLowerCase();
+            const box = document.getElementById("setList");
+            box.innerHTML = "";
+            allSets.forEach((set, i) => {
+    if (!set.setName.toLowerCase().includes(q))
+        return;
+
+    const btn = document.createElement("button");
+
+    btn.className = "setBtn tap";
+
+    btn.innerHTML = `
+        <div class="setIcon">📚</div>
+        <div>
+            ${set.setName}
+            <small>${set.items.length} word(s)</small>
+        </div>
+    `;
+
+    btn.onclick = () => {
+        hideHistory();      // hide score history
+        startSet(i);        // open selected set
+    };
+
+    box.appendChild(btn);
+});
+        }
+        
+        
+        function hideHistory() {
+    const history = document.getElementById("historyPage");
+    if (history) {
+        history.classList.add("hidden");
+    }
+}
+        
+        function startSet(i) {
+          hideHistory();
+          hideSavedWordsEditor();
+    lastSetIndex = i;
+    lastGameType = "word";
+
+    gameMode = "word";
+    vocabulary = allSets[i].items;
+    currentSetName = "Vocab: " + allSets[i].setName;
+
+    document.getElementById("setTitle").textContent = allSets[i].setName;
+
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("gamePage").classList.remove("hidden");
+    document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+
+    restartGame();
+}
+        function showMenu() {
+    speechSynthesis.cancel();
+     hideSavedWordsEditor();
+
+    document.getElementById("gamePage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("historyPage").classList.add("hidden");
+    document.getElementById("wordListPage").classList.add("hidden");
+    document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+
+    const meaningPage = document.getElementById("meaningMenuPage");
+    if (meaningPage) {
+        meaningPage.classList.add("hidden");
+    }
+
+    document.getElementById("menuPage").classList.remove("hidden");
+}
+        function makeChoices(correctItem) {
+
+    let allItems = [];
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            if (item.term !== correctItem.term) {
+                allItems.push(item);
+            }
+        });
+    });
+
+    let wrongs = shuffle(allItems).slice(0, 3);
+
+    return shuffle([
+        {
+            text: correctItem.meaning,
+            correct: true
+        },
+        ...wrongs.map(x => ({
+            text: x.meaning,
+            correct: false
+        }))
+    ]);
+}
+        
+        
+        
+        function renderPillProgress() {
+
+    const box = document.getElementById("pillProgress");
+    if (!box) return;
+
+    box.innerHTML = "";
+
+    for (let i = 0; i < vocabulary.length; i++) {
+
+        const item = vocabulary[order[i]];
+
+        const pill = document.createElement("div");
+        pill.className = "progressPill tap";
+
+        pill.title = item.term;              // tooltip on computer
+        pill.dataset.word = item.term;       // tooltip text
+
+        if (i <= index) {
+            pill.classList.add("done");
+        }
+
+        pill.onclick = () => {
+            speak(item.term);
+        };
+
+        box.appendChild(pill);
+    }
+}
+        
+        function renderQuestion() {
+
+    currentItem = vocabulary[order[index]];
+    updateSaveWordBtn();
+    answered = false;
+    missedThisQuestion = false;
+
+    document.getElementById("progress").textContent =
+        `Word ${index + 1} / ${vocabulary.length}`;
+
+    renderPillProgress();   // ← NEW
+
+    document.getElementById("score").textContent =
+        `Score: ${score}`;
+
+    document.getElementById("bigIcon").textContent =
+        currentItem.icon || "📘";
+
+    document.getElementById("hero").style.background =
+        currentItem.color || "#E0F2FE";
+
+    document.getElementById("word").textContent =
+        gameMode === "meaning"
+            ? currentItem.meaning
+            : currentItem.term;
+
+    document.getElementById("thai").textContent =
+        "Choose the correct word";
+
+    const ex = document.getElementById("examples");
+    ex.innerHTML = "";
+    ex.classList.add("hidden");
+
+    const btn = document.getElementById("examplesToggleBtn");
+    if (btn) btn.textContent = "➕ EXAMPLES";
+
+document.getElementById("quickWordSearch").value = "";
+document.getElementById("quickWordResults").innerHTML = "";
+document.getElementById("quickWordDetail").innerHTML = "";
+
+    currentItem.examples.forEach(s => {
+        const div = document.createElement("div");
+        div.className = "example tap";
+        div.textContent = s;
+        div.onclick = () => speak(s);
+        ex.appendChild(div);
+    });
+
+    const choices = document.getElementById("choices");
+    choices.innerHTML = "";
+
+    const questionChoices =
+        gameMode === "meaning"
+            ? makeWordChoices(currentItem)
+            : makeChoices(currentItem);
+
+    questionChoices.forEach((choice, i) => {
+
+        const row = document.createElement("div");
+        row.className = "choiceRow";
+
+        const btn = document.createElement("button");
+        btn.className = "choice tap";
+
+        const thaiText = findThaiForChoice(choice.text);
+
+        btn.dataset.thai = thaiText;
+
+        btn.textContent =
+            String.fromCharCode(65 + i) + ". " + choice.text;
+
+        btn.onclick = () => speak(choice.text);
+
+        const select = document.createElement("button");
+        select.className = "choiceSpeak tap";
+        select.textContent = "✓";
+        select.setAttribute("aria-label", "Select answer");
+
+        select.onclick = () =>
+            checkAnswer(btn, choice.correct);
+
+        row.appendChild(btn);
+        row.appendChild(select);
+
+        choices.appendChild(row);
+    });
+
+    const result = document.getElementById("result");
+    result.textContent = "";
+    result.className = "result";
+
+    if (gameMode === "meaning") {
+        speak(currentItem.meaning);
+    } else {
+        speak(currentItem.term);
+    }
+}
+
+        function checkAnswer(button, isCorrect) {
+            if (answered)
+                return;
+            answered = true;
+            document.querySelectorAll(".choice").forEach(btn => {
+                const text = btn.textContent.slice(3);
+                if (
+    (gameMode === "word" && text === currentItem.meaning) ||
+    (gameMode === "meaning" && text === currentItem.term)
+) {
+    btn.classList.add("correct");
+}
+            });
+            const result = document.getElementById("result");
+            if (isCorrect) {
+                    hideHistory();
+                    hideSavedWordsEditor();
+                if (!missedThisQuestion) {
+                    score++;
+                    correctWords.push(currentItem.term);
+                } else {
+                    wrongWords.push(currentItem.term);
+                }
+
+                button.classList.add("correct");
+                result.textContent = "Correct!";
+                result.className = "result good";
+                speak("Correct");
+
+                setTimeout(function () {
+                    nextQuestion();
+                }, 1200);
+
+            } else {
+                missedThisQuestion = true;
+                button.classList.add("wrong");
+
+                const originalText = button.innerHTML;
+
+                const selectedMeaning = button.textContent.replace(/^[A-D]\.\s*/, "");
+
+                let correctTerm = selectedMeaning;
+
+
+                allSets.forEach(set => {
+                    set.items.forEach(item => {
+                        if (item.meaning === selectedMeaning) {
+                            correctTerm = item.term;
+                        }
+                    });
+                });
+
+
+                wrongAnswerDetails.push({
+    wordId: currentItem.id,
+    selectedWordId: findItemByTerm(correctTerm)?.id || ""
+});
+
+
+
+                button.innerHTML = correctTerm;
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 1500);
+
+                result.textContent = "Wrong. Try again or press Next.";
+                result.className = "result bad";
+                speak("Wrong. Try again.");
+
+                answered = false;
+            }
+            document.getElementById("score").textContent = `Score: ${score}`;
+        }
+
+
+        function nextQuestion() {
+           hideSavedWordsEditor();
+           document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+
+            if (missedThisQuestion && !wrongWords.includes(currentItem.term) && !correctWords.includes(currentItem.term)) {
+                wrongWords.push(currentItem.term);
+            }
+            index++;
+            if (index >= order.length) {
+                showFinalResult();
+                return;
+            }
+            renderQuestion();
+        }
+        function restartGame() {
+           hideSavedWordsEditor();
+           document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+            order = shuffle([...Array(vocabulary.length).keys()]);
+            index = 0;
+            score = 0;
+            correctWords = [];
+            wrongWords = [];
+            renderQuestion();
+            wrongAnswerDetails = [];
+        }
+
+        function restartSameSet() {
+            document.getElementById("resultPage").classList.add("hidden");
+            document.getElementById("gamePage").classList.remove("hidden");
+            restartGame();
+        }
+
+        function showFinalResult() {
+    speechSynthesis.cancel();
+
+    document.getElementById("gamePage").classList.add("hidden");
+    document.getElementById("resultPage").classList.remove("hidden");
+    document.getElementById("historyPage").classList.remove("hidden");
+
+    const total = vocabulary.length;
+
+    // Save new game result first
+    saveGameResult();
+
+    // Show and refresh score history after saving
+    renderScoreHistory("historyList");
+    renderMistakePattern();
+    document.getElementById("historyPage").classList.remove("hidden");
+
+    const perfect = score === total;
+
+    document.getElementById("finalTitle").textContent =
+        perfect ? "Perfect Score!" : "Set Finished";
+
+    document.getElementById("finalScore").textContent =
+        "Correct: " + score + " / " + total;
+
+    document.getElementById("finalMessage").textContent =
+        perfect
+            ? "Great job! You got every answer correct."
+            : "Keep practicing. Review the words below.";
+
+    const correctBox = document.getElementById("correctList");
+    const wrongBox = document.getElementById("wrongList");
+
+    correctBox.innerHTML = "";
+    wrongBox.innerHTML = "";
+
+    if (correctWords.length === 0) {
+        correctBox.innerHTML =
+            '<div class="wordItem">No correct answers yet.</div>';
+    } else {
+        correctWords.forEach(w => {
+            const div = document.createElement("div");
+            div.className = "wordItem goodItem tap";
+            div.textContent = "✓ " + w;
+            div.onclick = () => speak(w);
+            correctBox.appendChild(div);
+        });
+    }
+
+    if (wrongWords.length === 0) {
+        wrongBox.innerHTML =
+            '<div class="wordItem goodItem">No wrong answers.</div>';
+    } else {
+        wrongWords.forEach(w => {
+            const div = document.createElement("div");
+
+            div.dataset.word = w;
+            div.className = "wordItem badItem tap";
+
+            div.innerHTML = `
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:8px;
+                ">
+                    <span>✗ ${w}</span>
+
+                    <button class="deleteBtn"
+                            onclick="event.stopPropagation();
+                                     deleteWrongWord('${w.replace(/'/g, "\\'")}')">
+                        -
+                    </button>
+                </div>
+            `;
+
+            div.onclick = () => speak(w);
+            wrongBox.appendChild(div);
+        });
+    }
+
+    if (perfect) {
+        playFireworks();
+        speak("Perfect score. Great job.");
+    } else {
+        speak("Finished. You got " + score + " out of " + total + " correct.");
+    }
+}
+
+        function playFireworks() {
+            const box = document.getElementById("fireworks");
+            box.classList.remove("hidden");
+            box.innerHTML = "";
+
+            for (let i = 0; i < 90; i++) {
+                const dot = document.createElement("div");
+                dot.className = "firework";
+                const left = 20 + Math.random() * 60;
+                const top = 20 + Math.random() * 45;
+                dot.style.left = left + "vw";
+                dot.style.top = top + "vh";
+                dot.style.background = ["#ef4444", "#22c55e", "#3b82f6", "#f59e0b", "#a855f7", "#ec4899"][Math.floor(Math.random() * 6)];
+                dot.style.setProperty("--x", (Math.random() * 260 - 130) + "px");
+                dot.style.setProperty("--y", (Math.random() * 260 - 130) + "px");
+                dot.style.animationDelay = (Math.random() * 0.8) + "s";
+                box.appendChild(dot);
+            }
+
+            setTimeout(() => {
+                box.classList.add("hidden");
+                box.innerHTML = "";
+            }, 2200);
+        }
+        function toggleWordList() {
+          hideSavedWordsEditor();
+    document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+    const wordPage = document.getElementById("wordListPage");
+    const btn = document.getElementById("wordListBtn");
+
+    if (wordPage.classList.contains("hidden")) {
+
+        document.getElementById("menuPage").classList.add("hidden");
+        document.getElementById("meaningMenuPage").classList.add("hidden");
+        document.getElementById("gamePage").classList.add("hidden");
+        document.getElementById("resultPage").classList.add("hidden");
+        document.getElementById("historyPage").classList.add("hidden");
+
+        buildWordList();
+        wordPage.classList.remove("hidden");
+
+        btn.innerHTML = "📚 Choose a Set";
+
+    } else {
+
+        wordPage.classList.add("hidden");
+        document.getElementById("menuPage").classList.remove("hidden");
+
+        btn.innerHTML = "📖 Word List";
+    }
+}
+
+        function buildWordList() {
+            buildAllWordsAZ();
+        }
+
+       function wordCard(item) {
+
+    return `
+<div class="wordItem tap"
+     onclick="speak('${item.term.replace(/'/g, "\\'")}')">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+    ">
+
+        <div class="wordTerm"
+             onclick="speak('${item.term.replace(/'/g, "\\'")}')"
+             ontouchstart="startHold(event,'${item.meaning.replace(/'/g, "\\'")}')"
+             ontouchend="cancelHold()"
+             onmousedown="startHold(event,'${item.meaning.replace(/'/g, "\\'")}')"
+             onmouseup="cancelHold()"
+             onmouseleave="cancelHold()">
+
+            <strong>${item.term}</strong>
+
+        </div>
+
+        <div
+            onclick="event.stopPropagation();
+                     speakThai('${item.thai.replace(/'/g, "\\'")}')"
+            style="
+                color:orange;
+                text-align:right;
+            ">
+            ${item.thai}
+        </div>
+
+    </div>
+
+    <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:6px;
+        margin-top:8px;
+    ">
+
+        <div
+            class="saveBtn"
+            data-term="${item.term}"
+            onclick="
+                event.stopPropagation();
+
+                if(this.textContent.trim()==='+'){
+
+                    if(saveWord('${item.id.replace(/'/g, "\\'")}')){
+                        this.textContent='-';
+                        this.style.color='orange';
+                    }
+
+                }else{
+
+                    removeSavedWord('${item.id.replace(/'/g, "\\'")}');
+                    this.textContent='+';
+                    this.style.color='gray';
+
+                }
+            "
+            style="
+                color:${savedWords.includes(item.id) ? '#dc2626' : 'gray'};
+            ">
+            ${savedWords.includes(item.id) ? '-' : '+'}
+        </div>
+
+        <div
+            onclick="event.stopPropagation();
+                     showMeaningPopup(${JSON.stringify(item).replace(/"/g, '&quot;')})"
+            style="
+                display:inline-block;
+                padding:4px 10px;
+                border:1px solid gray;
+                border-radius:12px;
+                color:brown;
+                font-size:14px;
+                font-weight:600;
+                cursor:pointer;
+            ">
+            👁️ more
+        </div>
+
+    </div>
+
+</div>
+`;
+}
+
+        function buildAllWordsAZ() {
+          document.getElementById("wordListTitle").textContent =
+    "Words A-Z";
+            currentWordListMode = "az";
+
+            const container = document.getElementById("wordListContent");
+
+            let allWords = [];
+
+            allSets.forEach(set => {
+                set.items.forEach(item => {
+                    if (wordMatchesSearch(item)) {
+                        allWords.push(item);
+                    }
+                });
+            });
+
+            allWords.sort((a, b) => a.term.localeCompare(b.term));
+
+            container.innerHTML = allWords.map(item => wordCard(item)).join("");
+        }
+
+        function buildSetButtons() {
+          document.getElementById("wordListTitle").textContent =
+    "Words by Set";
+            const container = document.getElementById("wordListContent");
+            container.innerHTML = allSets.map((set, index) => `
+        <button class="setBtn tap" onclick="showWordsFromSet(${index})">
+            <div>
+                ${set.setName}
+                <small>${set.items.length} words</small>
+            </div>
+        </button>
+    `).join("");
+
+        }
+
+        function showWordsFromSet(index) {
+          document.getElementById("wordListTitle").textContent =
+    "Words by Set";
+            const container = document.getElementById("wordListContent");
+            const set = allSets[index];
+
+            currentStudySet = set.items;
+
+            container.innerHTML = `
+        <button class="back" onclick="buildSetButtons()">← Set List</button>
+
+        <div class="sectionTitle">
+            ${set.setName}
+        </div>
+
+        <div style="
+            margin-bottom:12px;
+            color:#6b7280;
+            font-size:15px;
+            font-weight:600;
+        ">
+            ${set.items.length} words
+            <span onclick="startSetSpeakStudy()"
+                  style="
+                    color:#2563eb;
+                    margin-left:10px;
+                    cursor:pointer;
+                    font-weight:700;
+                  ">
+                🔊 speak this set
+            </span>
+        </div>
+
+        ${set.items.map(item => wordCard(item)).join("")}
+    `;
+        }
+
+        function getMeaningGroup(item) {
+            const m = item.meaning.toLowerCase();
+
+            if (m.includes("return")) return "Return / Come back";
+            if (m.includes("take care") || m.includes("protect")) return "Take care / Protect";
+            if (m.includes("leave quickly")) return "Leave quickly";
+            if (m.includes("leave") || m.includes("go outside")) return "Leave / Go out";
+            if (m.includes("visit")) return "Visit / Come over";
+            if (m.includes("enter") || m.includes("inside")) return "Enter / Go in";
+            if (m.includes("arrive") || m.includes("appear")) return "Arrive / Show up";
+            if (m.includes("support") || m.includes("loyal")) return "Support / Stay together";
+            if (m.includes("love") || m.includes("date") || m.includes("relationship")) return "Love / Dating";
+            if (m.includes("make") && m.includes("smaller")) return "Clothing: Smaller";
+            if (m.includes("looser") || m.includes("bigger")) return "Clothing: Bigger";
+            if (m.includes("wear") || m.includes("clothing") || m.includes("fasten")) return "Clothing";
+            if (m.includes("sleep") || m.includes("awake") || m.includes("bed")) return "Sleep / Wake up";
+            if (m.includes("cause") || m.includes("affect")) return "Cause / Effect";
+            if (m.includes("collect")) return "Collect / Gather";
+            if (m.includes("find")) return "Find / Discover";
+            if (m.includes("talk") || m.includes("message") || m.includes("news")) return "Talk / Communication";
+
+            return "Other";
+        }
+
+        function buildMeaningGroups() {
+    currentWordListMode = "meaning";
+
+    document.getElementById("wordListTitle").textContent =
+        "🧠 Words by Meaning";
+
+    const container = document.getElementById("wordListContent");
+    let groups = {};
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            if (wordMatchesSearch(item)) {
+                const group = getMeaningGroup(item);
+
+                if (!groups[group]) groups[group] = [];
+                groups[group].push(item);
+            }
+        });
+    });
+
+    let html = "";
+
+    Object.keys(groups).sort().forEach((groupName, index) => {
+        html += `
+            <div class="meaningGroupTitle"
+                 onclick="toggleMeaningGroup(${index})">
+                ▶ ${groupName}
+            </div>
+
+            <div id="meaningGroup${index}" class="hidden">
+                ${groups[groupName]
+                    .sort((a, b) => a.term.localeCompare(b.term))
+                    .map(item => wordCard(item))
+                    .join("")}
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+        let currentWordListMode = "az";
+
+        function refreshWordListSearch() {
+            if (currentWordListMode === "az") {
+                buildAllWordsAZ();
+            }
+
+            if (currentWordListMode === "meaning") {
+                buildMeaningGroups();
+            }
+        }
+
+        function wordMatchesSearch(item) {
+            const search = document.getElementById("wordSearchBox")?.value.toLowerCase().trim() || "";
+
+            if (search === "") return true;
+
+            return item.term.toLowerCase().includes(search) ||
+                item.thai.toLowerCase().includes(search) ||
+                item.meaning.toLowerCase().includes(search);
+        }
+
+        function showMeaningPopup(item) {
+            const popup = document.getElementById("meaningPopup");
+
+            const safeSpeak = text => text.replace(/'/g, "\\'");
+
+            const samples = (item.examples || [])
+                .map(ex => `
+        <div onclick="event.stopPropagation(); speak('${safeSpeak(ex)}')" 
+             style="margin-top:8px;padding:8px;border-radius:10px;background:#374151;cursor:pointer;">
+            🔊 ${ex}
+        </div>
+    `)
+                .join("");
+
+            popup.innerHTML = `
+    <button onclick="closeMeaningPopup()">×</button>
+
+    <div onclick="event.stopPropagation(); speak('${safeSpeak(item.term)}')"
+         style="font-size:20px;font-weight:950;margin-right:28px;cursor:pointer;">
+        🔊 ${item.term}
+    </div>
+    <div style="margin-top:6px;font-size:16px;">
+    ${item.thai}
+</div>
+
+    <div onclick="event.stopPropagation(); speak('${safeSpeak(item.meaning)}')"
+         style="margin-top:8px;font-size:14px;color:#d1d5db;cursor:pointer;">
+        🔊 ${item.meaning}
+    </div>
+
+    <div style="margin-top:12px;text-align:left;font-size:14px;color:white;">
+        <strong>Sample:</strong>
+        ${samples}
+    </div>
+`;
+
+            popup.style.display = "block";
+        }
+
+        function closeMeaningPopup() {
+            document.getElementById("meaningPopup").style.display = "none";
+        }
+
+        document.addEventListener("click", function (e) {
+            const popup = document.getElementById("meaningPopup");
+
+            if (
+                popup.style.display === "block" &&
+                !popup.contains(e.target) &&
+                !e.target.closest(".wordItem")
+            ) {
+                closeMeaningPopup();
+            }
+        });
+
+        function speakThai(text) {
+            speechSynthesis.cancel();
+
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = "th-TH";
+            utter.rate = 0.8;
+
+            const voices = speechSynthesis.getVoices();
+            const thaiVoice = voices.find(v =>
+                v.lang === "th-TH" || v.name.toLowerCase().includes("kanya")
+            );
+
+            if (thaiVoice) utter.voice = thaiVoice;
+
+            speechSynthesis.speak(utter);
+        }
+
+      
+        let holdTimer;
+
+        function startHold(e, meaning) {
+            holdTimer = setTimeout(() => {
+                showMeaningOnly(meaning);
+            }, 600); // hold 0.6 second
+        }
+
+        function cancelHold() {
+            clearTimeout(holdTimer);
+        }
+
+        function showMeaningOnly(meaning) {
+            const popup = document.createElement("div");
+            popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.6);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:9999;
+    `;
+
+            popup.innerHTML = `
+        <div style="
+            background:white;
+            padding:20px;
+            border-radius:18px;
+            max-width:90%;
+            font-size:18px;
+            font-weight:700;
+            text-align:center;
+        ">
+            ${meaning}
+            <div style="margin-top:15px;color:#2563eb;">
+                Tap anywhere to close
+            </div>
+        </div>
+    `;
+
+            popup.onclick = () => popup.remove();
+            document.body.appendChild(popup);
+        }
+
+       function studyNext() {
+
+    speechSynthesis.cancel();
+
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+
+    studyIndex++;
+
+    if (studyIndex >= studyWords.length) {
+        studyIndex = 0;
+    }
+
+    if (studyMode === "flash") {
+        showStudyWord();
+    }
+    else if (studyMode === "speak") {
+        speakCurrentStudyWord();
+    }
+    else if (
+        studyMode === "thai" ||
+        studyMode === "speakThai"
+    ) {
+        speakCurrentStudyWordWithThai();
+    }
+    else if (studyMode === "savedWordMeanThai") {
+    speakCurrentSavedWordMeanThai();
+}
+else if (studyMode === "randomSavedWordMeanThai") {
+    speakCurrentRandomSavedWordMeanThai();
+}
+
+}
+
+      function studyPrev() {
+
+    speechSynthesis.cancel();
+
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+
+    studyIndex--;
+
+    if (studyIndex < 0) {
+        studyIndex = studyWords.length - 1;
+    }
+
+    if (studyMode === "flash") {
+        showStudyWord();
+    }
+    else if (studyMode === "speak") {
+        speakCurrentStudyWord();
+    }
+    else if (
+        studyMode === "thai" ||
+        studyMode === "speakThai"
+    ) {
+        speakCurrentStudyWordWithThai();
+    }
+    else if (studyMode === "savedWordMeanThai") {
+    speakCurrentSavedWordMeanThai();
+}
+else if (studyMode === "randomSavedWordMeanThai") {
+    speakCurrentRandomSavedWordMeanThai();
+}
+}
+
+
+
+        function startSpeakStudy() {
+            studyMode = "speak";
+            keepScreenOn();
+            stopStudyMode();
+            studyRunning = true;
+            studyWords = [];
+            allSets.forEach(set => {
+                set.items.forEach(item => {
+                    studyWords.push(item);
+                });
+            });
+
+            studyWords.sort(() => Math.random() - 0.5);
+            studyIndex = 0;
+
+            openStudyOverlay();
+
+            clearInterval(studyTimer);
+            speakCurrentStudyWord();
+        }
+
+        function startSetSpeakStudy() {
+            stopStudyMode();
+            studyRunning = true;
+            if (!currentStudySet || currentStudySet.length === 0) {
+                alert("Tap By Set, then open one set first.");
+                return;
+            }
+
+            studyWords = [...currentStudySet];
+            studyIndex = 0;
+
+            openStudyOverlay();
+
+            clearInterval(studyTimer);
+            speakCurrentStudyWord();
+        }
+
+        
+function speakCurrentStudyWord() {
+    if (!studyRunning) return;
+
+    if (studyIndex >= studyWords.length) studyIndex = 0;
+    if (studyIndex < 0) studyIndex = studyWords.length - 1;
+
+    const item = studyWords[studyIndex];
+    const wordEl = document.getElementById("studyWord");
+
+    if (!item || !wordEl) return;
+
+    wordEl.innerHTML = `
+        <div style="font-size:42px;font-weight:950;">
+            ${item.term}
+        </div>
+        <div style="margin-top:20px;font-size:19px;color:#fbbf24;">
+            ${item.thai || ""}
+        </div>
+
+        <div style="font-size:19px;font-weight:800;color:#d1d5db;margin-top:6px;">
+    ${item.meaning}
+</div>
+
+        <div style="font-size:19px;color:green;margin-top:6px;">
+    ${(() => {
+        const ex = [...(item.examples || [])];
+
+        while (ex.length < 3) {
+            ex.push("&nbsp;");
+        }
+
+        return ex.slice(0, 3).join("<br>");
+    })()}
+</div>
+    `;
+
+    const strip = document.getElementById("studyWordStrip");
+
+    if (strip) {
+        const getWord = (offset) => {
+            let i = studyIndex + offset;
+
+            while (i < 0) i += studyWords.length;
+            while (i >= studyWords.length) i -= studyWords.length;
+
+            return studyWords[i]?.term || "";
+        };
+
+      strip.innerHTML = `
+<div id="studyWheelWrap"
+     onclick="event.stopPropagation();"
+     style="
+        height:300px;
+        width:100%;
+        max-width:320px;
+        margin:0 auto;
+        overflow:hidden;
+        position:relative;
+        perspective:900px;
+        touch-action:none;
+        -webkit-mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+        mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+     ">
+
+    <div style="
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        width:230px;
+        height:44px;
+        border-radius:14px;
+        background:rgba(249,115,22,.95);
+        box-shadow:0 0 0 4px rgba(249,115,22,.25);
+        z-index:0;
+    "></div>
+
+    <div id="studyWheel"
+         style="
+            height:300px;
+            overflow-y:auto;
+            scroll-snap-type:y mandatory;
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+            padding:128px 0;
+            position:relative;
+            z-index:1;
+        ">
+        ${studyWords.map((word, i) => `
+            <div class="studyWheelItem"
+                 data-index="${i}"
+                 onclick="selectStudyWheelWord(event, ${i})"
+                 style="
+                    height:44px;
+                    line-height:44px;
+                    scroll-snap-align:center;
+                    text-align:center;
+                    font-size:${i === studyIndex ? 28 : 20}px;
+                    font-weight:${i === studyIndex ? 950 : 800};
+                    color:${i === studyIndex ? '#111827' : '#d1d5db'};
+                    cursor:pointer;
+                    transition:.2s;
+                    white-space:nowrap;
+                ">
+                ${i === studyIndex ? `✦ ${word.term} ✦` : word.term}
+            </div>
+        `).join("")}
+    </div>
+</div>
+`;
+setTimeout(setupStudyWheel, 0);
+    }
+
+    speak(item.term);
+
+    // Flash mode = term only
+    if (studyMode === "flash") return;
+
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+
+    studyTimeout1 = setTimeout(() => {
+        if (!studyRunning) return;
+
+        speak(item.meaning);
+
+        studyTimeout2 = setTimeout(() => {
+            if (!studyRunning) return;
+
+            studyIndex++;
+            speakCurrentStudyWord();
+        }, 3500);
+
+    }, 1800);
+}
+
+
+        function loadVoices(callback) {
+    let voices = speechSynthesis.getVoices();
+
+    if (voices.length) {
+        callback(voices);
+        return;
+    }
+
+    speechSynthesis.onvoiceschanged = () => {
+        voices = speechSynthesis.getVoices();
+        callback(voices);
+    };
+
+    // Wake speech system
+    const dummy = new SpeechSynthesisUtterance(" ");
+    dummy.volume = 0;
+    speechSynthesis.speak(dummy);
+}
+
+function wakeVoice() {
+    speechSynthesis.cancel();
+
+    loadVoices(function(voices) {
+        if (!voices.length) {
+            alert("No voices found yet. Tap Test again.");
+            return;
+        }
+
+        const selected =
+            voices.find(v => v.name.includes("Microsoft David Online")) ||
+            voices.find(v => v.name.includes("Alex")) ||
+            voices.find(v => v.lang === "en-US") ||
+            voices[0];
+
+        const list = voices.map((v, i) =>
+            `${i + 1}. ${v.name} (${v.lang})`
+        ).join("\n");
+
+        alert(
+            `Selected Voice:\n${selected?.name || "None"}\n\n` +
+            `Total Voices: ${voices.length}\n\n` +
+            list
+        );
+
+        const msg = new SpeechSynthesisUtterance("iPhone Friendly Test");
+        msg.voice = selected;
+        msg.rate = 0.9;
+        msg.pitch = 1;
+
+        speechSynthesis.speak(msg);
+    });
+}
+
+        function stopStudyMode() {
+            studyRunning = false;
+            releaseScreenOn();
+            clearInterval(studyTimer);
+            clearTimeout(studyTimeout1);
+            clearTimeout(studyTimeout2);
+
+            studyTimer = null;
+            studyTimeout1 = null;
+            studyTimeout2 = null;
+
+            speechSynthesis.cancel();
+
+            const overlay = document.getElementById("studyOverlay");
+            if (overlay) overlay.remove();
+        }
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        console.log(
+            "Voices on load:",
+            speechSynthesis.getVoices().length
+        );
+    }, 1000);
+});
+
+function showMeaningGameMenu() {
+  hideSavedWordsEditor();
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("gamePage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("meaningMenuPage").classList.remove("hidden");
+    const savedName = localStorage.getItem("vocabPlayerName") || "";
+    const meaningInput = document.getElementById("meaningPlayerName");
+    if (meaningInput) meaningInput.value = savedName;
+    const box = document.getElementById("meaningGameList");
+    let groups = {};
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            let group = getMeaningGroup(item);
+            if (!groups[group]) groups[group] = [];
+            groups[group].push(item);
+        });
+    });
+
+     const q = document.getElementById("meaningSearchBox")?.value.toLowerCase() || "";
+
+box.innerHTML = allSets
+    .filter(set => set.setName.toLowerCase().includes(q))
+    .map((set, i) => `
+    <button class="setBtn tap" onclick="startMeaningSetBySet(${i})">
+        <div class="setIcon">📖</div>
+        <div>
+            ${set.setName}
+            <small>${set.items.length} word(s)</small>
+        </div>
+    </button>
+`).join("");
+}
+
+
+function makeWordChoices(correctItem) {
+    let wrongs = shuffle(vocabulary.filter(x => x.term !== correctItem.term)).slice(0, 3);
+
+    while (wrongs.length < 3) {
+        wrongs.push({
+            term: "not this word"
+        });
+    }
+
+    return shuffle([
+        {
+            text: correctItem.term,
+            correct: true
+        },
+        ...wrongs.map(x => ({
+            text: x.term,
+            correct: false
+        }))
+    ]);
+}
+
+function startMeaningSetBySet(i) {
+         hideHistory();
+         hideSavedWordsEditor();
+    lastSetIndex = i;
+    lastGameType = "meaning";
+
+    gameMode = "meaning";
+    vocabulary = allSets[i].items;
+    currentSetName = "Meaning: " + allSets[i].setName;
+
+    document.getElementById("setTitle").textContent = currentSetName;
+
+    document.getElementById("meaningMenuPage").classList.add("hidden");
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("gamePage").classList.remove("hidden");
+
+    restartGame();
+}
+
+function sayCurrentItem() {
+
+    const thaiEl = document.getElementById("thai");
+
+    thaiEl.textContent = currentItem.thai || "";
+
+    clearTimeout(thaiResetTimer);
+
+    thaiResetTimer = setTimeout(() => {
+        thaiEl.textContent = "Choose the correct word";
+    }, 1000);
+
+    if (gameMode === "meaning") {
+        speak(currentItem.meaning);
+    } else {
+        speak(currentItem.term);
+    }
+}
+
+function saveMeaningPlayerName() {
+    const name = document.getElementById("meaningPlayerName").value.trim();
+    localStorage.setItem("vocabPlayerName", name);
+
+    const mainInput = document.getElementById("playerName");
+    if (mainInput) mainInput.value = name;
+}
+
+function findThaiForChoice(text) {
+    text = text.replace(/^[A-D]\.\s*/, "").trim();
+
+    for (const set of allSets) {
+        for (const item of set.items) {
+
+            if (gameMode === "meaning") {
+                if (item.term.trim() === text) {
+                    return item.thai || "No Thai";
+                }
+            } else {
+                if (item.meaning.trim() === text) {
+                    return item.thai || "No Thai";
+                }
+            }
+
+        }
+    }
+
+    return "Not found";
+}
+
+function toggleExamples() {
+
+    const examples = document.getElementById("examples");
+    const btn = document.getElementById("examplesToggleBtn");
+
+    examples.classList.toggle("hidden");
+
+    if (examples.classList.contains("hidden")) {
+        btn.textContent = "➕ EXAMPLES";
+    } else {
+        btn.textContent = "➖ EXAMPLES";
+    }
+}
+
+
+
+function deleteHistoryItem(index){
+    const history = getScoreHistory();
+
+    history.splice(index,1);
+
+    localStorage.setItem(
+        "vocabScoreHistory",
+        JSON.stringify(history)
+    );
+
+    renderScoreHistory("historyList");
+}
+
+
+function deleteWrongWord(word){
+
+    wrongWords = wrongWords.filter(w => w !== word);
+
+    const row = document.querySelector(
+        `[data-word="${CSS.escape(word)}"]`
+    );
+
+    if(row) row.remove();
+}
+
+function deleteWrongDetail(historyIndex, wrongIndex){
+
+    const history = getScoreHistory();
+
+    history[historyIndex].wrongDetails.splice(
+        wrongIndex,
+        1
+    );
+
+    localStorage.setItem(
+        "vocabScoreHistory",
+        JSON.stringify(history)
+    );
+
+    renderScoreHistory("scoreHistory");
+    renderScoreHistory("historyList");
+}
+
+function renderMistakePattern() {
+    const history = getScoreHistory();
+    const mistakes = {};
+
+    history.forEach(game => {
+        (game.wrongDetails || []).forEach(w => {
+
+            const correctItem =
+                findItemById(w.wordId) ||
+                findItemByTerm(w.word);
+
+            const selectedItem =
+                findItemById(w.selectedWordId) ||
+                findItemByTerm(w.selectedWord);
+
+            if (!correctItem) return;
+
+            const correctId = correctItem.id;
+            const selectedWord = selectedItem
+                ? selectedItem.term
+                : (w.selectedWord || "Unknown");
+
+            if (!mistakes[correctId]) {
+                mistakes[correctId] = {
+                    count: 0,
+                    correctWord: correctItem.term,
+                    selected: []
+                };
+            }
+
+            mistakes[correctId].count++;
+
+            if (selectedWord) {
+                mistakes[correctId].selected.push(selectedWord);
+            }
+        });
+    });
+
+    let output = "";
+
+    Object.entries(mistakes)
+        .sort((a, b) => b[1].count - a[1].count)
+        .forEach(([id, data]) => {
+            output += data.correctWord + "\n";
+
+            data.selected.forEach(word => {
+                output += word + "\n";
+            });
+
+            output += "\n";
+        });
+
+    if (output.trim() === "") {
+        output = "No mistake pattern yet.";
+    }
+
+    const resultBox = document.getElementById("mistakePattern");
+    if (resultBox) resultBox.textContent = output;
+
+    const historyBox = document.getElementById("mistakePatternHistory");
+    if (historyBox) historyBox.textContent = output;
+}
+
+
+function goToNextSet() {
+        hideHistory();
+        hideSavedWordsEditor();
+    if (lastSetIndex === null) {
+        showMenu();
+        return;
+    }
+
+    let next = lastSetIndex + 1;
+
+    if (next >= allSets.length) {
+        next = 0;
+    }
+
+    if (lastGameType === "meaning") {
+        startMeaningSetBySet(next);
+    } else {
+        startSet(next);
+    }
+}
+
+function goToPreviousSet() {
+        hideHistory();
+        hideSavedWordsEditor();
+    if (lastSetIndex === null) {
+        showMenu();
+        return;
+    }
+
+    let prev = lastSetIndex - 1;
+
+    if (prev < 0) {
+        prev = allSets.length - 1;
+    }
+
+    if (lastGameType === "meaning") {
+        startMeaningSetBySet(prev);
+    } else {
+        startSet(prev);
+    }
+}
+
+function toggleMistakePattern() {
+    hideSavedWordsEditor();
+
+    const wrap = document.getElementById("mistakePatternWrap");
+    const btn = document.getElementById("toggleMistakeBtn");
+
+    wrap.classList.toggle("hidden");
+
+    btn.textContent = wrap.classList.contains("hidden")
+        ? "(+) Wrong Words"
+        : "(-) Wrong Words";
+}
+
+function toggleSavedWords() {
+    const section = document.getElementById("savedWordsSection");
+    const btn = document.getElementById("toggleSavedWordsBtn");
+
+    if (section.style.display === "none") {
+        section.style.display = "block";
+        btn.textContent = "(-) Saved Words";
+    } else {
+        section.style.display = "none";
+        btn.textContent = "(+) Saved Words";
+    }
+}
+
+function showSetPositionPopup() {
+
+    const popup = document.createElement("div");
+    popup.className = "popupWrap";
+
+    const wordsHtml = order.map((wordIndex, pos) => {
+        const item = vocabulary[wordIndex];
+
+        return `
+            <span
+                class="setWord"
+                data-thai="${item.thai || ""}"
+                onclick='showSetWordDetail(${JSON.stringify(item).replace(/'/g, "&apos;")})'
+                style="
+                    display:inline-block;
+                    background:${pos === index ? "#111827" : "#f3f4f6"};
+                    color:${pos === index ? "white" : "#111827"};
+                    padding:4px 10px;
+                    border-radius:999px;
+                    font-weight:800;
+                    margin:3px;
+                    cursor:pointer;
+                ">
+                ${pos === index ? "📍 " : ""}${item.term}
+            </span>
+        `;
+    }).join("");
+
+    popup.innerHTML = `
+        <div class="popupOverlay" style="
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.6);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:99999;
+            padding:16px;
+        ">
+            <div class="popupBox" onclick="event.stopPropagation()" style="
+                background:white;
+                max-width:90%;
+                max-height:80vh;
+                overflow:auto;
+                padding:20px;
+                border-radius:20px;
+                line-height:2;
+                font-size:16px;
+            ">
+                <div style="font-weight:900;margin-bottom:10px;">
+                    ${currentSetName}
+                </div>
+
+                <div>
+                    ${wordsHtml}
+                </div>
+
+                <div style="text-align:center;margin-top:8px;">
+    <div id="setWordDetail" style="
+        display:inline-block;
+        padding:8px;
+        border-radius:10px;
+        background:#f9fafb;
+        border:1px solid #e5e7eb;
+    ">
+                    Tap any word to speak and show meaning/sample here.
+                </div>
+
+                <div style="margin-top:16px;text-align:center;">
+                    <button onclick="this.closest('.popupWrap').remove()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    popup.querySelector(".popupOverlay").onclick = function(e) {
+        if (e.target.classList.contains("popupOverlay")) {
+            popup.remove();
+        }
+    };
+
+    document.body.appendChild(popup);
+}
+
+function showSetWordDetail(item) {
+
+    speak(item.term);
+
+    const box = document.getElementById("setWordDetail");
+    if (!box) return;
+
+   box.innerHTML = `
+    <span style="color:#78350f;">
+            ${item.term}
+        </span>
+
+        <span style="color:#6b7280;">
+            = ${item.meaning || ""}
+        </span>
+
+
+    <div style="color:#166534;">
+        ${item.thai || ""}
+    </div>
+
+  <div style="color:#4b5563;">
+    ${(item.examples || []).join("<br>")}
+</div>
+`;
+}
+
+function toggleMeaningGroup(index) {
+    const box = document.getElementById("meaningGroup" + index);
+    if (!box) return;
+
+    box.classList.toggle("hidden");
+}
+
+function searchGameWords() {
+    const q = document.getElementById("quickWordSearch").value
+        .toLowerCase()
+        .trim();
+
+    const resultsBox = document.getElementById("quickWordResults");
+    const detailBox = document.getElementById("quickWordDetail");
+
+    resultsBox.innerHTML = "";
+    detailBox.innerHTML = "";
+
+    if (q === "") return;
+
+    const matches = vocabulary
+        .filter(item => item.term.toLowerCase().includes(q))
+        .slice(0, 6);
+
+    matches.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "quickWordBtn tap";
+        btn.textContent = item.term;
+
+        btn.onclick = () => showQuickWordDetail(item);
+
+        resultsBox.appendChild(btn);
+    });
+}
+
+function showQuickWordDetail(item) {
+
+    const searchBox = document.getElementById("quickWordSearch");
+    const resultsBox = document.getElementById("quickWordResults");
+    const box = document.getElementById("quickWordDetail");
+
+    searchBox.value = item.term;
+    resultsBox.innerHTML = "";
+
+    box.innerHTML = `
+        <div class="quickWordBox" style="position:relative;">
+
+    <button
+        onclick="
+            document.getElementById('quickWordDetail').innerHTML='';
+            event.stopPropagation();
+        "
+        style="
+            position:absolute;
+            top:8px;
+            right:8px;
+            border:2;
+            background;gray;
+            color:white;
+            width:24px;
+            height:24px;
+            border-radius:50%;
+            font-weight:900;
+            cursor:pointer;
+        ">
+        −
+    </button>
+            <div onclick="speak('${item.term.replace(/'/g,"\\'")}')"
+                 style="font-size:24px;font-weight:950;cursor:pointer;">
+                🔊 ${item.term}
+            </div>
+
+            <div style="margin-top:10px;">
+                <b>Meaning:</b> ${item.meaning}
+            </div>
+
+            <div style="margin-top:10px;color:orange;">
+                <b>Thai:</b> ${item.thai || ""}
+            </div>
+
+            <div style="margin-top:12px;">
+                <b>Examples:</b>
+
+                ${(item.examples || []).map(ex => `
+                    <div
+                        onclick="speak('${ex.replace(/'/g,"\\'")}')"
+                        style="
+                            margin-top:6px;
+                            padding:10px;
+                            background:white;
+                            border-radius:12px;
+                            cursor:pointer;
+                        ">
+                        🔊 ${ex}
+                    </div>
+                `).join("")}
+            </div>
+        </div>
+    `;
+}
+
+
+function startSavedWordsGame() {
+    hideSavedWordsEditor();
+
+    document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+
+    const savedIds = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    const savedItems = savedIds
+        .map(id => findItemById(id))
+        .filter(item => item);
+
+    if (savedItems.length === 0) {
+        alert("No saved words yet.");
+        return;
+    }
+
+    gameMode = "word";
+    vocabulary = savedItems;
+    currentSetName = "⭐ Saved Words";
+
+    document.getElementById("setTitle").textContent =
+        `⭐ Saved Words (${savedItems.length} words)`;
+
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("meaningMenuPage").classList.add("hidden");
+    document.getElementById("resultPage").classList.add("hidden");
+    document.getElementById("historyPage").classList.add("hidden");
+    document.getElementById("wordListPage").classList.add("hidden");
+    document.getElementById("gamePage").classList.remove("hidden");
+
+    restartGame();
+}
+
+
+function deleteSavedWord(word) {
+
+    let savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    savedWords = savedWords.filter(w => w !== word);
+
+    localStorage.setItem(
+        "savedWords",
+        JSON.stringify(savedWords)
+    );
+
+    renderSavedWordsEditor();
+    updateSaveWordBtn();  
+    refreshSaveButtons(); 
+}
+
+function showSavedWordsEditor() {
+
+    document.getElementById("mistakePatternWrap")
+        ?.classList.add("hidden");
+
+    const mistakeBtn = document.getElementById("toggleMistakeBtn");
+    if (mistakeBtn) {
+        mistakeBtn.textContent = "(+) Show Mistake Pattern";
+    }
+
+    const wrap = document.getElementById("savedWordsEditorWrap");
+    const savedBtn = document.getElementById("toggleSavedWordsBtn");
+
+    wrap.classList.toggle("hidden");
+
+    if (!wrap.classList.contains("hidden")) {
+        if (savedBtn) {
+            savedBtn.textContent = "(-) Saved Words";
+        }
+        renderSavedWordsEditor();
+    } else {
+        if (savedBtn) {
+            savedBtn.textContent = "(+) Saved Words";
+        }
+    }
+}
+
+function hideSavedWordsEditor() {
+    const wrap = document.getElementById("savedWordsEditorWrap");
+    if (wrap) {
+        wrap.classList.add("hidden");
+    }
+}
+
+
+function renderSavedWordsEditor() {
+
+    const box = document.getElementById("savedWordsEditorBox");
+
+    const savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    if (savedWords.length === 0) {
+        box.innerHTML = `
+            <div style="text-align:center;">
+                No saved words.
+            </div>
+        `;
+        return;
+    }
+
+    box.innerHTML = `
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:8px;
+            padding-bottom:6px;
+            border-bottom:1px solid #ddd;
+        ">
+            <b>Saved Words (${savedWords.length})</b>
+
+            <button class="deleteBtn"
+                    onclick="deleteAllSavedWords()">
+                Clear All
+            </button>
+        </div>
+
+        ${savedWords.map(id => {
+
+    const item = findItemById(id);
+    const displayWord = item ? item.term : id;
+
+    return `
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:4px;
+            margin-bottom:2px;
+            padding:2px 6px;
+            line-height:1.1;
+        ">
+            <span onclick="speak('${displayWord.replace(/'/g,"\\'")}')">
+                🔊 ${displayWord}
+            </span>
+
+            <button class="deleteBtn"
+                    onclick="deleteSavedWord('${id.replace(/'/g,"\\'")}')">
+                -
+            </button>
+        </div>
+    `;
+}).join("")}
+    `;
+}
+
+function saveWord(term) {
+
+    savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    if (savedWords.includes(term)) {
+        speak("Already saved");
+        return false;
+    }
+
+    savedWords.push(term);
+
+    localStorage.setItem(
+        "savedWords",
+        JSON.stringify(savedWords)
+    );
+
+refreshSavedWordsEditorIfOpen();
+
+    speak("Saved");
+    return true;
+}
+
+function removeSavedWord(term) {
+
+    savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    savedWords = savedWords.filter(w => w !== term);
+
+    localStorage.setItem(
+        "savedWords",
+        JSON.stringify(savedWords)
+    );
+
+refreshSavedWordsEditorIfOpen();
+
+    speak("Removed");
+}
+
+function updateSaveWordBtn() {
+
+    const btn = document.getElementById("saveWordBtn");
+    if (!btn || !currentItem) return;
+
+    savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    const saved = savedWords.includes(currentItem.id);
+
+    btn.textContent = saved ? "-" : "+";
+    btn.style.color = saved ? "#dc2626" : "gray";
+}
+
+function toggleCurrentWord() {
+
+    savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    const id = currentItem.id;
+
+    if (savedWords.includes(id)) {
+
+        savedWords = savedWords.filter(w => w !== id);
+
+        localStorage.setItem(
+            "savedWords",
+            JSON.stringify(savedWords)
+        );
+
+        speak("Removed");
+
+    } else {
+
+        savedWords.push(id);
+
+        localStorage.setItem(
+            "savedWords",
+            JSON.stringify(savedWords)
+        );
+
+        speak("Saved");
+    }
+
+    updateSaveWordBtn();
+    refreshSavedWordsEditorIfOpen();
+}
+
+function deleteAllSavedWords() {
+
+    if (!confirm("Delete all saved words?")) return;
+
+    localStorage.removeItem("savedWords");
+
+    savedWords = [];
+
+    renderSavedWordsEditor();
+    refreshSaveButtons();
+
+    if (typeof renderQuestion === "function") {
+        renderQuestion();
+    }
+}
+
+function refreshSaveButtons() {
+
+    savedWords = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    document.querySelectorAll(".saveBtn").forEach(btn => {
+
+        const term = btn.dataset.term;
+        if (!term) return;
+
+        if (savedWords.includes(term)) {
+            btn.textContent = "-";
+            btn.style.color = "orange";
+        } else {
+            btn.textContent = "+";
+            btn.style.color = "gray";
+        }
+
+    });
+}
+
+function refreshSavedWordsEditorIfOpen() {
+    const wrap = document.getElementById("savedWordsEditorWrap");
+
+    if (wrap && !wrap.classList.contains("hidden")) {
+        renderSavedWordsEditor();
+    }
+}
+
+function findItemById(id) {
+    for (const set of allSets) {
+        for (const item of set.items) {
+            if (item.id === id) return item;
+        }
+    }
+    return null;
+}
+
+function startAZFlashStudyFromLetter(letter) {
+
+    studyMode = "flash";
+    keepScreenOn();
+    stopStudyMode();
+    studyRunning = true;
+
+    studyWords = [];
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+
+            if (
+                item.term &&
+                item.term.toUpperCase().startsWith(letter.toUpperCase())
+            ) {
+                studyWords.push(item);
+            }
+
+        });
+    });
+
+    if (studyWords.length === 0) {
+
+        studyRunning = false;
+
+        const msg = document.getElementById("letterPopupMessage");
+
+        if (msg) {
+            msg.textContent = `No words start with "${letter}".`;
+
+            clearTimeout(msg.hideTimer);
+
+            msg.hideTimer = setTimeout(() => {
+                msg.textContent = "";
+            }, 800);
+        }
+
+        return;
+    }
+
+    document.getElementById("letterPopup")?.remove();
+
+    // A-Z order
+    studyWords.sort((a, b) =>
+        a.term.localeCompare(b.term)
+    );
+
+    studyIndex = 0;
+
+    openStudyOverlay();
+
+    clearInterval(studyTimer);
+
+    studyTimer = setInterval(() => {
+
+        if (!studyRunning) return;
+
+        studyIndex++;
+
+        if (studyIndex >= studyWords.length) {
+            studyIndex = 0;
+        }
+
+        showStudyWord();
+
+    }, 1500);
+}
+
+function showAZFlashLetterPopup() {
+
+    const old = document.getElementById("letterPopup");
+    if (old) old.remove();
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    const popup = document.createElement("div");
+    popup.id = "letterPopup";
+
+    popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:999999;
+    `;
+
+    popup.innerHTML = `
+        <div id="letterPopupBox"
+             style="
+                background:white;
+                padding:20px;
+                border-radius:20px;
+                max-width:360px;
+                width:92%;
+                text-align:center;
+             ">
+
+            <div style="
+                font-size:22px;
+                font-weight:900;
+                margin-bottom:16px;
+            ">
+                Choose A-Z
+            </div>
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(5,1fr);
+                gap:8px;
+            ">
+                ${letters.map(letter => `
+                    <button
+                        class="studyBtn"
+                        onclick="startAZFlashStudyFromLetter('${letter}')">
+                        ${letter}
+                    </button>
+                `).join("")}
+            </div>
+
+            <div id="letterPopupMessage"
+                 style="
+                    min-height:22px;
+                    margin-top:12px;
+                    color:#ef4444;
+                    font-size:15px;
+                    font-weight:900;
+                    text-align:center;
+                 ">
+            </div>
+
+            <button
+                class="mainBtn lightBtn"
+                style="margin-top:12px;width:100%;"
+                onclick="document.getElementById('letterPopup').remove()">
+                Cancel
+            </button>
+
+        </div>
+    `;
+
+    popup.onclick = () => popup.remove();
+
+    popup.querySelector("#letterPopupBox").onclick = e => {
+        e.stopPropagation();
+    };
+
+    document.body.appendChild(popup);
+}
+
+function startSpeakStudyFromLetterAZ(letter) {
+
+    studyMode = "speak";
+    keepScreenOn();
+    stopStudyMode();
+    studyRunning = true;
+
+    studyWords = [];
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            if (
+                item.term &&
+                item.term.toUpperCase().startsWith(letter.toUpperCase())
+            ) {
+                studyWords.push(item);
+            }
+        });
+    });
+
+    if (studyWords.length === 0) {
+
+        studyRunning = false;
+
+        const msg = document.getElementById("letterPopupMessage");
+
+        if (msg) {
+            msg.textContent = `No words start with "${letter}".`;
+
+            clearTimeout(msg.hideTimer);
+
+            msg.hideTimer = setTimeout(() => {
+                msg.textContent = "";
+            }, 800);
+        }
+
+        return;
+    }
+
+    document.getElementById("letterPopup")?.remove();
+
+    studyWords.sort((a, b) => a.term.localeCompare(b.term));
+
+    studyIndex = 0;
+
+    openStudyOverlay();
+
+    clearInterval(studyTimer);
+
+    speakCurrentStudyWord();
+}
+
+function showSpeakAZLetterPopup() {
+
+    let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    const oldPopup = document.getElementById("letterPopup");
+    if (oldPopup) oldPopup.remove();
+
+    const popup = document.createElement("div");
+    popup.id = "letterPopup";
+
+    popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:99999;
+    `;
+
+    popup.innerHTML = `
+        <div id="letterPopupBox" style="
+            background:white;
+            padding:18px;
+            border-radius:20px;
+            max-width:340px;
+            width:90%;
+            text-align:center;
+        ">
+            <div style="font-size:20px;font-weight:900;margin-bottom:12px;">
+                Start with letter
+            </div>
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(5,1fr);
+                gap:8px;
+            ">
+                ${letters.map(letter => `
+                    <button
+                        onclick="startSpeakStudyFromLetterAZ('${letter}')"
+                        style="
+                            padding:10px;
+                            border-radius:12px;
+                            border:1px solid #ddd;
+                            background:#f8fafc;
+                            font-weight:900;
+                            font-size:16px;
+                        ">
+                        ${letter}
+                    </button>
+                `).join("")}
+            </div>
+
+            <div id="letterPopupMessage" style="
+                min-height:22px;
+                margin-top:12px;
+                color:#ef4444;
+                font-size:15px;
+                font-weight:900;
+                text-align:center;
+            "></div>
+
+            <button onclick="document.getElementById('letterPopup').remove()"
+                style="
+                    margin-top:12px;
+                    padding:10px 14px;
+                    border:0;
+                    border-radius:14px;
+                    background:#111827;
+                    color:white;
+                    font-weight:900;
+                ">
+                Cancel
+            </button>
+        </div>
+    `;
+
+    popup.onclick = () => popup.remove();
+
+    popup.querySelector("#letterPopupBox").onclick = e => {
+        e.stopPropagation();
+    };
+
+    document.body.appendChild(popup);
+}
+
+
+
+
+
+function startSpeakThaiRandomStudy() {
+    studyMode = "thai";
+    keepScreenOn();
+    stopStudyMode();
+    studyRunning = true;
+
+    studyWords = [];
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            studyWords.push(item);
+        });
+    });
+
+    // random order
+    studyWords.sort(() => Math.random() - 0.5);
+
+    studyIndex = 0;
+
+    openStudyOverlay();
+
+    clearInterval(studyTimer);
+    speakCurrentStudyWordWithThai();
+}
+
+function speakCurrentStudyWordWithThai() {
+
+    if (!studyRunning) return;
+
+    const item = studyWords[studyIndex];
+    const wordEl = document.getElementById("studyWord");
+    if (!wordEl) return;
+
+    wordEl.innerHTML = `
+        <div style="font-size:42px;font-weight:950;">
+            ${item.term}
+        </div>
+
+        <div style="font-size:20px;color:#fbbf24;margin-top:8px;">
+            ${item.thai || ""}
+        </div>
+
+        <div style="font-size:19px;color:#6b7280;margin-top:6px;">
+            ${item.meaning || ""}
+        </div>
+    `;
+
+    const strip = document.getElementById("studyWordStrip");
+
+    if (strip) {
+        const getWord = (offset) => {
+            let i = studyIndex + offset;
+
+            while (i < 0) i += studyWords.length;
+            while (i >= studyWords.length) i -= studyWords.length;
+
+            return studyWords[i]?.term || "";
+        };
+
+        strip.innerHTML = `
+<div id="studyWheelWrap"
+     onclick="event.stopPropagation();"
+     style="
+        height:300px;
+        width:100%;
+        max-width:320px;
+        margin:0 auto;
+        overflow:hidden;
+        position:relative;
+        perspective:900px;
+        touch-action:none;
+        -webkit-mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+        mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+     ">
+
+    <div style="
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        width:230px;
+        height:44px;
+        border-radius:14px;
+        background:rgba(249,115,22,.95);
+        box-shadow:0 0 0 4px rgba(249,115,22,.25);
+        z-index:0;
+    "></div>
+
+    <div id="studyWheel"
+         style="
+            height:300px;
+            overflow-y:auto;
+            scroll-snap-type:y mandatory;
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+            padding:128px 0;
+            position:relative;
+            z-index:1;
+        ">
+        ${studyWords.map((word, i) => `
+            <div class="studyWheelItem"
+                 data-index="${i}"
+                 onclick="selectStudyWheelWord(event, ${i})"
+                 style="
+                    height:44px;
+                    line-height:44px;
+                    scroll-snap-align:center;
+                    text-align:center;
+                    font-size:${i === studyIndex ? 28 : 20}px;
+                    font-weight:${i === studyIndex ? 950 : 800};
+                    color:${i === studyIndex ? '#111827' : '#d1d5db'};
+                    cursor:pointer;
+                    transition:.2s;
+                    white-space:nowrap;
+                ">
+                ${i === studyIndex ? `✦ ${word.term} ✦` : word.term}
+            </div>
+        `).join("")}
+    </div>
+</div>
+`;
+setTimeout(setupStudyWheel, 0);
+    }
+
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+
+    speak(item.term);
+
+    studyTimeout1 = setTimeout(() => {
+        speakThai(item.thai || "");
+    }, 1000);
+
+    studyTimeout2 = setTimeout(() => {
+        if (!studyRunning) return;
+
+        studyIndex++;
+
+        if (studyIndex >= studyWords.length) {
+            studyIndex = 0;
+        }
+
+        speakCurrentStudyWordWithThai();
+    }, 3200);
+}
+
+function speakCurrentSavedWordMeanThai() {
+    if (!studyRunning) return;
+
+    const item = studyWords[studyIndex];
+    const wordEl = document.getElementById("studyWord");
+    if (!wordEl) return;
+
+    wordEl.innerHTML = `
+        <div style="font-size:42px;font-weight:950;">
+            ${item.term}
+        </div>
+
+        <div style="font-size:19px;color:#d1d5db;margin-top:8px;font-weight:800;">
+            ${item.meaning || ""}
+        </div>
+
+        <div style="font-size:20px;color:#fbbf24;margin-top:8px;font-weight:900;">
+            ${item.thai || ""}
+        </div>
+    `;
+
+    const strip = document.getElementById("studyWordStrip");
+
+    if (strip) {
+        const getWord = (offset) => {
+            let i = studyIndex + offset;
+
+            while (i < 0) i += studyWords.length;
+            while (i >= studyWords.length) i -= studyWords.length;
+
+            return studyWords[i]?.term || "";
+        };
+
+        strip.innerHTML = `
+<div id="studyWheelWrap"
+     onclick="event.stopPropagation();"
+     style="
+        height:300px;
+        width:100%;
+        max-width:320px;
+        margin:0 auto;
+        overflow:hidden;
+        position:relative;
+        perspective:900px;
+        touch-action:none;
+        -webkit-mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+        mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+     ">
+
+    <div style="
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        width:230px;
+        height:44px;
+        border-radius:14px;
+        background:rgba(249,115,22,.95);
+        box-shadow:0 0 0 4px rgba(249,115,22,.25);
+        z-index:0;
+    "></div>
+
+    <div id="studyWheel"
+         style="
+            height:300px;
+            overflow-y:auto;
+            scroll-snap-type:y mandatory;
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+            padding:128px 0;
+            position:relative;
+            z-index:1;
+        ">
+        ${studyWords.map((word, i) => `
+            <div class="studyWheelItem"
+                 data-index="${i}"
+                 onclick="selectStudyWheelWord(event, ${i})"
+                 style="
+                    height:44px;
+                    line-height:44px;
+                    scroll-snap-align:center;
+                    text-align:center;
+                    font-size:${i === studyIndex ? 28 : 20}px;
+                    font-weight:${i === studyIndex ? 950 : 800};
+                    color:${i === studyIndex ? '#111827' : '#d1d5db'};
+                    cursor:pointer;
+                    transition:.2s;
+                    white-space:nowrap;
+                ">
+                ${i === studyIndex ? `✦ ${word.term} ✦` : word.term}
+            </div>
+        `).join("")}
+    </div>
+</div>
+`;
+setTimeout(setupStudyWheel, 0);
+    }
+
+    speechSynthesis.cancel();
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+
+    speak(item.term);
+
+    studyTimeout1 = setTimeout(() => {
+        speak(item.meaning || "");
+    }, 1500);
+
+    studyTimeout2 = setTimeout(() => {
+        speakThai(item.thai || "");
+
+        setTimeout(() => {
+            if (!studyRunning) return;
+
+            studyIndex++;
+            if (studyIndex >= studyWords.length) {
+                studyIndex = 0;
+            }
+
+            speakCurrentSavedWordMeanThai();
+        }, 2500);
+
+    }, 3500);
+}
+
+function speakCurrentRandomSavedWordMeanThai() {
+
+    if (!studyRunning) return;
+
+    const item = studyWords[studyIndex];
+    const wordEl = document.getElementById("studyWord");
+    if (!wordEl) return;
+
+    wordEl.innerHTML = `
+        <div style="font-size:42px;font-weight:950;">
+            ${item.term}
+        </div>
+
+        <div style="font-size:19px;color:#d1d5db;margin-top:6px;font-weight:800;">
+            ${item.meaning || ""}
+        </div>
+        
+        
+        <div style="font-size:20px;color:#fbbf24;margin-top:8px;">
+            ${item.thai || ""}
+        </div>
+    `;
+
+    const strip = document.getElementById("studyWordStrip");
+
+    if (strip) {
+        const getWord = (offset) => {
+            let i = studyIndex + offset;
+
+            while (i < 0) i += studyWords.length;
+            while (i >= studyWords.length) i -= studyWords.length;
+
+            return studyWords[i]?.term || "";
+        };
+
+        strip.innerHTML = `
+<div id="studyWheelWrap"
+     onclick="event.stopPropagation();"
+     style="
+        height:300px;
+        width:100%;
+        max-width:320px;
+        margin:0 auto;
+        overflow:hidden;
+        position:relative;
+        perspective:900px;
+        touch-action:none;
+        -webkit-mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+        mask-image:linear-gradient(
+            to bottom,
+            transparent 0%,
+            black 18%,
+            black 82%,
+            transparent 100%
+        );
+     ">
+
+    <div style="
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        width:230px;
+        height:44px;
+        border-radius:14px;
+        background:rgba(249,115,22,.95);
+        box-shadow:0 0 0 4px rgba(249,115,22,.25);
+        z-index:0;
+    "></div>
+
+    <div id="studyWheel"
+         style="
+            height:300px;
+            overflow-y:auto;
+            scroll-snap-type:y mandatory;
+            scrollbar-width:none;
+            -ms-overflow-style:none;
+            padding:128px 0;
+            position:relative;
+            z-index:1;
+        ">
+        ${studyWords.map((word, i) => `
+            <div class="studyWheelItem"
+                 data-index="${i}"
+                 onclick="selectStudyWheelWord(event, ${i})"
+                 style="
+                    height:44px;
+                    line-height:44px;
+                    scroll-snap-align:center;
+                    text-align:center;
+                    font-size:${i === studyIndex ? 28 : 20}px;
+                    font-weight:${i === studyIndex ? 950 : 800};
+                    color:${i === studyIndex ? '#111827' : '#d1d5db'};
+                    cursor:pointer;
+                    transition:.2s;
+                    white-space:nowrap;
+                ">
+                ${i === studyIndex ? `✦ ${word.term} ✦` : word.term}
+            </div>
+        `).join("")}
+    </div>
+</div>
+`;
+setTimeout(setupStudyWheel, 0);
+    }
+
+    speechSynthesis.cancel();
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+
+    speak(item.term);
+
+    studyTimeout1 = setTimeout(() => {
+        speak(item.meaning || "");
+    }, 1500);
+
+    studyTimeout2 = setTimeout(() => {
+        speakThai(item.thai || "");
+
+        setTimeout(() => {
+            if (!studyRunning) return;
+
+            studyIndex++;
+
+            if (studyIndex >= studyWords.length) {
+                studyIndex = 0;
+            }
+
+            speakCurrentRandomSavedWordMeanThai();
+        }, 2500);
+
+    }, 3500);
+}
+
+
+function startSpeakThaiStudyFromLetterAZ(letter) {
+
+    studyMode = "thai";
+    keepScreenOn();
+    stopStudyMode();
+    studyRunning = true;
+
+    studyWords = [];
+
+    allSets.forEach(set => {
+        set.items.forEach(item => {
+            if (
+                item.term &&
+                item.term.toUpperCase().startsWith(letter.toUpperCase())
+            ) {
+                studyWords.push(item);
+            }
+        });
+    });
+
+    if (studyWords.length === 0) {
+
+        studyRunning = false;
+
+        const msg = document.getElementById("letterPopupMessage");
+
+        if (msg) {
+            msg.textContent = `No words start with "${letter}".`;
+
+            clearTimeout(msg.hideTimer);
+
+            msg.hideTimer = setTimeout(() => {
+                msg.textContent = "";
+            }, 800);
+        }
+
+        return;
+    }
+
+    document.getElementById("letterPopup")?.remove();
+
+    studyWords.sort((a, b) => a.term.localeCompare(b.term));
+
+    studyIndex = 0;
+
+    openStudyOverlay();
+
+    clearInterval(studyTimer);
+
+    speakCurrentStudyWordWithThai();
+}
+
+function showSpeakThaiAZLetterPopup() {
+
+    let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    const oldPopup = document.getElementById("letterPopup");
+    if (oldPopup) oldPopup.remove();
+
+    const popup = document.createElement("div");
+    popup.id = "letterPopup";
+
+    popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:99999;
+    `;
+
+    popup.innerHTML = `
+        <div id="letterPopupBox" style="
+            background:white;
+            padding:18px;
+            border-radius:20px;
+            max-width:340px;
+            width:90%;
+            text-align:center;
+        ">
+            <div style="font-size:20px;font-weight:900;margin-bottom:12px;">
+                Start with letter
+            </div>
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(5,1fr);
+                gap:8px;
+            ">
+                ${letters.map(letter => `
+                    <button
+                        onclick="startSpeakThaiStudyFromLetterAZ('${letter}')"
+                        style="
+                            padding:10px;
+                            border-radius:12px;
+                            border:1px solid #ddd;
+                            background:#f8fafc;
+                            font-weight:900;
+                            font-size:16px;
+                        ">
+                        ${letter}
+                    </button>
+                `).join("")}
+            </div>
+
+            <div id="letterPopupMessage" style="
+                min-height:22px;
+                margin-top:12px;
+                color:#ef4444;
+                font-size:15px;
+                font-weight:900;
+                text-align:center;
+            "></div>
+
+            <button onclick="document.getElementById('letterPopup').remove()"
+                style="
+                    margin-top:12px;
+                    padding:10px 14px;
+                    border:0;
+                    border-radius:14px;
+                    background:#111827;
+                    color:white;
+                    font-weight:900;
+                ">
+                Cancel
+            </button>
+        </div>
+    `;
+
+    popup.onclick = () => popup.remove();
+
+    popup.querySelector("#letterPopupBox").onclick = e => {
+        e.stopPropagation();
+    };
+
+    document.body.appendChild(popup);
+}
+
+function startRandomSavedWordsWordMeanThaiStudy() {
+
+    studyMode = "randomSavedWordMeanThai";
+
+    keepScreenOn();
+    stopStudyMode();
+
+    studyRunning = true;
+
+    const savedIds = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    studyWords = savedIds
+        .map(id => findItemById(id))
+        .filter(item => item);
+
+    if (studyWords.length === 0) {
+        alert("No saved words yet.");
+        studyRunning = false;
+        return;
+    }
+
+    // random order
+    studyWords.sort(() => Math.random() - 0.5);
+
+    studyIndex = 0;
+
+    openStudyOverlay();
+
+    clearInterval(studyTimer);
+    speakCurrentRandomSavedWordMeanThai();
+}
+
+function showSavedWordsMeanThaiAZLetterPopup() {
+
+    let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    const oldPopup = document.getElementById("letterPopup");
+    if (oldPopup) oldPopup.remove();
+
+    const popup = document.createElement("div");
+    popup.id = "letterPopup";
+
+    popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:99999;
+    `;
+
+    popup.innerHTML = `
+        <div id="letterPopupBox" style="
+            background:white;
+            width:340px;
+            max-width:92vw;
+            border-radius:22px;
+            padding:18px;
+            box-shadow:0 20px 50px rgba(0,0,0,.25);
+        ">
+
+            <div style="
+                font-size:22px;
+                font-weight:900;
+                text-align:center;
+                margin-bottom:16px;
+            ">
+                Saved Words A-Z
+            </div>
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(6,1fr);
+                gap:8px;
+            ">
+                ${letters.map(letter => `
+                    <button
+                        class="studyBtn"
+                        style="
+                            padding:12px 0;
+                            font-size:18px;
+                            font-weight:900;
+                        "
+                        onclick="startSavedWordsWordMeanThaiFromLetter('${letter}')">
+                        ${letter}
+                    </button>
+                `).join("")}
+            </div>
+
+            <div id="letterPopupMessage" style="
+                min-height:22px;
+                margin-top:12px;
+                color:#ef4444;
+                font-size:15px;
+                font-weight:900;
+                text-align:center;
+            "></div>
+
+            <button
+                class="mainBtn lightBtn"
+                style="width:100%;margin-top:16px;"
+                onclick="document.getElementById('letterPopup').remove()">
+                Cancel
+            </button>
+
+        </div>
+    `;
+
+    popup.onclick = () => popup.remove();
+
+    popup.querySelector("#letterPopupBox").onclick = e => {
+        e.stopPropagation();
+    };
+
+    document.body.appendChild(popup);
+}
+
+function startSavedWordsWordMeanThaiFromLetter(letter) {
+
+    studyMode = "savedWordMeanThai";
+
+    keepScreenOn();
+    stopStudyMode();
+
+    studyRunning = true;
+
+    const savedIds = JSON.parse(
+        localStorage.getItem("savedWords") || "[]"
+    );
+
+    studyWords = savedIds
+        .map(id => findItemById(id))
+        .filter(item =>
+            item &&
+            item.term &&
+            item.term.toUpperCase().startsWith(letter.toUpperCase())
+        );
+
+    if (studyWords.length === 0) {
+
+        studyRunning = false;
+
+        const msg = document.getElementById("letterPopupMessage");
+
+        if (msg) {
+            msg.textContent = `No saved words start with "${letter}".`;
+
+            clearTimeout(msg.hideTimer);
+
+            msg.hideTimer = setTimeout(() => {
+                msg.textContent = "";
+            }, 1500);
+        }
+
+        return;
+    }
+
+    document.getElementById("letterPopup")?.remove();
+
+    studyWords.sort((a, b) => a.term.localeCompare(b.term));
+
+    studyIndex = 0;
+
+    openStudyOverlay();
+
+    clearInterval(studyTimer);
+
+    speakCurrentSavedWordMeanThai();
+}
+
+function playSelectedStudyMode() {
+    const order = document.getElementById("studyOrderSelect").value;
+    const type = document.getElementById("studyTypeSelect").value;
+
+    if (order === "random" && type === "word") {
+        startFlashStudy();
+        return;
+    }
+
+    if (order === "random" && type === "wm") {
+        startSpeakStudy();
+        return;
+    }
+
+    if (order === "random" && type === "wth") {
+        startSpeakThaiRandomStudy();
+        return;
+    }
+
+    if (order === "az" && type === "word") {
+        showAZFlashLetterPopup();
+        return;
+    }
+
+    if (order === "az" && type === "wm") {
+        showSpeakAZLetterPopup();
+        return;
+    }
+
+    if (order === "az" && type === "wth") {
+        showSpeakThaiAZLetterPopup();
+        return;
+    }
+}
+
+
+let studyWheelScrollTimer = null;
+
+function setupStudyWheel() {
+    const wheel = document.getElementById("studyWheel");
+    if (!wheel) return;
+
+    const itemHeight = 44;
+
+    wheel.scrollTop = studyIndex * itemHeight;
+
+    wheel.onscroll = () => {
+        clearTimeout(studyWheelScrollTimer);
+
+        studyWheelScrollTimer = setTimeout(() => {
+            const newIndex = Math.round(wheel.scrollTop / itemHeight);
+
+            if (newIndex < 0 || newIndex >= studyWords.length) return;
+            if (newIndex === studyIndex) return;
+
+            clearInterval(studyTimer);
+            clearTimeout(studyTimeout1);
+            clearTimeout(studyTimeout2);
+            speechSynthesis.cancel();
+
+            studyIndex = newIndex;
+            showStudyWord();
+
+            studyTimer = setInterval(() => {
+                if (!studyRunning) return;
+
+                studyIndex++;
+
+                if (studyIndex >= studyWords.length) {
+                    studyIndex = 0;
+                }
+
+                showStudyWord();
+            }, 1500);
+
+        }, 120);
+    };
+}
+
+function selectStudyWheelWord(event, index) {
+    event.stopPropagation();
+
+    clearInterval(studyTimer);
+    clearTimeout(studyTimeout1);
+    clearTimeout(studyTimeout2);
+    speechSynthesis.cancel();
+
+    studyIndex = index;
+    showStudyWord();
+
+    studyTimer = setInterval(() => {
+        if (!studyRunning) return;
+
+        studyIndex++;
+
+        if (studyIndex >= studyWords.length) {
+            studyIndex = 0;
+        }
+
+        showStudyWord();
+    }, 1500);
+}
+
+
+
+
+        loadPlayerName();
+        renderMenu();
+
+    </script>
+    <div id="meaningPopup" style="
+    position:fixed;
+    left:50%;
+    bottom:90px;
+    transform:translateX(-50%);
+    background:#111827;
+    color:white;
+    padding:18px 18px;
+    border-radius:18px;
+    max-width:92%;
+    width:340px;
+    text-align:center;
+    font-size:15px;
+    font-weight:700;
+    z-index:99999;
+    display:none;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+"></div>
+
+</body>
+
+</html>
