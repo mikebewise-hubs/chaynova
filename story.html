@@ -194,7 +194,7 @@
                 0 0 50px #00d9ff;
         }
 
-         .hero {
+        .hero {
             max-width: 900px;
             margin: 0 auto 30px;
             text-align: center;
@@ -248,10 +248,12 @@
         }
 
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-8px);
             }
@@ -537,6 +539,18 @@
                 flex-direction: column;
             }
         }
+
+        #fullText a {
+            color: #63eaff;
+            font-weight: bold;
+            text-decoration: underline;
+            overflow-wrap: anywhere;
+        }
+
+        #fullText a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #00d9ff;
+        }
     </style>
 </head>
 
@@ -569,7 +583,8 @@
                 <a href="index.html">
                     <img src="logo/WHITEDYNAMICTRANSS.png" alt="Watch Logo" class="hero-icon">
                 </a>
-                Story Zone</h1>
+                Story Zone
+            </h1>
             <p>
                 Welcome to the CHAYNOVA Story Zone - a place for imagination,
                 learning, adventure, and fun stories made for curious minds.
@@ -669,6 +684,17 @@
                 .replaceAll(">", "&gt;")
                 .replaceAll('"', "&quot;")
                 .replaceAll("'", "&#039;");
+        }
+
+        function makeLinksClickable(text = "") {
+            const safe = safeText(text);
+
+            return safe
+                .replace(/\n/g, "<br>")
+                .replace(
+                    /(https?:\/\/[^\s<]+)/g,
+                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+                );
         }
 
         function shortStory(text) {
@@ -779,8 +805,8 @@
 
             document.getElementById("fullTitle").innerText = item.title || "";
             document.getElementById("fullDate").innerText = createdDate;
-            document.getElementById("fullText").innerText = item.story || "";
-
+            document.getElementById("fullText").innerHTML =
+                makeLinksClickable(item.story || "");
             if (editedDate) {
                 document.getElementById("fullEdited").innerText = "Edited: " + editedDate;
             } else {
