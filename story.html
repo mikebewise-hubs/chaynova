@@ -194,7 +194,7 @@
                 0 0 50px #00d9ff;
         }
 
-        .hero {
+         .hero {
             max-width: 900px;
             margin: 0 auto 30px;
             text-align: center;
@@ -213,15 +213,48 @@
             background: linear-gradient(90deg, #ffb000, #ff2fcf, #7b2cff, #00d9ff);
             background-size: 300%;
             -webkit-background-clip: text;
-            background-clip: text;
             color: transparent;
             animation: rainbow 6s linear infinite;
+        }
+
+        @keyframes rainbow {
+            from {
+                background-position: 0%;
+            }
+
+            to {
+                background-position: 300%;
+            }
+        }
+
+        .hero h1 a {
+            display: inline-flex;
+            text-decoration: none;
         }
 
         .hero p {
             font-size: clamp(1rem, 3vw, 1.25rem);
             line-height: 1.7;
             color: #eefcff;
+        }
+
+        .hero-icon {
+            height: 70px;
+            width: auto;
+            position: relative;
+            top: 13px;
+            /* Move icon down */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
         .menu-row {
@@ -532,7 +565,11 @@
 
 
         <section class="hero">
-            <h1>Story Zone</h1>
+            <h1>
+                <a href="index.html">
+                    <img src="logo/WHITEDYNAMICTRANSS.png" alt="Watch Logo" class="hero-icon">
+                </a>
+                Story Zone</h1>
             <p>
                 Welcome to the CHAYNOVA Story Zone - a place for imagination,
                 learning, adventure, and fun stories made for curious minds.
@@ -540,10 +577,10 @@
         </section>
 
         <nav class="menu-row">
-            <a href="story.html">Vibe Story</a>
-            <a href="game.html">Play Zone</a>
-            <a href="music.html">Beats</a>
             <a href="video.html">Watch</a>
+            <a href="music.html">Beats</a>
+            <a href="game.html">Play Zone</a>
+            <a href="story.html">Vibe Story</a>
         </nav>
 
         <section>
