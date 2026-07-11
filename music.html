@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beats| CHAYNOVA</title>
-
+    <link rel="stylesheet" href="musictool.css">
     <style>
         * {
             margin: 0;
@@ -1048,6 +1048,27 @@ Please come online, just once more.
 
     </script>
 
-</body>
+    <div class="music-control">
+        <input
+            type="range"
+            id="volumeSlider"
+            class="volume-slider"
+            min="0"
+            max="100"
+            value="29"
+            aria-label="Music volume"
+        >
 
+        <button
+            id="musicBtn"
+            class="music-btn"
+            title="Play Music"
+            type="button"
+        >
+            🔇
+        </button>
+    </div>
+
+    <script src="musictool.js"></script>
+</body>
 </html>
