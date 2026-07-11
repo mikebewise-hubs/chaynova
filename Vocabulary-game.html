@@ -813,6 +813,39 @@ body{
     margin:14px auto;
 }
 
+.top-nav {
+    display: flex;
+    justify-content: center;   /* Center horizontally */
+    align-items: center;
+    gap: 20px;
+    margin: 20px auto;
+}
+
+.top-nav a {
+    font-size: .95rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    letter-spacing: .6px;
+    transition: .25s ease;
+}
+
+.top-nav a:hover {
+    color: #001019;
+    text-shadow: 0 0 14px rgba(255,255,255,.9);
+}
+
+.nav-logo img {
+    height: 22px;
+    width: auto;
+    transition: transform .2s ease;
+}
+
+.nav-logo img:hover {
+    transform: scale(1.1);
+}
+
+
     </style>
 </head>
 
@@ -837,7 +870,17 @@ body{
                 </button>
             </div>
         </div>
+<nav class="top-nav">
+    <a href="shop.html">Store</a>
+    <a href="fun.html">Fun</a>
+    <a href="support.html">Support</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
 
+    <a href="index.html" class="nav-logo">
+        <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+    </a>
+</nav>
         <div id="menuPage" class="card">
             <h1>Choose a set</h1>
             <div class="sub">
