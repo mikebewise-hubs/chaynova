@@ -27,6 +27,7 @@ h1{
     background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
     background-size:300%;
     -webkit-background-clip:text;
+    background-clip:text;
     color:transparent;
     animation:rainbow 6s linear infinite;
 }
@@ -96,6 +97,12 @@ button:hover,.link-btn:hover{
     transform:scale(1.05);
 }
 
+button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none;
+}
+
 img{
     max-width:260px;
     width:100%;
@@ -125,15 +132,15 @@ img{
 
 <div class="admin-box">
 
-<label>Story Title</label>
-<input id="title" placeholder="Title">
+<label for="title">Story Title</label>
+<input id="title" maxlength="120" placeholder="Title">
 
 <div id="dateLine" class="date-line">New story</div>
 
-<label>Story</label>
+<label for="story">Story</label>
 <textarea id="story" placeholder="Write your story..."></textarea>
 
-<label>Image</label>
+<label for="image">Image</label>
 <input id="image" type="file" accept="image/*">
 
 <img id="preview" alt="Story image preview">
@@ -143,20 +150,18 @@ img{
 <button type="button" onclick="saveStory()" id="saveBtn">Submit Story</button>
 <a href="story.html?admin=1" class="link-btn">Back to Stories</a>
 
-<div id="status"></div>
+<div id="status" aria-live="polite"></div>
 
 </div>
 
 <script>
-const token = localStorage.getItem("chaynovaAdminToken");
+const API = "https://chay1api.mikebewise.workers.dev";
+const TOKEN_KEY = "chaynovaAdminToken";
+const token = localStorage.getItem(TOKEN_KEY);
 
-if (!token) {
+if(!token){
     window.location.replace("/");
 }
-</script>
-    
-<script>
-const API = "https://chay1api.mikebewise.workers.dev";
 
 const params = new URLSearchParams(window.location.search);
 const editId = params.get("id");
@@ -171,13 +176,36 @@ const pageTitleBox = document.getElementById("pageTitle");
 const saveBtnBox = document.getElementById("saveBtn");
 
 let oldImage = "";
+let previewObjectUrl = "";
+
+function authHeaders(extra = {}){
+    return {
+        ...extra,
+        Authorization:`Bearer ${token}`
+    };
+}
+
+async function apiFetch(url,options = {}){
+    const response = await fetch(url,{
+        ...options,
+        headers:authHeaders(options.headers || {})
+    });
+
+    if(response.status === 401 || response.status === 403){
+        localStorage.removeItem(TOKEN_KEY);
+        window.location.replace("/");
+        throw new Error("Unauthorized");
+    }
+
+    return response;
+}
 
 function formatDate(dateString){
     if(!dateString) return "New story";
 
     const d = new Date(dateString);
 
-    if(isNaN(d.getTime())) return "New story";
+    if(Number.isNaN(d.getTime())) return "New story";
 
     return d.toLocaleString("en-US",{
         month:"short",
@@ -188,121 +216,179 @@ function formatDate(dateString){
     });
 }
 
-if(!editId){
-    dateLineBox.innerHTML = formatDate(new Date().toISOString());
+function showStatus(message,isError = false){
+    statusBox.textContent = message;
+    statusBox.style.color = isError ? "#ff9cab" : "#7CFC00";
 }
 
-imageInput.onchange = () => {
-    const file = imageInput.files[0];
-    if (!file) return;
+function imageUrl(imageName){
+    if(!imageName) return "";
+    if(/^https?:\/\//i.test(imageName)) return imageName;
+    return `${API}/image/${encodeURIComponent(imageName)}`;
+}
 
-    previewImg.src = URL.createObjectURL(file);
+dateLineBox.textContent = formatDate(new Date().toISOString());
+
+imageInput.addEventListener("change",() => {
+    const file = imageInput.files[0];
+
+    if(previewObjectUrl){
+        URL.revokeObjectURL(previewObjectUrl);
+        previewObjectUrl = "";
+    }
+
+    if(!file){
+        if(oldImage){
+            previewImg.src = imageUrl(oldImage);
+            previewImg.style.display = "block";
+        }else{
+            previewImg.removeAttribute("src");
+            previewImg.style.display = "none";
+        }
+        return;
+    }
+
+    if(!file.type.startsWith("image/")){
+        imageInput.value = "";
+        showStatus("Please choose an image file.",true);
+        return;
+    }
+
+    previewObjectUrl = URL.createObjectURL(file);
+    previewImg.src = previewObjectUrl;
     previewImg.style.display = "block";
-};
+});
 
 async function loadStoryForEdit(){
     if(!editId) return;
 
-    pageTitleBox.innerText = "Edit CHAYNOVA Story";
-    saveBtnBox.innerText = "Update Story";
-    statusBox.innerHTML = "Loading story...";
+    pageTitleBox.textContent = "Edit CHAYNOVA Story";
+    saveBtnBox.textContent = "Update Story";
+    showStatus("Loading story...");
 
     try{
-        const response = await fetch(API);
+        const response = await apiFetch(API,{
+            method:"GET",
+            cache:"no-store"
+        });
 
         if(!response.ok){
-            statusBox.innerHTML = "Could not connect to API.";
-            return;
+            throw new Error("Could not connect to API.");
         }
 
         const stories = await response.json();
-        const item = stories.find(s => String(s.id) === String(editId));
+        const item = stories.find(story => String(story.id) === String(editId));
 
         if(!item){
-            statusBox.innerHTML = "Story not found.";
-            return;
+            throw new Error("Story not found.");
         }
 
         titleInput.value = item.title || "";
         storyInput.value = item.story || "";
         oldImage = item.image || "";
-        dateLineBox.innerHTML = formatDate(item.created_at);
+
+        dateLineBox.textContent = `Created: ${formatDate(item.created_at)}`;
 
         if(item.updated_at){
-            dateLineBox.innerHTML += `<br>(Edited) • ${formatDate(item.updated_at)}`;
+            dateLineBox.innerHTML += `<br>Edited: ${formatDate(item.updated_at)}`;
         }
 
         if(oldImage){
-            previewImg.src = `${API}/image/${encodeURIComponent(oldImage)}`;
+            previewImg.src = imageUrl(oldImage);
             previewImg.style.display = "block";
         }
 
-        statusBox.innerHTML = "";
+        showStatus("");
     }catch(error){
-        statusBox.innerHTML = "Could not load story.";
+        if(error.message !== "Unauthorized"){
+            showStatus(error.message || "Could not load story.",true);
+        }
     }
 }
 
 async function saveStory(){
-    if(!titleInput.value.trim() || !storyInput.value.trim()){
-        statusBox.innerHTML = "Please add title and story.";
+    const title = titleInput.value.trim();
+    const story = storyInput.value.trim();
+    const selectedImage = imageInput.files[0];
+
+    if(!title || !story){
+        showStatus("Please add title and story.",true);
         return;
     }
 
-    statusBox.innerHTML = editId ? "Updating..." : "Uploading...";
+    showStatus(editId ? "Updating..." : "Uploading...");
     saveBtnBox.disabled = true;
 
     try{
-        if(editId){
-            const r = await fetch(`${API}/story/${editId}`, {
-                method:"PUT",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    title:titleInput.value,
-                    story:storyInput.value,
-                    edited_by:"Admin01"
-                })
-            });
+        let response;
 
-            if(!r.ok){
-                statusBox.innerHTML = "Update failed.";
-                saveBtnBox.disabled = false;
-                return;
+        if(editId){
+            if(selectedImage){
+                const fd = new FormData();
+                fd.append("title",title);
+                fd.append("story",story);
+                fd.append("edited_by","Admin01");
+                fd.append("image",selectedImage);
+                fd.append("old_image",oldImage);
+
+                response = await apiFetch(
+                    `${API}/story/${encodeURIComponent(editId)}`,
+                    {
+                        method:"PUT",
+                        body:fd
+                    }
+                );
+            }else{
+                response = await apiFetch(
+                    `${API}/story/${encodeURIComponent(editId)}`,
+                    {
+                        method:"PUT",
+                        headers:{"Content-Type":"application/json"},
+                        body:JSON.stringify({
+                            title,
+                            story,
+                            edited_by:"Admin01",
+                            image:oldImage
+                        })
+                    }
+                );
+            }
+        }else{
+            const fd = new FormData();
+            fd.append("title",title);
+            fd.append("story",story);
+            fd.append("created_at",new Date().toISOString());
+
+            if(selectedImage){
+                fd.append("image",selectedImage);
             }
 
-            statusBox.innerHTML = "Story updated!";
-            window.location.href = "story.html?admin=1";
-            return;
+            response = await apiFetch(API,{
+                method:"POST",
+                body:fd
+            });
         }
 
-        const fd = new FormData();
-        fd.append("title", titleInput.value);
-        fd.append("story", storyInput.value);
-        fd.append("created_at", new Date().toISOString());
+        const responseText = await response.text();
 
-        if(imageInput.files[0]){
-            fd.append("image", imageInput.files[0]);
+        if(!response.ok){
+            throw new Error(
+                responseText ||
+                (editId ? "Update failed." : "Upload failed.")
+            );
         }
 
-        const r = await fetch(API, {
-            method:"POST",
-            body:fd
-        });
-
-        const text = await r.text();
-        statusBox.innerHTML = text;
-
-        if(r.ok){
-            window.location.href = "story.html?admin=1";
-        }else{
-            saveBtnBox.disabled = false;
-        }
+        showStatus(editId ? "Story updated!" : "Story uploaded!");
+        window.location.href = "story.html?admin=1";
 
     }catch(error){
-        statusBox.innerHTML = "Something went wrong. Please try again.";
-        saveBtnBox.disabled = false;
+        if(error.message !== "Unauthorized"){
+            showStatus(
+                error.message || "Something went wrong. Please try again.",
+                true
+            );
+            saveBtnBox.disabled = false;
+        }
     }
 }
 
