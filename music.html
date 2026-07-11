@@ -23,7 +23,7 @@
                 radial-gradient(circle at 80% 20%, rgba(0, 200, 255, .4), transparent 30%),
                 linear-gradient(135deg, #030010, #080033, #001234);
         }
-        
+
         .page {
             position: relative;
             z-index: 5;
@@ -295,10 +295,12 @@
         }
 
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-8px);
             }
@@ -478,6 +480,52 @@
                 opacity: 0;
             }
         }
+
+        .music-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .beats-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            animation: logoPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .jukebox-text {
+            display: inline-block;
+            animation: dance 0.8s ease-in-out infinite;
+        }
+
+        @keyframes dance {
+
+            0%,
+            100% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+        }
     </style>
 </head>
 
@@ -526,7 +574,10 @@
         </nav>
 
         <section class="music-player">
-            <h2>🎵 CHAYNOVA Shuffle</h2>
+            <h2 class="music-title">
+                <img src="logo/BEATSTRANSS.png" alt="CHAYNOVA Beats Logo" class="beats-logo">
+                <span class="jukebox-text">Jukebox</span>
+            </h2>
 
             <div id="nowPlaying" class="now-playing">
                 Ready: Strawberry Elephant
