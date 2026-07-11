@@ -1,517 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beats| CHAYNOVA</title>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-    min-height:100vh;
-    font-family:Arial,Helvetica,sans-serif;
-    color:white;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(255,0,180,.4), transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
-        linear-gradient(135deg,#030010,#080033,#001234);
-}
-
-
-
-@keyframes twinkle{
-    from{opacity:.3;}
-    to{opacity:.9;}
-}
-
-.page{
-    position:relative;
-    z-index:5;
-    min-height:100vh;
-    padding:86px 20px 60px;
-}
-
-/* ===== HEADER ===== */
-.top-header{
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(92vw, 1050px);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 8px 18px;
-
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 999px;
-
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-
-    box-shadow: 0 0 28px rgba(0,217,255,.25);
-
-    z-index: 1000;
-}
-
-/* ===== NAVIGATION ===== */
-.top-nav{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-/* ===== LINKS ===== */
-.top-nav a{
-    font-family: "Oxanium", sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
-    text-decoration: none;
-    letter-spacing: .6px;
-    transition: .25s ease;
-}
-
-.top-nav a:hover{
-    color: #001019;
-    text-shadow: 0 0 14px rgba(255,255,255,.9);
-}
-
-/* ===== LOGO ===== */
-.nav-logo{
-    display: flex;
-    align-items: center;
-}
-
-.nav-logo img{
-    height: 22px;      /* Increase to 26px, 28px, etc. if desired */
-    width: auto;
-    display: block;
-    transition: transform .2s ease;
-}
-
-.nav-logo:hover img{
-    transform: scale(1.1);
-}
-
-/* ===== MOBILE ===== */
-@media (max-width:560px){
-
-    .top-header{
-        top:12px;
-        border-radius:24px;
-    }
-
-    .top-nav{
-        gap:13px;
-    }
-
-    .top-nav a{
-        font-size:.82rem;
-    }
-
-    .nav-logo img{
-        height:18px;
-    }
-}
-
-
-.menu-row a,
-.control-btn{
-    position:relative;
-    overflow:hidden;
-    text-decoration:none;
-    color:white;
-    font-weight:bold;
-    border:none;
-    cursor:pointer;
-    border-radius:18px;
-    background:linear-gradient(
-        135deg,
-        rgba(255,47,207,.35),
-        rgba(123,44,255,.35),
-        rgba(0,217,255,.35)
-    );
-    border:1px solid rgba(255,255,255,.28);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.12);
-    transition:.35s ease;
-}
-
-.home-btn::before,
-.menu-row a::before,
-.control-btn::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:65%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.65),
-        transparent
-    );
-    transform:skewX(-25deg);
-    transition:.75s;
-}
-
-.home-btn:hover::before,
-.menu-row a:hover::before,
-.control-btn:hover::before{
-    left:160%;
-}
-
-.home-btn:hover,
-.menu-row a:hover,
-.control-btn:hover{
-    transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:
-        0 0 20px #ff2fcf,
-        0 0 35px #7b2cff,
-        0 0 50px #00d9ff;
-}
-
-.home-btn{
-    padding:13px 22px;
-}
-
-
-
-.menu-row{
-    margin:28px auto 45px;
-    max-width:900px;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:16px;
-}
-
-.menu-row a{
-    position:relative;
-    min-width:145px;
-    padding:14px 22px;
-    text-align:center;
-    text-decoration:none;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.6px;
-    color:white;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(135deg,rgba(255,47,207,.35),rgba(123,44,255,.35),rgba(0,217,255,.35));
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 18px rgba(0,217,255,.35),inset 0 0 15px rgba(255,255,255,.08);
-    overflow:hidden;
-    transition:.35s ease;
-}
-
-.menu-row a::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:60%;
-    height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
-    transform:skewX(-25deg);
-    transition:.7s;
-}
-
-.menu-row a:hover::before{left:160%;}
-
-.menu-row a:hover{
-    transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 20px #ff2fcf,0 0 35px #7b2cff,0 0 50px #00d9ff;
-}
-
-.control-btn{
-    padding:12px 22px;
-    font-size:1rem;
-}
-
-.hero{
-    max-width:900px;
-    margin:0 auto 30px;
-    text-align:center;
-    padding:32px 28px;
-    border-radius:28px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.2);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 35px rgba(0,217,255,.28);
-}
-
-.hero h1{
-    font-size:clamp(2.2rem,7vw,4.5rem);
-    margin-bottom:15px;
-    background:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
-    background-size:300%;
-    -webkit-background-clip:text;
-    color:transparent;
-    animation:rainbow 6s linear infinite;
-}
-
-.hero p{
-    font-size:clamp(1rem,3vw,1.25rem);
-    line-height:1.7;
-    color:#eefcff;
-}
-
-.music-player{
-    max-width:900px;
-    margin:0 auto 45px;
-    padding:28px;
-    text-align:center;
-    border-radius:28px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.2);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 30px rgba(0,217,255,.35);
-}
-
-.music-player h2{
-    color:#8ef2ff;
-    margin-bottom:10px;
-}
-
-.now-playing{
-    margin:15px 0;
-    color:#ffd966;
-    font-weight:bold;
-}
-
-.lyrics-box{
-    margin:18px auto 0;
-    padding:22px;
-    max-width:760px;
-    max-height:380px;
-    overflow:auto;
-    white-space:pre-wrap;
-    text-align:left;
-    line-height:1.8;
-    font-size:1rem;
-    font-weight:600;
-    border-radius:22px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.22);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    box-shadow:0 0 25px rgba(0,217,255,.35);
-
-    background-image:linear-gradient(90deg,#ffb000,#ff2fcf,#7b2cff,#00d9ff);
-    background-size:300%;
-    -webkit-background-clip:text;
-    color:transparent;
-
-    animation:lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite;
-}
-
-@keyframes lyricRainbow{
-    from{background-position:0%;}
-    to{background-position:300%;}
-}
-
-@keyframes lyricFloat{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-5px);}
-}
-
-audio{
-    width:100%;
-    max-width:700px;
-    margin:18px 0;
-}
-
-.controls{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:14px;
-    margin-top:15px;
-}
-
-.song-list{
-    margin-top:18px;
-    display:grid;
-    gap:12px;
-}
-
-.song-item{
-    padding:12px 16px;
-    border-radius:14px;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.18);
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.song-item:hover,
-.song-item.active{
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-    box-shadow:0 0 18px rgba(0,217,255,.55);
-    transform:scale(1.03);
-}
-
-.start-note{
-    margin-top:15px;
-    color:#9bdfff;
-    line-height:1.5;
-}
-
-footer{
-    position:relative;
-    z-index:5;
-    text-align:center;
-    padding:40px 20px;
-    color:#9bdfff;
-}
-
-@media(max-width:700px){
-    .top-bar{
-        flex-direction:column;
-    }
-
-    .menu-row{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .menu-row a{
-        width:240px;
-    }
-
-    .controls{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    .control-btn{
-        width:240px;
-    }
-}
-
-.firework{
-    position:fixed;
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    animation:explode 2.8s infinite ease-out;
-    opacity:0;
-    z-index:1;
-    pointer-events:none;
-}
-@keyframes explode{
-0%{opacity:1;box-shadow:0 0 0 currentColor;}
-70%{opacity:1;box-shadow:0 -80px currentColor,60px -60px currentColor,80px 0 currentColor,60px 60px currentColor,0 80px currentColor,-60px 60px currentColor,-80px 0 currentColor,-60px -60px currentColor;}
-100%{opacity:0;}
-}
-
-
-
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beats| CHAYNOVA</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255, 0, 180, .4), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(0, 200, 255, .4), transparent 30%),
+                linear-gradient(135deg, #030010, #080033, #001234);
+        }
+        
+        .page {
+            position: relative;
+            z-index: 5;
+            min-height: 100vh;
+            padding: 86px 20px 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .top-header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 1050px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 8px 18px;
+
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
+
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+
+            z-index: 1000;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== LINKS ===== */
+        .top-nav a {
+            font-family: "Oxanium", sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: .6px;
+            transition: .25s ease;
+        }
+
+        .top-nav a:hover {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
+
+        /* ===== LOGO ===== */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-logo img {
+            height: 22px;
+            /* Increase to 26px, 28px, etc. if desired */
+            width: auto;
+            display: block;
+            transition: transform .2s ease;
+        }
+
+        .nav-logo:hover img {
+            transform: scale(1.1);
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width:560px) {
+
+            .top-header {
+                top: 12px;
+                border-radius: 24px;
+            }
+
+            .top-nav {
+                gap: 13px;
+            }
+
+            .top-nav a {
+                font-size: .82rem;
+            }
+
+            .nav-logo img {
+                height: 18px;
+            }
+        }
+
+
+        .menu-row a,
+        .control-btn {
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 18px;
+            background: linear-gradient(135deg,
+                    rgba(255, 47, 207, .35),
+                    rgba(123, 44, 255, .35),
+                    rgba(0, 217, 255, .35));
+            border: 1px solid rgba(255, 255, 255, .28);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow:
+                0 0 18px rgba(0, 217, 255, .35),
+                inset 0 0 15px rgba(255, 255, 255, .12);
+            transition: .35s ease;
+        }
+
+        .home-btn::before,
+        .menu-row a::before,
+        .control-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 65%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, .65),
+                    transparent);
+            transform: skewX(-25deg);
+            transition: .75s;
+        }
+
+        .home-btn:hover::before,
+        .menu-row a:hover::before,
+        .control-btn:hover::before {
+            left: 160%;
+        }
+
+        .home-btn:hover,
+        .menu-row a:hover,
+        .control-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+            box-shadow:
+                0 0 20px #ff2fcf,
+                0 0 35px #7b2cff,
+                0 0 50px #00d9ff;
+        }
+
+        .home-btn {
+            padding: 13px 22px;
+        }
+
+
+
+        .menu-row {
+            margin: 28px auto 45px;
+            max-width: 900px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .menu-row a {
+            position: relative;
+            min-width: 145px;
+            padding: 14px 22px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .6px;
+            color: white;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            background: linear-gradient(135deg, rgba(255, 47, 207, .35), rgba(123, 44, 255, .35), rgba(0, 217, 255, .35));
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 0 18px rgba(0, 217, 255, .35), inset 0 0 15px rgba(255, 255, 255, .08);
+            overflow: hidden;
+            transition: .35s ease;
+        }
+
+        .menu-row a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+            transform: skewX(-25deg);
+            transition: .7s;
+        }
+
+        .menu-row a:hover::before {
+            left: 160%;
+        }
+
+        .menu-row a:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+            box-shadow: 0 0 20px #ff2fcf, 0 0 35px #7b2cff, 0 0 50px #00d9ff;
+        }
+
+        .control-btn {
+            padding: 12px 22px;
+            font-size: 1rem;
+        }
+
+        .hero {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            text-align: center;
+            padding: 32px 28px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .2);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 0 35px rgba(0, 217, 255, .28);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #ffb000, #ff2fcf, #7b2cff, #00d9ff);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow 6s linear infinite;
+        }
+
+        @keyframes rainbow {
+            from {
+                background-position: 0%;
+            }
+
+            to {
+                background-position: 300%;
+            }
+        }
+
+        .hero h1 a {
+            display: inline-flex;
+            text-decoration: none;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            line-height: 1.7;
+            color: #eefcff;
+        }
+
+        .hero-icon {
+            height: 70px;
+            width: auto;
+            position: relative;
+            top: 13px;
+            /* Move icon down */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .music-player {
+            max-width: 900px;
+            margin: 0 auto 45px;
+            padding: 28px;
+            text-align: center;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .2);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 0 30px rgba(0, 217, 255, .35);
+        }
+
+        .music-player h2 {
+            color: #8ef2ff;
+            margin-bottom: 10px;
+        }
+
+        .now-playing {
+            margin: 15px 0;
+            color: #ffd966;
+            font-weight: bold;
+        }
+
+        .lyrics-box {
+            margin: 18px auto 0;
+            padding: 22px;
+            max-width: 760px;
+            max-height: 380px;
+            overflow: auto;
+            white-space: pre-wrap;
+            text-align: left;
+            line-height: 1.8;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .22);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 0 25px rgba(0, 217, 255, .35);
+
+            background-image: linear-gradient(90deg, #ffb000, #ff2fcf, #7b2cff, #00d9ff);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            color: transparent;
+
+            animation: lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes lyricRainbow {
+            from {
+                background-position: 0%;
+            }
+
+            to {
+                background-position: 300%;
+            }
+        }
+
+        @keyframes lyricFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        audio {
+            width: 100%;
+            max-width: 700px;
+            margin: 18px 0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 15px;
+        }
+
+        .song-list {
+            margin-top: 18px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .song-item {
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .18);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .song-item:hover,
+        .song-item.active {
+            background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+            box-shadow: 0 0 18px rgba(0, 217, 255, .55);
+            transform: scale(1.03);
+        }
+
+        .start-note {
+            margin-top: 15px;
+            color: #9bdfff;
+            line-height: 1.5;
+        }
+
+        footer {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+            padding: 40px 20px;
+            color: #9bdfff;
+        }
+
+        @media(max-width:700px) {
+            .top-bar {
+                flex-direction: column;
+            }
+
+            .menu-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .menu-row a {
+                width: 240px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .control-btn {
+                width: 240px;
+            }
+        }
+
+        .firework {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: explode 2.8s infinite ease-out;
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                box-shadow: 0 0 0 currentColor;
+            }
+
+            70% {
+                opacity: 1;
+                box-shadow: 0 -80px currentColor, 60px -60px currentColor, 80px 0 currentColor, 60px 60px currentColor, 0 80px currentColor, -60px 60px currentColor, -80px 0 currentColor, -60px -60px currentColor;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 
-<div class="firework"></div>
-<div class="firework"></div>
-<div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
 
 
-<div class="page">
+    <div class="page">
 
- <header class="top-header">
-    <nav class="top-nav">
-        <a href="shop.html">Store</a>
-        <a href="fun.html">Fun</a>
-        <a href="support.html">Support</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+        <header class="top-header">
+            <nav class="top-nav">
+                <a href="shop.html">Store</a>
+                <a href="fun.html">Fun</a>
+                <a href="support.html">Support</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
 
-        <a href="index.html" class="nav-logo">
-            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-        </a>
-    </nav>
-</header>
+                <a href="index.html" class="nav-logo">
+                    <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+                </a>
+            </nav>
+        </header>
 
-    <section class="hero">
-        <h1>Beats</h1>
-        <p>
-            Discover relaxing melodies and original music that brings every story,
-            game, and adventure to life.
-        </p>
-    </section>
+        <section class="hero">
+            <h1>
+                <a href="index.html">
+                    <img src="logo/WHITEDYNAMICTRANSS.png" alt="Watch Logo" class="hero-icon">
+                </a>
+                Beats
+            </h1>
+            <p>
+                Discover relaxing melodies and original music that brings every story,
+                game, and adventure to life.
+            </p>
+        </section>
 
-    <nav class="menu-row">
-        <a href="story.html">Vibe Story</a>
-        <a href="game.html">Play Zone</a>
-        <a href="music.html">Beats</a>
-        <a href="video.html">Watch</a>
-    </nav>
+        <nav class="menu-row">
+            <a href="video.html">Watch</a>
+            <a href="music.html">Beats</a>
+            <a href="game.html">Play Zone</a>
+            <a href="story.html">Vibe Story</a>
+        </nav>
 
-    <section class="music-player">
-        <h2>🎵 CHAYNOVA Shuffle</h2>
+        <section class="music-player">
+            <h2>🎵 CHAYNOVA Shuffle</h2>
 
-        <div id="nowPlaying" class="now-playing">
-            Ready: Strawberry Elephant
-        </div>
-        <audio id="player" controls preload="metadata"></audio>
-        <div class="controls">
-            <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
-            <button class="control-btn" onclick="startMusic()">▶ Play Music</button>
-            <button class="control-btn" onclick="nextSong()">⏭ Next</button>
-        </div>
-        <div id="lyricsBox" class="lyrics-box"></div>
-
-        
-
-        <div class="controls">
-            <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
-            <button class="control-btn" onclick="startMusic()">▶ Play Music</button>
-            <button class="control-btn" onclick="nextSong()">⏭ Next</button>
-        </div>
-
-        <div id="songList" class="song-list"></div>
-
-        <p class="start-note">
-            Default song is Strawberry Elephant Thai. Browser needs one click first to allow sound.
-        </p>
-    </section>
-
-</div>
-
-<footer>
-    © 2026 CHAYNOVA
-</footer>
+            <div id="nowPlaying" class="now-playing">
+                Ready: Strawberry Elephant
+            </div>
+            <audio id="player" controls preload="metadata"></audio>
+            <div class="controls">
+                <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
+                <button class="control-btn" onclick="startMusic()">▶ Play Music</button>
+                <button class="control-btn" onclick="nextSong()">⏭ Next</button>
+            </div>
+            <div id="lyricsBox" class="lyrics-box"></div>
 
 
 
-<script>
-const songs = [
-    {
-        title: "I Miss You Every Day",
-        file: "audio/background.mp3",
-        lyrics: ` 🎶 I Miss You Every Day 🎶
+            <div class="controls">
+                <button class="control-btn" onclick="previousSong()">⏮ Previous</button>
+                <button class="control-btn" onclick="startMusic()">▶ Play Music</button>
+                <button class="control-btn" onclick="nextSong()">⏭ Next</button>
+            </div>
+
+            <div id="songList" class="song-list"></div>
+
+            <p class="start-note">
+                Default song is Strawberry Elephant Thai. Browser needs one click first to allow sound.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        © 2026 CHAYNOVA
+    </footer>
+
+
+
+    <script>
+        const songs = [
+            {
+                title: "I Miss You Every Day",
+                file: "audio/background.mp3",
+                lyrics: ` 🎶 I Miss You Every Day 🎶
 คิดถึงเธอในแต่ละวัน
 อยากให้มาหาฉันทุกวัน
 รอให้เธอเห็นความสำคัญ
@@ -545,11 +601,11 @@ Join Roblox แล้วเธอจะช็อค
 สวนแห่งใจ เต็มไปด้วยรักที่มี
 รอเธอคนดี ช่วยมาดูแลฉันที
 `
-    },
-    {
-        title: "Strawberry Elephant Thai",
-        file: "audio/strawberryElephant.mp3",
-        lyrics: ` 🎶 Strawberry Elephant 🎶
+            },
+            {
+                title: "Strawberry Elephant Thai",
+                file: "audio/strawberryElephant.mp3",
+                lyrics: ` 🎶 Strawberry Elephant 🎶
 Loading… Steal a Brainrot…ping!
 Yo, she’s online again!
 เธอออนไลน์แล้ว อดยิ้มไม่ไหว
@@ -603,11 +659,11 @@ Strawberry Elephant ที่ฉันได้เห็น
 ไม่ได้หาง่ายอย่างที่ใครเป็น…
 ออนไลน์ให้เห็นอีกครั้งเถอะเธอ
 `
-    },
-    {
-        title: "The 25th Floor",
-        file: "audio/the25thFloor.mp3",
-        lyrics: ` 🎶 The 25th Floor 🎶
+            },
+            {
+                title: "The 25th Floor",
+                file: "audio/the25thFloor.mp3",
+                lyrics: ` 🎶 The 25th Floor 🎶
 First login night, shadows breathe
 Danny World pulling me in
 Heart beats fast, I hesitate
@@ -668,11 +724,11 @@ I find the path until the end
 From the dark to victory’s roar
 Solo… to the 25th floor
 `
-    },
-    {
-        title: "Love Defenders Do",
-        file: "audio/LoveDefendersDo.mp3",
-        lyrics: ` 🎶 Love Defenders Do 🎶
+            },
+            {
+                title: "Love Defenders Do",
+                file: "audio/LoveDefendersDo.mp3",
+                lyrics: ` 🎶 Love Defenders Do 🎶
 ฉันยังอยู่ตรงนี้ base ยังเปิดไว้
 ไฟยังส่องไกล... แต่เธอกลับไป rebornin\'
 
@@ -737,11 +793,11 @@ Forever in this game of two.
 If you steal again, I won’t fight…
 Just promise you’ll come back tonight.
 `
-    },
-    {
-        title: "Strawberry Elephant one",
-        file: "audio/strawberryElephantE.mp3",
-        lyrics: ` 🎶 Strawberry Elephant 🎶
+            },
+            {
+                title: "Strawberry Elephant one",
+                file: "audio/strawberryElephantE.mp3",
+                lyrics: ` 🎶 Strawberry Elephant 🎶
         “Loading… Steal a Brainrot…” ping!
 She’s online now, I can’t stop my smile,
 My heart’s electric, sparks run wild.
@@ -791,149 +847,150 @@ My Strawberry Elephant, my star.
 Hard to find, no matter how far…
 Please come online, just once more.
         `
+            }
+        ];
+        const player = document.getElementById("player");
+        const nowPlaying = document.getElementById("nowPlaying");
+        const lyricsBox = document.getElementById("lyricsBox");
+        const songList = document.getElementById("songList");
+
+        let currentSong = 1;
+        let historySongs = [1];
+
+        function showSongList() {
+            songList.innerHTML = "";
+
+            songs.forEach((song, index) => {
+                const item = document.createElement("div");
+                item.className = "song-item";
+                item.innerText = "🎵 " + song.title;
+
+                if (index === currentSong) {
+                    item.classList.add("active");
+                }
+
+                item.onclick = function () {
+                    historySongs.push(index);
+                    playSong(index);
+                };
+
+                songList.appendChild(item);
+            });
         }
-];
-const player = document.getElementById("player");
-const nowPlaying = document.getElementById("nowPlaying");
-const lyricsBox = document.getElementById("lyricsBox");
-const songList = document.getElementById("songList");
 
-let currentSong = 1;
-let historySongs = [1];
+        function updateLyrics() {
 
-function showSongList(){
-    songList.innerHTML = "";
+            lyricsBox.innerText = songs[currentSong].lyrics;
 
-    songs.forEach((song, index) => {
-        const item = document.createElement("div");
-        item.className = "song-item";
-        item.innerText = "🎵 " + song.title;
+            // Scroll to top
+            lyricsBox.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
 
-        if(index === currentSong){
-            item.classList.add("active");
+            // Restart animation
+            lyricsBox.style.animation = "none";
+            void lyricsBox.offsetWidth;
+            lyricsBox.style.animation =
+                "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
         }
 
-        item.onclick = function(){
-            historySongs.push(index);
-            playSong(index);
-        };
+        function loadDefaultSong() {
+            player.src = songs[currentSong].file;
+            player.load();
 
-        songList.appendChild(item);
-    });
-}
+            nowPlaying.innerText = "Ready: " + songs[currentSong].title;
+            updateLyrics();
+            showSongList();
+        }
 
-function updateLyrics(){
+        function playSong(index) {
+            currentSong = Number(index);
 
-    lyricsBox.innerText = songs[currentSong].lyrics;
+            player.pause();
+            player.src = songs[currentSong].file;
+            player.load();
 
-    // Scroll to top
-    lyricsBox.scrollTo({
-    top: 0,
-    behavior: "smooth"
-});
+            nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
+            updateLyrics();
+            showSongList();
 
-    // Restart animation
-    lyricsBox.style.animation = "none";
-    void lyricsBox.offsetWidth;
-    lyricsBox.style.animation =
-        "lyricRainbow 6s linear infinite, lyricFloat 3s ease-in-out infinite";
-}
+            player.play().catch(() => {
+                nowPlaying.innerText = "Ready: " + songs[currentSong].title;
+            });
+        }
 
-function loadDefaultSong(){
-    player.src = songs[currentSong].file;
-    player.load();
+        function startMusic() {
+            playSong(currentSong);
+        }
 
-    nowPlaying.innerText = "Ready: " + songs[currentSong].title;
-    updateLyrics();
-    showSongList();
-}
+        function randomSong() {
+            let next;
 
-function playSong(index){
-    currentSong = Number(index);
+            do {
+                next = Math.floor(Math.random() * songs.length);
+            } while (songs.length > 1 && next === currentSong);
 
-    player.pause();
-    player.src = songs[currentSong].file;
-    player.load();
+            return next;
+        }
 
-    nowPlaying.innerText = "Now Playing: " + songs[currentSong].title;
-    updateLyrics();
-    showSongList();
+        function nextSong() {
+            const next = randomSong();
+            historySongs.push(next);
+            playSong(next);
+        }
 
-    player.play().catch(() => {
-        nowPlaying.innerText = "Ready: " + songs[currentSong].title;
-    });
-}
+        function previousSong() {
+            if (historySongs.length > 1) {
+                historySongs.pop();
+                const previous = historySongs[historySongs.length - 1];
+                playSong(previous);
+            }
+        }
 
-function startMusic(){
-    playSong(currentSong);
-}
+        player.addEventListener("ended", function () {
+            nextSong();
+        });
 
-function randomSong(){
-    let next;
+        window.addEventListener("load", loadDefaultSong);
 
-    do{
-        next = Math.floor(Math.random() * songs.length);
-    }while(songs.length > 1 && next === currentSong);
+        const fireworks = document.querySelectorAll(".firework");
 
-    return next;
-}
+        const colors = [
+            "#ff2fcf",
+            "#00d9ff",
+            "#ffaa00",
+            "#7b2cff",
+            "#00ff99",
+            "#ff5555"
+        ];
 
-function nextSong(){
-    const next = randomSong();
-    historySongs.push(next);
-    playSong(next);
-}
+        function randomizeFirework(fw) {
+            fw.style.left = Math.random() * 90 + "%";
+            fw.style.top = Math.random() * 70 + "%";
+            fw.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-function previousSong(){
-    if(historySongs.length > 1){
-        historySongs.pop();
-        const previous = historySongs[historySongs.length - 1];
-        playSong(previous);
-    }
-}
+            // Restart animation
+            fw.style.animation = "none";
+            void fw.offsetWidth;
+            fw.style.animation = "explode 2.8s ease-out";
+        }
 
-player.addEventListener("ended", function(){
-    nextSong();
-});
+        // Start each firework at a different time
+        fireworks.forEach((fw, i) => {
+            setTimeout(() => {
+                randomizeFirework(fw);
 
-window.addEventListener("load", loadDefaultSong);
+                setInterval(() => {
+                    randomizeFirework(fw);
+                }, 2800);
 
-const fireworks = document.querySelectorAll(".firework");
-
-const colors = [
-    "#ff2fcf",
-    "#00d9ff",
-    "#ffaa00",
-    "#7b2cff",
-    "#00ff99",
-    "#ff5555"
-];
-
-function randomizeFirework(fw) {
-    fw.style.left = Math.random() * 90 + "%";
-    fw.style.top = Math.random() * 70 + "%";
-    fw.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-    // Restart animation
-    fw.style.animation = "none";
-    void fw.offsetWidth;
-    fw.style.animation = "explode 2.8s ease-out";
-}
-
-// Start each firework at a different time
-fireworks.forEach((fw, i) => {
-    setTimeout(() => {
-        randomizeFirework(fw);
-
-        setInterval(() => {
-            randomizeFirework(fw);
-        }, 2800);
-
-    }, i * 900);
-});
+            }, i * 900);
+        });
 
 
-</script>
+    </script>
 
 </body>
+
 </html>
