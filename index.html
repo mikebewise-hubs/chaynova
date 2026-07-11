@@ -1,1190 +1,1222 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home| CHAYNOVA ⚡ Coming This August</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    min-height:100vh;
-    overflow-x:hidden;
-    font-family:Arial, Helvetica, sans-serif;
-    color:white;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(255, 204, 0, 0.4), transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(0,200,255,.4), transparent 30%),
-        linear-gradient(135deg,#da7b06,#7864eb,#72a1f8);
-}
-/* Header */
-header{
-    position:fixed;
-    top:18px;
-    left:50%;
-    transform:translateX(-50%);
-    width:min(92vw,1050px);
-    z-index:20;
-    display:flex;
-    justify-content:center;
-    padding:8px 18px;
-    border:1px solid rgba(255,255,255,.25);
-    border-radius:999px;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    box-shadow:0 0 28px rgba(0,217,255,.25);
-}
-
-header nav{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:20px;
-}
-
-header a{
-    font-size:.95rem;
-    font-weight:700;
-    color:white;
-    text-decoration:none;
-    letter-spacing:.6px;
-    transition:.25s ease;
-}
-
-header a:hover{
-    color:#001019;
-    text-shadow:0 0 14px rgba(255,255,255,.9);
-}
-
-@media (max-width:560px){
-    header{
-        top:12px;
-        border-radius:24px;
-    }
-
-    header nav{
-        gap:13px;
-    }
-
-    header a{
-        font-size:.82rem;
-    }
-}
-
-/* BACKGROUND */
-.firework{
-    position:fixed;
-    width:20px;
-    height:20px;
-    color:white;
-    z-index:1;
-    pointer-events:none;
-}
-
-.firework span{
-    position:absolute;
-    left:50%;
-    top:50%;
-    font-size:18px;
-    color:currentColor;
-    opacity:0;
-    transform:translate(-50%, -50%);
-    animation:starExplode 2.8s ease-out;
-}
-
-.firework span:nth-child(1){ --x:0px;   --y:-80px; }
-.firework span:nth-child(2){ --x:60px;  --y:-60px; }
-.firework span:nth-child(3){ --x:80px;  --y:0px; }
-.firework span:nth-child(4){ --x:60px;  --y:60px; }
-.firework span:nth-child(5){ --x:0px;   --y:80px; }
-.firework span:nth-child(6){ --x:-60px; --y:60px; }
-.firework span:nth-child(7){ --x:-80px; --y:0px; }
-.firework span:nth-child(8){ --x:-60px; --y:-60px; }
-
-@keyframes starExplode{
-    0%{
-        opacity:1;
-        transform:translate(-50%, -50%) scale(.3);
-    }
-
-    70%{
-        opacity:1;
-        transform:
-            translate(
-                calc(-50% + var(--x)),
-                calc(-50% + var(--y))
-            )
-            scale(1);
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translate(
-                calc(-50% + var(--x)),
-                calc(-50% + var(--y))
-            )
-            scale(.5);
-    }
-}
-
-/* START SCREEN */
-.start-screen{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    background:rgba(0,0,20,.88);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    cursor:pointer;
-    transition:opacity .8s ease;
-}
-
-.start-screen.hide{
-    opacity:0;
-    pointer-events:none;
-}
-
-.start-logo,
-.main-logo{
-    width:min(320px,80vw);
-    height:auto;
-    margin:28px 0;
-    filter:
-        drop-shadow(0 0 10px rgba(255,255,255,.35))
-        drop-shadow(0 0 25px rgba(0,217,255,.45));
-    animation:logoFloat 3s ease-in-out infinite;
-}
-
-.start-text{
-    font-size:clamp(1.8rem,8vw,3rem);
-    font-weight:bold;
-    text-shadow:0 0 25px #00d9ff;
-    animation:pulse 1.5s infinite;
-}
-
-.tap-text{
-    margin-top:18px;
-    color:#d6f7ff;
-}
-
-/* MAIN */
-.container{
-    position:relative;
-    z-index:5;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-    padding:20px;
-    opacity:0;
-    transition:opacity .8s ease;
-}
-
-.container.show{
-    opacity:1;
-}
-
-/* MENU */
-.menu-bar{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:16px;
-}
-
-.menu-bar a{
-    font-family: "Oxanium", sans-serif !important;
-    position:relative;
-    overflow:hidden;
-    min-width:145px;
-    padding:14px 22px;
-    text-align:center;
-    text-decoration:none;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.6px;
-    color:black;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(
-        135deg,
-        rgba(249, 87, 211, 0.35),
-        rgba(168, 125, 244, 0.35),
-        rgba(114, 225, 245, 0.35)
-    );
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.08);
-    cursor:pointer;
-    transition:.35s ease;
-}
-
-.menu-bar a::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:60%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.6),
-        transparent
-    );
-    transform:skewX(-25deg);
-    transition:.75s;
-}
-
-.menu-bar a:hover::before{
-    left:160%;
-}
-
-.menu-bar a:hover{
-    transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#ef94da,#a97df6,#70e0f4);
-    box-shadow:
-        0 0 10px #bab4b6,
-        0 0 20px #768cc2,
-        0 0 30px #2a9fb4;
-}
-
-.menu-bar a:active{
-    transform:scale(.96);
-}
-
-/* MUSIC BUTTON */
-.music-btn{
-    position:fixed;
-    right:18px;
-    bottom:calc(22px + env(safe-area-inset-bottom));
-    width:56px;
-    height:56px;
-    border:none;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:24px;
-    color:white;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,.25);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.45),
-        inset 0 0 10px rgba(255,255,255,.15);
-    transition:.25s;
-    z-index:90;
-}
-
-.music-btn:hover{
-    transform:scale(1.12);
-}
-
-.music-btn:active{
-    transform:scale(.92);
-}
-
-
-/* MUSIC CONTROL FRAME */
-
-.music-control{
-    position:fixed;
-    right:18px;
-    bottom:calc(22px + env(safe-area-inset-bottom));
-    z-index:90;
-
-    width:22px;
-    padding:9px 0 0;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-
-    border-radius:28px;
-    border:1px solid rgba(255,255,255,.25);
-
-    background:rgba(255,255,255,.12);
-
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-
-    box-shadow:
-        0 0 18px rgba(0,217,255,.45),
-        inset 0 0 10px rgba(255,255,255,.15);
-
-    overflow:hidden;
-}
-
-
-/* SHORT VERTICAL VOLUME BAR */
-
-.volume-slider{
-    appearance:none;
-    -webkit-appearance:none;
-
-    writing-mode:vertical-lr;
-    direction:rtl;
-
-    width:6px;
-    height:58px;
-
-    margin:0 0 2px;
-
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.3);
-
-    background:rgba(255,255,255,.2);
-
-    box-shadow:
-        inset 0 0 5px rgba(255,255,255,.2),
-        0 0 8px rgba(0,217,255,.3);
-
-    cursor:pointer;
-}
-
-
-/* SLIDER CIRCLE */
-
-.volume-slider::-webkit-slider-thumb{
-    appearance:none;
-    -webkit-appearance:none;
-
-    width:15px;
-    height:15px;
-
-    border-radius:50%;
-    border:2px solid white;
-
-    background:linear-gradient(
-        135deg,
-        #ff72cf,
-        #9f7dff,
-        #66e8ff
-    );
-
-    box-shadow:0 0 10px rgba(0,217,255,.7);
-
-    cursor:pointer;
-}
-
-.volume-slider::-moz-range-thumb{
-    width:15px;
-    height:15px;
-
-    border-radius:50%;
-    border:2px solid white;
-
-    background:linear-gradient(
-        135deg,
-        #ff72cf,
-        #9f7dff,
-        #66e8ff
-    );
-
-    box-shadow:0 0 10px rgba(0,217,255,.7);
-
-    cursor:pointer;
-}
-
-
-/* MUSIC BUTTON INSIDE SAME FRAME */
-
-.music-btn{
-    position:static;
-
-    width:56px;
-    height:50px;
-
-    border:none;
-    border-top:1px solid rgba(255,255,255,.15);
-
-    border-radius:0;
-
-    cursor:pointer;
-    font-size:24px;
-    color:white;
-
-    background:transparent;
-
-    transition:.25s;
-}
-
-.music-btn:hover{
-    background:rgba(255,255,255,.12);
-    transform:none;
-}
-
-.music-btn:active{
-    transform:scale(.9);
-}
-
-/* keep your existing .music-btn exactly the same */
-
-.volume-slider{
-
-    appearance:none;
-    -webkit-appearance:none;
-
-    width:6px;
-    height:72px;
-
-    writing-mode:vertical-lr;
-    direction:rtl;
-
-    background:rgba(255,255,255,.12);
-
-    border:1px solid rgba(255,255,255,.25);
-
-    border-radius:999px;
-
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 8px rgba(255,255,255,.12);
-
-    cursor:pointer;
-}
-
-/* Chrome */
-
-.volume-slider::-webkit-slider-thumb{
-
-    appearance:none;
-    -webkit-appearance:none;
-
-    width:16px;
-    height:16px;
-
-    border-radius:50%;
-
-    background:linear-gradient(
-        135deg,
-        #ff72cf,
-        #9f7dff,
-        #66e8ff
-    );
-
-    border:2px solid white;
-
-    box-shadow:
-        0 0 12px rgba(0,217,255,.6);
-
-    cursor:pointer;
-}
-
-/* Firefox */
-
-.volume-slider::-moz-range-thumb{
-
-    width:16px;
-    height:16px;
-    border:none;
-    border-radius:50%;
-    background:#66e8ff;
-}
-
-/* FOOTER */
-.site-footer{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:10px;
-    z-index:80;
-    text-align:center;
-    color:#9bdfff;
-    font-size:14px;
-    opacity:0;
-    transition:opacity .8s ease;
-    padding-bottom:env(safe-area-inset-bottom);
-}
-
-.site-footer.show{
-    opacity:1;
-}
-
-.hidden-admin-btn{
-    width:18px;
-    height:18px;
-    margin-left:6px;
-    border:none;
-    border-radius:50%;
-    background:transparent;
-    color:rgba(255,255,255,.08);
-    cursor:pointer;
-}
-
-.hidden-admin-btn:hover{
-    color:#00d9ff;
-    text-shadow:0 0 12px #00d9ff;
-}
-
-/* LOGIN */
-.login-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:200;
-    background:rgba(0,0,20,.82);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.login-box{
-    width:min(92vw,420px);
-    padding:28px;
-    border-radius:24px;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.25);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 35px rgba(0,217,255,.4);
-    text-align:center;
-}
-
-.login-box h2{
-    color:#8ef2ff;
-    margin-bottom:18px;
-}
-
-.login-box input{
-    width:100%;
-    margin:10px 0;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    outline:none;
-    font-size:16px;
-}
-
-.login-actions{
-    display:flex;
-    gap:12px;
-    margin-top:16px;
-}
-
-.login-actions button,
-.admin-panel a,
-.logout-btn{
-    flex:1;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    color:white;
-    font-weight:bold;
-    text-decoration:none;
-    cursor:pointer;
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-}
-
-.admin-panel{
-    display:none;
-    margin-top:18px;
-    gap:12px;
-    flex-direction:column;
-}
-
-.login-error{
-    margin-top:12px;
-    color:#ffd966;
-    min-height:20px;
-}
-
-.admin-note{
-    margin-top:12px;
-    font-size:13px;
-    color:#9bdfff;
-    line-height:1.5;
-}
-
-/* ANIMATIONS */
-@keyframes twinkle{
-    from{opacity:.3;}
-    to{opacity:.9;}
-}
-
-@keyframes pulse{
-    0%,100%{transform:scale(1);opacity:.75;}
-    50%{transform:scale(1.06);opacity:1;}
-}
-
-@keyframes logoFloat{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-8px);}
-}
-
-
-/* MOBILE */
-@media screen and (max-width:768px){
-    .menu-bar{
-        flex-direction:column;
-        align-items:stretch;
-        width:100%;
-        max-width:360px;
-    }
-
-    .menu-bar a{
-        width:100%;
-        min-width:0;
-        padding:16px;
-    }
-
-    .login-actions{
-        flex-direction:column;
-    }
-}
-
-.menu-icon{
-    width:280px;
-    height:280px;
-    object-fit:cover;
-    display:block;
-    margin:0 auto 28px;
-}
-
-.logo-text{
-    font-family: "Oxanium", sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: .6px;
-    color: #000;
-    text-align: center;
-    margin-top: -10px;
-    margin-bottom: 30px;
-
-    text-shadow:
-        0 0 10px rgba(255,255,255,.35),
-        0 0 20px rgba(0,217,255,.45);
-}
-
-.logo-text{
-    font-family: "Oxanium", sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: .6px;
-    color: #000;
-    text-align: center;
-    margin-top: -10px;
-    margin-bottom: 30px;
-
-    text-shadow:
-        0 0 10px rgba(255,255,255,.35),
-        0 0 20px rgba(0,217,255,.45);
-}
-
-.launching-red{
-    color:#870303;
-    animation: launchGlow 1.2s infinite;
-}
-
-@keyframes launchGlow{
-    0%,100%{
-        opacity:1;
-        text-shadow:
-            0 0 5px #f5d8d8,
-            0 0 12px #bf8c8c,
-            0 0 22px #e8dcdc;
-    }
-    50%{
-        opacity:.35;
-        text-shadow:none;
-    }
-}
-
-.top-nav {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.nav-logo img {
-    height: 22px;      /* Adjust size as needed */
-    width: auto;
-    vertical-align: middle;
-    transition: transform 0.2s ease;
-}
-
-.nav-logo img:hover {
-    transform: scale(1.1);
-}
-
-.preview-text{
-    margin-top: 8px;
-    color: #8B0000; /* Dark Red */
-    font-weight: bold;
-    font-size: 1rem;
-    text-shadow: 0 0 8px rgba(139,0,0,.6);
-    animation: blinkRed 1.2s infinite;
-}
-
-@keyframes blinkRed{
-    0%,100%{
-        opacity: 1;
-        text-shadow:
-            0 0 5px #8B0000,
-            0 0 10px #b22222;
-    }
-    50%{
-        opacity: .3;
-        text-shadow: none;
-    }
-}
-
-/* Add text under each FIREWORK | .firework - @keyframes */
-.firework::after{
-    content:"⚡ Coming This August";
-    position:absolute;
-    top:90px;
-    left:50%;
-    transform:translateX(-50%);
-    white-space:nowrap;
-
-    font-family:"Oxanium", sans-serif;
-    font-size:15px;
-    font-weight:700;
-    letter-spacing:1px;
-
-    background:linear-gradient(
-        90deg,
-        #ff84d8,
-        #b08cff,
-        #79e7ff,
-        #ffe27a
-    );
-
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-
-    text-shadow:
-        0 0 8px rgba(255,132,216,.35),
-        0 0 16px rgba(121,231,255,.35),
-        0 0 24px rgba(255,226,122,.25);
-
-    animation:comingGlow 2.2s ease-in-out infinite;
-}
-
-@keyframes comingGlow{
-    0%,100%{
-        opacity:.75;
-        transform:translateX(-50%) scale(1);
-    }
-    50%{
-        opacity:1;
-        transform:translateX(-50%) scale(1.05);
-        text-shadow:
-            0 0 12px rgba(255,132,216,.6),
-            0 0 24px rgba(121,231,255,.6),
-            0 0 36px rgba(255,226,122,.45);
-    }
-}
-
-/* volume bar hide on iOS */
-.music-control.ios {
-    width: 56px;
-    padding: 0;
-}
-
-.music-control.ios .volume-slider {
-    display: none;
-}
-
-/* Restore the original circular music button on iPhone/iPad */
-.music-control.ios{
-    width:56px;
-    height:56px;
-    padding:0;
-    border:none;
-    background:transparent;
-    box-shadow:none;
-    overflow:visible;
-}
-
-.music-control.ios .volume-slider{
-    display:none;
-}
-
-.music-control.ios .music-btn{
-    width:56px;
-    height:56px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,.25);
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.45),
-        inset 0 0 10px rgba(255,255,255,.15);
-}
-
-
-
-</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home| CHAYNOVA ⚡ Coming This August</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255, 204, 0, 0.4), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(0, 200, 255, .4), transparent 30%),
+                linear-gradient(135deg, #da7b06, #7864eb, #72a1f8);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 1050px);
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        header a {
+            font-size: .95rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: .6px;
+            transition: .25s ease;
+        }
+
+        header a:hover {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
+
+        @media (max-width:560px) {
+            header {
+                top: 12px;
+                border-radius: 24px;
+            }
+
+            header nav {
+                gap: 13px;
+            }
+
+            header a {
+                font-size: .82rem;
+            }
+        }
+
+        /* BACKGROUND */
+        .firework {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            color: white;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .firework span {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            font-size: 18px;
+            color: currentColor;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            animation: starExplode 2.8s ease-out;
+        }
+
+        .firework span:nth-child(1) {
+            --x: 0px;
+            --y: -80px;
+        }
+
+        .firework span:nth-child(2) {
+            --x: 60px;
+            --y: -60px;
+        }
+
+        .firework span:nth-child(3) {
+            --x: 80px;
+            --y: 0px;
+        }
+
+        .firework span:nth-child(4) {
+            --x: 60px;
+            --y: 60px;
+        }
+
+        .firework span:nth-child(5) {
+            --x: 0px;
+            --y: 80px;
+        }
+
+        .firework span:nth-child(6) {
+            --x: -60px;
+            --y: 60px;
+        }
+
+        .firework span:nth-child(7) {
+            --x: -80px;
+            --y: 0px;
+        }
+
+        .firework span:nth-child(8) {
+            --x: -60px;
+            --y: -60px;
+        }
+
+        @keyframes starExplode {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(.3);
+            }
+
+            70% {
+                opacity: 1;
+                transform:
+                    translate(calc(-50% + var(--x)),
+                        calc(-50% + var(--y))) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform:
+                    translate(calc(-50% + var(--x)),
+                        calc(-50% + var(--y))) scale(.5);
+            }
+        }
+
+        /* START SCREEN */
+        .start-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 20, .88);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            transition: opacity .8s ease;
+        }
+
+        .start-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .start-logo,
+        .main-logo {
+            width: min(320px, 80vw);
+            height: auto;
+            margin: 28px 0;
+            filter:
+                drop-shadow(0 0 10px rgba(255, 255, 255, .35)) drop-shadow(0 0 25px rgba(0, 217, 255, .45));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .start-text {
+            font-size: clamp(1.8rem, 8vw, 3rem);
+            font-weight: bold;
+            text-shadow: 0 0 25px #00d9ff;
+            animation: pulse 1.5s infinite;
+        }
+
+        .tap-text {
+            margin-top: 18px;
+            color: #d6f7ff;
+        }
+
+        /* MAIN */
+        .container {
+            position: relative;
+            z-index: 5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity .8s ease;
+        }
+
+        .container.show {
+            opacity: 1;
+        }
+
+        /* MENU */
+        .menu-bar {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .menu-bar a {
+            font-family: "Oxanium", sans-serif !important;
+            position: relative;
+            overflow: hidden;
+            min-width: 145px;
+            padding: 14px 22px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .6px;
+            color: black;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            background: linear-gradient(135deg,
+                    rgba(249, 87, 211, 0.35),
+                    rgba(168, 125, 244, 0.35),
+                    rgba(114, 225, 245, 0.35));
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow:
+                0 0 18px rgba(0, 217, 255, .35),
+                inset 0 0 15px rgba(255, 255, 255, .08);
+            cursor: pointer;
+            transition: .35s ease;
+        }
+
+        .menu-bar a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, .6),
+                    transparent);
+            transform: skewX(-25deg);
+            transition: .75s;
+        }
+
+        .menu-bar a:hover::before {
+            left: 160%;
+        }
+
+        .menu-bar a:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: linear-gradient(135deg, #ef94da, #a97df6, #70e0f4);
+            box-shadow:
+                0 0 10px #bab4b6,
+                0 0 20px #768cc2,
+                0 0 30px #2a9fb4;
+        }
+
+        .menu-bar a:active {
+            transform: scale(.96);
+        }
+
+        /* MUSIC BUTTON */
+        .music-btn {
+            position: fixed;
+            right: 18px;
+            bottom: calc(22px + env(safe-area-inset-bottom));
+            width: 56px;
+            height: 56px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, .25);
+            box-shadow:
+                0 0 18px rgba(0, 217, 255, .45),
+                inset 0 0 10px rgba(255, 255, 255, .15);
+            transition: .25s;
+            z-index: 90;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.12);
+        }
+
+        .music-btn:active {
+            transform: scale(.92);
+        }
+
+
+        /* MUSIC CONTROL FRAME */
+
+        .music-control {
+            position: fixed;
+            right: 18px;
+            bottom: calc(22px + env(safe-area-inset-bottom));
+            z-index: 90;
+
+            width: 22px;
+            padding: 9px 0 0;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, .25);
+
+            background: rgba(255, 255, 255, .12);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 0 18px rgba(0, 217, 255, .45),
+                inset 0 0 10px rgba(255, 255, 255, .15);
+
+            overflow: hidden;
+        }
+
+
+        /* SHORT VERTICAL VOLUME BAR */
+
+        .volume-slider {
+            appearance: none;
+            -webkit-appearance: none;
+
+            writing-mode: vertical-lr;
+            direction: rtl;
+
+            width: 6px;
+            height: 58px;
+
+            margin: 0 0 2px;
+
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .3);
+
+            background: rgba(255, 255, 255, .2);
+
+            box-shadow:
+                inset 0 0 5px rgba(255, 255, 255, .2),
+                0 0 8px rgba(0, 217, 255, .3);
+
+            cursor: pointer;
+        }
+
+
+        /* SLIDER CIRCLE */
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+
+            width: 15px;
+            height: 15px;
+
+            border-radius: 50%;
+            border: 2px solid white;
+
+            background: linear-gradient(135deg,
+                    #ff72cf,
+                    #9f7dff,
+                    #66e8ff);
+
+            box-shadow: 0 0 10px rgba(0, 217, 255, .7);
+
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+
+            border-radius: 50%;
+            border: 2px solid white;
+
+            background: linear-gradient(135deg,
+                    #ff72cf,
+                    #9f7dff,
+                    #66e8ff);
+
+            box-shadow: 0 0 10px rgba(0, 217, 255, .7);
+
+            cursor: pointer;
+        }
+
+
+        /* MUSIC BUTTON INSIDE SAME FRAME */
+
+        .music-btn {
+            position: static;
+
+            width: 56px;
+            height: 50px;
+
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, .15);
+
+            border-radius: 0;
+
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+
+            background: transparent;
+
+            transition: .25s;
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 255, 255, .12);
+            transform: none;
+        }
+
+        .music-btn:active {
+            transform: scale(.9);
+        }
+
+        /* keep your existing .music-btn exactly the same */
+
+        .volume-slider {
+
+            appearance: none;
+            -webkit-appearance: none;
+
+            width: 6px;
+            height: 72px;
+
+            writing-mode: vertical-lr;
+            direction: rtl;
+
+            background: rgba(255, 255, 255, .12);
+
+            border: 1px solid rgba(255, 255, 255, .25);
+
+            border-radius: 999px;
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 0 18px rgba(0, 217, 255, .35),
+                inset 0 0 8px rgba(255, 255, 255, .12);
+
+            cursor: pointer;
+        }
+
+        /* Chrome */
+
+        .volume-slider::-webkit-slider-thumb {
+
+            appearance: none;
+            -webkit-appearance: none;
+
+            width: 16px;
+            height: 16px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(135deg,
+                    #ff72cf,
+                    #9f7dff,
+                    #66e8ff);
+
+            border: 2px solid white;
+
+            box-shadow:
+                0 0 12px rgba(0, 217, 255, .6);
+
+            cursor: pointer;
+        }
+
+        /* Firefox */
+
+        .volume-slider::-moz-range-thumb {
+
+            width: 16px;
+            height: 16px;
+            border: none;
+            border-radius: 50%;
+            background: #66e8ff;
+        }
+
+        /* FOOTER */
+        .site-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            z-index: 80;
+            text-align: center;
+            color: #9bdfff;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity .8s ease;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .site-footer.show {
+            opacity: 1;
+        }
+
+        .hidden-admin-btn {
+            width: 18px;
+            height: 18px;
+            margin-left: 6px;
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            color: rgba(255, 255, 255, .08);
+            cursor: pointer;
+        }
+
+        .hidden-admin-btn:hover {
+            color: #00d9ff;
+            text-shadow: 0 0 12px #00d9ff;
+        }
+
+        /* LOGIN */
+        .login-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 20, .82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: min(92vw, 420px);
+            padding: 28px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 0 35px rgba(0, 217, 255, .4);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            color: #8ef2ff;
+            margin-bottom: 18px;
+        }
+
+        .login-box input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .login-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .login-actions button,
+        .admin-panel a,
+        .logout-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+        }
+
+        .admin-panel {
+            display: none;
+            margin-top: 18px;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .login-error {
+            margin-top: 12px;
+            color: #ffd966;
+            min-height: 20px;
+        }
+
+        .admin-note {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #9bdfff;
+            line-height: 1.5;
+        }
+
+        /* ANIMATIONS */
+        @keyframes twinkle {
+            from {
+                opacity: .3;
+            }
+
+            to {
+                opacity: .9;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: .75;
+            }
+
+            50% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
+        }
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+
+        /* MOBILE */
+        @media screen and (max-width:768px) {
+            .menu-bar {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                max-width: 360px;
+            }
+
+            .menu-bar a {
+                width: 100%;
+                min-width: 0;
+                padding: 16px;
+            }
+
+            .login-actions {
+                flex-direction: column;
+            }
+        }
+
+        .menu-icon {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 28px;
+        }
+
+        .logo-text {
+            font-family: "Oxanium", sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: .6px;
+            color: #000;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 30px;
+
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, .35),
+                0 0 20px rgba(0, 217, 255, .45);
+        }
+
+        .logo-text {
+            font-family: "Oxanium", sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: .6px;
+            color: #000;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 30px;
+
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, .35),
+                0 0 20px rgba(0, 217, 255, .45);
+        }
+
+        .launching-red {
+            color: #870303;
+            animation: launchGlow 1.2s infinite;
+        }
+
+        @keyframes launchGlow {
+
+            0%,
+            100% {
+                opacity: 1;
+                text-shadow:
+                    0 0 5px #f5d8d8,
+                    0 0 12px #bf8c8c,
+                    0 0 22px #e8dcdc;
+            }
+
+            50% {
+                opacity: .35;
+                text-shadow: none;
+            }
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-logo img {
+            height: 22px;
+            /* Adjust size as needed */
+            width: auto;
+            vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-logo img:hover {
+            transform: scale(1.1);
+        }
+
+        .preview-text {
+            margin-top: 8px;
+            color: #8B0000;
+            /* Dark Red */
+            font-weight: bold;
+            font-size: 1rem;
+            text-shadow: 0 0 8px rgba(139, 0, 0, .6);
+            animation: blinkRed 1.2s infinite;
+        }
+
+        @keyframes blinkRed {
+
+            0%,
+            100% {
+                opacity: 1;
+                text-shadow:
+                    0 0 5px #8B0000,
+                    0 0 10px #b22222;
+            }
+
+            50% {
+                opacity: .3;
+                text-shadow: none;
+            }
+        }
+
+        /* Add text under each FIREWORK | .firework - @keyframes */
+        .firework::after {
+            content: "⚡ Coming This August";
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+
+            font-family: "Oxanium", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            background: linear-gradient(90deg,
+                    #ff84d8,
+                    #b08cff,
+                    #79e7ff,
+                    #ffe27a);
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+
+            text-shadow:
+                0 0 8px rgba(255, 132, 216, .35),
+                0 0 16px rgba(121, 231, 255, .35),
+                0 0 24px rgba(255, 226, 122, .25);
+
+            animation: comingGlow 2.2s ease-in-out infinite;
+        }
+
+        @keyframes comingGlow {
+
+            0%,
+            100% {
+                opacity: .75;
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.05);
+                text-shadow:
+                    0 0 12px rgba(255, 132, 216, .6),
+                    0 0 24px rgba(121, 231, 255, .6),
+                    0 0 36px rgba(255, 226, 122, .45);
+            }
+        }
+
+        /* volume bar hide on iOS */
+        .music-control.ios {
+            width: 56px;
+            padding: 0;
+        }
+
+        .music-control.ios .volume-slider {
+            display: none;
+        }
+
+        /* Restore the original circular music button on iPhone/iPad */
+        .music-control.ios {
+            width: 56px;
+            height: 56px;
+            padding: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+        }
+
+        .music-control.ios .volume-slider {
+            display: none;
+        }
+
+        .music-control.ios .music-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .25);
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow:
+                0 0 18px rgba(0, 217, 255, .45),
+                inset 0 0 10px rgba(255, 255, 255, .15);
+        }
+    </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" loop>
-    <source src="audio/background.mp3" type="audio/mpeg">
-</audio>
+    <audio id="bgMusic" loop>
+        <source src="audio/background.mp3" type="audio/mpeg">
+    </audio>
 
-<header class="top-header">
-    <nav class="top-nav">
-        <a href="shop.html">Store</a>
-        <a href="fun.html">Fun</a>
-        <a href="support.html">Support</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+    <header class="top-header">
+        <nav class="top-nav">
+            <a href="shop.html">Store</a>
+            <a href="fun.html">Fun</a>
+            <a href="support.html">Support</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
 
-        <a href="index.html" class="nav-logo">
-            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-        </a>
-        
-    </nav>
-</header>
+            <a href="index.html" class="nav-logo">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+            </a>
 
-<div class="start-screen" id="startScreen">
-    <div class="start-text"></div>
+        </nav>
+    </header>
 
-    <img
-        src="logo/WHITEDYNAMICTRANS.png"
-        alt="CHAYNOVA Logo"
-        class="start-logo"
-    >
-<div class="preview-text">🚧 Early Preview • Official Launch: August 2026</div>
-    <div class="tap-text">Tap anywhere to begin</div>
-</div>
+    <div class="start-screen" id="startScreen">
+        <div class="start-text"></div>
 
-<div class="firework">
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-</div><div class="firework">
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-    <span>✮</span>
-</div>
+        <img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Logo" class="start-logo">
+        <div class="preview-text">🚧 Early Preview • Official Launch: August 2026</div>
+        <div class="tap-text">Tap anywhere to begin</div>
+    </div>
+
+    <div class="firework">
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+    </div>
+    <div class="firework">
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+        <span>✮</span>
+    </div>
 
 
-<main class="container" id="mainContent">
-    <img
-        src="logo/DYNAMICTRANS.png"
-        alt="CHAYNOVA Logo"
-        class="main-logo"
-    >
-<div class="logo-text">
- CHAYNOVA ATHLETICS, Premium sportswear inspired by Thailand.
-Performance • Comfort • Style  | Based in New York |&nbsp;&nbsp; 🚀
-    <span class="launching-red">Launching Soon</span>
-</div>
-
-    <nav class="menu-bar">
-    <a href="shop.html">
-        <img src="logo/SPORTWEARTRANS.png" class="menu-icon" alt="">
-        SHOP SPORTSWEAR
-    </a>
-
-    <a href="game.html">
-        <img src="logo/PLAYZCTRANS.png" class="menu-icon" alt="">
-        PLAY ZONE
-    </a>
-
-    <a href="music.html">
-        <img src="logo/BEATSTRANS.png" class="menu-icon" alt="">
-        BEATS
-    </a>
-
-    <a href="video.html">
-        <img src="logo/WATCHTRANS.png" class="menu-icon" alt="">
-        WATCH
-    </a>
-</nav>
-</main>
-
-<div class="music-control">
-
-    <input
-        type="range"
-        id="volumeSlider"
-        class="volume-slider"
-        min="0"
-        max="100"
-        value="29"
-        aria-label="Music volume"
-    >
-
-    <button id="musicBtn" class="music-btn" title="Pause Music">
-        🔊
-    </button>
-
-</div>
-
-<footer class="site-footer" id="siteFooter">
-    © 2026 CHAYNOVA
-    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
-</footer>
-
-<div id="loginOverlay" class="login-overlay">
-    <div class="login-box">
-
-        <h2>CHAYNOVA Admin</h2>
-
-        <div id="loginForm">
-            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
-
-            <div class="login-actions">
-                <button onclick="checkLogin()">Login</button>
-                <button onclick="closeLogin()">Cancel</button>
-            </div>
-
-            <div id="loginError" class="login-error"></div>
-
-            <div class="admin-note">
-                Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
-            </div>
+    <main class="container" id="mainContent">
+        <img src="logo/DYNAMICTRANS.png" alt="CHAYNOVA Logo" class="main-logo">
+        <div class="logo-text">
+            CHAYNOVA ATHLETICS, Premium sportswear inspired by Thailand.
+            Performance • Comfort • Style | Based in New York |&nbsp;&nbsp; 🚀
+            <span class="launching-red">Launching Soon</span>
         </div>
 
-        <div id="adminPanel" class="admin-panel">
-            <a href="admin-edit-post.html">Edit Fun Posts</a>
-            <a href="watch-admin.html">Edit Watch Videos</a>
-            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-            <button class="logout-btn" onclick="closeLogin()">Close</button>
-        </div>
+        <nav class="menu-bar">
+            <a href="shop.html">
+                <img src="logo/SPORTWEARTRANS.png" class="menu-icon" alt="">
+                SHOP SPORTSWEAR
+            </a>
+
+            <a href="video.html">
+                <img src="logo/WATCHTRANS.png" class="menu-icon" alt="">
+                WATCH
+            </a>
+
+            <a href="music.html">
+                <img src="logo/BEATSTRANS.png" class="menu-icon" alt="">
+                BEATS
+            </a>
+
+            <a href="game.html">
+                <img src="logo/PLAYZCTRANS.png" class="menu-icon" alt="">
+                PLAY ZONE
+            </a>
+
+        </nav>
+    </main>
+
+    <div class="music-control">
+
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="29"
+            aria-label="Music volume">
+
+        <button id="musicBtn" class="music-btn" title="Pause Music">
+            🔊
+        </button>
 
     </div>
-</div>
 
-<script>
-const API = "https://chay1api.mikebewise.workers.dev";
+    <footer class="site-footer" id="siteFooter">
+        © 2026 CHAYNOVA
+        <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
+    </footer>
 
-const startScreen = document.getElementById("startScreen");
-const mainContent = document.getElementById("mainContent");
-const music = document.getElementById("bgMusic");
-const volumeSlider = document.getElementById("volumeSlider");
-const musicBtn = document.getElementById("musicBtn");
-const siteFooter = document.getElementById("siteFooter");
-// Detect iPhone/iPad (Safari & Chrome on iOS)
-const isiOS =
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
 
-if (isiOS) {
-    document.querySelector(".music-control").classList.add("ios");
-    musicBtn.title = "Use your iPhone volume buttons";
-}
+            <h2>CHAYNOVA Admin</h2>
 
+            <div id="loginForm">
+                <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+                <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
+                <div class="login-actions">
+                    <button onclick="checkLogin()">Login</button>
+                    <button onclick="closeLogin()">Cancel</button>
+                </div>
 
+                <div id="loginError" class="login-error"></div>
 
-startScreen.addEventListener("click", () => {
-    music.volume = 0.29;
-    volumeSlider.value = 29;
-    music.play().catch(() => {
-        console.log("Music could not start.");
-    });
+                <div class="admin-note">
+                    Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
+                </div>
+            </div>
 
-    startScreen.classList.add("hide");
-    mainContent.classList.add("show");
-    siteFooter.classList.add("show");
+            <div id="adminPanel" class="admin-panel">
+                <a href="admin-edit-post.html">Edit Fun Posts</a>
+                <a href="watch-admin.html">Edit Watch Videos</a>
+                <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+                <button class="logout-btn" onclick="closeLogin()">Close</button>
+            </div>
 
-    musicBtn.innerHTML = "🔊";
-    musicBtn.title = "Pause Music";
-});
+        </div>
+    </div>
 
-musicBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
+    <script>
+        const API = "https://chay1api.mikebewise.workers.dev";
 
-    if(music.paused){
-        music.play();
-        musicBtn.innerHTML = "🔊";
-        musicBtn.title = "Pause Music";
-    }else{
-        music.pause();
-        musicBtn.innerHTML = "🔇";
-        musicBtn.title = "Play Music";
-    }
-});
-volumeSlider.addEventListener("input", () => {
-    music.volume = volumeSlider.value / 100;
+        const startScreen = document.getElementById("startScreen");
+        const mainContent = document.getElementById("mainContent");
+        const music = document.getElementById("bgMusic");
+        const volumeSlider = document.getElementById("volumeSlider");
+        const musicBtn = document.getElementById("musicBtn");
+        const siteFooter = document.getElementById("siteFooter");
+        // Detect iPhone/iPad (Safari & Chrome on iOS)
+        const isiOS =
+            /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-    if(music.volume === 0){
-        musicBtn.innerHTML = "🔇";
-        musicBtn.title = "Play Music";
-    }else{
-        musicBtn.innerHTML = music.paused ? "🔇" : "🔊";
-    }
-});
-
-
-function openLogin(){
-    document.getElementById("loginOverlay").style.display = "flex";
-    updateAdminPanel();
-
-    setTimeout(() => {
-        const usernameInput = document.getElementById("usernameInput");
-        if(usernameInput && usernameInput.offsetParent !== null){
-            usernameInput.focus();
+        if (isiOS) {
+            document.querySelector(".music-control").classList.add("ios");
+            musicBtn.title = "Use your iPhone volume buttons";
         }
-    }, 100);
-}
 
-function closeLogin(){
-    document.getElementById("loginOverlay").style.display = "none";
-    document.getElementById("loginError").innerText = "";
-}
 
-async function checkLogin(){
-    const username = document.getElementById("usernameInput").value.trim();
-    const password = document.getElementById("passwordInput").value.trim();
-    const errorBox = document.getElementById("loginError");
 
-    if(!username || !password){
-        errorBox.innerText = "Please enter username and password.";
-        return;
-    }
 
-    errorBox.innerText = "Checking login...";
+        startScreen.addEventListener("click", () => {
+            music.volume = 0.29;
+            volumeSlider.value = 29;
+            music.play().catch(() => {
+                console.log("Music could not start.");
+            });
 
-    try{
-        const response = await fetch(API + "/login", {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                username:username,
-                password:password
-            })
+            startScreen.classList.add("hide");
+            mainContent.classList.add("show");
+            siteFooter.classList.add("show");
+
+            musicBtn.innerHTML = "🔊";
+            musicBtn.title = "Pause Music";
         });
 
-        const data = await response.json();
+        musicBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
 
-        if(response.ok && data.success && data.token){
-            localStorage.setItem("chaynovaAdminToken", data.token);
-            errorBox.innerText = "";
+            if (music.paused) {
+                music.play();
+                musicBtn.innerHTML = "🔊";
+                musicBtn.title = "Pause Music";
+            } else {
+                music.pause();
+                musicBtn.innerHTML = "🔇";
+                musicBtn.title = "Play Music";
+            }
+        });
+        volumeSlider.addEventListener("input", () => {
+            music.volume = volumeSlider.value / 100;
+
+            if (music.volume === 0) {
+                musicBtn.innerHTML = "🔇";
+                musicBtn.title = "Play Music";
+            } else {
+                musicBtn.innerHTML = music.paused ? "🔇" : "🔊";
+            }
+        });
+
+
+        function openLogin() {
+            document.getElementById("loginOverlay").style.display = "flex";
             updateAdminPanel();
-        }else{
-            localStorage.removeItem("chaynovaAdminToken");
-            errorBox.innerText = "Wrong username or password.";
+
+            setTimeout(() => {
+                const usernameInput = document.getElementById("usernameInput");
+                if (usernameInput && usernameInput.offsetParent !== null) {
+                    usernameInput.focus();
+                }
+            }, 100);
         }
 
-    }catch(error){
-        errorBox.innerText = "Login failed. Check your Worker API.";
-    }
-}
+        function closeLogin() {
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("loginError").innerText = "";
+        }
 
-function updateAdminPanel(){
-    const token = localStorage.getItem("chaynovaAdminToken");
+        async function checkLogin() {
+            const username = document.getElementById("usernameInput").value.trim();
+            const password = document.getElementById("passwordInput").value.trim();
+            const errorBox = document.getElementById("loginError");
 
-    if(token){
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("adminPanel").style.display = "flex";
-    }else{
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("adminPanel").style.display = "none";
-    }
-}
+            if (!username || !password) {
+                errorBox.innerText = "Please enter username and password.";
+                return;
+            }
 
-function logoutAdmin(){
-    localStorage.removeItem("chaynovaAdminToken");
-    document.getElementById("usernameInput").value = "";
-    document.getElementById("passwordInput").value = "";
-    updateAdminPanel();
-}
+            errorBox.innerText = "Checking login...";
 
-document.getElementById("passwordInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        checkLogin();
-    }
-});
+            try {
+                const response = await fetch(API + "/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
 
-document.getElementById("usernameInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        document.getElementById("passwordInput").focus();
-    }
-});
+                const data = await response.json();
 
-window.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-        closeLogin();
-    }
-});
+                if (response.ok && data.success && data.token) {
+                    localStorage.setItem("chaynovaAdminToken", data.token);
+                    errorBox.innerText = "";
+                    updateAdminPanel();
+                } else {
+                    localStorage.removeItem("chaynovaAdminToken");
+                    errorBox.innerText = "Wrong username or password.";
+                }
 
-//fireworks animation
+            } catch (error) {
+                errorBox.innerText = "Login failed. Check your Worker API.";
+            }
+        }
 
-const fireworks = document.querySelectorAll(".firework");
+        function updateAdminPanel() {
+            const token = localStorage.getItem("chaynovaAdminToken");
 
-const colors = [
-    "#ff2fcf",
-    "#00d9ff",
-    "#ffaa00",
-    "#7b2cff",
-    "#00ff99",
-    "#ff5555"
-];
-function randomizeFirework(fw) {
-    fw.style.left = Math.random() * 90 + "%";
-    fw.style.top = Math.random() * 70 + "%";
-    fw.style.color = colors[Math.floor(Math.random() * colors.length)];
+            if (token) {
+                document.getElementById("loginForm").style.display = "none";
+                document.getElementById("adminPanel").style.display = "flex";
+            } else {
+                document.getElementById("loginForm").style.display = "block";
+                document.getElementById("adminPanel").style.display = "none";
+            }
+        }
 
-    const stars = fw.querySelectorAll("span");
+        function logoutAdmin() {
+            localStorage.removeItem("chaynovaAdminToken");
+            document.getElementById("usernameInput").value = "";
+            document.getElementById("passwordInput").value = "";
+            updateAdminPanel();
+        }
 
-    stars.forEach(star => {
-        star.style.animation = "none";
-        void star.offsetWidth;
-        star.style.animation = "starExplode 2.8s ease-out";
-    });
-}
+        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                checkLogin();
+            }
+        });
 
-// Start each firework at a different time
-fireworks.forEach((fw, i) => {
-    setTimeout(() => {
-        randomizeFirework(fw);
+        document.getElementById("usernameInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                document.getElementById("passwordInput").focus();
+            }
+        });
 
-        setInterval(() => {
-            randomizeFirework(fw);
-        }, 2800);
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                closeLogin();
+            }
+        });
 
-    }, i * 900);
-});
+        //fireworks animation
+
+        const fireworks = document.querySelectorAll(".firework");
+
+        const colors = [
+            "#ff2fcf",
+            "#00d9ff",
+            "#ffaa00",
+            "#7b2cff",
+            "#00ff99",
+            "#ff5555"
+        ];
+        function randomizeFirework(fw) {
+            fw.style.left = Math.random() * 90 + "%";
+            fw.style.top = Math.random() * 70 + "%";
+            fw.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+            const stars = fw.querySelectorAll("span");
+
+            stars.forEach(star => {
+                star.style.animation = "none";
+                void star.offsetWidth;
+                star.style.animation = "starExplode 2.8s ease-out";
+            });
+        }
+
+        // Start each firework at a different time
+        fireworks.forEach((fw, i) => {
+            setTimeout(() => {
+                randomizeFirework(fw);
+
+                setInterval(() => {
+                    randomizeFirework(fw);
+                }, 2800);
+
+            }, i * 900);
+        });
 
 
 
 
 
-</script>
+    </script>
 
 </body>
+
 </html>
