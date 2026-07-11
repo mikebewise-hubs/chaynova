@@ -382,7 +382,13 @@
             width: 100%;
             max-width: 700px;
             margin: 18px 0;
+            margin-top: 0;
         }
+
+        .now-playing {
+            margin-bottom: 2px;
+        }
+
 
         .controls {
             display: flex;
@@ -950,7 +956,7 @@ Please come online, just once more.
             player.src = songs[currentSong].file;
             player.load();
 
-            nowPlaying.innerText = "Ready: " + songs[currentSong].title;
+            nowPlaying.innerText = "🎸 Ready! Click Play to Start: " + songs[currentSong].title;
             updateLyrics();
             showSongList();
         }
