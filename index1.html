@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home| CHAYNOVA ⚡ Coming This August</title>
+    <title>Home | CHAYNOVA ⚡ Coming This August</title>
 
     <style>
         * {
@@ -771,6 +771,11 @@
             transform: scale(1.1);
         }
 
+        .main-logo-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
         .preview-text {
             margin-top: 8px;
             color: #8B0000;
@@ -939,7 +944,9 @@
 
 
     <main class="container" id="mainContent">
-        <img src="logo/DYNAMICTRANS.png" alt="CHAYNOVA Logo" class="main-logo">
+        <a href="shop.html" class="main-logo-link">
+            <img src="logo/DYNAMICTRANS.png" alt="CHAYNOVA Logo" class="main-logo">
+        </a>
         <div class="logo-text">
             CHAYNOVA ATHLETICS, Premium sportswear inspired by Thailand.
             Performance • Comfort • Style | Based in New York |&nbsp;&nbsp; 🚀
@@ -975,8 +982,8 @@
         <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="29"
             aria-label="Music volume">
 
-        <button id="musicBtn" class="music-btn" title="Pause Music">
-            🔊
+        <button id="musicBtn" class="music-btn" type="button" title="Play Music">
+            🔇
         </button>
 
     </div>
@@ -1022,62 +1029,20 @@
 
         const startScreen = document.getElementById("startScreen");
         const mainContent = document.getElementById("mainContent");
-        const music = document.getElementById("bgMusic");
-        const volumeSlider = document.getElementById("volumeSlider");
-        const musicBtn = document.getElementById("musicBtn");
         const siteFooter = document.getElementById("siteFooter");
-        // Detect iPhone/iPad (Safari & Chrome on iOS)
-        const isiOS =
-            /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-            (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+        const bgMusic = document.getElementById("bgMusic");
 
-        if (isiOS) {
-            document.querySelector(".music-control").classList.add("ios");
-            musicBtn.title = "Use your iPhone volume buttons";
-        }
-
-
-
-
-        startScreen.addEventListener("click", () => {
-            music.volume = 0.29;
-            volumeSlider.value = 29;
-            music.play().catch(() => {
-                console.log("Music could not start.");
-            });
+        startScreen.addEventListener("click", async () => {
+            try {
+                await bgMusic.play();
+            } catch (error) {
+                console.log("Music could not start:", error);
+            }
 
             startScreen.classList.add("hide");
             mainContent.classList.add("show");
             siteFooter.classList.add("show");
-
-            musicBtn.innerHTML = "🔊";
-            musicBtn.title = "Pause Music";
         });
-
-        musicBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-
-            if (music.paused) {
-                music.play();
-                musicBtn.innerHTML = "🔊";
-                musicBtn.title = "Pause Music";
-            } else {
-                music.pause();
-                musicBtn.innerHTML = "🔇";
-                musicBtn.title = "Play Music";
-            }
-        });
-        volumeSlider.addEventListener("input", () => {
-            music.volume = volumeSlider.value / 100;
-
-            if (music.volume === 0) {
-                musicBtn.innerHTML = "🔇";
-                musicBtn.title = "Play Music";
-            } else {
-                musicBtn.innerHTML = music.paused ? "🔇" : "🔊";
-            }
-        });
-
 
         function openLogin() {
             document.getElementById("loginOverlay").style.display = "flex";
@@ -1114,10 +1079,7 @@
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
+                    body: JSON.stringify({ username, password })
                 });
 
                 const data = await response.json();
@@ -1130,7 +1092,6 @@
                     localStorage.removeItem("chaynovaAdminToken");
                     errorBox.innerText = "Wrong username or password.";
                 }
-
             } catch (error) {
                 errorBox.innerText = "Login failed. Check your Worker API.";
             }
@@ -1139,13 +1100,8 @@
         function updateAdminPanel() {
             const token = localStorage.getItem("chaynovaAdminToken");
 
-            if (token) {
-                document.getElementById("loginForm").style.display = "none";
-                document.getElementById("adminPanel").style.display = "flex";
-            } else {
-                document.getElementById("loginForm").style.display = "block";
-                document.getElementById("adminPanel").style.display = "none";
-            }
+            document.getElementById("loginForm").style.display = token ? "none" : "block";
+            document.getElementById("adminPanel").style.display = token ? "flex" : "none";
         }
 
         function logoutAdmin() {
@@ -1155,28 +1111,25 @@
             updateAdminPanel();
         }
 
-        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
+        document.getElementById("passwordInput").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
                 checkLogin();
             }
         });
 
-        document.getElementById("usernameInput").addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
+        document.getElementById("usernameInput").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
                 document.getElementById("passwordInput").focus();
             }
         });
 
-        window.addEventListener("keydown", function (e) {
-            if (e.key === "Escape") {
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
                 closeLogin();
             }
         });
 
-        //fireworks animation
-
         const fireworks = document.querySelectorAll(".firework");
-
         const colors = [
             "#ff2fcf",
             "#00d9ff",
@@ -1185,37 +1138,28 @@
             "#00ff99",
             "#ff5555"
         ];
-        function randomizeFirework(fw) {
-            fw.style.left = Math.random() * 90 + "%";
-            fw.style.top = Math.random() * 70 + "%";
-            fw.style.color = colors[Math.floor(Math.random() * colors.length)];
 
-            const stars = fw.querySelectorAll("span");
+        function randomizeFirework(firework) {
+            firework.style.left = Math.random() * 90 + "%";
+            firework.style.top = Math.random() * 70 + "%";
+            firework.style.color = colors[Math.floor(Math.random() * colors.length)];
 
-            stars.forEach(star => {
+            firework.querySelectorAll("span").forEach((star) => {
                 star.style.animation = "none";
                 void star.offsetWidth;
                 star.style.animation = "starExplode 2.8s ease-out";
             });
         }
 
-        // Start each firework at a different time
-        fireworks.forEach((fw, i) => {
+        fireworks.forEach((firework, index) => {
             setTimeout(() => {
-                randomizeFirework(fw);
-
-                setInterval(() => {
-                    randomizeFirework(fw);
-                }, 2800);
-
-            }, i * 900);
+                randomizeFirework(firework);
+                setInterval(() => randomizeFirework(firework), 2800);
+            }, index * 900);
         });
-
-
-
-
-
     </script>
+
+    <script src="musictool.js" defer></script>
 
 </body>
 
