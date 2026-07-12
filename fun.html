@@ -958,7 +958,7 @@
                 const created = new Date(createdAt);
                 const now = new Date();
 
-                return (now - created) < (1 * 60 * 1000); // 1 minute
+                return (now - created) < (1 * 24 * 60 * 60 * 1000); // 1 day
             }
 
 
