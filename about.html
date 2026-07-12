@@ -79,12 +79,15 @@
             -webkit-backdrop-filter: blur(16px);
             box-shadow: 0 0 28px rgba(0, 217, 255, 0.25);
         }
+        header a:hover,
+        header a[aria-current="page"] {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
 
-        .top-nav {
+       .top-nav {
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
             gap: 20px;
         }
 
@@ -112,16 +115,7 @@
             transition: width 0.25s ease;
         }
 
-        header a:hover,
-        header a.active {
-            color: #dffbff;
-            text-shadow: 0 0 14px rgba(255, 255, 255, 0.9);
-        }
 
-        header a:hover::after,
-        header a.active::after {
-            width: 100%;
-        }
 
         .nav-logo img {
             height: 22px;
@@ -520,7 +514,7 @@
             <a href="shop.html">Store</a>
             <a href="fun.html">Fun</a>
             <a href="support.html">Support</a>
-            <a href="about.html">About</a>
+            <a href="about.html" aria-current="page">About</a>
             <a href="contact.html">Contact</a>
 
             <a href="index.html" class="nav-logo">
@@ -616,7 +610,7 @@
     </main>
 
     <footer>
-        © 2026 CHAYNOVA • Inspired by Thailand • Based in New York
+        <footer><a href="about.html">© 2026 CHAYNOVA</a>• Inspired by Thailand • Based in New York
     </footer>
 </body>
 </html>
