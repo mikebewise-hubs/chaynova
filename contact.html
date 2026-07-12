@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,8 +121,7 @@
             margin: 2px auto 10px;
             display: block;
             filter:
-                drop-shadow(0 0 10px rgba(255, 255, 255, .35))
-                drop-shadow(0 0 25px rgba(0, 217, 255, .45));
+                drop-shadow(0 0 10px rgba(255, 255, 255, .35)) drop-shadow(0 0 25px rgba(0, 217, 255, .45));
             animation: logoFloat 3s ease-in-out infinite;
         }
 
@@ -146,6 +146,66 @@
             text-shadow: 0 0 8px rgba(0, 0, 0, .18);
         }
 
+        .qr-section {
+            margin: 28px 0 32px;
+        }
+
+        .qr-title {
+            font-family: "Oxanium", sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #fff;
+            text-shadow: 0 0 12px rgba(121, 231, 255, .45);
+        }
+
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .qr-card {
+            padding: 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            background: rgba(255, 255, 255, .10);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            text-align: center;
+            transition: .3s;
+        }
+
+        .qr-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 217, 255, .45);
+        }
+
+        .qr-card img {
+            width: 160px;
+            max-width: 100%;
+            border-radius: 14px;
+            background: white;
+            padding: 8px;
+        }
+
+        .qr-card h3 {
+            margin-top: 15px;
+            font-family: "Oxanium", sans-serif;
+            color: #fff;
+        }
+
+        .qr-card p {
+            margin-top: 6px;
+            font-size: .9rem;
+            color: #d8f8ff;
+        }
+
+        .qr-card a {
+            color: inherit;
+            text-decoration: none;
+        }
+
         .social-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -162,9 +222,9 @@
             color: #081018;
             text-decoration: none;
             background: linear-gradient(135deg,
-                rgba(249, 87, 211, .34),
-                rgba(168, 125, 244, .34),
-                rgba(114, 225, 245, .34));
+                    rgba(249, 87, 211, .34),
+                    rgba(168, 125, 244, .34),
+                    rgba(114, 225, 245, .34));
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             box-shadow:
@@ -272,14 +332,45 @@
             animation: starExplode 2.8s ease-out;
         }
 
-        .firework span:nth-child(1) { --x: 0px; --y: -80px; }
-        .firework span:nth-child(2) { --x: 60px; --y: -60px; }
-        .firework span:nth-child(3) { --x: 80px; --y: 0px; }
-        .firework span:nth-child(4) { --x: 60px; --y: 60px; }
-        .firework span:nth-child(5) { --x: 0px; --y: 80px; }
-        .firework span:nth-child(6) { --x: -60px; --y: 60px; }
-        .firework span:nth-child(7) { --x: -80px; --y: 0px; }
-        .firework span:nth-child(8) { --x: -60px; --y: -60px; }
+        .firework span:nth-child(1) {
+            --x: 0px;
+            --y: -80px;
+        }
+
+        .firework span:nth-child(2) {
+            --x: 60px;
+            --y: -60px;
+        }
+
+        .firework span:nth-child(3) {
+            --x: 80px;
+            --y: 0px;
+        }
+
+        .firework span:nth-child(4) {
+            --x: 60px;
+            --y: 60px;
+        }
+
+        .firework span:nth-child(5) {
+            --x: 0px;
+            --y: 80px;
+        }
+
+        .firework span:nth-child(6) {
+            --x: -60px;
+            --y: 60px;
+        }
+
+        .firework span:nth-child(7) {
+            --x: -80px;
+            --y: 0px;
+        }
+
+        .firework span:nth-child(8) {
+            --x: -60px;
+            --y: -60px;
+        }
 
         .music-control {
             position: fixed;
@@ -356,10 +447,12 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(.3);
             }
+
             70% {
                 opacity: 1;
                 transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1);
             }
+
             100% {
                 opacity: 0;
                 transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(.5);
@@ -367,13 +460,27 @@
         }
 
         @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
         @keyframes panelIn {
-            from { opacity: 0; transform: translateY(22px) scale(.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         @media (max-width: 640px) {
@@ -441,6 +548,7 @@
                     inset 0 0 10px rgba(255, 255, 255, .15);
             }
         }
+
         footer {
             position: relative;
             z-index: 2;
@@ -495,8 +603,41 @@
                 music, games, language learning, and future updates.
             </p>
 
+            <div class="qr-section">
+
+                <div class="qr-title">
+                    Scan with your phone
+                </div>
+
+                <div class="qr-grid">
+
+                    <a class="qr-card" href="https://www.chaynova.com" target="_blank">
+
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://www.chaynova.com"
+                            alt="CHAYNOVA QR Code">
+
+                        <h3>CHAYNOVA</h3>
+                        <p>www.chaynova.com</p>
+
+                    </a>
+
+                    <a class="qr-card" href="https://www.chaynova.com/shop" target="_blank">
+
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://www.chaynova.com/shop"
+                            alt="CHAYNOVA Shop QR Code">
+
+                        <h3>Shop</h3>
+                        <p>www.chaynova.com/shop</p>
+
+                    </a>
+
+                </div>
+
+            </div>
+
             <div class="social-grid">
-                <a class="social-card" href="https://www.youtube.com/@thechaynova" target="_blank" rel="noopener noreferrer">
+                <a class="social-card" href="https://www.youtube.com/@thechaynova" target="_blank"
+                    rel="noopener noreferrer">
                     <span class="social-icon">▶</span>
                     <span>
                         <span class="social-name">YouTube</span>
@@ -504,7 +645,8 @@
                     </span>
                 </a>
 
-                <a class="social-card" href="https://www.tiktok.com/@thechaynova" target="_blank" rel="noopener noreferrer">
+                <a class="social-card" href="https://www.tiktok.com/@thechaynova" target="_blank"
+                    rel="noopener noreferrer">
                     <span class="social-icon">♪</span>
                     <span>
                         <span class="social-name">TikTok</span>
@@ -512,7 +654,8 @@
                     </span>
                 </a>
 
-                <a class="social-card" href="https://www.instagram.com/thechaynova" target="_blank" rel="noopener noreferrer">
+                <a class="social-card" href="https://www.instagram.com/thechaynova" target="_blank"
+                    rel="noopener noreferrer">
                     <span class="social-icon">◎</span>
                     <span>
                         <span class="social-name">Instagram</span>
@@ -542,8 +685,10 @@
     </main>
 
     <div class="music-control">
-        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="29" aria-label="Music volume">
-        <button id="musicBtn" class="music-btn" type="button" title="Play Music" aria-label="Play or pause background music">🔇</button>
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="29"
+            aria-label="Music volume">
+        <button id="musicBtn" class="music-btn" type="button" title="Play Music"
+            aria-label="Play or pause background music">🔇</button>
     </div>
 
 
@@ -597,6 +742,7 @@
             }, index * 900);
         });
     </script>
-        <footer><a href="about.html">© 2026 CHAYNOVA</a> • Inspired by Thailand • Based in New York</footer>
+    <footer><a href="about.html">© 2026 CHAYNOVA</a> • Inspired by Thailand • Based in New York</footer>
 </body>
+
 </html>
