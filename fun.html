@@ -1,846 +1,1415 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATHLESTICS STORE| CHAYNOVA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun| CHAYNOVA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255, 208, 64, .42), transparent 28%),
+                radial-gradient(circle at 85% 18%, rgba(0, 229, 255, .38), transparent 30%),
+                radial-gradient(circle at 50% 85%, rgba(255, 73, 206, .30), transparent 34%),
+                linear-gradient(135deg, #dd7a13 0%, #f32708 48%, #e41877 100%);
+        }
 
-body {
-    min-height: 100vh;
-    overflow-x: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(255, 0, 180, .4), transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(0, 200, 255, .4), transparent 30%),
-        linear-gradient(135deg, #030010, #080033, #001234);
-}
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(255, 255, 255, .08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .08) 1px, transparent 1px);
+            background-size: 42px 42px;
+            opacity: .35;
+        }
 
-/* Header */
-header{
-    position:fixed;
-    top:18px;
-    left:50%;
-    transform:translateX(-50%);
-    width:min(92vw,1050px);
-    z-index:20;
-    display:flex;
-    justify-content:center;
-    padding:8px 18px;
-    border:1px solid rgba(255,255,255,.25);
-    border-radius:999px;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    box-shadow:0 0 28px rgba(0,217,255,.25);
-}
-
-header nav{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:20px;
-}
-
-header a{
-    font-family:"Oxanium", sans-serif;
-    font-size:.95rem;
-    font-weight:700;
-    color:white;
-    text-decoration:none;
-    letter-spacing:.6px;
-    transition:.25s ease;
-}
-
-
-header a:hover,
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 1050px);
+            z-index: 50;
+            display: flex;
+            justify-content: center;
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+        }
+        header a:hover,
         header a[aria-current="page"] {
             color: #001019;
             text-shadow: 0 0 14px rgba(255, 255, 255, .9);
         }
 
+        header a {
+            position: relative;
+            font-family: "Oxanium", sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 0.6px;
+            transition: 0.25s ease;
+        }
 
-@media (max-width:560px){
-    header{
-        top:12px;
-        border-radius:24px;
-    }
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-    header nav{
-        gap:13px;
-    }
+        nav a {
+            font-size: .95rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: .6px;
+            transition: .25s ease;
+        }
 
-    header a{
-        font-size:.82rem;
-    }
-}
+        nav a:hover {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
 
-/* BACKGROUND */
-
-
-/* MAIN */
-.container{
-    position:relative;
-    z-index:5;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-    padding:20px;
-}
-
-.main-logo{
-    width:100%;
-    max-width:420px;
-    height:auto;
-    margin:0 auto 20px;
-    padding:0;
-    display:block;
-    object-fit:contain;
-}
-
-/* MENU */
-.menu-bar{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:16px;
-}
-
-.menu-bar a{
-    font-family:"Oxanium", sans-serif !important;
-    position:relative;
-    overflow:hidden;
-    min-width:145px;
-    padding:14px 22px;
-    text-align:center;
-    text-decoration:none;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.6px;
-    color:black;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.25);
-    background:linear-gradient(
-        135deg,
-        rgba(249, 87, 211, 0.35),
-        rgba(168, 125, 244, 0.35),
-        rgba(114, 225, 245, 0.35)
-    );
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:
-        0 0 18px rgba(0,217,255,.35),
-        inset 0 0 15px rgba(255,255,255,.08);
-    cursor:pointer;
-    transition:.35s ease;
-}
-
-.menu-bar a::before{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:60%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.6),
-        transparent
-    );
-    transform:skewX(-25deg);
-    transition:.75s;
-}
-
-.menu-bar a:hover::before{
-    left:160%;
-}
-
-.menu-bar a:hover{
-    transform:translateY(-4px) scale(1.05);
-    background:linear-gradient(135deg,#ef94da,#a97df6,#70e0f4);
-    box-shadow:
-        0 0 10px #bab4b6,
-        0 0 20px #768cc2,
-        0 0 30px #2a9fb4;
-}
-
-.menu-bar a:active{
-    transform:scale(.96);
-}
-
-.menu-icon{
-    width:280px;
-    height:280px;
-    object-fit:contain;
-    display:block;
-    margin:0 auto 12px;
-}
-
-/* MUSIC BUTTON */
-.music-control {
+        #musicPlayer {
             position: fixed;
-            right: 18px;
-            bottom: calc(22px + env(safe-area-inset-bottom));
-            z-index: 90;
-            width: 22px;
-            padding: 9px 0 0;
+            top: 88px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 650px);
+            z-index: 45;
+            padding: 14px 20px 34px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .15);
+            border: 1px solid rgba(255, 255, 255, .25);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .18);
+        }
+
+        #songTitle {
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #songSelect {
+            width: 100%;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 999px;
+            background: white;
+            color: #111;
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+        }
+
+        #musicBtn {
+            position: absolute;
+            left: 50%;
+            bottom: -23px;
+            transform: translateX(-50%);
+            width: 46px;
+            height: 46px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            color: #111;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+            transition: .25s ease;
+        }
+
+        #musicBtn:hover {
+            transform: translateX(-50%) scale(1.08);
+        }
+
+        /* Curved volume control below the play button */
+        #volumeControl {
+            position: absolute;
+            left: 50%;
+            bottom: -78px;
+            width: 130px;
+            height: 58px;
+            transform: translateX(-50%);
+            touch-action: none;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        #volumeControl svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, .28));
+        }
+
+        .volume-track {
+            fill: none;
+            stroke: rgba(255, 255, 255, .28);
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .volume-progress {
+            fill: none;
+            stroke: white;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .volume-knob {
+            fill: white;
+            stroke: rgba(0, 0, 0, .18);
+            stroke-width: 2;
+        }
+
+
+        body.iphone-device #volumeControl {
+            display: none;
+        }
+
+        body.iphone-device #musicBtn {
+            bottom: -55px;
+        }
+
+        #volumeValue {
+            position: absolute;
+            left: 50%;
+            bottom: -4px;
+            transform: translateX(-50%);
+            min-width: 38px;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, .45);
+            pointer-events: none;
+        }
+
+        main {
+            position: relative;
+            z-index: 5;
+
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 275px 20px 80px;
+        }
+
+        #logo {
+            width: min(330px, 82vw);
+            margin-bottom: 40px;
+
+            filter:
+                drop-shadow(0 0 12px rgba(255, 255, 255, .4)) drop-shadow(0 0 28px rgba(0, 217, 255, .5));
+
+            animation: logoFloat 3.2s ease-in-out infinite;
+        }
+
+        #storyList {
+
+            width: min(720px, 90vw);
+
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            background: rgba(255, 255, 255, .12);
+
+            border: 1px solid rgba(255, 255, 255, .25);
+
             border-radius: 28px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+
+            padding: 30px;
+
+            backdrop-filter: blur(18px);
+
             box-shadow:
-                0 0 18px rgba(0, 217, 255, .45),
-                inset 0 0 10px rgba(255, 255, 255, .15);
-            overflow: hidden;
+                0 15px 40px rgba(0, 0, 0, .25);
         }
 
-        .volume-slider {
-            appearance: none;
-            -webkit-appearance: none;
-            writing-mode: vertical-lr;
-            direction: rtl;
-            width: 6px;
-            height: 72px;
-            margin-bottom: 4px;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, .3);
-            background: rgba(255, 255, 255, .2);
-            cursor: pointer;
-        }
+        #storyList h2 {
 
-        .volume-slider::-webkit-slider-thumb {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid white;
-            background: linear-gradient(135deg, #ff72cf, #9f7dff, #66e8ff);
-            box-shadow: 0 0 12px rgba(0, 217, 255, .6);
-        }
+            margin-bottom: 24px;
 
-        .volume-slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border: 2px solid white;
-            border-radius: 50%;
-            background: #66e8ff;
-        }
+            font-size: 30px;
 
-        .music-btn {
-            width: 56px;
-            height: 50px;
-            border: none;
-            border-top: 1px solid rgba(255, 255, 255, .15);
-            cursor: pointer;
-            font-size: 24px;
             color: white;
+
+            text-align: center;
+        }
+
+        #storyButtons {
+
+            width: 100%;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 16px;
+        }
+
+        #storyLayer {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .storyBubble {
+            position: absolute;
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, .22);
+            border: 1px solid rgba(255, 255, 255, .4);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 0 24px rgba(0, 217, 255, .45);
+            animation: popIn .35s ease;
+        }
+
+        .storyBubble:hover {
+            transform: scale(1.08);
+        }
+
+        .storyWindow {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: min(90vw, 560px);
+            max-height: 72vh;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            padding: 24px;
+            border-radius: 28px;
+            background: rgba(10, 15, 25, .9);
+            border: 1px solid rgba(255, 255, 255, .28);
+            color: white;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+            overflow-y: auto;
+            pointer-events: auto;
+        }
+
+        .storyWindow h2 {
+            margin-bottom: 14px;
+        }
+
+        .storyWindow p {
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .storyClose {
+            margin-top: 20px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            background: white;
+            color: #111;
+        }
+
+        footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 12px;
+            z-index: 300;
+            text-align: center;
+            padding: 10px 20px;
+            color: #9bdfff;
+            font-size: 14px;
+            text-shadow: 0 0 12px rgba(0, 217, 255, 0.6);
+        }
+
+        .hidden-admin-btn {
+            width: 22px;
+            height: 22px;
+            margin-left: 6px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
             background: transparent;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 20px;
+            line-height: 22px;
+            text-align: center;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .hidden-admin-btn:hover {
+            color: #00d9ff;
+            text-shadow: 0 0 12px #00d9ff;
+        }
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-9px);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(.4);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media screen and (max-width: 560px) {
+            header {
+                top: 12px;
+                border-radius: 24px;
+            }
+
+            nav {
+                gap: 13px;
+            }
+
+            nav a {
+                font-size: .82rem;
+            }
+
+            #musicPlayer {
+                top: 100px;
+                width: 94vw;
+            }
+
+            main {
+                padding-top: 305px;
+            }
+
+            .storyBubble {
+                width: 64px;
+                height: 64px;
+                font-size: 13px;
+            }
+        }
+
+        .storyPhoto {
+            width: 100%;
+            max-height: 260px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+        }
+
+        #storyList {
+            margin-top: 50px;
+            width: min(700px, 90vw);
+
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .25);
+
+            border-radius: 28px;
+
+            padding: 28px;
+
+            backdrop-filter: blur(18px);
+        }
+
+        #storyList h2 {
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        #storyButtons {
+            display: grid;
+            gap: 14px;
+        }
+
+        .storyItem {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            padding: 14px 18px;
+
+            border: none;
+            border-radius: 18px;
+
+            background: rgba(255, 255, 255, .10);
+
+            color: white;
+
+            cursor: pointer;
+
             transition: .25s;
         }
 
-        .music-btn:hover {
-            background: rgba(255, 255, 255, .12);
+        .storyItem:hover {
+            background: rgba(255, 255, 255, .22);
+            transform: translateY(-2px);
         }
 
 
-/* Hide volume slider on iPhone, iPad, and other touch devices */
-@media (hover: none) and (pointer: coarse) {
-    .music-control {
-        width: 56px;
-        height: 56px;
-        padding: 0;
-        border: none;
-        background: transparent;
-        box-shadow: none;
-        overflow: visible;
-    }
+        .story-card-wrap {
+            width: 100%;
+            display: grid;
+            gap: 9px;
+        }
 
-    .volume-slider {
-        display: none;
-    }
+        .story-admin-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            padding: 0 4px;
+        }
 
-    .music-btn {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        border: 1px solid rgba(255,255,255,.25);
-        background: rgba(255,255,255,.12);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow:
-            0 0 18px rgba(0,217,255,.45),
-            inset 0 0 10px rgba(255,255,255,.15);
-    }
-}
+        .story-admin-actions button,
+        .story-admin-actions a,
+        .story-window-admin button,
+        .story-window-admin a {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 15px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            background: linear-gradient(90deg, #ff2fcf, #7b2cff, #00d9ff);
+            box-shadow: 0 0 12px rgba(0, 217, 255, .35);
+        }
 
-/* FOOTER */
-footer {
+        .story-admin-actions .delete-story-btn,
+        .story-window-admin .delete-story-btn {
+            background: linear-gradient(90deg, #8b101d, #ff5f73);
+        }
+
+        .story-window-admin {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .story-window-admin .storyClose {
+            margin-top: 0;
+        }
+
+        .storyThumb {
+            width: 70px;
+            height: 70px;
+
+            border-radius: 14px;
+
+            object-fit: cover;
+        }
+
+        .storyTitle {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .storyPreview {
+            font-size: 13px;
+            opacity: .8;
+            margin-top: 4px;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-logo img {
+            height: 22px;
+            /* Adjust size as needed */
+            width: auto;
+            vertical-align: middle;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-logo img:hover {
+            transform: scale(1.1);
+        }
+
+        footer {
             position: relative;
-            z-index: 2;
-            padding: 26px 20px 34px;
+            z-index: 5;
             text-align: center;
-            color: #c9f5ff;
-            font-size: 0.92rem;
+            padding: 40px 20px;
+            color: #9bdfff;
         }
 
-.hidden-admin-btn{
-    width:18px;
-    height:18px;
-    margin-left:6px;
-    border:none;
-    border-radius:50%;
-    background:transparent;
-    color:rgba(255,255,255,.08);
-    cursor:pointer;
-}
+        .hidden-admin-btn {
+            width: 18px;
+            height: 18px;
+            margin-left: 6px;
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            color: rgba(255, 255, 255, .08);
+            cursor: pointer;
+        }
 
-.hidden-admin-btn:hover{
-    color:#00d9ff;
-    text-shadow:0 0 12px #00d9ff;
-}
+        .hidden-admin-btn:hover {
+            color: #00d9ff;
+            text-shadow: 0 0 12px #00d9ff;
+        }
 
-/* LOGIN */
-.login-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:200;
-    background:rgba(0,0,20,.82);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
+        .login-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 20, .82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-.login-box{
-    width:min(92vw,420px);
-    padding:28px;
-    border-radius:24px;
-    background:rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.25);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    box-shadow:0 0 35px rgba(0,217,255,.4);
-    text-align:center;
-}
+        .login-box {
+            width: min(92vw, 420px);
+            padding: 28px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .25);
+            box-shadow: 0 0 35px rgba(0, 217, 255, .4);
+            text-align: center;
+        }
 
-.login-box h2{
-    color:#8ef2ff;
-    margin-bottom:18px;
-}
+        .login-box h2 {
+            color: #8ef2ff;
+            margin-bottom: 18px;
+        }
 
-.login-box input{
-    width:100%;
-    margin:10px 0;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    outline:none;
-    font-size:16px;
-}
+        .login-box input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            outline: none;
+            font-size: 16px;
+        }
 
-.login-actions{
-    display:flex;
-    gap:12px;
-    margin-top:16px;
-}
+        .login-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
 
-.login-actions button,
-.admin-panel a,
-.logout-btn{
-    flex:1;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    color:white;
-    font-weight:bold;
-    text-decoration:none;
-    cursor:pointer;
-    background:linear-gradient(135deg,#ff2fcf,#7b2cff,#00d9ff);
-}
+        .login-actions button,
+        .admin-panel a,
+        .logout-btn {
+            flex: 1;
+            border: none;
+            border-radius: 14px;
+            padding: 12px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            background: linear-gradient(90deg, #ff2fcf, #7b2cff, #00d9ff);
+            box-shadow: 0 0 16px rgba(0, 217, 255, .45);
+        }
 
-.admin-panel{
-    display:none;
-    margin-top:18px;
-    gap:12px;
-    flex-direction:column;
-}
+        .admin-panel {
+            display: none;
+            margin-top: 18px;
+            gap: 12px;
+            flex-direction: column;
+        }
 
-.login-error{
-    margin-top:12px;
-    color:#ffd966;
-    min-height:20px;
-}
+        .login-error {
+            margin-top: 12px;
+            color: #ffd966;
+            min-height: 20px;
+        }
 
-.admin-note{
-    margin-top:12px;
-    font-size:13px;
-    color:#9bdfff;
-    line-height:1.5;
-}
+        .admin-note {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #9bdfff;
+            line-height: 1.5;
+        }
 
-/* ANIMATIONS */
-@keyframes logoFloat{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-8px);}
-}
+        @media(max-width:700px) {
+            .top-bar {
+                flex-direction: column;
+            }
 
-@keyframes explode{
-    0%{
-        opacity:1;
-        box-shadow:0 0 0 currentColor;
-    }
+            .menu-row {
+                flex-direction: column;
+                align-items: center;
+            }
 
-    70%{
-        opacity:1;
-        box-shadow:
-            0 -80px currentColor,
-            60px -60px currentColor,
-            80px 0 currentColor,
-            60px 60px currentColor,
-            0 80px currentColor,
-            -60px 60px currentColor,
-            -80px 0 currentColor,
-            -60px -60px currentColor;
-    }
+            .menu-row a {
+                width: 240px;
+            }
+        }
 
-    100%{
-        opacity:0;
-    }
-}
+        .storyTitle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-/* MOBILE */
-@media screen and (max-width:768px){
-    .menu-bar{
-        flex-direction:column;
-        align-items:stretch;
-        width:100%;
-        max-width:360px;
-    }
+        .new-badge {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #fff;
+            background: linear-gradient(90deg, #ff3b3b, #ff9a00);
+            animation: newPulse .9s infinite alternate;
+            box-shadow: 0 0 10px rgba(255, 80, 80, .6);
+        }
 
-    .menu-bar a{
-        width:100%;
-        min-width:0;
-        padding:16px;
-    }
+        @keyframes newPulse {
+            from {
+                transform: scale(1);
+                opacity: .8;
+            }
 
-    .login-actions{
-        flex-direction:column;
-    }
-}
+            to {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+        }
 
-.category{
-    width:100%;
-    max-width:1100px;
-    margin:50px auto;
-}
+        .storyWindow p a {
+            color: #63eaff;
+            font-weight: bold;
+            text-decoration: underline;
+            overflow-wrap: anywhere;
+        }
 
-.product-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:25px;
-    margin-top:25px;
-}
-
-.product-img{
-    width:100%;
-    aspect-ratio:1/1;
-    object-fit:cover;
-    border-radius:22px;
-    background:white;
-    box-shadow:
-        0 0 15px rgba(0,217,255,.35);
-    transition:.3s;
-}
-
-.product-img:hover{
-    transform:translateY(-6px) scale(1.03);
-    box-shadow:
-        0 0 30px rgba(0,217,255,.7);
-}
-
-.categories{
-    display:grid;
-    grid-template-columns:repeat(2, minmax(320px,1fr));
-    gap:60px;
-    width:100%;
-    max-width:1400px;
-    margin:40px auto;
-}
-
-.category{
-    text-align:center;
-}
-
-.product-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:20px;
-    margin-top:20px;
-}
-
-.product-img{
-    width:100%;
-    aspect-ratio:1;
-    object-fit:cover;
-    border-radius:20px;
-    background:#fff;
-    box-shadow:0 0 18px rgba(0,217,255,.35);
-    transition:.3s;
-}
-
-.product-img:hover{
-    transform:translateY(-5px) scale(1.03);
-    box-shadow:0 0 30px rgba(0,217,255,.6);
-}
-
-/* Mobile */
-@media (max-width:900px){
-
-    .categories{
-        grid-template-columns:1fr;
-        gap:40px;
-    }
-
-}
-
-.top-nav {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.nav-logo img {
-    height: 22px;      /* Adjust size as needed */
-    width: auto;
-    vertical-align: middle;
-    transition: transform 0.2s ease;
-}
-
-.nav-logo img:hover {
-    transform: scale(1.1);
-}
-
-
-
-</style>
+        .storyWindow p a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px #00d9ff;
+        }
+    </style>
 </head>
 
 <body>
+    <header class="top-header">
+        <nav class="top-nav">
+            <a href="shop.html">Store</a>
+            <a href="fun.html" aria-current="page">Fun</a>
+            <a href="support.html">Support</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
 
-<audio id="bgMusic" loop>
-    <source src="audio/background.mp3" type="audio/mpeg">
-</audio>
+            <a href="index.html" class="nav-logo">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+            </a>
+        </nav>
+    </header>
 
-<header class="top-header">
-    <nav class="top-nav">
-        <a href="shop.html" aria-current="page">Store</a>
-        <a href="fun.html">Fun</a>
-        <a href="support.html">Support</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+    <div id="musicPlayer">
+        <div id="songTitle">Strawberry Elephant</div>
+        <select id="songSelect"></select>
+        <button id="musicBtn" type="button" aria-label="Play music">▶</button>
 
-        <a href="index.html" class="nav-logo">
-            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-        </a>
-    </nav>
-</header>
-
-<div class="firework"></div>
-<div class="firework"></div>
-<div class="firework"></div>
-
-
-<main class="container" id="mainContent">
-  <div class="categories">
-
-    <!-- Athletics -->
-    <section class="category">
-
-        <img
-            src="logo/CHAYNOVAATH.png"
-            class="main-logo"
-            alt="CHAYNOVA Athletics">
-
-        <div class="product-grid">
-
-            <img src="images/sport1.png" class="product-img" alt="">
-            <img src="images/sport2.png" class="product-img" alt="">
-            <img src="images/sport3.png" class="product-img" alt="">
-            <img src="images/sport4.png" class="product-img" alt="">
-
+        <div id="volumeControl"
+             role="slider"
+             tabindex="0"
+             aria-label="Music volume"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             aria-valuenow="35">
+            <svg viewBox="0 0 100 55" aria-hidden="true">
+                <path class="volume-track" d="M 8 8 Q 50 58 92 8"></path>
+                <path id="volumeProgress" class="volume-progress" d="M 8 8 Q 50 58 92 8"></path>
+                <circle id="volumeKnob" class="volume-knob" cx="37.4" cy="29.1" r="7"></circle>
+            </svg>
+            <span id="volumeValue">35%</span>
         </div>
-
-    </section>
-
-    <!-- Regular Clothing -->
-    <section class="category">
-
-        <img
-            src="logo/REGCLOTHTRANS.png"
-            class="main-logo"
-            alt="Regular Clothing">
-
-        <div class="product-grid">
-
-<img src="images/casual1.jpg" class="product-img" alt="Traditional Thai Outfit">
-<img src="images/casual2.jpg" class="product-img" alt="Thai Formal Wear">
-<img src="images/casual3.jpg" class="product-img" alt="Modern Thai Casual">
-<img src="images/casual4.jpg" class="product-img" alt="Modern Thai Jacket">
-
-        </div>
-
-    </section>
-
-</div>
-
-    <nav class="menu-bar">
-        <a href="shop.html">
-            <img src="logo/SPORTWEARTRANS.png" class="menu-icon" alt="">
-            Shop Sportswear
-        </a>
-
-        <a href="game.html">
-            <img src="logo/PLAYZCTRANS.png" class="menu-icon" alt="">
-            Play Zone
-        </a>
-
-        <a href="music.html">
-            <img src="logo/BEATSTRANS.png" class="menu-icon" alt="">
-            Beats
-        </a>
-
-        <a href="video.html">
-            <img src="logo/WATCHTRANS.png" class="menu-icon" alt="">
-            Watch
-        </a>
-    </nav>
-</main>
-
-<div class="music-control">
-        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="29" aria-label="Music volume">
-        <button id="musicBtn" class="music-btn" type="button" title="Play Music" aria-label="Play or pause background music">🔇</button>
     </div>
 
-<footer id="siteFooter">
-    <footer><a href="about.html">© 2026 CHAYNOVA</a>
-    <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
-</footer>
+    <audio id="bgMusic"></audio>
 
-<div id="loginOverlay" class="login-overlay">
-    <div class="login-box">
+    <div id="storyLayer"></div>
 
-        <h2>CHAYNOVA Admin</h2>
+    <main>
 
-        <div id="loginForm">
-            <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-            <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+        <img id="logo" src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Logo">
 
-            <div class="login-actions">
-                <button onclick="checkLogin()">Login</button>
-                <button onclick="closeLogin()">Cancel</button>
+        <section id="storyList">
+
+            <h2>📖 Stories</h2>
+
+            <div id="storyButtons"></div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <footer><a href="about.html">© 2026 CHAYNOVA</a> • Inspired by Thailand • Based in New York
+        <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
+    </footer>
+
+    <div id="loginOverlay" class="login-overlay" aria-hidden="true">
+        <div class="login-box">
+
+            <h2>CHAYNOVA Admin</h2>
+
+            <div id="loginForm">
+                <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+                <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+
+                <div class="login-actions">
+                    <button type="button" onclick="checkLogin()">Login</button>
+                    <button type="button" onclick="closeLogin()">Cancel</button>
+                </div>
+
+                <div id="loginError" class="login-error"></div>
+
+                <div class="admin-note">
+                    Login is checked by your Cloudflare Worker.
+                </div>
             </div>
 
-            <div id="loginError" class="login-error"></div>
-
-            <div class="admin-note">
-                Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
+            <div id="adminPanel" class="admin-panel">
+                <a href="admin-edit-post.html">Edit Fun</a>
+                <a href="fun.html">Open Fun</a>
+                <a href="index.html">Home</a>
+                <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
+                <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
             </div>
-        </div>
 
-        <div id="adminPanel" class="admin-panel">
-            <a href="story-admin.html">Post New Story</a>
-            <a href="story.html?admin=1">Open Story Admin View</a>
-            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-            <button class="logout-btn" onclick="closeLogin()">Close</button>
         </div>
-
     </div>
-</div>
 
-<script>
-const API = "https://chay1api.mikebewise.workers.dev";
-
-const music = document.getElementById("bgMusic");
-const musicBtn = document.getElementById("musicBtn");
-const volumeSlider = document.getElementById("volumeSlider");
-
-music.volume = Number(volumeSlider.value) / 100;
-
-volumeSlider.addEventListener("input", () => {
-    music.volume = Number(volumeSlider.value) / 100;
-});
-
-/*
-Most browsers block music autoplay.
-The music button lets the user start music manually.
-*/
-
-musicBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    if(music.paused){
-        music.play();
-        musicBtn.innerHTML = "🔊";
-        musicBtn.title = "Pause Music";
-    }else{
-        music.pause();
-        musicBtn.innerHTML = "🔇";
-        musicBtn.title = "Play Music";
-    }
-});
-
-function openLogin(){
-    document.getElementById("loginOverlay").style.display = "flex";
-    updateAdminPanel();
-
-    setTimeout(() => {
-        const usernameInput = document.getElementById("usernameInput");
-        if(usernameInput && usernameInput.offsetParent !== null){
-            usernameInput.focus();
-        }
-    }, 100);
-}
-
-function closeLogin(){
-    document.getElementById("loginOverlay").style.display = "none";
-    document.getElementById("loginError").innerText = "";
-}
-
-async function checkLogin(){
-    const username = document.getElementById("usernameInput").value.trim();
-    const password = document.getElementById("passwordInput").value.trim();
-    const errorBox = document.getElementById("loginError");
-
-    if(!username || !password){
-        errorBox.innerText = "Please enter username and password.";
-        return;
-    }
-
-    errorBox.innerText = "Checking login...";
-
-    try{
-        const response = await fetch(API + "/login", {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+    <script>
+        const songs = [
+            {
+                title: "Strawberry Elephant one",
+                file: "audio/strawberryElephantE.mp3"
             },
-            body:JSON.stringify({
-                username:username,
-                password:password
-            })
+            {
+                title: "I Miss You Every Day",
+                file: "audio/background.mp3"
+            },
+            {
+                title: "The 25th Floor",
+                file: "audio/the25thFloor.mp3"
+            },
+            {
+                title: "Love Defenders Do",
+                file: "audio/LoveDefendersDo.mp3"
+            },
+            {
+                title: "Strawberry Elephant Thai",
+                file: "audio/strawberryElephant.mp3"
+            }
+        ];
+
+        const API = "https://chay1api.mikebewise.workers.dev";
+        const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
+
+        let stories = [];
+
+        const storyButtons = document.getElementById("storyButtons");
+
+        function escapeHtml(value = "") {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function makeLinksClickable(text = "") {
+            const safeText = escapeHtml(text);
+
+            return safeText.replace(
+                /(https?:\/\/[^\s<]+)/g,
+                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+            );
+        }
+
+        function imageUrl(imageName) {
+            if (!imageName) return "";
+            if (/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")) {
+                return imageName;
+            }
+            return `${API}/image/${encodeURIComponent(imageName)}`;
+        }
+
+        function normalizeStory(item) {
+            return {
+                id: item.id,
+                title: item.title || "Untitled",
+                text: item.story || "",
+                photo: imageUrl(item.image || ""),
+                position: Number(item.position || 0),
+                created_at: item.created_at || "",
+                updated_at: item.updated_at || item.created_at || ""
+            };
+        }
+
+        function isAdminLoggedIn() {
+            return Boolean(localStorage.getItem(ADMIN_TOKEN_KEY));
+        }
+
+        function openStoryEditor(storyId) {
+            localStorage.setItem("chaynovaEditStoryId", String(storyId));
+            window.location.href = `admin-edit-post.html?edit=${encodeURIComponent(storyId)}`;
+        }
+
+        async function deleteSavedStory(story) {
+            if (!isAdminLoggedIn()) {
+                alert("Your admin login has expired. Please log in again.");
+                openLogin();
+                return;
+            }
+
+            const confirmed = confirm(`Delete “${story.title}”?`);
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`${API}/story/${encodeURIComponent(story.id)}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN_KEY)}`
+                    }
+                });
+
+                const message = await response.text();
+
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem(ADMIN_TOKEN_KEY);
+                    updateAdminPanel();
+                    throw new Error("Your admin login expired. Please log in again.");
+                }
+
+                if (!response.ok) {
+                    throw new Error(message || "Could not delete the story.");
+                }
+
+                document.querySelector(".storyWindow")?.remove();
+                await loadSavedStories();
+            } catch (error) {
+                alert(error.message || "Could not delete the story.");
+            }
+        }
+
+        // Check if a story is new (created within the last 2 days) (2 * 24 * 60 * 60 * 1000)
+        function isNewStory(createdAt) {
+            if (!createdAt) return false;
+
+            const created = new Date(createdAt);
+            const now = new Date();
+
+            return (now - created) < (1 * 60 * 1000); // 1 minute
+        }
+
+
+        function renderStoryList() {
+            storyButtons.innerHTML = "";
+
+            if (!stories.length) {
+                storyButtons.innerHTML = `
+            <div style="padding:18px;text-align:center;opacity:.85;">
+                No saved stories yet.
+            </div>
+        `;
+                return;
+            }
+
+            const showAdminActions = isAdminLoggedIn();
+
+            stories.forEach(story => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "story-card-wrap";
+
+                const button = document.createElement("button");
+                button.className = "storyItem";
+
+                const previewText = story.text.length > 80
+                    ? `${story.text.substring(0, 80)}...`
+                    : story.text;
+
+                const imageHtml = story.photo
+                    ? `<img class="storyThumb" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+                    : `<div class="storyThumb" style="display:grid;place-items:center;background:rgba(255,255,255,.12);">📖</div>`;
+
+                button.innerHTML = `
+            ${imageHtml}
+            <div>
+                <div class="storyTitle">
+    ${escapeHtml(story.title)}
+    ${isNewStory(story.updated_at)
+                        ? '<span class="new-badge">NEW</span>'
+                        : ''}
+</div>
+                <div class="storyPreview">${escapeHtml(previewText)}</div>
+            </div>
+        `;
+
+                button.onclick = () => openStoryWindow(story);
+                wrapper.appendChild(button);
+
+                if (showAdminActions) {
+                    const actions = document.createElement("div");
+                    actions.className = "story-admin-actions";
+
+                    const editButton = document.createElement("button");
+                    editButton.type = "button";
+                    editButton.textContent = "Edit";
+                    editButton.onclick = () => openStoryEditor(story.id);
+
+                    const deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.className = "delete-story-btn";
+                    deleteButton.textContent = "Delete";
+                    deleteButton.onclick = () => deleteSavedStory(story);
+
+                    actions.append(editButton, deleteButton);
+                    wrapper.appendChild(actions);
+                }
+
+                storyButtons.appendChild(wrapper);
+            });
+        }
+
+        async function loadSavedStories() {
+            storyButtons.innerHTML = `
+        <div style="padding:18px;text-align:center;opacity:.85;">
+            Loading saved stories...
+        </div>
+    `;
+
+            try {
+                const response = await fetch(API, {
+                    method: "GET",
+                    cache: "no-store"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Could not load saved stories.");
+                }
+
+                const data = await response.json();
+
+                stories = (Array.isArray(data) ? data : [])
+                    .map(normalizeStory)
+                    .sort((a, b) =>
+                        new Date(b.updated_at) - new Date(a.updated_at)
+                    );
+
+                renderStoryList();
+            } catch (error) {
+                console.error(error);
+                storyButtons.innerHTML = `
+            <div style="padding:18px;text-align:center;color:#ffd966;">
+                ${escapeHtml(error.message || "Could not load saved stories.")}
+            </div>
+        `;
+            }
+        }
+
+        const music = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
+        const songSelect = document.getElementById("songSelect");
+        const songTitle = document.getElementById("songTitle");
+        const storyLayer = document.getElementById("storyLayer");
+        const volumeControl = document.getElementById("volumeControl");
+        const volumeProgress = document.getElementById("volumeProgress");
+        const volumeKnob = document.getElementById("volumeKnob");
+        const volumeValue = document.getElementById("volumeValue");
+
+        let currentSong = 0;
+        const maxPopups = 3;
+
+        music.volume = 0.69;
+
+        const volumePath = volumeProgress;
+        const volumePathLength = volumePath.getTotalLength();
+        let currentVolume = music.volume;
+
+        function updateVolumeControl(volume) {
+            currentVolume = Math.min(1, Math.max(0, volume));
+            music.volume = currentVolume;
+
+            const point = volumePath.getPointAtLength(volumePathLength * currentVolume);
+            volumeKnob.setAttribute("cx", point.x);
+            volumeKnob.setAttribute("cy", point.y);
+
+            volumeProgress.style.strokeDasharray = `${volumePathLength}`;
+            volumeProgress.style.strokeDashoffset =
+                `${volumePathLength * (1 - currentVolume)}`;
+
+            const percentage = Math.round(currentVolume * 100);
+            volumeValue.textContent = `${percentage}%`;
+            volumeControl.setAttribute("aria-valuenow", percentage);
+        }
+
+        function setVolumeFromPointer(event) {
+            const rect = volumeControl.getBoundingClientRect();
+            const x = Math.min(rect.width, Math.max(0, event.clientX - rect.left));
+            updateVolumeControl(x / rect.width);
+        }
+
+        volumeControl.addEventListener("pointerdown", event => {
+            volumeControl.setPointerCapture(event.pointerId);
+            setVolumeFromPointer(event);
         });
 
-        const data = await response.json();
+        volumeControl.addEventListener("pointermove", event => {
+            if (volumeControl.hasPointerCapture(event.pointerId)) {
+                setVolumeFromPointer(event);
+            }
+        });
 
-        if(response.ok && data.success && data.token){
-            localStorage.setItem("chaynovaAdminToken", data.token);
-            errorBox.innerText = "";
-            updateAdminPanel();
-        }else{
-            localStorage.removeItem("chaynovaAdminToken");
-            errorBox.innerText = "Wrong username or password.";
+        volumeControl.addEventListener("keydown", event => {
+            if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+                event.preventDefault();
+                updateVolumeControl(currentVolume + 0.05);
+            }
+
+            if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+                event.preventDefault();
+                updateVolumeControl(currentVolume - 0.05);
+            }
+
+            if (event.key === "Home") {
+                event.preventDefault();
+                updateVolumeControl(0);
+            }
+
+            if (event.key === "End") {
+                event.preventDefault();
+                updateVolumeControl(1);
+            }
+        });
+
+        updateVolumeControl(currentVolume);
+
+        songs.forEach((song, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = song.title;
+            songSelect.appendChild(option);
+        });
+
+        function loadSong(index) {
+            currentSong = index;
+            music.src = songs[index].file;
+            songTitle.textContent = songs[index].title;
+            songSelect.value = index;
         }
 
-    }catch(error){
-        errorBox.innerText = "Login failed. Check your Worker API.";
-    }
-}
+        loadSong(currentSong);
 
-function updateAdminPanel(){
-    const token = localStorage.getItem("chaynovaAdminToken");
+        musicBtn.addEventListener("click", () => {
+            if (music.paused) {
+                music.play()
+                    .then(() => {
+                        musicBtn.textContent = "❚❚";
+                    })
+                    .catch(() => {
+                        musicBtn.textContent = "▶";
+                    });
+            } else {
+                music.pause();
+                musicBtn.textContent = "▶";
+            }
+        });
 
-    if(token){
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("adminPanel").style.display = "flex";
-    }else{
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("adminPanel").style.display = "none";
-    }
-}
+        songSelect.addEventListener("change", () => {
+            const selectedSong = Number(songSelect.value);
+            loadSong(selectedSong);
 
-function logoutAdmin(){
-    localStorage.removeItem("chaynovaAdminToken");
-    document.getElementById("usernameInput").value = "";
-    document.getElementById("passwordInput").value = "";
-    updateAdminPanel();
-}
+            music.play()
+                .then(() => {
+                    musicBtn.textContent = "❚❚";
+                })
+                .catch(() => {
+                    musicBtn.textContent = "▶";
+                });
+        });
 
-document.getElementById("passwordInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        checkLogin();
-    }
-});
+        music.addEventListener("ended", () => {
+            currentSong = (currentSong + 1) % songs.length;
+            loadSong(currentSong);
+            music.play();
+        });
 
-document.getElementById("usernameInput").addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        document.getElementById("passwordInput").focus();
-    }
-});
+        function showRandomStory() {
+            if (!stories.length) return;
 
-window.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-        closeLogin();
-    }
-});
+            const currentPopups = document.querySelectorAll(".storyBubble").length;
 
-const fireworks = document.querySelectorAll(".firework");
+            if (currentPopups >= maxPopups) return;
 
-const colors = [
-    "#ff2fcf",
-    "#00d9ff",
-    "#ffaa00",
-    "#7b2cff",
-    "#00ff99",
-    "#ff5555"
-];
+            const story = stories[Math.floor(Math.random() * stories.length)];
 
-function randomizeFirework(fw) {
-    fw.style.left = Math.random() * 90 + "%";
-    fw.style.top = Math.random() * 70 + "%";
-    fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+            const bubble = document.createElement("button");
+            bubble.className = "storyBubble";
+            bubble.textContent = story.title;
 
-    // Restart animation
-    fw.style.animation = "none";
-    void fw.offsetWidth;
-    fw.style.animation = "explode 2.8s ease-out";
-}
+            const bubbleSize = 74;
+            const safeTop = 170;
+            const safeBottom = 90;
 
-// Start each firework at a different time
-fireworks.forEach((fw, i) => {
-    setTimeout(() => {
-        randomizeFirework(fw);
+            const maxX = window.innerWidth - bubbleSize - 20;
+            const maxY = window.innerHeight - bubbleSize - safeBottom;
 
-        setInterval(() => {
-            randomizeFirework(fw);
-        }, 2800);
+            const x = 20 + Math.random() * Math.max(0, maxX - 20);
+            const y = safeTop + Math.random() * Math.max(0, maxY - safeTop);
 
-    }, i * 900);
-});
+            bubble.style.left = `${x}px`;
+            bubble.style.top = `${y}px`;
 
+            bubble.addEventListener("click", () => {
+                bubble.remove();
+                openStoryWindow(story);
+            });
 
-</script>
+            storyLayer.appendChild(bubble);
 
+            setTimeout(() => {
+                bubble.remove();
+            }, 9000);
+        }
+
+        function openStoryWindow(story) {
+            const existingWindow = document.querySelector(".storyWindow");
+
+            if (existingWindow) {
+                existingWindow.remove();
+            }
+
+            const storyWindow = document.createElement("div");
+            storyWindow.className = "storyWindow";
+
+            const storyImage = story.photo
+                ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+                : "";
+
+            const adminButtons = isAdminLoggedIn()
+                ? `
+      <div class="story-window-admin">
+        <button type="button" class="edit-story-btn">Edit</button>
+        <button type="button" class="delete-story-btn">Delete</button>
+        <button type="button" class="storyClose">Close</button>
+      </div>
+    `
+                : `<button type="button" class="storyClose">Close</button>`;
+
+            storyWindow.innerHTML = `
+    ${storyImage}
+    <h2>${escapeHtml(story.title)}</h2>
+    <p>${makeLinksClickable(story.text)}</p>
+    ${adminButtons}
+  `;
+
+            storyWindow.querySelector(".storyClose").addEventListener("click", () => {
+                storyWindow.remove();
+            });
+
+            const editButton = storyWindow.querySelector(".edit-story-btn");
+            if (editButton) {
+                editButton.addEventListener("click", () => openStoryEditor(story.id));
+            }
+
+            const deleteButton = storyWindow.querySelector(".delete-story-btn");
+            if (deleteButton) {
+                deleteButton.addEventListener("click", () => deleteSavedStory(story));
+            }
+
+            document.body.appendChild(storyWindow);
+        }
+
+        function openLogin() {
+            const overlay = document.getElementById("loginOverlay");
+            overlay.style.display = "flex";
+            overlay.setAttribute("aria-hidden", "false");
+            document.getElementById("loginError").innerText = "";
+            updateAdminPanel();
+
+            setTimeout(() => {
+                const usernameInput = document.getElementById("usernameInput");
+                if (usernameInput && usernameInput.offsetParent !== null) {
+                    usernameInput.focus();
+                }
+            }, 100);
+        }
+
+        function closeLogin() {
+            const overlay = document.getElementById("loginOverlay");
+            overlay.style.display = "none";
+            overlay.setAttribute("aria-hidden", "true");
+            document.getElementById("loginError").innerText = "";
+        }
+
+        async function checkLogin() {
+            const usernameInput = document.getElementById("usernameInput");
+            const passwordInput = document.getElementById("passwordInput");
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            const errorBox = document.getElementById("loginError");
+
+            if (!username || !password) {
+                errorBox.innerText = "Please enter username and password.";
+                return;
+            }
+
+            errorBox.innerText = "Checking login...";
+
+            try {
+                const response = await fetch(`${API}/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                let data = {};
+                try {
+                    data = await response.json();
+                } catch (_) {
+                    throw new Error("The login API returned an invalid response.");
+                }
+
+                if (response.ok && data.success && data.token) {
+                    localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+                    passwordInput.value = "";
+                    errorBox.innerText = "";
+                    updateAdminPanel();
+                    renderStoryList();
+                } else {
+                    localStorage.removeItem(ADMIN_TOKEN_KEY);
+                    updateAdminPanel();
+                    errorBox.innerText = data.message || "Wrong username or password.";
+                }
+            } catch (error) {
+                localStorage.removeItem(ADMIN_TOKEN_KEY);
+                updateAdminPanel();
+                errorBox.innerText = error.message || "Login failed. Check your Worker API.";
+            }
+        }
+
+        function updateAdminPanel() {
+            const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+            const loginForm = document.getElementById("loginForm");
+            const adminPanel = document.getElementById("adminPanel");
+
+            if (token) {
+                loginForm.style.display = "none";
+                adminPanel.style.display = "flex";
+            } else {
+                loginForm.style.display = "block";
+                adminPanel.style.display = "none";
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem(ADMIN_TOKEN_KEY);
+            document.getElementById("usernameInput").value = "";
+            document.getElementById("passwordInput").value = "";
+            document.getElementById("loginError").innerText = "";
+            updateAdminPanel();
+            renderStoryList();
+        }
+
+        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                checkLogin();
+            }
+        });
+
+        document.getElementById("usernameInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                document.getElementById("passwordInput").focus();
+            }
+        });
+
+        document.getElementById("loginOverlay").addEventListener("click", function (e) {
+            if (e.target === this) {
+                closeLogin();
+            }
+        });
+
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                closeLogin();
+            }
+        });
+
+        window.openLogin = openLogin;
+        window.closeLogin = closeLogin;
+        window.checkLogin = checkLogin;
+        window.logoutAdmin = logoutAdmin;
+
+        updateAdminPanel();
+        loadSavedStories();
+
+        setInterval(showRandomStory, 3000);
+    </script>
 </body>
+
 </html>
