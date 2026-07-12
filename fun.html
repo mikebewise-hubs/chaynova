@@ -45,7 +45,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: min(92vw, 1050px);
-            z-index: 50;
+            z-index: 30;
             display: flex;
             justify-content: center;
             padding: 8px 18px;
@@ -56,6 +56,7 @@
             -webkit-backdrop-filter: blur(16px);
             box-shadow: 0 0 28px rgba(0, 217, 255, .25);
         }
+
         header a:hover,
         header a[aria-current="page"] {
             color: #001019;
@@ -769,13 +770,8 @@
         <select id="songSelect"></select>
         <button id="musicBtn" type="button" aria-label="Play music">▶</button>
 
-        <div id="volumeControl"
-             role="slider"
-             tabindex="0"
-             aria-label="Music volume"
-             aria-valuemin="0"
-             aria-valuemax="100"
-             aria-valuenow="35">
+        <div id="volumeControl" role="slider" tabindex="0" aria-label="Music volume" aria-valuemin="0"
+            aria-valuemax="100" aria-valuenow="35">
             <svg viewBox="0 0 100 55" aria-hidden="true">
                 <path class="volume-track" d="M 8 8 Q 50 58 92 8"></path>
                 <path id="volumeProgress" class="volume-progress" d="M 8 8 Q 50 58 92 8"></path>
@@ -805,366 +801,383 @@
 
     <footer>
         <footer><a href="about.html">© 2026 CHAYNOVA</a> • Inspired by Thailand • Based in New York
-        <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
-    </footer>
+            <button class="hidden-admin-btn" onclick="openLogin()" title="Admin">•</button>
+        </footer>
 
-    <div id="loginOverlay" class="login-overlay" aria-hidden="true">
-        <div class="login-box">
+        <div id="loginOverlay" class="login-overlay" aria-hidden="true">
+            <div class="login-box">
 
-            <h2>CHAYNOVA Admin</h2>
+                <h2>CHAYNOVA Admin</h2>
 
-            <div id="loginForm">
-                <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-                <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+                <div id="loginForm">
+                    <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+                    <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
-                <div class="login-actions">
-                    <button type="button" onclick="checkLogin()">Login</button>
-                    <button type="button" onclick="closeLogin()">Cancel</button>
+                    <div class="login-actions">
+                        <button type="button" onclick="checkLogin()">Login</button>
+                        <button type="button" onclick="closeLogin()">Cancel</button>
+                    </div>
+
+                    <div id="loginError" class="login-error"></div>
+
+                    <div class="admin-note">
+                        Login is checked by your Cloudflare Worker.
+                    </div>
                 </div>
 
-                <div id="loginError" class="login-error"></div>
-
-                <div class="admin-note">
-                    Login is checked by your Cloudflare Worker.
+                <div id="adminPanel" class="admin-panel">
+                    <a href="admin-edit-post.html">Edit Fun</a>
+                    <a href="fun.html">Open Fun</a>
+                    <a href="index.html">Home</a>
+                    <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
+                    <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
                 </div>
-            </div>
 
-            <div id="adminPanel" class="admin-panel">
-                <a href="admin-edit-post.html">Edit Fun</a>
-                <a href="fun.html">Open Fun</a>
-                <a href="index.html">Home</a>
-                <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
-                <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
             </div>
-
         </div>
-    </div>
 
-    <script>
-        const songs = [
-            {
-                title: "Strawberry Elephant one",
-                file: "audio/strawberryElephantE.mp3"
-            },
-            {
-                title: "I Miss You Every Day",
-                file: "audio/background.mp3"
-            },
-            {
-                title: "The 25th Floor",
-                file: "audio/the25thFloor.mp3"
-            },
-            {
-                title: "Love Defenders Do",
-                file: "audio/LoveDefendersDo.mp3"
-            },
-            {
-                title: "Strawberry Elephant Thai",
-                file: "audio/strawberryElephant.mp3"
-            }
-        ];
+        <script>
+            const songs = [
+                {
+                    title: "Strawberry Elephant one",
+                    file: "audio/strawberryElephantE.mp3"
+                },
+                {
+                    title: "I Miss You Every Day",
+                    file: "audio/background.mp3"
+                },
+                {
+                    title: "The 25th Floor",
+                    file: "audio/the25thFloor.mp3"
+                },
+                {
+                    title: "Love Defenders Do",
+                    file: "audio/LoveDefendersDo.mp3"
+                },
+                {
+                    title: "Strawberry Elephant Thai",
+                    file: "audio/strawberryElephant.mp3"
+                }
+            ];
 
-        const API = "https://chay1api.mikebewise.workers.dev";
-        const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
+            const API = "https://chay1api.mikebewise.workers.dev";
+            const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
 
-        let stories = [];
+            let stories = [];
 
-        const storyButtons = document.getElementById("storyButtons");
+            const storyButtons = document.getElementById("storyButtons");
 
-        function escapeHtml(value = "") {
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-        }
-
-        function makeLinksClickable(text = "") {
-            const safeText = escapeHtml(text);
-
-            return safeText.replace(
-                /(https?:\/\/[^\s<]+)/g,
-                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-            );
-        }
-
-        function imageUrl(imageName) {
-            if (!imageName) return "";
-            if (/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")) {
-                return imageName;
-            }
-            return `${API}/image/${encodeURIComponent(imageName)}`;
-        }
-
-        function normalizeStory(item) {
-            return {
-                id: item.id,
-                title: item.title || "Untitled",
-                text: item.story || "",
-                photo: imageUrl(item.image || ""),
-                position: Number(item.position || 0),
-                created_at: item.created_at || "",
-                updated_at: item.updated_at || item.created_at || ""
-            };
-        }
-
-        function isAdminLoggedIn() {
-            return Boolean(localStorage.getItem(ADMIN_TOKEN_KEY));
-        }
-
-        function openStoryEditor(storyId) {
-            localStorage.setItem("chaynovaEditStoryId", String(storyId));
-            window.location.href = `admin-edit-post.html?edit=${encodeURIComponent(storyId)}`;
-        }
-
-        async function deleteSavedStory(story) {
-            if (!isAdminLoggedIn()) {
-                alert("Your admin login has expired. Please log in again.");
-                openLogin();
-                return;
+            function escapeHtml(value = "") {
+                return String(value)
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll('"', "&quot;")
+                    .replaceAll("'", "&#039;");
             }
 
-            const confirmed = confirm(`Delete “${story.title}”?`);
-            if (!confirmed) return;
+            function makeLinksClickable(text = "") {
+                const safeText = escapeHtml(text);
 
-            try {
-                const response = await fetch(`${API}/story/${encodeURIComponent(story.id)}`, {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN_KEY)}`
+                return safeText.replace(
+                    /(https?:\/\/[^\s<]+)/g,
+                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+                );
+            }
+
+            function imageUrl(imageName) {
+                if (!imageName) return "";
+                if (/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")) {
+                    return imageName;
+                }
+                return `${API}/image/${encodeURIComponent(imageName)}`;
+            }
+
+            function normalizeStory(item) {
+                return {
+                    id: item.id,
+                    title: item.title || "Untitled",
+                    text: item.story || "",
+                    photo: imageUrl(item.image || ""),
+                    position: Number(item.position || 0),
+                    created_at: item.created_at || "",
+                    updated_at: item.updated_at || item.created_at || ""
+                };
+            }
+
+            function isAdminLoggedIn() {
+                return Boolean(localStorage.getItem(ADMIN_TOKEN_KEY));
+            }
+
+            function openStoryEditor(storyId) {
+                localStorage.setItem("chaynovaEditStoryId", String(storyId));
+                window.location.href = `admin-edit-post.html?edit=${encodeURIComponent(storyId)}`;
+            }
+
+            async function deleteSavedStory(story) {
+                if (!isAdminLoggedIn()) {
+                    alert("Your admin login has expired. Please log in again.");
+                    openLogin();
+                    return;
+                }
+
+                const confirmed = confirm(`Delete “${story.title}”?`);
+                if (!confirmed) return;
+
+                try {
+                    const response = await fetch(`${API}/story/${encodeURIComponent(story.id)}`, {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN_KEY)}`
+                        }
+                    });
+
+                    const message = await response.text();
+
+                    if (response.status === 401 || response.status === 403) {
+                        localStorage.removeItem(ADMIN_TOKEN_KEY);
+                        updateAdminPanel();
+                        throw new Error("Your admin login expired. Please log in again.");
                     }
-                });
 
-                const message = await response.text();
+                    if (!response.ok) {
+                        throw new Error(message || "Could not delete the story.");
+                    }
 
-                if (response.status === 401 || response.status === 403) {
-                    localStorage.removeItem(ADMIN_TOKEN_KEY);
-                    updateAdminPanel();
-                    throw new Error("Your admin login expired. Please log in again.");
+                    document.querySelector(".storyWindow")?.remove();
+                    await loadSavedStories();
+                } catch (error) {
+                    alert(error.message || "Could not delete the story.");
                 }
-
-                if (!response.ok) {
-                    throw new Error(message || "Could not delete the story.");
-                }
-
-                document.querySelector(".storyWindow")?.remove();
-                await loadSavedStories();
-            } catch (error) {
-                alert(error.message || "Could not delete the story.");
             }
-        }
 
-        // Check if a story is new (created within the last 2 days) (2 * 24 * 60 * 60 * 1000)
-        function isNewStory(createdAt) {
-            if (!createdAt) return false;
+            // Check if a story is new (created within the last 2 days) (2 * 24 * 60 * 60 * 1000)
+            function isNewStory(createdAt) {
+                if (!createdAt) return false;
 
-            const created = new Date(createdAt);
-            const now = new Date();
+                const created = new Date(createdAt);
+                const now = new Date();
 
-            return (now - created) < (1 * 60 * 1000); // 1 minute
-        }
+                return (now - created) < (1 * 60 * 1000); // 1 minute
+            }
 
 
-        function renderStoryList() {
-            storyButtons.innerHTML = "";
+            function renderStoryList() {
+                storyButtons.innerHTML = "";
 
-            if (!stories.length) {
-                storyButtons.innerHTML = `
+                if (!stories.length) {
+                    storyButtons.innerHTML = `
             <div style="padding:18px;text-align:center;opacity:.85;">
                 No saved stories yet.
             </div>
         `;
-                return;
-            }
+                    return;
+                }
 
-            const showAdminActions = isAdminLoggedIn();
+                const showAdminActions = isAdminLoggedIn();
 
-            stories.forEach(story => {
-                const wrapper = document.createElement("div");
-                wrapper.className = "story-card-wrap";
+                stories.forEach(story => {
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "story-card-wrap";
 
-                const button = document.createElement("button");
-                button.className = "storyItem";
+                    const button = document.createElement("button");
+                    button.className = "storyItem";
 
-                const previewText = story.text.length > 80
-                    ? `${story.text.substring(0, 80)}...`
-                    : story.text;
+                    const previewText = story.text.length > 80
+                        ? `${story.text.substring(0, 80)}...`
+                        : story.text;
 
-                const imageHtml = story.photo
-                    ? `<img class="storyThumb" src="${story.photo}" alt="${escapeHtml(story.title)}">`
-                    : `<div class="storyThumb" style="display:grid;place-items:center;background:rgba(255,255,255,.12);">📖</div>`;
+                    const imageHtml = story.photo
+                        ? `<img class="storyThumb" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+                        : `<div class="storyThumb" style="display:grid;place-items:center;background:rgba(255,255,255,.12);">📖</div>`;
 
-                button.innerHTML = `
+                    button.innerHTML = `
             ${imageHtml}
             <div>
                 <div class="storyTitle">
     ${escapeHtml(story.title)}
     ${isNewStory(story.updated_at)
-                        ? '<span class="new-badge">NEW</span>'
-                        : ''}
+                            ? '<span class="new-badge">NEW</span>'
+                            : ''}
 </div>
                 <div class="storyPreview">${escapeHtml(previewText)}</div>
             </div>
         `;
 
-                button.onclick = () => openStoryWindow(story);
-                wrapper.appendChild(button);
+                    button.onclick = () => openStoryWindow(story);
+                    wrapper.appendChild(button);
 
-                if (showAdminActions) {
-                    const actions = document.createElement("div");
-                    actions.className = "story-admin-actions";
+                    if (showAdminActions) {
+                        const actions = document.createElement("div");
+                        actions.className = "story-admin-actions";
 
-                    const editButton = document.createElement("button");
-                    editButton.type = "button";
-                    editButton.textContent = "Edit";
-                    editButton.onclick = () => openStoryEditor(story.id);
+                        const editButton = document.createElement("button");
+                        editButton.type = "button";
+                        editButton.textContent = "Edit";
+                        editButton.onclick = () => openStoryEditor(story.id);
 
-                    const deleteButton = document.createElement("button");
-                    deleteButton.type = "button";
-                    deleteButton.className = "delete-story-btn";
-                    deleteButton.textContent = "Delete";
-                    deleteButton.onclick = () => deleteSavedStory(story);
+                        const deleteButton = document.createElement("button");
+                        deleteButton.type = "button";
+                        deleteButton.className = "delete-story-btn";
+                        deleteButton.textContent = "Delete";
+                        deleteButton.onclick = () => deleteSavedStory(story);
 
-                    actions.append(editButton, deleteButton);
-                    wrapper.appendChild(actions);
-                }
+                        actions.append(editButton, deleteButton);
+                        wrapper.appendChild(actions);
+                    }
 
-                storyButtons.appendChild(wrapper);
-            });
-        }
+                    storyButtons.appendChild(wrapper);
+                });
+            }
 
-        async function loadSavedStories() {
-            storyButtons.innerHTML = `
+            async function loadSavedStories() {
+                storyButtons.innerHTML = `
         <div style="padding:18px;text-align:center;opacity:.85;">
             Loading saved stories...
         </div>
     `;
 
-            try {
-                const response = await fetch(API, {
-                    method: "GET",
-                    cache: "no-store"
-                });
+                try {
+                    const response = await fetch(API, {
+                        method: "GET",
+                        cache: "no-store"
+                    });
 
-                if (!response.ok) {
-                    throw new Error("Could not load saved stories.");
-                }
+                    if (!response.ok) {
+                        throw new Error("Could not load saved stories.");
+                    }
 
-                const data = await response.json();
+                    const data = await response.json();
 
-                stories = (Array.isArray(data) ? data : [])
-                    .map(normalizeStory)
-                    .sort((a, b) =>
-                        new Date(b.updated_at) - new Date(a.updated_at)
-                    );
+                    stories = (Array.isArray(data) ? data : [])
+                        .map(normalizeStory)
+                        .sort((a, b) =>
+                            new Date(b.updated_at) - new Date(a.updated_at)
+                        );
 
-                renderStoryList();
-            } catch (error) {
-                console.error(error);
-                storyButtons.innerHTML = `
+                    renderStoryList();
+                } catch (error) {
+                    console.error(error);
+                    storyButtons.innerHTML = `
             <div style="padding:18px;text-align:center;color:#ffd966;">
                 ${escapeHtml(error.message || "Could not load saved stories.")}
             </div>
         `;
+                }
             }
-        }
 
-        const music = document.getElementById("bgMusic");
-        const musicBtn = document.getElementById("musicBtn");
-        const songSelect = document.getElementById("songSelect");
-        const songTitle = document.getElementById("songTitle");
-        const storyLayer = document.getElementById("storyLayer");
-        const volumeControl = document.getElementById("volumeControl");
-        const volumeProgress = document.getElementById("volumeProgress");
-        const volumeKnob = document.getElementById("volumeKnob");
-        const volumeValue = document.getElementById("volumeValue");
+            const music = document.getElementById("bgMusic");
+            const musicBtn = document.getElementById("musicBtn");
+            const songSelect = document.getElementById("songSelect");
+            const songTitle = document.getElementById("songTitle");
+            const storyLayer = document.getElementById("storyLayer");
+            const volumeControl = document.getElementById("volumeControl");
+            const volumeProgress = document.getElementById("volumeProgress");
+            const volumeKnob = document.getElementById("volumeKnob");
+            const volumeValue = document.getElementById("volumeValue");
 
-        let currentSong = 0;
-        const maxPopups = 3;
+            let currentSong = 0;
+            const maxPopups = 3;
 
-        music.volume = 0.69;
+            music.volume = 0.69;
 
-        const volumePath = volumeProgress;
-        const volumePathLength = volumePath.getTotalLength();
-        let currentVolume = music.volume;
+            const volumePath = volumeProgress;
+            const volumePathLength = volumePath.getTotalLength();
+            let currentVolume = music.volume;
 
-        function updateVolumeControl(volume) {
-            currentVolume = Math.min(1, Math.max(0, volume));
-            music.volume = currentVolume;
+            function updateVolumeControl(volume) {
+                currentVolume = Math.min(1, Math.max(0, volume));
+                music.volume = currentVolume;
 
-            const point = volumePath.getPointAtLength(volumePathLength * currentVolume);
-            volumeKnob.setAttribute("cx", point.x);
-            volumeKnob.setAttribute("cy", point.y);
+                const point = volumePath.getPointAtLength(volumePathLength * currentVolume);
+                volumeKnob.setAttribute("cx", point.x);
+                volumeKnob.setAttribute("cy", point.y);
 
-            volumeProgress.style.strokeDasharray = `${volumePathLength}`;
-            volumeProgress.style.strokeDashoffset =
-                `${volumePathLength * (1 - currentVolume)}`;
+                volumeProgress.style.strokeDasharray = `${volumePathLength}`;
+                volumeProgress.style.strokeDashoffset =
+                    `${volumePathLength * (1 - currentVolume)}`;
 
-            const percentage = Math.round(currentVolume * 100);
-            volumeValue.textContent = `${percentage}%`;
-            volumeControl.setAttribute("aria-valuenow", percentage);
-        }
+                const percentage = Math.round(currentVolume * 100);
+                volumeValue.textContent = `${percentage}%`;
+                volumeControl.setAttribute("aria-valuenow", percentage);
+            }
 
-        function setVolumeFromPointer(event) {
-            const rect = volumeControl.getBoundingClientRect();
-            const x = Math.min(rect.width, Math.max(0, event.clientX - rect.left));
-            updateVolumeControl(x / rect.width);
-        }
+            function setVolumeFromPointer(event) {
+                const rect = volumeControl.getBoundingClientRect();
+                const x = Math.min(rect.width, Math.max(0, event.clientX - rect.left));
+                updateVolumeControl(x / rect.width);
+            }
 
-        volumeControl.addEventListener("pointerdown", event => {
-            volumeControl.setPointerCapture(event.pointerId);
-            setVolumeFromPointer(event);
-        });
-
-        volumeControl.addEventListener("pointermove", event => {
-            if (volumeControl.hasPointerCapture(event.pointerId)) {
+            volumeControl.addEventListener("pointerdown", event => {
+                volumeControl.setPointerCapture(event.pointerId);
                 setVolumeFromPointer(event);
+            });
+
+            volumeControl.addEventListener("pointermove", event => {
+                if (volumeControl.hasPointerCapture(event.pointerId)) {
+                    setVolumeFromPointer(event);
+                }
+            });
+
+            volumeControl.addEventListener("keydown", event => {
+                if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    updateVolumeControl(currentVolume + 0.05);
+                }
+
+                if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+                    event.preventDefault();
+                    updateVolumeControl(currentVolume - 0.05);
+                }
+
+                if (event.key === "Home") {
+                    event.preventDefault();
+                    updateVolumeControl(0);
+                }
+
+                if (event.key === "End") {
+                    event.preventDefault();
+                    updateVolumeControl(1);
+                }
+            });
+
+            updateVolumeControl(currentVolume);
+
+            songs.forEach((song, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = song.title;
+                songSelect.appendChild(option);
+            });
+
+            function loadSong(index) {
+                currentSong = index;
+                music.src = songs[index].file;
+                songTitle.textContent = songs[index].title;
+                songSelect.value = index;
             }
-        });
 
-        volumeControl.addEventListener("keydown", event => {
-            if (event.key === "ArrowRight" || event.key === "ArrowUp") {
-                event.preventDefault();
-                updateVolumeControl(currentVolume + 0.05);
-            }
+            loadSong(currentSong);
 
-            if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
-                event.preventDefault();
-                updateVolumeControl(currentVolume - 0.05);
-            }
+            musicBtn.addEventListener("click", () => {
+                if (music.paused) {
+                    music.play()
+                        .then(() => {
+                            musicBtn.textContent = "❚❚";
+                        })
+                        .catch(() => {
+                            musicBtn.textContent = "▶";
+                        });
+                } else {
+                    music.pause();
+                    musicBtn.textContent = "▶";
+                }
+            });
 
-            if (event.key === "Home") {
-                event.preventDefault();
-                updateVolumeControl(0);
-            }
+            songSelect.addEventListener("change", () => {
+                const selectedSong = Number(songSelect.value);
+                loadSong(selectedSong);
 
-            if (event.key === "End") {
-                event.preventDefault();
-                updateVolumeControl(1);
-            }
-        });
-
-        updateVolumeControl(currentVolume);
-
-        songs.forEach((song, index) => {
-            const option = document.createElement("option");
-            option.value = index;
-            option.textContent = song.title;
-            songSelect.appendChild(option);
-        });
-
-        function loadSong(index) {
-            currentSong = index;
-            music.src = songs[index].file;
-            songTitle.textContent = songs[index].title;
-            songSelect.value = index;
-        }
-
-        loadSong(currentSong);
-
-        musicBtn.addEventListener("click", () => {
-            if (music.paused) {
                 music.play()
                     .then(() => {
                         musicBtn.textContent = "❚❚";
@@ -1172,244 +1185,227 @@
                     .catch(() => {
                         musicBtn.textContent = "▶";
                     });
-            } else {
-                music.pause();
-                musicBtn.textContent = "▶";
-            }
-        });
-
-        songSelect.addEventListener("change", () => {
-            const selectedSong = Number(songSelect.value);
-            loadSong(selectedSong);
-
-            music.play()
-                .then(() => {
-                    musicBtn.textContent = "❚❚";
-                })
-                .catch(() => {
-                    musicBtn.textContent = "▶";
-                });
-        });
-
-        music.addEventListener("ended", () => {
-            currentSong = (currentSong + 1) % songs.length;
-            loadSong(currentSong);
-            music.play();
-        });
-
-        function showRandomStory() {
-            if (!stories.length) return;
-
-            const currentPopups = document.querySelectorAll(".storyBubble").length;
-
-            if (currentPopups >= maxPopups) return;
-
-            const story = stories[Math.floor(Math.random() * stories.length)];
-
-            const bubble = document.createElement("button");
-            bubble.className = "storyBubble";
-            bubble.textContent = story.title;
-
-            const bubbleSize = 74;
-            const safeTop = 170;
-            const safeBottom = 90;
-
-            const maxX = window.innerWidth - bubbleSize - 20;
-            const maxY = window.innerHeight - bubbleSize - safeBottom;
-
-            const x = 20 + Math.random() * Math.max(0, maxX - 20);
-            const y = safeTop + Math.random() * Math.max(0, maxY - safeTop);
-
-            bubble.style.left = `${x}px`;
-            bubble.style.top = `${y}px`;
-
-            bubble.addEventListener("click", () => {
-                bubble.remove();
-                openStoryWindow(story);
             });
 
-            storyLayer.appendChild(bubble);
+            music.addEventListener("ended", () => {
+                currentSong = (currentSong + 1) % songs.length;
+                loadSong(currentSong);
+                music.play();
+            });
 
-            setTimeout(() => {
-                bubble.remove();
-            }, 9000);
-        }
+            function showRandomStory() {
+                if (!stories.length) return;
 
-        function openStoryWindow(story) {
-            const existingWindow = document.querySelector(".storyWindow");
+                const currentPopups = document.querySelectorAll(".storyBubble").length;
 
-            if (existingWindow) {
-                existingWindow.remove();
+                if (currentPopups >= maxPopups) return;
+
+                const story = stories[Math.floor(Math.random() * stories.length)];
+
+                const bubble = document.createElement("button");
+                bubble.className = "storyBubble";
+                bubble.textContent = story.title;
+
+                const bubbleSize = 74;
+                const safeTop = 170;
+                const safeBottom = 90;
+
+                const maxX = window.innerWidth - bubbleSize - 20;
+                const maxY = window.innerHeight - bubbleSize - safeBottom;
+
+                const x = 20 + Math.random() * Math.max(0, maxX - 20);
+                const y = safeTop + Math.random() * Math.max(0, maxY - safeTop);
+
+                bubble.style.left = `${x}px`;
+                bubble.style.top = `${y}px`;
+
+                bubble.addEventListener("click", () => {
+                    bubble.remove();
+                    openStoryWindow(story);
+                });
+
+                storyLayer.appendChild(bubble);
+
+                setTimeout(() => {
+                    bubble.remove();
+                }, 9000);
             }
 
-            const storyWindow = document.createElement("div");
-            storyWindow.className = "storyWindow";
+            function openStoryWindow(story) {
+                const existingWindow = document.querySelector(".storyWindow");
 
-            const storyImage = story.photo
-                ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
-                : "";
+                if (existingWindow) {
+                    existingWindow.remove();
+                }
 
-            const adminButtons = isAdminLoggedIn()
-                ? `
+                const storyWindow = document.createElement("div");
+                storyWindow.className = "storyWindow";
+
+                const storyImage = story.photo
+                    ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+                    : "";
+
+                const adminButtons = isAdminLoggedIn()
+                    ? `
       <div class="story-window-admin">
         <button type="button" class="edit-story-btn">Edit</button>
         <button type="button" class="delete-story-btn">Delete</button>
         <button type="button" class="storyClose">Close</button>
       </div>
     `
-                : `<button type="button" class="storyClose">Close</button>`;
+                    : `<button type="button" class="storyClose">Close</button>`;
 
-            storyWindow.innerHTML = `
+                storyWindow.innerHTML = `
     ${storyImage}
     <h2>${escapeHtml(story.title)}</h2>
     <p>${makeLinksClickable(story.text)}</p>
     ${adminButtons}
   `;
 
-            storyWindow.querySelector(".storyClose").addEventListener("click", () => {
-                storyWindow.remove();
-            });
-
-            const editButton = storyWindow.querySelector(".edit-story-btn");
-            if (editButton) {
-                editButton.addEventListener("click", () => openStoryEditor(story.id));
-            }
-
-            const deleteButton = storyWindow.querySelector(".delete-story-btn");
-            if (deleteButton) {
-                deleteButton.addEventListener("click", () => deleteSavedStory(story));
-            }
-
-            document.body.appendChild(storyWindow);
-        }
-
-        function openLogin() {
-            const overlay = document.getElementById("loginOverlay");
-            overlay.style.display = "flex";
-            overlay.setAttribute("aria-hidden", "false");
-            document.getElementById("loginError").innerText = "";
-            updateAdminPanel();
-
-            setTimeout(() => {
-                const usernameInput = document.getElementById("usernameInput");
-                if (usernameInput && usernameInput.offsetParent !== null) {
-                    usernameInput.focus();
-                }
-            }, 100);
-        }
-
-        function closeLogin() {
-            const overlay = document.getElementById("loginOverlay");
-            overlay.style.display = "none";
-            overlay.setAttribute("aria-hidden", "true");
-            document.getElementById("loginError").innerText = "";
-        }
-
-        async function checkLogin() {
-            const usernameInput = document.getElementById("usernameInput");
-            const passwordInput = document.getElementById("passwordInput");
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
-            const errorBox = document.getElementById("loginError");
-
-            if (!username || !password) {
-                errorBox.innerText = "Please enter username and password.";
-                return;
-            }
-
-            errorBox.innerText = "Checking login...";
-
-            try {
-                const response = await fetch(`${API}/login`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ username, password })
+                storyWindow.querySelector(".storyClose").addEventListener("click", () => {
+                    storyWindow.remove();
                 });
 
-                let data = {};
-                try {
-                    data = await response.json();
-                } catch (_) {
-                    throw new Error("The login API returned an invalid response.");
+                const editButton = storyWindow.querySelector(".edit-story-btn");
+                if (editButton) {
+                    editButton.addEventListener("click", () => openStoryEditor(story.id));
                 }
 
-                if (response.ok && data.success && data.token) {
-                    localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
-                    passwordInput.value = "";
-                    errorBox.innerText = "";
-                    updateAdminPanel();
-                    renderStoryList();
-                } else {
+                const deleteButton = storyWindow.querySelector(".delete-story-btn");
+                if (deleteButton) {
+                    deleteButton.addEventListener("click", () => deleteSavedStory(story));
+                }
+
+                document.body.appendChild(storyWindow);
+            }
+
+            function openLogin() {
+                const overlay = document.getElementById("loginOverlay");
+                overlay.style.display = "flex";
+                overlay.setAttribute("aria-hidden", "false");
+                document.getElementById("loginError").innerText = "";
+                updateAdminPanel();
+
+                setTimeout(() => {
+                    const usernameInput = document.getElementById("usernameInput");
+                    if (usernameInput && usernameInput.offsetParent !== null) {
+                        usernameInput.focus();
+                    }
+                }, 100);
+            }
+
+            function closeLogin() {
+                const overlay = document.getElementById("loginOverlay");
+                overlay.style.display = "none";
+                overlay.setAttribute("aria-hidden", "true");
+                document.getElementById("loginError").innerText = "";
+            }
+
+            async function checkLogin() {
+                const usernameInput = document.getElementById("usernameInput");
+                const passwordInput = document.getElementById("passwordInput");
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value;
+                const errorBox = document.getElementById("loginError");
+
+                if (!username || !password) {
+                    errorBox.innerText = "Please enter username and password.";
+                    return;
+                }
+
+                errorBox.innerText = "Checking login...";
+
+                try {
+                    const response = await fetch(`${API}/login`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    let data = {};
+                    try {
+                        data = await response.json();
+                    } catch (_) {
+                        throw new Error("The login API returned an invalid response.");
+                    }
+
+                    if (response.ok && data.success && data.token) {
+                        localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+                        passwordInput.value = "";
+                        errorBox.innerText = "";
+                        updateAdminPanel();
+                        renderStoryList();
+                    } else {
+                        localStorage.removeItem(ADMIN_TOKEN_KEY);
+                        updateAdminPanel();
+                        errorBox.innerText = data.message || "Wrong username or password.";
+                    }
+                } catch (error) {
                     localStorage.removeItem(ADMIN_TOKEN_KEY);
                     updateAdminPanel();
-                    errorBox.innerText = data.message || "Wrong username or password.";
+                    errorBox.innerText = error.message || "Login failed. Check your Worker API.";
                 }
-            } catch (error) {
+            }
+
+            function updateAdminPanel() {
+                const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+                const loginForm = document.getElementById("loginForm");
+                const adminPanel = document.getElementById("adminPanel");
+
+                if (token) {
+                    loginForm.style.display = "none";
+                    adminPanel.style.display = "flex";
+                } else {
+                    loginForm.style.display = "block";
+                    adminPanel.style.display = "none";
+                }
+            }
+
+            function logoutAdmin() {
                 localStorage.removeItem(ADMIN_TOKEN_KEY);
+                document.getElementById("usernameInput").value = "";
+                document.getElementById("passwordInput").value = "";
+                document.getElementById("loginError").innerText = "";
                 updateAdminPanel();
-                errorBox.innerText = error.message || "Login failed. Check your Worker API.";
+                renderStoryList();
             }
-        }
 
-        function updateAdminPanel() {
-            const token = localStorage.getItem(ADMIN_TOKEN_KEY);
-            const loginForm = document.getElementById("loginForm");
-            const adminPanel = document.getElementById("adminPanel");
+            document.getElementById("passwordInput").addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    checkLogin();
+                }
+            });
 
-            if (token) {
-                loginForm.style.display = "none";
-                adminPanel.style.display = "flex";
-            } else {
-                loginForm.style.display = "block";
-                adminPanel.style.display = "none";
-            }
-        }
+            document.getElementById("usernameInput").addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    document.getElementById("passwordInput").focus();
+                }
+            });
 
-        function logoutAdmin() {
-            localStorage.removeItem(ADMIN_TOKEN_KEY);
-            document.getElementById("usernameInput").value = "";
-            document.getElementById("passwordInput").value = "";
-            document.getElementById("loginError").innerText = "";
+            document.getElementById("loginOverlay").addEventListener("click", function (e) {
+                if (e.target === this) {
+                    closeLogin();
+                }
+            });
+
+            window.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeLogin();
+                }
+            });
+
+            window.openLogin = openLogin;
+            window.closeLogin = closeLogin;
+            window.checkLogin = checkLogin;
+            window.logoutAdmin = logoutAdmin;
+
             updateAdminPanel();
-            renderStoryList();
-        }
+            loadSavedStories();
 
-        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
-                checkLogin();
-            }
-        });
-
-        document.getElementById("usernameInput").addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
-                document.getElementById("passwordInput").focus();
-            }
-        });
-
-        document.getElementById("loginOverlay").addEventListener("click", function (e) {
-            if (e.target === this) {
-                closeLogin();
-            }
-        });
-
-        window.addEventListener("keydown", function (e) {
-            if (e.key === "Escape") {
-                closeLogin();
-            }
-        });
-
-        window.openLogin = openLogin;
-        window.closeLogin = closeLogin;
-        window.checkLogin = checkLogin;
-        window.logoutAdmin = logoutAdmin;
-
-        updateAdminPanel();
-        loadSavedStories();
-
-        setInterval(showRandomStory, 3000);
-    </script>
+            setInterval(showRandomStory, 3000);
+        </script>
 </body>
 
 </html>
