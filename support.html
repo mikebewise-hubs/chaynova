@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CHAYNOVA support for online order questions and common order issues.">
     <title>Support | CHAYNOVA</title>
+
     <style>
         * {
             margin: 0;
@@ -403,6 +404,65 @@
             font-size: 0.92rem;
         }
 
+        .fun-button{
+    margin-top:20px;
+    text-align:center;
+}
+
+#qrEmoji{
+    font-size:60px;
+    cursor:pointer;
+    display:inline-block;
+    transition:.3s;
+    animation:bounce 2s infinite;
+    user-select:none;
+}
+
+#qrEmoji:hover{
+    transform:scale(1.3) rotate(15deg);
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+}
+
+/* Popup */
+
+.qr-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    z-index:9999;
+}
+
+.qr-content{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#fff;
+    color:#333;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    max-width:340px;
+    box-shadow:0 0 40px rgba(255,255,255,.25);
+}
+
+.qr-content img{
+    border-radius:12px;
+}
+
+.close{
+    position:absolute;
+    right:15px;
+    top:10px;
+    font-size:32px;
+    cursor:pointer;
+}
+
     </style>
 </head>
 
@@ -418,7 +478,6 @@
             <a href="support.html" aria-current="page">Support</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
-
             <a href="index.html" class="nav-logo" aria-label="CHAYNOVA home">
                 <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
             </a>
@@ -489,6 +548,35 @@
             </div>
 
             <p class="motto">Keep Learning • Keep Playing • Keep Moving</p>
+
+            <p class="coming-soon">
+    More questions and answers will be added here soon.<br>
+    <strong>Keep Learning • Keep Playing • Keep Moving</strong>
+</p>
+
+<div class="fun-button">
+    <span id="qrEmoji" title="Scan me!">🎉</span>
+</div>
+
+<!-- QR Code Popup -->
+<div id="qrModal" class="qr-modal">
+    <div class="qr-content">
+        <span class="close">&times;</span>
+
+        <h2>🎮 Fun Time</h2>
+        <p>Scan the QR Code</p>
+
+        <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://www.chaynova.com/funtime"
+            alt="QR Code">
+
+        <br><br>
+
+        <a href="https://www.chaynova.com/funtime" target="_blank">
+            https://www.chaynova.com/funtime
+        </a>
+    </div>
+</div>
         </section>
     </main>
 
@@ -569,6 +657,27 @@
                 setInterval(() => randomizeFirework(firework), 2800);
             }, index * 900);
         });
+
+
+const modal = document.getElementById("qrModal");
+const emoji = document.getElementById("qrEmoji");
+const closeBtn = document.querySelector(".close");
+
+emoji.onclick = () => {
+    modal.style.display = "block";
+};
+
+closeBtn.onclick = () => {
+    modal.style.display = "none";
+};
+
+window.onclick = (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+};
+
+
     </script>
 </body>
 </html>
