@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contact CHAYNOVA and follow @thechaynova on YouTube, TikTok, and Instagram.">
     <title>Contact | CHAYNOVA</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -63,12 +62,14 @@
         }
 
         header a {
-            font-size: .95rem;
+            position: relative;
+            font-family: "Oxanium", sans-serif;
+            font-size: 0.95rem;
             font-weight: 700;
             color: white;
             text-decoration: none;
-            letter-spacing: .6px;
-            transition: .25s ease;
+            letter-spacing: 0.6px;
+            transition: 0.25s ease;
         }
 
         header a:hover,
@@ -285,7 +286,7 @@
             right: 18px;
             bottom: calc(22px + env(safe-area-inset-bottom));
             z-index: 90;
-            width: 56px;
+            width: 22px;
             padding: 9px 0 0;
             display: flex;
             flex-direction: column;
@@ -348,18 +349,6 @@
 
         .music-btn:hover {
             background: rgba(255, 255, 255, .12);
-        }
-
-        .site-footer {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 10px;
-            z-index: 80;
-            text-align: center;
-            color: #9bdfff;
-            font-size: 14px;
-            padding-bottom: env(safe-area-inset-bottom);
         }
 
         @keyframes starExplode {
@@ -452,6 +441,14 @@
                     inset 0 0 10px rgba(255, 255, 255, .15);
             }
         }
+        footer {
+            position: relative;
+            z-index: 2;
+            padding: 26px 20px 34px;
+            text-align: center;
+            color: #c9f5ff;
+            font-size: 0.92rem;
+        }
     </style>
 </head>
 
@@ -466,7 +463,7 @@
             <a href="fun.html">Fun</a>
             <a href="support.html">Support</a>
             <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
+            <a href="contact.html" aria-current="page">Contact</a>
 
             <a href="index.html" class="nav-logo">
                 <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
@@ -549,7 +546,7 @@
         <button id="musicBtn" class="music-btn" type="button" title="Play Music" aria-label="Play or pause background music">🔇</button>
     </div>
 
-    <footer class="site-footer">© 2026 CHAYNOVA</footer>
+
 
     <script>
         const bgMusic = document.getElementById("bgMusic");
@@ -600,5 +597,6 @@
             }, index * 900);
         });
     </script>
+        <footer><a href="about.html">© 2026 CHAYNOVA</a> • Inspired by Thailand • Based in New York</footer>
 </body>
 </html>
