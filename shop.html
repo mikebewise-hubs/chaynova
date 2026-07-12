@@ -263,6 +263,37 @@ header a:hover,
             background: rgba(255, 255, 255, .12);
         }
 
+
+/* Hide volume slider on iPhone, iPad, and other touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .music-control {
+        width: 56px;
+        height: 56px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .volume-slider {
+        display: none;
+    }
+
+    .music-btn {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.25);
+        background: rgba(255,255,255,.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow:
+            0 0 18px rgba(0,217,255,.45),
+            inset 0 0 10px rgba(255,255,255,.15);
+    }
+}
+
 /* FOOTER */
 footer {
             position: relative;
@@ -653,8 +684,13 @@ const API = "https://chay1api.mikebewise.workers.dev";
 
 const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
+const volumeSlider = document.getElementById("volumeSlider");
 
-music.volume = 0.35;
+music.volume = Number(volumeSlider.value) / 100;
+
+volumeSlider.addEventListener("input", () => {
+    music.volume = Number(volumeSlider.value) / 100;
+});
 
 /*
 Most browsers block music autoplay.
