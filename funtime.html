@@ -1,162 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fun Time</title>
 
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body{
-            font-family:Arial, Helvetica, sans-serif;
-            min-height:100vh;
-            background:linear-gradient(135deg,#1a237e,#311b92,#0d47a1);
-            overflow-x:hidden;
-            color:white;
-            text-align:center;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a237e, #311b92, #0d47a1);
+            overflow-x: hidden;
+            color: white;
+            text-align: center;
         }
 
         /* Floating background */
-        .bubble{
-            position:fixed;
-            border-radius:50%;
-            opacity:.25;
-            animation:float linear infinite;
-            pointer-events:none;
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            opacity: .25;
+            animation: float linear infinite;
+            pointer-events: none;
         }
 
-        @keyframes float{
-            from{
-                transform:translateY(120vh) rotate(0deg);
+        @keyframes float {
+            from {
+                transform: translateY(120vh) rotate(0deg);
             }
-            to{
-                transform:translateY(-150px) rotate(360deg);
-            }
-        }
 
-        .container{
-            max-width:1100px;
-            margin:0 auto;
-            padding:40px 20px 120px;
-        }
-
-        h1{
-            font-size:3rem;
-            margin-bottom:20px;
-            text-shadow:0 0 20px #fff;
-            animation:glow 2s infinite alternate;
-        }
-
-        @keyframes glow{
-            from{ text-shadow:0 0 10px #fff; }
-            to{ text-shadow:0 0 35px #00e5ff; }
-        }
-
-        img{
-            width:100%;
-            max-width:900px;
-            border-radius:20px;
-            box-shadow:0 15px 40px rgba(0,0,0,.4);
-            animation:floatImage 4s ease-in-out infinite;
-        }
-
-        @keyframes floatImage{
-            0%,100%{
-                transform:translateY(0px);
-            }
-            50%{
-                transform:translateY(-12px);
+            to {
+                transform: translateY(-150px) rotate(360deg);
             }
         }
 
-        p{
-            margin-top:25px;
-            font-size:1.3rem;
-            line-height:1.6;
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 120px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #fff;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #fff;
+            }
+
+            to {
+                text-shadow: 0 0 35px #00e5ff;
+            }
+        }
+
+        img {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .4);
+            animation: floatImage 4s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        img.show {
+            opacity: 1;
+        }
+
+        @keyframes floatImage {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        p {
+            margin-top: 25px;
+            font-size: 1.3rem;
+            line-height: 1.6;
         }
 
         /* Home Button */
-        .home-btn{
-            position:fixed;
-            left:50%;
-            bottom:25px;
-            transform:translateX(-50%);
-            text-decoration:none;
-            color:white;
-            font-size:20px;
-            font-weight:bold;
-            padding:16px 40px;
-            border-radius:50px;
-            background:linear-gradient(45deg,#ff9800,#ff4081);
-            box-shadow:0 10px 25px rgba(255,64,129,.45);
-            transition:.3s;
-            z-index:9999;
-            animation:pulse 2s infinite;
+        .home-btn {
+            position: fixed;
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 16px 40px;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff9800, #ff4081);
+            box-shadow: 0 10px 25px rgba(255, 64, 129, .45);
+            transition: .3s;
+            z-index: 9999;
+            animation: pulse 2s infinite;
         }
 
-        .home-btn:hover{
-            transform:translateX(-50%) scale(1.08);
-            box-shadow:0 15px 35px rgba(255,64,129,.65);
+        .home-btn:hover {
+            transform: translateX(-50%) scale(1.08);
+            box-shadow: 0 15px 35px rgba(255, 64, 129, .65);
         }
 
-        @keyframes pulse{
-            0%{transform:translateX(-50%) scale(1);}
-            50%{transform:translateX(-50%) scale(1.05);}
-            100%{transform:translateX(-50%) scale(1);}
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.05);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>🎉 Fun Time 🎉</h1>
+    <div class="container">
+        <h1>🎉 Fun Time 🎉</h1>
 
-    <img src="images/funtime.png" alt="Fun Time">
+        <img id="funImage" src="images/funtime.png" alt="Fun Time">
 
-    <p>
-        Welcome to the Fun Time page!<br>
-        More games, stories, music, and learning activities are coming soon.
-    </p>
-</div>
+        <p>
+            Welcome to the Fun Time page!<br>
+            More games, stories, music, and learning activities are coming soon.
+        </p>
+    </div>
 
-<!-- Back to Home -->
-<a href="index.html" class="home-btn">
-    🏠 Back to Home
-</a>
+    <!-- Back to Home -->
+    <a href="index.html" class="home-btn">
+        🏠 Back to Home
+    </a>
 
-<script>
-    // Floating colorful bubbles
-    const colors = [
-        "#ff4081",
-        "#00e5ff",
-        "#ffeb3b",
-        "#69f0ae",
-        "#ff9800",
-        "#b388ff"
-    ];
+    <script>
+        // Floating colorful bubbles
+        const colors = [
+            "#ff4081",
+            "#00e5ff",
+            "#ffeb3b",
+            "#69f0ae",
+            "#ff9800",
+            "#b388ff"
+        ];
 
-    for(let i=0;i<40;i++){
-        const b=document.createElement("div");
-        b.className="bubble";
+        for (let i = 0; i < 40; i++) {
+            const b = document.createElement("div");
+            b.className = "bubble";
 
-        const size=Math.random()*30+10;
+            const size = Math.random() * 30 + 10;
 
-        b.style.width=size+"px";
-        b.style.height=size+"px";
-        b.style.left=Math.random()*100+"vw";
-        b.style.background=colors[Math.floor(Math.random()*colors.length)];
-        b.style.animationDuration=(Math.random()*12+10)+"s";
-        b.style.animationDelay=(-Math.random()*20)+"s";
+            b.style.width = size + "px";
+            b.style.height = size + "px";
+            b.style.left = Math.random() * 100 + "vw";
+            b.style.background = colors[Math.floor(Math.random() * colors.length)];
+            b.style.animationDuration = (Math.random() * 12 + 10) + "s";
+            b.style.animationDelay = (-Math.random() * 20) + "s";
 
-        document.body.appendChild(b);
-    }
-</script>
+            document.body.appendChild(b);
+        }
+
+        // Show image after 3 seconds
+        setTimeout(() => {
+            document.getElementById("funImage").classList.add("show");
+        }, 3000);
+
+    </script>
 
 </body>
+
 </html>
