@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>About CHAYNOVA</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+      overflow-x: hidden;
+
+      background:
+        linear-gradient(rgba(5, 15, 35, .78), rgba(5, 15, 35, .88)),
+        url("logo/CHAYNOVABGABOUT.png") center center/cover fixed no-repeat;
+
+    }
+
+    /* animated glow */
+
+    body::before {
+
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      background:
+
+        radial-gradient(circle at 15% 20%, rgba(255, 193, 7, .25), transparent 28%),
+
+        radial-gradient(circle at 85% 15%, rgba(0, 217, 255, .25), transparent 30%),
+
+        radial-gradient(circle at 50% 100%, rgba(128, 90, 255, .30), transparent 40%);
+
+      animation: moveGlow 18s linear infinite alternate;
+
+      pointer-events: none;
+
+      z-index: -1;
+
+    }
+
+    @keyframes moveGlow {
+
+      from {
+        transform: translateY(-40px);
+      }
+
+      to {
+        transform: translateY(40px);
+      }
+
+    }
+
+    /* Header */
+
+    header {
+
+      position: sticky;
+
+      top: 18px;
+
+      margin: 20px auto;
+
+      width: min(92%, 1100px);
+
+      display: flex;
+
+      justify-content: center;
+
+      padding: 14px;
+
+      border-radius: 50px;
+
+      background: rgba(255, 255, 255, .12);
+
+      backdrop-filter: blur(15px);
+
+      border: 1px solid rgba(255, 255, 255, .2);
+
+      box-shadow: 0 0 30px rgba(0, 217, 255, .25);
+
+      z-index: 100;
+
+    }
+
+    nav {
+
+      display: flex;
+
+      gap: 22px;
+
+      flex-wrap: wrap;
+
+      justify-content: center;
+
+    }
+
+    nav a {
+
+      color: white;
+
+      text-decoration: none;
+
+      font-weight: bold;
+
+      transition: .3s;
+
+    }
+
+    nav a:hover {
+
+      color: #7be9ff;
+
+    }
+
+    /* Hero */
+
+    .hero {
+
+      max-width: 1200px;
+
+      margin: auto;
+
+      padding: 70px 25px 40px;
+
+      text-align: center;
+
+    }
+
+    .hero img {
+
+      width: min(420px, 85vw);
+
+      filter: drop-shadow(0 0 30px rgba(0, 217, 255, .45));
+
+      animation: floatLogo 5s ease-in-out infinite;
+
+    }
+
+    @keyframes floatLogo {
+
+      50% {
+        transform: translateY(-12px);
+      }
+
+    }
+
+    .hero h1 {
+
+      font-family: "Oxanium", sans-serif;
+
+      font-size: clamp(2.5rem, 6vw, 4rem);
+
+      margin-top: 30px;
+
+      background: linear-gradient(90deg, #ffd54a, #ff6ecf, #7be9ff);
+
+      -webkit-background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+
+    }
+
+    .hero p {
+
+      margin-top: 18px;
+
+      font-size: 1.2rem;
+
+      color: #d9f7ff;
+
+      max-width: 850px;
+
+      margin-left: auto;
+
+      margin-right: auto;
+
+      line-height: 1.8;
+
+    }
+
+    /* Sections */
+
+    .container {
+
+      width: min(1100px, 92%);
+
+      margin: auto;
+
+      padding-bottom: 70px;
+
+    }
+
+    .card {
+
+      background: rgba(255, 255, 255, .08);
+
+      backdrop-filter: blur(18px);
+
+      border: 1px solid rgba(255, 255, 255, .18);
+
+      border-radius: 28px;
+
+      padding: 45px;
+
+      margin-bottom: 35px;
+
+      box-shadow:
+
+        0 10px 35px rgba(0, 0, 0, .25),
+
+        0 0 25px rgba(0, 217, 255, .15);
+
+      transition: .35s;
+
+    }
+
+    .card:hover {
+
+      transform: translateY(-6px);
+
+      box-shadow:
+
+        0 18px 40px rgba(0, 0, 0, .35),
+
+        0 0 35px rgba(0, 217, 255, .28);
+
+    }
+
+    .card h2 {
+
+      font-family: "Oxanium", sans-serif;
+
+      font-size: 2rem;
+
+      margin-bottom: 20px;
+
+      color: #7be9ff;
+
+    }
+
+    .card p {
+
+      line-height: 1.9;
+
+      font-size: 1.05rem;
+
+      margin-bottom: 18px;
+
+      color: #f3f8ff;
+
+    }
+
+    .highlight {
+
+      color: #ffd84d;
+
+      font-weight: bold;
+
+    }
+
+    ul {
+
+      padding-left: 22px;
+
+    }
+
+    li {
+
+      margin: 14px 0;
+
+      line-height: 1.8;
+
+      font-size: 1.05rem;
+
+    }
+
+    .promise {
+
+      text-align: center;
+
+    }
+
+    .tagline {
+
+      margin-top: 35px;
+
+      font-size: 2rem;
+
+      font-family: "Oxanium", sans-serif;
+
+      font-weight: bold;
+
+      background: linear-gradient(90deg, #ffdd55, #ff7adf, #7be9ff);
+
+      -webkit-background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+
+      animation: pulse 2s infinite;
+
+    }
+
+    @keyframes pulse {
+
+      50% {
+        transform: scale(1.03);
+      }
+
+    }
+
+    footer {
+
+      text-align: center;
+
+      padding: 35px;
+
+      color: #8bdfff;
+
+      font-size: .9rem;
+
+    }
+
+    @media(max-width:768px) {
+
+      .card {
+
+        padding: 28px;
+
+      }
+
+      .hero {
+
+        padding-top: 40px;
+
+      }
+
+    }
+
+    .about-hero{
+
+    min-height:700px;
+
+    background:
+        linear-gradient(
+            rgba(5,15,35,.35),
+            rgba(5,15,35,.78)
+        ),
+        url("logo/CHAYNOVABGABOUT.png") center center / cover no-repeat;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    margin-bottom:50px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45),
+        0 0 35px rgba(0,217,255,.25);
+
+}
+
+.about-overlay{
+
+    width:100%;
+    padding:80px 50px;
+
+    backdrop-filter:blur(2px);
+
+}
+
+.about-content{
+
+    max-width:650px;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    border-radius:24px;
+
+    padding:45px;
+
+}
+
+.about-content h1{
+
+    font-family:"Oxanium",sans-serif;
+
+    font-size:3.2rem;
+
+    margin-bottom:10px;
+
+    background:linear-gradient(90deg,#ffd84a,#ff79d8,#7be9ff);
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+}
+
+.about-content h2{
+
+    color:#7be9ff;
+
+    margin-bottom:20px;
+
+    font-size:2rem;
+
+}
+
+.about-content p{
+
+    line-height:1.9;
+
+    font-size:1.1rem;
+
+}
+
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+
+    <nav>
+
+      <a href="index.html">Home</a>
+
+      <a href="shop.html">Store</a>
+
+      <a href="video.html">Watch</a>
+
+      <a href="music.html">Beats</a>
+
+      <a href="game.html">Play Zone</a>
+
+      <a href="contact.html">Contact</a>
+
+    </nav>
+
+  </header>
+
+  <section class="hero">
+
+    <img src="logo/CHAYNOVABGABOUT.png" alt="CHAYNOVA">
+
+    <h1>About CHAYNOVA</h1>
+
+    <p>
+      More than sportswear.
+      Building confidence through movement, learning,
+      music, games, and lifelong growth.
+    </p>
+
+  </section>
+
+  <div class="container">
+
+    <div class="card">
+
+      <h2>More Than Sportswear</h2>
+
+      <p>
+
+        At <span class="highlight">CHAYNOVA</span>, our primary mission is to provide high-quality sportswear that
+        combines performance, comfort, durability, and value. We believe that the right sportswear is more than just
+        clothing—it can help people feel confident, stay active, and embrace new challenges.
+
+      </p>
+
+      <p>
+
+        Our inspiration comes from Thailand, where the founder discovered sportswear that delivered exceptional quality
+        at a reasonable price. After years of personal experience wearing these products, it became clear that
+        outstanding performance doesn't always require a premium price.
+
+      </p>
+
+      <p>
+
+        One special piece of sportswear has remained with the founder since the <span class="highlight">24th SEA Games
+          held in Nakhon Ratchasima, Thailand, in 2007</span>. Even after many years, it is still in excellent condition
+        and continues to be worn casually today. That lasting quality inspired the vision behind CHAYNOVA.
+
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Our Vision</h2>
+
+      <p>
+
+        CHAYNOVA is more than a sportswear brand.
+
+      </p>
+
+      <p>
+
+        We want to encourage people of all ages to live active, meaningful, and enjoyable lives. Whether it's playing
+        sports, listening to music, enjoying computer games, or continuing to learn new skills, we believe every stage
+        of life offers opportunities to grow.
+
+      </p>
+
+      <p>
+
+        We believe that confidence often begins with taking the first step. Sometimes that first step is as simple as
+        putting on clothing that makes you feel comfortable, capable, and ready to move.
+
+      </p>
+
+      <p>
+
+        For us, sportswear is not just something you wear. It can become a tool that helps you build confidence, step
+        outside your comfort zone, and discover new possibilities.
+
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      <h2>What We Believe</h2>
+
+      <ul>
+
+        <li>🏃 Stay active and healthy.</li>
+
+        <li>🎵 Enjoy music and entertainment.</li>
+
+        <li>🎮 Have fun through games.</li>
+
+        <li>📚 Continue learning throughout life.</li>
+
+        <li>💪 Build confidence by trying new experiences.</li>
+
+        <li>🌎 Never stop growing, regardless of age.</li>
+
+      </ul>
+
+    </div>
+
+    <div class="card promise">
+
+      <h2>Our Promise</h2>
+
+      <p>
+
+        We carefully select products that we would proudly wear ourselves. Our goal is to offer sportswear that provides
+        excellent quality, lasting durability, comfort, and great value.
+
+      </p>
+
+      <p>
+
+        As CHAYNOVA grows, we hope to build more than a store. We hope to build a community that inspires people to
+        move, learn, play, and enjoy life together.
+
+      </p>
+
+      <p>
+
+        Thank you for being part of the CHAYNOVA journey.
+
+      </p>
+
+      <div class="tagline">
+
+        Keep Learning. Keep Playing. Keep Moving.
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+
+    © 2026 CHAYNOVA • Inspired by Thailand • Based in New York
+
+  </footer>
+
+</body>
+
+</html>
