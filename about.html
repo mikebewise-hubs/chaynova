@@ -490,27 +490,52 @@
                 transition-duration: 0.01ms !important;
             }
         }
+           .mainB-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin-right: 9px;
+
+            animation: logoPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
     </style>
 </head>
 
 <body>
-    <header>
-        <nav class="top-nav" aria-label="Main navigation">
+    <header class="top-header">
+        <nav class="top-nav">
             <a href="shop.html">Store</a>
             <a href="fun.html">Fun</a>
             <a href="support.html">Support</a>
-            <a href="about.html" class="active" aria-current="page">About</a>
+            <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
-            <a href="index.html" class="nav-logo" aria-label="CHAYNOVA home">
+
+            <a href="index.html" class="nav-logo">
                 <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
             </a>
+
         </nav>
     </header>
 
     <main class="page-shell">
         <section class="hero" aria-labelledby="about-title">
             <div class="hero-copy">
-                <div class="eyebrow">⚡ About CHAYNOVA</div>
+                <div class="eyebrow">
+                  <img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo">
+                  <span> CHAYNOVA </span> </div>
                 <h1 id="about-title">More Than Sportswear</h1>
                 <div class="hero-subtitle">Inspired by Thailand. Built to move with you.</div>
 
@@ -536,7 +561,7 @@
 
         <section class="section-panel" aria-labelledby="our-story">
             <div class="section-heading">
-                <div class="icon" aria-hidden="true">🇹🇭</div>
+                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo"></div>
                 <h2 id="our-story">Our Inspiration</h2>
             </div>
 
@@ -551,7 +576,7 @@
 
         <section class="section-panel" id="our-vision" aria-labelledby="vision-title">
             <div class="section-heading">
-                <div class="icon" aria-hidden="true">🚀</div>
+                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo"></div>
                 <h2 id="vision-title">Our Vision</h2>
             </div>
 
@@ -572,7 +597,7 @@
 
         <section class="section-panel promise" aria-labelledby="promise-title">
             <div class="section-heading">
-                <div class="icon" aria-hidden="true">🤝</div>
+                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo"></div>
                 <h2 id="promise-title">Our Promise</h2>
             </div>
 
