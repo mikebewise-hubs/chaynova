@@ -1085,6 +1085,24 @@
             const volumePathLength = volumePath.getTotalLength();
             let currentVolume = music.volume;
 
+            // Detect iPhone/iPad
+            const isIOS =
+                /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+            if (isIOS) {
+                document.body.classList.add("iphone-device");
+
+                // Use your preferred default volume
+                currentVolume = 1.0;      // 100%
+                music.volume = currentVolume;
+            } else {
+                currentVolume = 0.69;
+                music.volume = currentVolume;
+            }
+
+            updateVolumeControl(currentVolume);
+
             function updateVolumeControl(volume) {
                 currentVolume = Math.min(1, Math.max(0, volume));
                 music.volume = currentVolume;
