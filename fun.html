@@ -1112,6 +1112,12 @@
         </div>
 
         <script>
+
+const balloonPopSound = new Audio("audio/bubblePopUp.mp3");
+balloonPopSound.preload = "auto";
+balloonPopSound.volume = 0.8;
+
+
             const songs = [
                 {
                     title: "Strawberry Elephant one",
@@ -1360,6 +1366,7 @@
             const volumePathLength = volumePath.getTotalLength();
             let currentVolume = music.volume;
 
+            
             // Detect iPhone/iPad
             const isIOS =
                 /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
@@ -1541,8 +1548,15 @@
                 bubble.classList.add("bubble-expand");
 
                 setTimeout(() => {
-                    createLargeBubbleExplosion();
-                    bubble.classList.add("bubble-big-pop");
+    createLargeBubbleExplosion();
+
+    balloonPopSound.currentTime = 0;
+
+    balloonPopSound.play().catch(error => {
+        console.log("Pop sound could not play:", error);
+    });
+
+    bubble.classList.add("bubble-big-pop");
 
                     setTimeout(() => {
                         bubble.remove();
@@ -1554,8 +1568,8 @@
                         }
 
                         bubbleIsOpening = false;
-                    }, 420);
-                }, 600);
+                    }, 1000);
+                }, 1200);
             }
 
             function createLargeBubbleExplosion() {
