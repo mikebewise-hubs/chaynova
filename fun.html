@@ -322,29 +322,53 @@
             position: fixed;
             left: 50%;
             top: 50%;
-            width: min(90vw, 560px);
-            max-height: 72vh;
+            width: min(92vw, 620px);
+            max-height: 78vh;
             transform: translate(-50%, -50%);
             z-index: 200;
-            padding: 24px;
-            border-radius: 28px;
-            background: rgba(10, 15, 25, .9);
-            border: 1px solid rgba(255, 255, 255, .28);
+            padding: 64px 28px 28px;
+            border-radius: 32px;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(255, 214, 77, .28), transparent 32%),
+                radial-gradient(circle at 85% 20%, rgba(0, 229, 255, .25), transparent 34%),
+                radial-gradient(circle at 50% 95%, rgba(255, 47, 207, .22), transparent 38%),
+                rgba(255, 255, 255, .16);
+            border: 1px solid rgba(255, 255, 255, .38);
             color: white;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow:
+                0 25px 70px rgba(80, 0, 70, .35),
+                0 0 35px rgba(255, 255, 255, .2),
+                0 0 70px rgba(0, 217, 255, .24),
+                inset 0 1px 0 rgba(255, 255, 255, .3);
             overflow-y: auto;
             pointer-events: auto;
         }
 
         .storyWindow h2 {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
+            font-family: "Oxanium", sans-serif;
+            font-size: clamp(25px, 5vw, 36px);
+            font-weight: 700;
+            color: white;
+            text-shadow:
+                0 0 12px rgba(255, 255, 255, .65),
+                0 0 25px rgba(0, 217, 255, .55);
+            overflow-wrap: anywhere;
         }
 
         .storyWindow p {
-            line-height: 1.6;
+            line-height: 1.75;
+            font-size: 16px;
+            color: rgba(255, 255, 255, .94);
             white-space: pre-line;
+            overflow-wrap: anywhere;
+            padding: 18px;
+            border-radius: 20px;
+            background: rgba(20, 10, 35, .22);
+            border: 1px solid rgba(255, 255, 255, .16);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
         }
 
         .storyClose {
@@ -448,11 +472,14 @@
 
         .storyPhoto {
             width: 100%;
-            max-height: 260px;
+            max-height: 300px;
             object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            border-radius: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, .3);
+            box-shadow:
+                0 14px 35px rgba(0, 0, 0, .3),
+                0 0 25px rgba(0, 217, 255, .25);
         }
 
         #storyList {
@@ -746,6 +773,254 @@
         .storyWindow p a:hover {
             color: #ffffff;
             text-shadow: 0 0 10px #00d9ff;
+        }
+
+        @keyframes bubblePop {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            20% {
+                transform: scale(.9);
+            }
+
+            60% {
+                transform: scale(1.2);
+                opacity: .9;
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        .popParticle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, #fff, #7de7ff, #00bfff);
+            animation: particleFly .8s ease-out forwards;
+        }
+
+        @keyframes particleFly {
+            from {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform:
+                    translate(var(--dx), var(--dy)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .storyBubble {
+            transition:
+                left .55s cubic-bezier(.22, 1, .36, 1),
+                top .55s cubic-bezier(.22, 1, .36, 1),
+                width .55s cubic-bezier(.22, 1, .36, 1),
+                height .55s cubic-bezier(.22, 1, .36, 1),
+                transform .3s ease,
+                opacity .3s ease,
+                border-radius .55s ease;
+        }
+
+        /* Bubble moves to center and grows */
+        .storyBubble.bubble-expand {
+            position: fixed;
+            left: 50% !important;
+            top: 50% !important;
+
+            width: min(55vw, 500px);
+            height: min(55vw, 500px);
+
+            transform: translate(-50%, -50%);
+            font-size: clamp(20px, 4vw, 42px);
+
+            z-index: 1000;
+
+            background:
+                radial-gradient(circle at 30% 25%,
+                    rgba(255, 255, 255, .95),
+                    rgba(117, 231, 255, .55) 20%,
+                    rgba(255, 83, 214, .35) 55%,
+                    rgba(123, 44, 255, .45));
+
+            box-shadow:
+                0 0 40px rgba(255, 255, 255, .85),
+                0 0 100px rgba(0, 217, 255, .75),
+                0 0 160px rgba(255, 47, 207, .55);
+        }
+
+        /* Large pop animation */
+        .storyBubble.bubble-big-pop {
+            animation: bigBubblePop .55s ease forwards;
+        }
+
+        @keyframes bigBubblePop {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            25% {
+                transform: translate(-50%, -50%) scale(.92);
+            }
+
+            55% {
+                transform: translate(-50%, -50%) scale(1.15);
+                filter: brightness(1.8);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+                filter: brightness(3);
+            }
+        }
+
+        /* Large bubble pieces */
+        .large-pop-particle {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+
+            width: var(--size);
+            height: var(--size);
+
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1001;
+
+            background:
+                radial-gradient(circle at 30% 25%,
+                    white,
+                    rgba(126, 238, 255, .9) 25%,
+                    rgba(255, 67, 207, .7) 65%,
+                    transparent);
+
+            box-shadow:
+                0 0 18px rgba(255, 255, 255, .9),
+                0 0 30px rgba(0, 217, 255, .7);
+
+            animation: largeParticleFly 1s ease-out forwards;
+        }
+
+        @keyframes largeParticleFly {
+            from {
+                transform:
+                    translate(-50%, -50%) rotate(0deg) scale(1);
+
+                opacity: 1;
+            }
+
+            to {
+                transform:
+                    translate(calc(-50% + var(--move-x)),
+                        calc(-50% + var(--move-y))) rotate(var(--rotate)) scale(0);
+
+                opacity: 0;
+            }
+        }
+
+        /* Story box enters from the clicked bubble location */
+        .storyWindow.story-window-enter {
+            animation: storyBoxEnter .65s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes storyBoxEnter {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(.2) rotate(-6deg);
+                border-radius: 50%;
+                filter: brightness(2);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.04) rotate(1deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotate(0);
+                border-radius: 32px;
+                filter: brightness(1);
+            }
+        }
+
+        to {
+            opacity: 1;
+            transform:
+                translate(-50%, -50%) scale(1);
+
+            border-radius: 28px;
+        }
+
+
+        .storyCloseX {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, .4);
+            border-radius: 50%;
+            background: linear-gradient(135deg,
+                    rgba(255, 47, 207, .7),
+                    rgba(123, 44, 255, .72),
+                    rgba(0, 217, 255, .72));
+            color: white;
+            font-size: 30px;
+            font-weight: 400;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow:
+                0 0 18px rgba(255, 255, 255, .28),
+                0 0 28px rgba(0, 217, 255, .32);
+            transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+            z-index: 10;
+        }
+
+        .storyCloseX:hover {
+            transform: rotate(90deg) scale(1.12);
+            filter: brightness(1.2);
+            box-shadow:
+                0 0 22px rgba(255, 255, 255, .8),
+                0 0 44px rgba(0, 217, 255, .65),
+                0 0 55px rgba(255, 47, 207, .45);
+        }
+
+        @media screen and (max-width: 560px) {
+            .storyWindow {
+                width: calc(100vw - 28px);
+                max-height: 74vh;
+                padding: 60px 18px 20px;
+                border-radius: 26px;
+            }
+
+            .storyWindow h2 {
+                font-size: 25px;
+            }
+
+            .storyWindow p {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+        .storyWindow {
+            transition:
+                left .25s ease,
+                top .25s ease,
+                transform .25s ease;
         }
     </style>
 </head>
@@ -1238,8 +1513,7 @@
                 bubble.style.top = `${y}px`;
 
                 bubble.addEventListener("click", () => {
-                    bubble.remove();
-                    openStoryWindow(story);
+                    expandBubbleToStory(bubble, story);
                 });
 
                 storyLayer.appendChild(bubble);
@@ -1249,15 +1523,132 @@
                 }, 9000);
             }
 
-            function openStoryWindow(story) {
-                const existingWindow = document.querySelector(".storyWindow");
+            let bubbleIsOpening = false;
 
-                if (existingWindow) {
-                    existingWindow.remove();
+            function expandBubbleToStory(bubble, story) {
+                if (bubbleIsOpening) return;
+
+                bubbleIsOpening = true;
+                bubble.disabled = true;
+
+                // Save the original clicked bubble position before it moves.
+                const clickedRect = bubble.getBoundingClientRect();
+                const clickedPosition = {
+                    x: clickedRect.left + clickedRect.width / 2,
+                    y: clickedRect.top + clickedRect.height / 2
+                };
+
+                bubble.classList.add("bubble-expand");
+
+                setTimeout(() => {
+                    createLargeBubbleExplosion();
+                    bubble.classList.add("bubble-big-pop");
+
+                    setTimeout(() => {
+                        bubble.remove();
+                        openStoryWindow(story, clickedPosition);
+
+                        const storyWindow = document.querySelector(".storyWindow");
+                        if (storyWindow) {
+                            storyWindow.classList.add("story-window-enter");
+                        }
+
+                        bubbleIsOpening = false;
+                    }, 420);
+                }, 600);
+            }
+
+            function createLargeBubbleExplosion() {
+                const particleCount = 36;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement("span");
+
+                    particle.className = "large-pop-particle";
+
+                    const angle =
+                        (Math.PI * 2 * i) / particleCount +
+                        Math.random() * .25;
+
+                    const distance =
+                        Math.min(window.innerWidth, window.innerHeight)
+                        * (.22 + Math.random() * .3);
+
+                    const moveX =
+                        Math.cos(angle) * distance;
+
+                    const moveY =
+                        Math.sin(angle) * distance;
+
+                    const size =
+                        10 + Math.random() * 32;
+
+                    const rotation =
+                        -360 + Math.random() * 720;
+
+                    particle.style.setProperty(
+                        "--move-x",
+                        `${moveX}px`
+                    );
+
+                    particle.style.setProperty(
+                        "--move-y",
+                        `${moveY}px`
+                    );
+
+                    particle.style.setProperty(
+                        "--size",
+                        `${size}px`
+                    );
+
+                    particle.style.setProperty(
+                        "--rotate",
+                        `${rotation}deg`
+                    );
+
+                    document.body.appendChild(particle);
+
+                    particle.addEventListener(
+                        "animationend",
+                        () => particle.remove(),
+                        { once: true }
+                    );
                 }
+            }
+
+            function openStoryWindow(story, clickedPosition = null) {
+                document.querySelector(".storyWindow")?.remove();
 
                 const storyWindow = document.createElement("div");
                 storyWindow.className = "storyWindow";
+
+                // Put the popup between the clicked bubble and screen center.
+                if (clickedPosition) {
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+                    const factor = 0.68;
+
+                    let popupX = clickedPosition.x + (centerX - clickedPosition.x) * factor;
+                    let popupY = clickedPosition.y + (centerY - clickedPosition.y) * factor;
+
+                    // Keep the popup safely inside the screen.
+                    const estimatedHalfWidth = Math.min(window.innerWidth * 0.46, 310);
+                    const estimatedHalfHeight = Math.min(window.innerHeight * 0.39, 300);
+                    const margin = 16;
+
+                    popupX = Math.max(
+                        estimatedHalfWidth + margin,
+                        Math.min(window.innerWidth - estimatedHalfWidth - margin, popupX)
+                    );
+
+                    popupY = Math.max(
+                        estimatedHalfHeight + margin,
+                        Math.min(window.innerHeight - estimatedHalfHeight - margin, popupY)
+                    );
+
+                    storyWindow.style.left = `${popupX}px`;
+                    storyWindow.style.top = `${popupY}px`;
+                }
 
                 const storyImage = story.photo
                     ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
@@ -1265,22 +1656,22 @@
 
                 const adminButtons = isAdminLoggedIn()
                     ? `
-      <div class="story-window-admin">
-        <button type="button" class="edit-story-btn">Edit</button>
-        <button type="button" class="delete-story-btn">Delete</button>
-        <button type="button" class="storyClose">Close</button>
-      </div>
-    `
-                    : `<button type="button" class="storyClose">Close</button>`;
+                        <div class="story-window-admin">
+                            <button type="button" class="edit-story-btn">Edit</button>
+                            <button type="button" class="delete-story-btn">Delete</button>
+                        </div>
+                    `
+                    : "";
 
                 storyWindow.innerHTML = `
-    ${storyImage}
-    <h2>${escapeHtml(story.title)}</h2>
-    <p>${makeLinksClickable(story.text)}</p>
-    ${adminButtons}
-  `;
+                    <button type="button" class="storyCloseX" aria-label="Close story">&times;</button>
+                    ${storyImage}
+                    <h2>${escapeHtml(story.title)}</h2>
+                    <p>${makeLinksClickable(story.text)}</p>
+                    ${adminButtons}
+                `;
 
-                storyWindow.querySelector(".storyClose").addEventListener("click", () => {
+                storyWindow.querySelector(".storyCloseX").addEventListener("click", () => {
                     storyWindow.remove();
                 });
 
@@ -1295,6 +1686,7 @@
                 }
 
                 document.body.appendChild(storyWindow);
+                makePopupDraggable(storyWindow);
             }
 
             function openLogin() {
@@ -1423,6 +1815,105 @@
             loadSavedStories();
 
             setInterval(showRandomStory, 3000);
+
+            function popBubble(bubble, story) {
+
+                const rect = bubble.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+
+                // create particles
+                for (let i = 0; i < 18; i++) {
+
+                    const p = document.createElement("div");
+                    p.className = "popParticle";
+
+                    p.style.left = (cx - 6) + "px";
+                    p.style.top = (cy - 6) + "px";
+
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 40 + Math.random() * 80;
+
+                    p.style.setProperty("--dx",
+                        Math.cos(angle) * distance + "px");
+
+                    p.style.setProperty("--dy",
+                        Math.sin(angle) * distance + "px");
+
+                    document.body.appendChild(p);
+
+                    p.addEventListener("animationend", () => {
+                        p.remove();
+                    });
+                }
+
+                bubble.style.animation = "bubblePop .35s forwards";
+
+                bubble.addEventListener("animationend", () => {
+                    bubble.remove();
+                    openStoryWindow(story);
+                }, { once: true });
+            }
+
+            function makePopupDraggable(popup) {
+
+                let dragging = false;
+                let startX = 0;
+                let startY = 0;
+
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+
+                const LIMIT = 80;   // movement distance
+
+                popup.style.cursor = "grab";
+
+                popup.addEventListener("pointerdown", e => {
+
+                    if (
+                        e.target.closest(".storyCloseX") ||
+                        e.target.closest("button") ||
+                        e.target.closest("a")
+                    ) return;
+
+                    dragging = true;
+
+                    popup.style.cursor = "grabbing";
+
+                    startX = e.clientX;
+                    startY = e.clientY;
+
+                    popup.setPointerCapture(e.pointerId);
+
+                });
+
+                popup.addEventListener("pointermove", e => {
+
+                    if (!dragging) return;
+
+                    let dx = e.clientX - startX;
+                    let dy = e.clientY - startY;
+
+                    dx = Math.max(-LIMIT, Math.min(LIMIT, dx));
+                    dy = Math.max(-LIMIT, Math.min(LIMIT, dy));
+
+                    popup.style.left = `${centerX + dx}px`;
+                    popup.style.top = `${centerY + dy}px`;
+
+                });
+
+                popup.addEventListener("pointerup", () => {
+
+                    dragging = false;
+                    popup.style.left = "50%";
+                    popup.style.top = "50%";
+                    popup.style.cursor = "grab";
+
+                });
+
+            }
+
+
         </script>
 </body>
 
