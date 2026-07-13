@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Fun Time</title>
 
     <style>
@@ -22,16 +23,16 @@
             text-align: center;
         }
 
-        /* Floating background */
+        /* Floating background bubbles */
         .bubble {
             position: fixed;
             border-radius: 50%;
-            opacity: .25;
-            animation: float linear infinite;
+            opacity: 0.25;
+            animation: floatBubble linear infinite;
             pointer-events: none;
         }
 
-        @keyframes float {
+        @keyframes floatBubble {
             from {
                 transform: translateY(120vh) rotate(0deg);
             }
@@ -49,40 +50,277 @@
 
         h1 {
             font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px #fff;
-            animation: glow 2s infinite alternate;
+            margin-bottom: 25px;
+            text-shadow: 0 0 20px white;
+            animation: titleGlow 2s infinite alternate;
         }
 
-        @keyframes glow {
+        @keyframes titleGlow {
             from {
-                text-shadow: 0 0 10px #fff;
+                text-shadow: 0 0 10px white;
             }
 
             to {
-                text-shadow: 0 0 35px #00e5ff;
+                text-shadow:
+                    0 0 20px #00e5ff,
+                    0 0 35px #ff4081;
             }
         }
 
-        img {
+        /*
+        The loading animation and image use the same area.
+        This lets the image replace the loading circle.
+        */
+        .fun-area {
+            position: relative;
+            width: 100%;
+            min-height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Loading section */
+        #loadingScreen {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 340px;
+            height: 340px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease;
+            z-index: 5;
+        }
+
+        #loadingScreen.hide {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.4) rotate(180deg);
+            pointer-events: none;
+        }
+
+        /* Large animated circle */
+        .fun-circle {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(255, 255, 255, 0.25),
+                    rgba(255, 255, 255, 0.05)
+                );
+            box-shadow:
+                0 0 25px #00e5ff,
+                0 0 50px rgba(255, 64, 129, 0.7),
+                inset 0 0 35px rgba(255, 255, 255, 0.25);
+            animation:
+                circlePulse 1.2s ease-in-out infinite alternate,
+                circleColor 3s linear infinite;
+        }
+
+        @keyframes circlePulse {
+            from {
+                transform: scale(0.95);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes circleColor {
+            0% {
+                box-shadow:
+                    0 0 25px #00e5ff,
+                    0 0 55px rgba(0, 229, 255, 0.7),
+                    inset 0 0 30px rgba(255, 255, 255, 0.25);
+            }
+
+            33% {
+                box-shadow:
+                    0 0 25px #ffeb3b,
+                    0 0 55px rgba(255, 235, 59, 0.7),
+                    inset 0 0 30px rgba(255, 255, 255, 0.25);
+            }
+
+            66% {
+                box-shadow:
+                    0 0 25px #ff4081,
+                    0 0 55px rgba(255, 64, 129, 0.7),
+                    inset 0 0 30px rgba(255, 255, 255, 0.25);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 25px #00e5ff,
+                    0 0 55px rgba(0, 229, 255, 0.7),
+                    inset 0 0 30px rgba(255, 255, 255, 0.25);
+            }
+        }
+
+        /* Rotating circle line */
+        .circle-ring {
+            position: absolute;
+            inset: -15px;
+            border-radius: 50%;
+            border: 8px dotted #ffeb3b;
+            animation: spinRing 3s linear infinite;
+        }
+
+        .circle-ring-two {
+            position: absolute;
+            inset: 15px;
+            border-radius: 50%;
+            border: 5px dashed #00e5ff;
+            animation: spinRingReverse 2s linear infinite;
+        }
+
+        @keyframes spinRing {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinRingReverse {
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+        }
+
+        /* Center loading information */
+        .loading-center {
+            position: relative;
+            z-index: 4;
+        }
+
+        .loading-emoji {
+            font-size: 70px;
+            animation: emojiBounce 0.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes emojiBounce {
+            from {
+                transform: translateY(5px) rotate(-10deg);
+            }
+
+            to {
+                transform: translateY(-12px) rotate(10deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 12px white;
+        }
+
+        .countdown {
+            margin-top: 8px;
+            font-size: 45px;
+            font-weight: bold;
+            color: #ffeb3b;
+            text-shadow: 0 0 20px #ff9800;
+        }
+
+        /* Emojis traveling around the circle */
+        .orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: orbitRotate 4s linear infinite;
+        }
+
+        .orbit-two {
+            animation-duration: 6s;
+            animation-direction: reverse;
+        }
+
+        @keyframes orbitRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .orbit-emoji {
+            position: absolute;
+            font-size: 34px;
+            filter: drop-shadow(0 0 8px white);
+        }
+
+        .emoji-one {
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .emoji-two {
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .emoji-three {
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .emoji-four {
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Main image */
+        #funImage {
+            position: relative;
             width: 100%;
             max-width: 900px;
+            margin-top: 250px;
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, .4);
-            animation: floatImage 4s ease-in-out infinite;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
             opacity: 0;
-            transition: opacity 1s ease;
+            transform: translateY(150px) scale(0.85);
+            transition:
+                opacity 1s ease,
+                transform 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+                margin-top 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        img.show {
+        /* Image moves upward into loading position */
+        #funImage.show {
             opacity: 1;
+            margin-top: 20px;
+            transform: translateY(0) scale(1);
+            animation: imageFloat 4s ease-in-out 1.2s infinite;
         }
 
-        @keyframes floatImage {
-
+        @keyframes imageFloat {
             0%,
             100% {
-                transform: translateY(0px);
+                transform: translateY(0);
             }
 
             50% {
@@ -90,13 +328,23 @@
             }
         }
 
-        p {
+        .description {
             margin-top: 25px;
             font-size: 1.3rem;
             line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            transition:
+                opacity 1s ease 0.7s,
+                transform 1s ease 0.7s;
         }
 
-        /* Home Button */
+        .description.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Home button */
         .home-btn {
             position: fixed;
             left: 50%;
@@ -109,28 +357,77 @@
             padding: 16px 40px;
             border-radius: 50px;
             background: linear-gradient(45deg, #ff9800, #ff4081);
-            box-shadow: 0 10px 25px rgba(255, 64, 129, .45);
-            transition: .3s;
+            box-shadow: 0 10px 25px rgba(255, 64, 129, 0.45);
+            transition: 0.3s;
             z-index: 9999;
-            animation: pulse 2s infinite;
+            animation: homePulse 2s infinite;
         }
 
         .home-btn:hover {
-            transform: translateX(-50%) scale(1.08);
-            box-shadow: 0 15px 35px rgba(255, 64, 129, .65);
+            box-shadow: 0 15px 35px rgba(255, 64, 129, 0.65);
         }
 
-        @keyframes pulse {
-            0% {
+        @keyframes homePulse {
+            0%,
+            100% {
                 transform: translateX(-50%) scale(1);
             }
 
             50% {
                 transform: translateX(-50%) scale(1.05);
             }
+        }
 
-            100% {
-                transform: translateX(-50%) scale(1);
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .fun-area {
+                min-height: 350px;
+            }
+
+            #loadingScreen {
+                width: 260px;
+                height: 260px;
+            }
+
+            .fun-circle {
+                width: 210px;
+                height: 210px;
+            }
+
+            .loading-emoji {
+                font-size: 50px;
+            }
+
+            .loading-text {
+                font-size: 16px;
+            }
+
+            .countdown {
+                font-size: 38px;
+            }
+
+            .orbit-emoji {
+                font-size: 27px;
+            }
+
+            #funImage {
+                margin-top: 190px;
+            }
+
+            #funImage.show {
+                margin-top: 10px;
+            }
+
+            .description {
+                font-size: 1.05rem;
+            }
+
+            .home-btn {
+                font-size: 17px;
+                padding: 13px 28px;
             }
         }
     </style>
@@ -139,23 +436,65 @@
 <body>
 
     <div class="container">
+
         <h1>🎉 Fun Time 🎉</h1>
 
-        <img id="funImage" src="images/funtime.png" alt="Fun Time">
+        <div class="fun-area">
 
-        <p>
+            <!-- Three-second loading animation -->
+            <div id="loadingScreen">
+
+                <div class="fun-circle">
+
+                    <div class="circle-ring"></div>
+                    <div class="circle-ring-two"></div>
+
+                    <div class="orbit">
+                        <span class="orbit-emoji emoji-one">🎈</span>
+                        <span class="orbit-emoji emoji-two">🎮</span>
+                        <span class="orbit-emoji emoji-three">🎵</span>
+                        <span class="orbit-emoji emoji-four">⭐</span>
+                    </div>
+
+                    <div class="orbit orbit-two">
+                        <span class="orbit-emoji emoji-one">🚀</span>
+                        <span class="orbit-emoji emoji-two">🎨</span>
+                        <span class="orbit-emoji emoji-three">🏀</span>
+                        <span class="orbit-emoji emoji-four">😄</span>
+                    </div>
+
+                    <div class="loading-center">
+                        <div class="loading-emoji">🎉</div>
+                        <div class="loading-text">Fun is loading...</div>
+                        <div class="countdown" id="countdown">3</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Image moves upward after three seconds -->
+            <img
+                id="funImage"
+                src="images/funtime.png"
+                alt="Fun Time"
+            >
+
+        </div>
+
+        <p class="description" id="description">
             Welcome to the Fun Time page!<br>
             More games, stories, music, and learning activities are coming soon.
         </p>
+
     </div>
 
-    <!-- Back to Home -->
     <a href="index.html" class="home-btn">
         🏠 Back to Home
     </a>
 
     <script>
-        // Floating colorful bubbles
+        // Floating colorful background bubbles
         const colors = [
             "#ff4081",
             "#00e5ff",
@@ -166,26 +505,58 @@
         ];
 
         for (let i = 0; i < 40; i++) {
-            const b = document.createElement("div");
-            b.className = "bubble";
+            const bubble = document.createElement("div");
+
+            bubble.className = "bubble";
 
             const size = Math.random() * 30 + 10;
 
-            b.style.width = size + "px";
-            b.style.height = size + "px";
-            b.style.left = Math.random() * 100 + "vw";
-            b.style.background = colors[Math.floor(Math.random() * colors.length)];
-            b.style.animationDuration = (Math.random() * 12 + 10) + "s";
-            b.style.animationDelay = (-Math.random() * 20) + "s";
+            bubble.style.width = size + "px";
+            bubble.style.height = size + "px";
+            bubble.style.left = Math.random() * 100 + "vw";
+            bubble.style.background =
+                colors[Math.floor(Math.random() * colors.length)];
 
-            document.body.appendChild(b);
+            bubble.style.animationDuration =
+                Math.random() * 12 + 10 + "s";
+
+            bubble.style.animationDelay =
+                -Math.random() * 20 + "s";
+
+            document.body.appendChild(bubble);
         }
 
-        // Show image after 3 seconds
-        setTimeout(() => {
-            document.getElementById("funImage").classList.add("show");
-        }, 3000);
+        const loadingScreen =
+            document.getElementById("loadingScreen");
 
+        const funImage =
+            document.getElementById("funImage");
+
+        const countdown =
+            document.getElementById("countdown");
+
+        const description =
+            document.getElementById("description");
+
+        let number = 3;
+
+        const countdownTimer = setInterval(() => {
+            number--;
+
+            if (number > 0) {
+                countdown.textContent = number;
+            } else {
+                countdown.textContent = "GO!";
+                clearInterval(countdownTimer);
+            }
+        }, 1000);
+
+        // Replace loading animation with image after three seconds
+        setTimeout(() => {
+            loadingScreen.classList.add("hide");
+            funImage.classList.add("show");
+            description.classList.add("show");
+        }, 3000);
     </script>
 
 </body>
