@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CHAYNOVA secure product catalog and inventory list.">
+  <title>All Products | CHAYNOVA Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --pink: #ff2fcf;
+      --purple: #7b2cff;
+      --cyan: #00d9ff;
+      --green: #00e79f;
+      --yellow: #ffd966;
+      --red: #ff6678;
+      --page-1: #030010;
+      --page-2: #080033;
+      --page-3: #001234;
+      --glass: rgba(255, 255, 255, 0.10);
+      --glass-strong: rgba(7, 7, 39, 0.78);
+      --border: rgba(255, 255, 255, 0.24);
+      --muted: #b9d7e5;
+      --text: #f8fdff;
+      --shadow: 0 0 28px rgba(0, 217, 255, 0.24);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255, 0, 180, 0.36), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(0, 200, 255, 0.34), transparent 31%),
+        radial-gradient(circle at 55% 90%, rgba(123, 44, 255, 0.22), transparent 35%),
+        linear-gradient(135deg, var(--page-1), var(--page-2), var(--page-3));
+      background-attachment: fixed;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Decorative background */
+    .orb {
+      position: fixed;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.3;
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      width: 220px;
+      height: 220px;
+      left: -70px;
+      top: 22%;
+      background: rgba(255, 47, 207, 0.35);
+    }
+
+    .orb.two {
+      width: 280px;
+      height: 280px;
+      right: -90px;
+      bottom: 10%;
+      background: rgba(0, 217, 255, 0.28);
+      animation-delay: -4s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, -8px, 0) scale(1); }
+      to { transform: translate3d(20px, 22px, 0) scale(1.08); }
+    }
+
+    /* Top navigation */
+    header {
+      position: sticky;
+      top: 14px;
+      z-index: 1000;
+      width: min(96vw, 1450px);
+      margin: 14px auto 0;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.11);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      color: white;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 12px;
+      padding: 5px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-family: "Oxanium", sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.8px;
+    }
+
+    .brand-copy span {
+      display: block;
+      margin-top: 2px;
+      color: #bfefff;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link,
+    .nav-button {
+      min-height: 39px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      color: white;
+      background: rgba(255, 255, 255, 0.09);
+      text-decoration: none;
+      font-family: "Oxanium", sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .nav-link:hover,
+    .nav-button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, rgba(255,47,207,.55), rgba(123,44,255,.55), rgba(0,217,255,.55));
+      box-shadow: 0 0 18px rgba(0, 217, 255, 0.36);
+    }
+
+    .nav-link.primary {
+      color: #07101a;
+      border-color: transparent;
+      background: linear-gradient(135deg, #ef94da, #a97df6, #70e0f4);
+    }
+
+    /* Page */
+    .page {
+      position: relative;
+      z-index: 2;
+      width: min(1450px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 52px 0 55px;
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: #8ef2ff;
+      font-family: "Oxanium", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin-top: 8px;
+      font-family: "Oxanium", sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.03;
+      text-shadow: 0 0 25px rgba(0, 217, 255, 0.35);
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin-top: 10px;
+      color: #c7e3ef;
+      line-height: 1.65;
+    }
+
+    .api-status {
+      min-width: max-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: #dffcff;
+      background: rgba(0, 0, 25, 0.52);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--yellow);
+      box-shadow: 0 0 0 5px rgba(255, 217, 102, 0.12);
+    }
+
+    .api-status.online .status-dot {
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(0, 231, 159, 0.12), 0 0 16px rgba(0, 231, 159, 0.8);
+    }
+
+    .api-status.error .status-dot {
+      background: var(--red);
+      box-shadow: 0 0 0 5px rgba(255, 102, 120, 0.12);
+    }
+
+    /* Summary */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .summary-card {
+      min-height: 128px;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-label {
+      color: #bfe3ef;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .summary-value {
+      margin-top: 13px;
+      font-family: "Oxanium", sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .summary-note {
+      margin-top: 6px;
+      color: #9fc4d2;
+      font-size: 0.74rem;
+    }
+
+    /* Controls */
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: rgba(3, 5, 34, 0.74);
+      backdrop-filter: blur(17px);
+      -webkit-backdrop-filter: blur(17px);
+      box-shadow: 0 0 32px rgba(0, 217, 255, 0.18);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) 190px 190px auto;
+      gap: 11px;
+      padding: 17px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .control {
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      border-radius: 13px;
+      outline: none;
+      color: white;
+      background: rgba(255, 255, 255, 0.10);
+    }
+
+    .control::placeholder {
+      color: #a9c5d1;
+    }
+
+    select.control option {
+      color: #101725;
+      background: white;
+    }
+
+    .control:focus {
+      border-color: rgba(0, 217, 255, 0.8);
+      box-shadow: 0 0 0 4px rgba(0, 217, 255, 0.12);
+    }
+
+    .action-button {
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(135deg, rgba(255,47,207,.55), rgba(123,44,255,.55), rgba(0,217,255,.55));
+      font-family: "Oxanium", sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .action-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.38);
+    }
+
+    .action-button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      transform: none;
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1120px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      color: #aeefff;
+      background: rgba(12, 13, 55, 0.96);
+      font-family: "Oxanium", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      transition: 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(0, 217, 255, 0.075);
+    }
+
+    .product-cell {
+      min-width: 250px;
+    }
+
+    .product-name {
+      display: block;
+      color: white;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .product-id {
+      display: block;
+      margin-top: 5px;
+      color: #9dbdca;
+      font-family: monospace;
+      font-size: 0.72rem;
+    }
+
+    .sku {
+      color: #e9fbff;
+      font-family: monospace;
+      font-size: 0.82rem;
+    }
+
+    .money,
+    .quantity {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .low-stock {
+      color: var(--yellow);
+    }
+
+    .out-stock {
+      color: var(--red);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 76px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+
+    .status.active {
+      color: #baffdf;
+      background: rgba(0, 231, 159, 0.15);
+      border: 1px solid rgba(0, 231, 159, 0.34);
+    }
+
+    .status.draft {
+      color: #ffeaa5;
+      background: rgba(255, 217, 102, 0.14);
+      border: 1px solid rgba(255, 217, 102, 0.30);
+    }
+
+    .status.hidden,
+    .status.archived {
+      color: #dfcaff;
+      background: rgba(123, 44, 255, 0.16);
+      border: 1px solid rgba(169, 125, 246, 0.34);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .small-btn {
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      color: white;
+      background: rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .small-btn:hover {
+      background: rgba(0, 217, 255, 0.18);
+    }
+
+    .empty-state,
+    .loading-state {
+      padding: 55px 20px;
+      text-align: center;
+      color: #b9dbe7;
+    }
+
+    .empty-state strong,
+    .loading-state strong {
+      display: block;
+      color: white;
+      font-family: "Oxanium", sans-serif;
+      font-size: 1.15rem;
+    }
+
+    .empty-state p,
+    .loading-state p {
+      margin-top: 8px;
+      line-height: 1.55;
+    }
+
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 14px 17px;
+      color: #a8c8d4;
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* Login */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0, 0, 20, 0.88);
+      backdrop-filter: blur(13px);
+      -webkit-backdrop-filter: blur(13px);
+    }
+
+    .login-card {
+      width: min(94vw, 430px);
+      padding: 29px;
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.11);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 0 42px rgba(0, 217, 255, 0.35);
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 20px;
+    }
+
+    .login-brand img {
+      width: 57px;
+      height: 57px;
+      object-fit: contain;
+      padding: 7px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.11);
+    }
+
+    .login-brand h2 {
+      font-family: "Oxanium", sans-serif;
+      color: #8ef2ff;
+    }
+
+    .login-brand p {
+      margin-top: 4px;
+      color: #b6d9e5;
+      font-size: 0.82rem;
+    }
+
+    .login-card label {
+      display: block;
+      margin: 13px 0 7px;
+      color: #dff8ff;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .login-card input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 13px;
+      outline: none;
+      color: #17212d;
+      background: rgba(255,255,255,.94);
+    }
+
+    .login-submit {
+      width: 100%;
+      min-height: 49px;
+      margin-top: 19px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+      font-family: "Oxanium", sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .login-submit:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .login-message {
+      min-height: 21px;
+      margin-top: 12px;
+      color: #ffd966;
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .login-note {
+      margin-top: 12px;
+      color: #a9d6e5;
+      text-align: center;
+      font-size: 0.74rem;
+      line-height: 1.5;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 7000;
+      max-width: min(88vw, 380px);
+      padding: 13px 16px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 13px;
+      color: white;
+      background: rgba(7, 10, 39, 0.95);
+      box-shadow: 0 0 25px rgba(0, 217, 255, 0.30);
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: 0.25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 10px 20px 35px;
+      color: #bcecff;
+      text-align: center;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 980px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 680px) {
+      header {
+        top: 8px;
+        width: calc(100% - 16px);
+        margin-top: 8px;
+        border-radius: 20px;
+      }
+
+      .top-nav {
+        align-items: flex-start;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      .nav-actions {
+        gap: 5px;
+      }
+
+      .nav-link,
+      .nav-button {
+        min-height: 36px;
+        padding: 7px 10px;
+        font-size: 0.76rem;
+      }
+
+      .page {
+        width: calc(100% - 18px);
+        padding-top: 38px;
+      }
+
+      .summary-grid,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        min-height: 108px;
+      }
+
+      .table-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <section id="loginOverlay" class="login-overlay">
+    <form id="loginForm" class="login-card">
+      <div class="login-brand">
+        <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA">
+        <div>
+          <h2>CHAYNOVA Admin</h2>
+          <p>Secure Product Catalog</p>
+        </div>
+      </div>
+
+      <label for="username">Username</label>
+      <input id="username" type="text" autocomplete="username" placeholder="Admin username" required>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="Password" required>
+
+      <button id="loginButton" class="login-submit" type="submit">Log In</button>
+      <div id="loginMessage" class="login-message" aria-live="polite"></div>
+      <p class="login-note">Your login is checked by the Cloudflare Worker. The password is not stored in this page.</p>
+    </form>
+  </section>
+
+  <div id="app" class="hidden">
+    <header>
+      <nav class="top-nav" aria-label="Admin navigation">
+        <a class="brand" href="admin.html">
+          <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA logo">
+          <span class="brand-copy">
+            <strong>CHAYNOVA</strong>
+            <span>Product & Inventory Workspace</span>
+          </span>
+        </a>
+
+        <div class="nav-actions">
+          <a class="nav-link" href="admin.html">Dashboard</a>
+          <a class="nav-link primary" href="product-manager.html">＋ Add Product</a>
+          <button class="nav-button" id="logoutButton" type="button">Logout</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Internal catalog</div>
+          <h1>All Products</h1>
+          <p>View products stored in Cloudflare D1, search the catalog, filter stock and status, and export a backup list.</p>
+        </div>
+
+        <div id="apiStatus" class="api-status">
+          <span class="status-dot"></span>
+          <span id="apiStatusText">Connecting to Cloudflare…</span>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Product summary">
+        <article class="summary-card">
+          <div class="summary-label">Total Products</div>
+          <div id="totalProducts" class="summary-value">0</div>
+          <div class="summary-note">Records in this catalog</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-label">Total Units</div>
+          <div id="totalUnits" class="summary-value">0</div>
+          <div class="summary-note">Combined product quantity</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-label">Low Stock</div>
+          <div id="lowStock" class="summary-value">0</div>
+          <div class="summary-note">At or below reorder level</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-label">Out of Stock</div>
+          <div id="outOfStock" class="summary-value">0</div>
+          <div class="summary-note">No available units</div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input id="searchInput" class="control" type="search" placeholder="Search name, SKU, product ID, brand, category…">
+
+          <select id="statusFilter" class="control" aria-label="Filter by status">
+            <option value="">All statuses</option>
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+            <option value="hidden">Hidden</option>
+            <option value="archived">Archived</option>
+          </select>
+
+          <select id="stockFilter" class="control" aria-label="Filter by stock">
+            <option value="">All stock levels</option>
+            <option value="in">In stock</option>
+            <option value="low">Low stock</option>
+            <option value="out">Out of stock</option>
+          </select>
+
+          <button id="refreshButton" class="action-button" type="button">↻ Refresh</button>
+        </div>
+
+        <div id="loadingState" class="loading-state">
+          <strong>Loading products…</strong>
+          <p>Connecting securely to your Cloudflare D1 database.</p>
+        </div>
+
+        <div id="tableArea" class="hidden">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productRows"></tbody>
+            </table>
+          </div>
+
+          <div id="emptyState" class="empty-state hidden">
+            <strong>No matching products</strong>
+            <p>Try changing your search or filters, or add a new product.</p>
+          </div>
+
+          <div class="table-footer">
+            <span id="resultCount">Showing 0 products</span>
+            <button id="exportButton" class="small-btn" type="button">Export CSV</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>© 2026 CHAYNOVA • Secure internal product catalog</footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+
+    const API = "https://chay1api.mikebewise.workers.dev";
+    const LOGIN_URL = `${API}/login`;
+    const PRODUCTS_URL = `${API}/products`;
+    const STATS_URL = `${API}/products/stats`;
+    const TOKEN_KEY = "chaynovaAdminToken";
+
+    const loginOverlay = document.getElementById("loginOverlay");
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const loginMessage = document.getElementById("loginMessage");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const app = document.getElementById("app");
+    const logoutButton = document.getElementById("logoutButton");
+    const refreshButton = document.getElementById("refreshButton");
+    const exportButton = document.getElementById("exportButton");
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const stockFilter = document.getElementById("stockFilter");
+    const loadingState = document.getElementById("loadingState");
+    const tableArea = document.getElementById("tableArea");
+    const productRows = document.getElementById("productRows");
+    const emptyState = document.getElementById("emptyState");
+    const resultCount = document.getElementById("resultCount");
+    const toast = document.getElementById("toast");
+    const apiStatus = document.getElementById("apiStatus");
+    const apiStatusText = document.getElementById("apiStatusText");
+
+    let products = [];
+    let visibleProducts = [];
+    let toastTimer = null;
+
+    function getToken() {
+      return localStorage.getItem(TOKEN_KEY) || "";
+    }
+
+    function authHeaders() {
+      return {
+        "Authorization": `Bearer ${getToken()}`
+      };
+    }
+
+    function showApp() {
+      loginOverlay.classList.add("hidden");
+      app.classList.remove("hidden");
+    }
+
+    function showLogin(message = "") {
+      app.classList.add("hidden");
+      loginOverlay.classList.remove("hidden");
+      loginMessage.textContent = message;
+      setTimeout(() => usernameInput.focus(), 60);
+    }
+
+    function logout(message = "You have been logged out.") {
+      localStorage.removeItem(TOKEN_KEY);
+      products = [];
+      visibleProducts = [];
+      passwordInput.value = "";
+      showLogin(message);
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("show");
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function setApiStatus(type, text) {
+      apiStatus.classList.remove("online", "error");
+      if (type) apiStatus.classList.add(type);
+      apiStatusText.textContent = text;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
+
+    function money(value) {
+      const number = Number(value || 0);
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(Number.isFinite(number) ? number : 0);
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return escapeHtml(value);
+      return new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      }).format(date);
+    }
+
+    function normalizeProduct(item) {
+      return {
+        id: String(item.id || ""),
+        product_id: String(item.product_id || ""),
+        sku: String(item.sku || ""),
+        internal_code: String(item.internal_code || ""),
+        product_name: String(item.product_name || "Unnamed product"),
+        brand: String(item.brand || ""),
+        category: String(item.category || ""),
+        country_of_origin: String(item.country_of_origin || ""),
+        store_barcode: String(item.store_barcode || ""),
+        selling_price: Number(item.selling_price || 0),
+        total_quantity: Math.max(0, Number(item.total_quantity || 0)),
+        reorder_level: Math.max(0, Number(item.reorder_level || 0)),
+        status: String(item.status || "draft").toLowerCase(),
+        featured: Boolean(item.featured),
+        created_at: String(item.created_at || ""),
+        updated_at: String(item.updated_at || "")
+      };
+    }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, options);
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch (_) {
+        throw new Error(`Server returned ${response.status} without valid JSON.`);
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        logout("Your login expired. Please log in again.");
+        throw new Error("Not authorized.");
+      }
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || `Request failed with status ${response.status}.`);
+      }
+
+      return data;
+    }
+
+    async function login(event) {
+      event.preventDefault();
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        loginMessage.textContent = "Please enter your username and password.";
+        return;
+      }
+
+      loginButton.disabled = true;
+      loginMessage.textContent = "Checking login…";
+
+      try {
+        const data = await requestJson(LOGIN_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (!data.success || !data.token) {
+          throw new Error(data.message || "Login failed.");
+        }
+
+        localStorage.setItem(TOKEN_KEY, data.token);
+        passwordInput.value = "";
+        loginMessage.textContent = "";
+        showApp();
+        await loadPageData();
+      } catch (error) {
+        loginMessage.textContent = error.message || "Login failed.";
+      } finally {
+        loginButton.disabled = false;
+      }
+    }
+
+    async function loadPageData() {
+      loadingState.classList.remove("hidden");
+      tableArea.classList.add("hidden");
+      refreshButton.disabled = true;
+      setApiStatus("", "Connecting to Cloudflare…");
+
+      try {
+        const [productData, statsData] = await Promise.all([
+          requestJson(PRODUCTS_URL, { headers: authHeaders() }),
+          requestJson(STATS_URL, { headers: authHeaders() })
+        ]);
+
+        const list = Array.isArray(productData)
+          ? productData
+          : Array.isArray(productData.products)
+            ? productData.products
+            : [];
+
+        products = list.map(normalizeProduct);
+        updateSummary(statsData);
+        applyFilters();
+
+        loadingState.classList.add("hidden");
+        tableArea.classList.remove("hidden");
+        setApiStatus("online", "Cloudflare connected");
+      } catch (error) {
+        if (!getToken()) return;
+
+        loadingState.innerHTML = `
+          <strong>Could not load products</strong>
+          <p>${escapeHtml(error.message || "Unknown error")}</p>
+        `;
+        setApiStatus("error", "Connection error");
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+
+    function updateSummary(stats) {
+      const fallbackUnits = products.reduce((sum, item) => sum + item.total_quantity, 0);
+      const fallbackLow = products.filter(item => item.total_quantity <= item.reorder_level).length;
+      const fallbackOut = products.filter(item => item.total_quantity <= 0).length;
+
+      document.getElementById("totalProducts").textContent =
+        Number(stats?.products ?? products.length).toLocaleString();
+
+      document.getElementById("totalUnits").textContent =
+        Number(stats?.totalUnits ?? fallbackUnits).toLocaleString();
+
+      document.getElementById("lowStock").textContent =
+        Number(stats?.lowStock ?? fallbackLow).toLocaleString();
+
+      document.getElementById("outOfStock").textContent =
+        Number(stats?.outOfStock ?? fallbackOut).toLocaleString();
+    }
+
+    function applyFilters() {
+      const search = searchInput.value.trim().toLowerCase();
+      const selectedStatus = statusFilter.value;
+      const selectedStock = stockFilter.value;
+
+      visibleProducts = products.filter(product => {
+        const searchable = [
+          product.product_name,
+          product.product_id,
+          product.sku,
+          product.internal_code,
+          product.brand,
+          product.category,
+          product.country_of_origin,
+          product.store_barcode
+        ].join(" ").toLowerCase();
+
+        if (search && !searchable.includes(search)) return false;
+        if (selectedStatus && product.status !== selectedStatus) return false;
+
+        if (selectedStock === "out" && product.total_quantity > 0) return false;
+        if (
+          selectedStock === "low" &&
+          !(product.total_quantity > 0 && product.total_quantity <= product.reorder_level)
+        ) return false;
+        if (selectedStock === "in" && product.total_quantity <= product.reorder_level) return false;
+
+        return true;
+      });
+
+      renderProducts();
+    }
+
+    function renderProducts() {
+      productRows.innerHTML = "";
+
+      visibleProducts.forEach(product => {
+        const row = document.createElement("tr");
+        const quantityClass =
+          product.total_quantity <= 0
+            ? "quantity out-stock"
+            : product.total_quantity <= product.reorder_level
+              ? "quantity low-stock"
+              : "quantity";
+
+        const statusClass = ["active", "draft", "hidden", "archived"].includes(product.status)
+          ? product.status
+          : "draft";
+
+        const editUrl = `product-manager.html?id=${encodeURIComponent(product.id)}`;
+
+        row.innerHTML = `
+          <td class="product-cell">
+            <span class="product-name">${escapeHtml(product.product_name)}</span>
+            <span class="product-id">${escapeHtml(product.product_id || product.id)}</span>
+          </td>
+          <td><span class="sku">${escapeHtml(product.sku || "—")}</span></td>
+          <td>${escapeHtml(product.brand || "—")}</td>
+          <td>${escapeHtml(product.category || "—")}</td>
+          <td class="money">${money(product.selling_price)}</td>
+          <td class="${quantityClass}">${product.total_quantity.toLocaleString()}</td>
+          <td><span class="status ${statusClass}">${escapeHtml(product.status)}</span></td>
+          <td>${formatDate(product.updated_at || product.created_at)}</td>
+          <td>
+            <div class="row-actions">
+              <a class="small-btn" href="${editUrl}">Edit</a>
+              <button class="small-btn copy-id" type="button" data-id="${escapeHtml(product.id)}">Copy ID</button>
+            </div>
+          </td>
+        `;
+
+        productRows.appendChild(row);
+      });
+
+      emptyState.classList.toggle("hidden", visibleProducts.length !== 0);
+      resultCount.textContent = `Showing ${visibleProducts.length.toLocaleString()} of ${products.length.toLocaleString()} products`;
+
+      document.querySelectorAll(".copy-id").forEach(button => {
+        button.addEventListener("click", async () => {
+          const id = button.dataset.id || "";
+          try {
+            await navigator.clipboard.writeText(id);
+            showToast("Database ID copied.");
+          } catch (_) {
+            showToast(`Product database ID: ${id}`);
+          }
+        });
+      });
+    }
+
+    function csvCell(value) {
+      const text = String(value ?? "");
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function exportCsv() {
+      if (!visibleProducts.length) {
+        showToast("There are no visible products to export.");
+        return;
+      }
+
+      const headers = [
+        "Database ID",
+        "Product ID",
+        "SKU",
+        "Product Name",
+        "Brand",
+        "Category",
+        "Selling Price",
+        "Quantity",
+        "Reorder Level",
+        "Status",
+        "Created",
+        "Updated"
+      ];
+
+      const rows = visibleProducts.map(product => [
+        product.id,
+        product.product_id,
+        product.sku,
+        product.product_name,
+        product.brand,
+        product.category,
+        product.selling_price,
+        product.total_quantity,
+        product.reorder_level,
+        product.status,
+        product.created_at,
+        product.updated_at
+      ]);
+
+      const csv = [
+        headers.map(csvCell).join(","),
+        ...rows.map(row => row.map(csvCell).join(","))
+      ].join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `chaynova-products-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("CSV product list exported.");
+    }
+
+    loginForm.addEventListener("submit", login);
+    logoutButton.addEventListener("click", () => logout());
+    refreshButton.addEventListener("click", loadPageData);
+    exportButton.addEventListener("click", exportCsv);
+    searchInput.addEventListener("input", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
+    stockFilter.addEventListener("change", applyFilters);
+
+    if (getToken()) {
+      showApp();
+      loadPageData();
+    } else {
+      showLogin();
+    }
+  </script>
+</body>
+</html>
