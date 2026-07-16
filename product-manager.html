@@ -1801,7 +1801,7 @@
         document.getElementById("addVariant").addEventListener("click", () => addVariant());
         document.getElementById("saveDraft").addEventListener("click", saveDraft);
         document.getElementById("saveDraftTop").addEventListener("click", saveDraft);
-        document.getElementById("saveCloud").addEventListener("click",saveProductToCloud);
+        document.getElementById("saveCloud").addEventListener("click", saveProductToCloud);
         document.getElementById("exportJson").addEventListener("click", exportJson);
         document.getElementById("clearForm").addEventListener("click", clearProduct);
         document.getElementById("newProductTop").addEventListener("click", clearProduct);
@@ -1954,17 +1954,41 @@
                 const result = await response.json();
 
                 if (!response.ok) {
-
                     throw new Error(result.error || "Save failed.");
-
                 }
 
+                // Remove saved draft
+                localStorage.removeItem(DRAFT_KEY);
+
+                // Success message
                 showToast(
                     "✅ Product saved successfully!",
                     "success"
                 );
 
                 console.log(result);
+
+                // Reset the form
+                form.reset();
+
+                // Remove all variant rows
+                variantRows.innerHTML = "";
+
+                // Add one blank variant
+                addVariant();
+
+                // Clear uploaded files
+                selectedPhotos = [];
+                selectedDocuments = [];
+
+                photoPreview.innerHTML = "";
+                documentList.innerHTML = "";
+
+                // Generate a new Product ID
+                generateProductId();
+
+                // Refresh the live preview
+                updatePreview();
 
             }
             catch (error) {
