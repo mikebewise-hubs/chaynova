@@ -39,61 +39,105 @@
             opacity: .35;
         }
 
-        header {
-            position: fixed;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(92vw, 1050px);
-            z-index: 30;
-            display: flex;
-            justify-content: center;
-            padding: 8px 18px;
-            border: 1px solid rgba(255, 255, 255, .25);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .12);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
-        }
+        /* ===========================
+   CHAYNOVA Universal Header
+   =========================== */
 
-        header a:hover,
-        header a[aria-current="page"] {
-            color: #001019;
-            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
-        }
+header {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(95vw, 1100px);
+    z-index: 1000;
 
-        header a {
-            position: relative;
-            font-family: "Oxanium", sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-            letter-spacing: 0.6px;
-            transition: 0.25s ease;
-        }
+    display: flex;
+    justify-content: center;
 
-        nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+    padding: 8px 18px;
 
-        nav a {
-            font-size: .95rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-            letter-spacing: .6px;
-            transition: .25s ease;
-        }
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px;
 
-        nav a:hover {
-            color: #001019;
-            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
-        }
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    box-shadow: 0 0 28px rgba(0,217,255,.25);
+}
+
+.top-nav{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-wrap:nowrap;
+    white-space:nowrap;
+
+    gap:clamp(8px,1.8vw,22px);
+}
+
+.top-nav a{
+    flex-shrink:0;
+
+    font-family:"Oxanium",sans-serif;
+    font-size:0.95rem;
+    font-weight:700;
+    letter-spacing:.5px;
+
+    color:#fff;
+    text-decoration:none;
+
+    transition:.25s;
+}
+
+.top-nav a:hover,
+.top-nav a[aria-current="page"]{
+    color:#001019;
+    text-shadow:0 0 14px rgba(255,255,255,.9);
+}
+
+.nav-logo{
+    display:flex;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.nav-logo img{
+    display:block;
+    height:22px;
+    width:auto;
+    transition:.2s;
+}
+
+.nav-logo img:hover{
+    transform:scale(1.08);
+}
+
+/* Mobile */
+
+@media (max-width:700px){
+
+    header{
+        width:97vw;
+        padding:8px 10px;
+        top:12px;
+    }
+
+    .top-nav{
+        gap:clamp(5px,1.5vw,10px);
+    }
+
+    .top-nav a{
+        font-size:clamp(.65rem,2.4vw,.82rem);
+        letter-spacing:0;
+    }
+
+    .nav-logo img{
+        height:18px;
+    }
+}
 
         #musicPlayer {
             position: fixed;
@@ -601,17 +645,6 @@
             gap: 20px;
         }
 
-        .nav-logo img {
-            height: 22px;
-            /* Adjust size as needed */
-            width: auto;
-            vertical-align: middle;
-            transition: transform 0.2s ease;
-        }
-
-        .nav-logo img:hover {
-            transform: scale(1.1);
-        }
 
         footer {
             position: relative;
