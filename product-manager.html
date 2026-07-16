@@ -1522,6 +1522,7 @@
                 localStorage.setItem(TOKEN_KEY, data.token);
                 adminPassword.value = "";
                 showAdminPage();
+                await loadProductForEditing();
             } catch (error) {
                 localStorage.removeItem(TOKEN_KEY);
                 adminLoginError.textContent = error.message || "Login failed.";
@@ -1865,25 +1866,185 @@
         sections.forEach(section => observer.observe(section));
 
         addVariant();
-        generateProductId();
-        loadDraft();
-        updatePreview();
+
+        if (getEditingIdFromUrl()) {
+            updatePreview();
+        } else {
+            generateProductId();
+            loadDraft();
+            updatePreview();
+        }
 
         if (getAdminToken()) {
             showAdminPage();
+            loadProductForEditing();
         } else {
-            showAdminLogin();
+            showAdminLogin(
+                getEditingIdFromUrl()
+                    ? "Please log in to edit this product."
+                    : ""
+            );
+        }
+
+
+        function getEditingIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return (params.get("id") || "").trim();
+        }
+
+        function databaseProductToFormProduct(product, variants = []) {
+            return {
+                productId: product.product_id || "",
+                sku: product.sku || "",
+                productName: product.product_name || "",
+                brand: product.brand || "",
+                category: product.category || "",
+                subcategory: product.subcategory || "",
+                gender: product.gender || "unisex",
+                manufacturer: product.manufacturer || "",
+                countryOrigin: product.country_of_origin || "Thailand",
+                manufacturerBarcode: product.manufacturer_barcode || "",
+                storeBarcode: product.store_barcode || "",
+                fullDescription: product.description || "",
+                additionalInfo: product.additional_info || "",
+                material: product.material || "",
+                careInstructions: product.care_instructions || "",
+                manufacturedDate: product.manufacture_date || "",
+                dateReceived: product.date_received || "",
+                purchaseCost: Number(product.purchase_cost || 0),
+                shippingCost: Number(product.shipping_cost || 0),
+                dutyCost: Number(product.import_cost || 0),
+                landedCost: Number(product.landed_cost || 0),
+                sellingPrice: Number(product.selling_price || 0),
+                comparePrice: Number(product.msrp || 0),
+                reorderLevel: Number(product.reorder_level || 0),
+                stockLocation: product.warehouse_location || "",
+                supplierName: product.supplier_name || "",
+                supplierEmail: product.supplier_email || "",
+                supplierPhone: product.supplier_phone || "",
+                supplierWebsite: product.supplier_website || "",
+                purchaseOrder: product.invoice_number || "",
+                importEntry: product.customs_entry_number || "",
+                seoTitle: product.seo_title || "",
+                seoDescription: product.seo_description || "",
+                slug: product.website_slug || "",
+                tags: product.tags || "",
+                status: product.status || "draft",
+                featured: Boolean(Number(product.featured || 0)),
+                variants: Array.isArray(variants) && variants.length
+                    ? variants.map(variant => ({
+                        size: variant.size || "",
+                        color: variant.color || "",
+                        sku: variant.sku || "",
+                        barcode: variant.barcode || "",
+                        quantity: Number(variant.quantity || 0),
+                        location: variant.location || ""
+                    }))
+                    : [{}]
+            };
+        }
+
+        async function loadProductForEditing() {
+            const id = getEditingIdFromUrl();
+
+            if (!id) return;
+
+            if (!getAdminToken()) {
+                showAdminLogin("Please log in to edit this product.");
+                return;
+            }
+
+            editingProductDatabaseId = id;
+            document.getElementById("saveCloud").disabled = true;
+            document.getElementById("saveCloud").textContent = "Loading Product…";
+            document.querySelector(".product-state").textContent = "● Loading product";
+
+            try {
+                const response = await fetch(
+                    `${CLOUD_API_URL}/${encodeURIComponent(id)}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": "Bearer " + getAdminToken()
+                        },
+                        cache: "no-store"
+                    }
+                );
+
+                let result = {};
+                try {
+                    result = await response.json();
+                } catch (_) {
+                    throw new Error(`Server returned ${response.status} without valid JSON.`);
+                }
+
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    editingProductDatabaseId = "";
+                    showAdminLogin("Your login expired. Please log in again.");
+                    throw new Error("Not authorized.");
+                }
+
+                if (!response.ok || !result.success || !result.product) {
+                    throw new Error(result.error || "Could not load this product.");
+                }
+
+                localStorage.removeItem(DRAFT_KEY);
+                restoreForm(
+                    databaseProductToFormProduct(
+                        result.product,
+                        result.variants || []
+                    )
+                );
+
+                document.getElementById("slug").dataset.manual =
+                    result.product.website_slug ? "true" : "";
+
+                document.getElementById("saveCloud").textContent = "Update Product";
+                document.querySelector(".product-state").textContent = "● Editing saved product";
+                document.title = `${result.product.product_name || "Edit Product"} | CHAYNOVA`;
+                showToast("Product loaded from Cloudflare.", "success");
+            } catch (error) {
+                console.error(error);
+
+                if (getAdminToken()) {
+                    editingProductDatabaseId = "";
+                    document.getElementById("saveCloud").textContent = "Save to Cloudflare";
+                    document.querySelector(".product-state").textContent = "● Product load failed";
+                    showToast(error.message || "Unable to load product.", "error");
+                }
+            } finally {
+                document.getElementById("saveCloud").disabled = false;
+            }
         }
 
         async function saveProductToCloud() {
 
+            if (!form.reportValidity()) {
+                showToast("Complete the required fields first.", "error");
+                return;
+            }
+
+            if (!getAdminToken()) {
+                showAdminLogin("Please log in before saving.");
+                return;
+            }
+
             const product = getFormObject();
+            const saveButton = document.getElementById("saveCloud");
+            saveButton.disabled = true;
+            const originalButtonText = saveButton.textContent;
 
             try {
 
-                const response = await fetch(CLOUD_API_URL, {
+                const isEditing = Boolean(editingProductDatabaseId);
 
-                    method: "POST",
+                const requestUrl = isEditing
+                    ? `${CLOUD_API_URL}/${editingProductDatabaseId}`
+                    : CLOUD_API_URL;
+
+                const response = await fetch(requestUrl, {
+                    method: isEditing ? "PUT" : "POST",
 
                     headers: {
                         "Content-Type": "application/json",
@@ -1971,7 +2132,18 @@
 
                 });
 
-                const result = await response.json();
+                let result = {};
+                try {
+                    result = await response.json();
+                } catch (_) {
+                    throw new Error(`Server returned ${response.status} without valid JSON.`);
+                }
+
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    showAdminLogin("Your login expired. Please log in again.");
+                    throw new Error("Not authorized.");
+                }
 
                 if (!response.ok) {
                     throw new Error(result.error || "Save failed.");
@@ -1988,9 +2160,17 @@
                 document.querySelector(".product-state").textContent = "● Saved product";
 
                 showToast(
-                    "✅ Product saved! You are now editing this product.",
-                    "success"
-                );
+    isEditing
+        ? "✅ Product updated successfully!"
+        : "✅ Product saved! You are now editing this product.",
+    "success"
+);
+
+                if (!isEditing && editingProductDatabaseId) {
+                    const editUrl =
+                        `${window.location.pathname}?id=${encodeURIComponent(editingProductDatabaseId)}`;
+                    window.history.replaceState({}, "", editUrl);
+                }
 
                 console.log(result);
 
@@ -1999,11 +2179,19 @@
 
                 console.error(error);
 
-                showToast(
-                    error.message,
-                    "error"
-                );
+                if (error.message !== "Not authorized.") {
+                    showToast(
+                        error.message,
+                        "error"
+                    );
+                }
 
+            }
+            finally {
+                saveButton.disabled = false;
+                saveButton.textContent = editingProductDatabaseId
+                    ? "Update Product"
+                    : originalButtonText;
             }
 
         }
