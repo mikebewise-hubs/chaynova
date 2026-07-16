@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CHAYNOVA internal product and inventory manager.">
+    <title>Product Manager | CHAYNOVA</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oxanium:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy: #17324d;
+            --navy-2: #244a6a;
+            --blue: #2f72b7;
+            --blue-soft: #eaf3fb;
+            --teal: #238a87;
+            --green: #24855f;
+            --red: #ba3f4d;
+            --orange: #b86a22;
+            --text: #243446;
+            --muted: #6b7d90;
+            --border: #dbe4ec;
+            --border-dark: #c9d5df;
+            --surface: #ffffff;
+            --surface-2: #f7f9fb;
+            --page: #edf2f6;
+            --shadow: 0 10px 30px rgba(37, 59, 82, .08);
+            --radius: 14px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(47, 114, 183, .08), transparent 28%),
+                linear-gradient(180deg, #f8fafc 0, var(--page) 320px);
+        }
+
+        button, input, select, textarea { font: inherit; }
+        button { cursor: pointer; }
+        a { color: inherit; }
+
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            min-height: 68px;
+            padding: 10px clamp(16px, 4vw, 44px);
+            color: #fff;
+            background: rgba(23, 50, 77, .96);
+            border-bottom: 1px solid rgba(255, 255, 255, .12);
+            box-shadow: 0 5px 22px rgba(24, 43, 63, .18);
+            backdrop-filter: blur(14px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-decoration: none;
+            min-width: 0;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: rgba(255,255,255,.09);
+            padding: 5px;
+        }
+
+        .brand-copy strong {
+            display: block;
+            font-family: "Oxanium", sans-serif;
+            letter-spacing: .8px;
+            font-size: 1.02rem;
+        }
+
+        .brand-copy span {
+            display: block;
+            margin-top: 2px;
+            color: #c7d9e9;
+            font-size: .78rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 11px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.16);
+            color: #eaf3fb;
+            font-size: .79rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f0b54a;
+            box-shadow: 0 0 0 4px rgba(240,181,74,.14);
+        }
+
+        .top-btn {
+            min-height: 38px;
+            padding: 8px 13px;
+            border: 1px solid rgba(255,255,255,.22);
+            border-radius: 9px;
+            color: #fff;
+            background: rgba(255,255,255,.08);
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .top-btn:hover { background: rgba(255,255,255,.16); }
+
+        .page-shell {
+            width: min(1500px, 96vw);
+            margin: 0 auto;
+            padding: 28px 0 56px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            color: var(--blue);
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin-top: 6px;
+            color: var(--navy);
+            font-family: "Oxanium", sans-serif;
+            font-size: clamp(1.75rem, 3vw, 2.55rem);
+            letter-spacing: .3px;
+        }
+
+        .heading-copy p {
+            max-width: 760px;
+            margin-top: 8px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .product-state {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: max-content;
+            padding: 10px 14px;
+            border-radius: 11px;
+            color: #276245;
+            background: #edf8f2;
+            border: 1px solid #cfe8d9;
+            font-size: .87rem;
+            font-weight: 700;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 232px minmax(0, 1fr) 290px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 88px;
+            padding: 12px;
+        }
+
+        .sidebar-title {
+            padding: 10px 11px 8px;
+            color: var(--muted);
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+        }
+
+        .section-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 11px 12px;
+            margin: 3px 0;
+            border: 0;
+            border-radius: 9px;
+            color: #43566a;
+            background: transparent;
+            text-decoration: none;
+            text-align: left;
+            font-weight: 600;
+            transition: .18s ease;
+        }
+
+        .section-link:hover,
+        .section-link.active {
+            color: var(--navy);
+            background: var(--blue-soft);
+        }
+
+        .section-link span:first-child {
+            width: 24px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .main-column { min-width: 0; }
+
+        .form-section {
+            margin-bottom: 18px;
+            overflow: hidden;
+            scroll-margin-top: 92px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #fff, #fbfcfd);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            border-radius: 10px;
+            color: var(--navy);
+            background: var(--blue-soft);
+            font-size: 1.05rem;
+        }
+
+        .section-title h2 {
+            color: var(--navy);
+            font-size: 1rem;
+        }
+
+        .section-title p {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: .78rem;
+        }
+
+        .section-badge {
+            padding: 6px 9px;
+            border-radius: 999px;
+            color: #5e7081;
+            background: #f2f5f7;
+            font-size: .7rem;
+            font-weight: 700;
+        }
+
+        .section-body { padding: 20px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field { grid-column: span 4; min-width: 0; }
+        .field.half { grid-column: span 6; }
+        .field.wide { grid-column: 1 / -1; }
+        .field.quarter { grid-column: span 3; }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #405366;
+            font-size: .78rem;
+            font-weight: 700;
+        }
+
+        label .required { color: var(--red); }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 12px;
+            color: var(--text);
+            background: #fff;
+            border: 1px solid var(--border-dark);
+            border-radius: 9px;
+            outline: none;
+            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        textarea { min-height: 110px; resize: vertical; line-height: 1.55; }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #78a9d7;
+            box-shadow: 0 0 0 3px rgba(47,114,183,.12);
+        }
+
+        input::placeholder,
+        textarea::placeholder { color: #9aa8b5; }
+
+        .help-text {
+            margin-top: 6px;
+            color: #8391a0;
+            font-size: .7rem;
+            line-height: 1.4;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+        }
+
+        .mini-btn {
+            min-height: 42px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-dark);
+            border-radius: 9px;
+            color: var(--navy);
+            background: #f7fafc;
+            font-weight: 700;
+        }
+
+        .mini-btn:hover { background: var(--blue-soft); }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px 22px;
+            padding-top: 3px;
+        }
+
+        .check {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            font-weight: 600;
+            color: #53677a;
+        }
+
+        .check input { width: 17px; min-height: 17px; accent-color: var(--blue); }
+
+        .variant-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .variant-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        .variant-table th,
+        .variant-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .variant-table th {
+            color: #5d7081;
+            background: #f5f8fa;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .variant-table td input { min-height: 38px; padding: 8px 9px; }
+        .variant-table tr:last-child td { border-bottom: 0; }
+
+        .remove-row {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #edcbd0;
+            border-radius: 8px;
+            color: var(--red);
+            background: #fff6f7;
+        }
+
+        .add-row {
+            margin-top: 12px;
+            min-height: 40px;
+            padding: 8px 13px;
+            border: 1px solid #bcd4e9;
+            border-radius: 9px;
+            color: var(--blue);
+            background: #f2f8fd;
+            font-weight: 700;
+        }
+
+        .drop-zone {
+            padding: 28px 18px;
+            border: 2px dashed #b9cbd9;
+            border-radius: 12px;
+            text-align: center;
+            background: #f9fbfc;
+            transition: .2s ease;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--blue);
+            background: var(--blue-soft);
+        }
+
+        .drop-zone strong { display: block; color: var(--navy); }
+        .drop-zone p { margin: 6px 0 14px; color: var(--muted); font-size: .8rem; }
+
+        .file-button {
+            display: inline-block;
+            padding: 9px 14px;
+            border-radius: 9px;
+            color: #fff;
+            background: var(--blue);
+            font-weight: 700;
+            font-size: .82rem;
+            cursor: pointer;
+        }
+
+        .file-button input { display: none; }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .preview-card {
+            position: relative;
+            min-height: 126px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #f4f7f9;
+        }
+
+        .preview-card img {
+            width: 100%;
+            height: 126px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .preview-card button {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 28px;
+            height: 28px;
+            border: 0;
+            border-radius: 50%;
+            color: #fff;
+            background: rgba(25, 39, 53, .76);
+        }
+
+        .document-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .doc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #fbfcfd;
+            font-size: .78rem;
+        }
+
+        .right-panel {
+            position: sticky;
+            top: 88px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .summary-card { padding: 18px; }
+
+        .summary-card h3 {
+            color: var(--navy);
+            font-size: .92rem;
+            margin-bottom: 14px;
+        }
+
+        .product-preview {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #fff;
+        }
+
+        .preview-image-main {
+            display: grid;
+            place-items: center;
+            height: 188px;
+            color: #8ca0b3;
+            background: linear-gradient(135deg, #eef3f7, #f9fbfc);
+            border-bottom: 1px solid var(--border);
+            font-size: 2rem;
+        }
+
+        .preview-image-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-copy { padding: 14px; }
+        .preview-copy .brand-line { color: var(--blue); font-size: .72rem; font-weight: 700; text-transform: uppercase; }
+        .preview-copy h4 { margin-top: 5px; color: var(--navy); font-size: 1rem; line-height: 1.35; }
+        .preview-copy .sku-line { margin-top: 5px; color: var(--muted); font-size: .73rem; }
+        .preview-price { margin-top: 12px; color: var(--navy); font-size: 1.25rem; font-weight: 800; }
+
+        .summary-list { margin-top: 15px; }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 9px 0;
+            border-bottom: 1px solid #edf1f4;
+            font-size: .77rem;
+        }
+
+        .summary-line span:first-child { color: var(--muted); }
+        .summary-line strong { color: #405466; text-align: right; }
+
+        .save-panel { padding: 18px; }
+
+        .save-panel p {
+            margin-bottom: 14px;
+            color: var(--muted);
+            font-size: .77rem;
+            line-height: 1.55;
+        }
+
+        .action-stack { display: grid; gap: 9px; }
+
+        .action-btn {
+            width: 100%;
+            min-height: 43px;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-weight: 700;
+            transition: .18s ease;
+        }
+
+        .action-btn.primary { border: 1px solid var(--blue); color: #fff; background: var(--blue); }
+        .action-btn.primary:hover { background: #28649e; }
+        .action-btn.secondary { border: 1px solid var(--border-dark); color: var(--navy); background: #fff; }
+        .action-btn.secondary:hover { background: #f4f8fb; }
+        .action-btn.danger { border: 1px solid #efccd1; color: var(--red); background: #fff7f8; }
+
+        .connection-box {
+            padding: 12px;
+            margin-top: 14px;
+            border-radius: 9px;
+            color: #7b5a20;
+            background: #fff8e8;
+            border: 1px solid #edd9a7;
+            font-size: .72rem;
+            line-height: 1.5;
+        }
+
+        .toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 500;
+            max-width: 360px;
+            padding: 13px 16px;
+            border-radius: 10px;
+            color: #fff;
+            background: #263c50;
+            box-shadow: 0 12px 30px rgba(21, 38, 54, .24);
+            opacity: 0;
+            transform: translateY(16px);
+            pointer-events: none;
+            transition: .25s ease;
+            font-size: .82rem;
+        }
+
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #287154; }
+        .toast.error { background: #a73e4c; }
+
+        footer {
+            padding: 24px 10px 6px;
+            text-align: center;
+            color: #7b8a99;
+            font-size: .75rem;
+        }
+
+        @media (max-width: 1180px) {
+            .layout { grid-template-columns: 210px minmax(0, 1fr); }
+            .right-panel {
+                position: static;
+                grid-column: 2;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 850px) {
+            .app-header { align-items: flex-start; }
+            .brand-copy span, .status-pill { display: none; }
+            .page-heading { align-items: flex-start; flex-direction: column; }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar {
+                position: static;
+                display: flex;
+                overflow-x: auto;
+                gap: 5px;
+                padding: 8px;
+            }
+            .sidebar-title { display: none; }
+            .section-link { min-width: max-content; margin: 0; }
+            .right-panel { grid-column: auto; grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 680px) {
+            .app-header { padding: 9px 12px; }
+            .brand img { width: 38px; height: 38px; }
+            .top-btn { min-height: 36px; padding: 7px 10px; font-size: .78rem; }
+            .page-shell { width: min(100% - 20px, 1500px); padding-top: 20px; }
+            .section-header, .section-body { padding: 16px; }
+            .field, .field.half, .field.quarter { grid-column: 1 / -1; }
+            .checkbox-row { display: grid; }
+        }
+    
+        /* Admin login */
+        .admin-protected { display: none; }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(238, 243, 249, .94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .login-overlay.open { display: flex; }
+
+        .login-box {
+            width: min(94vw, 430px);
+            padding: 32px;
+            border: 1px solid #d7e0ea;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 24px 70px rgba(28, 46, 70, .18);
+        }
+
+        .login-brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 24px;
+        }
+
+        .login-brand img {
+            width: 54px;
+            height: 54px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: #f3f7fb;
+            padding: 8px;
+        }
+
+        .login-brand h2 {
+            margin: 0 0 3px;
+            color: #18324d;
+            font-size: 1.35rem;
+        }
+
+        .login-brand p {
+            margin: 0;
+            color: #6f8092;
+            font-size: .9rem;
+        }
+
+        .login-box label {
+            display: block;
+            margin: 14px 0 7px;
+            color: #34495e;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid #cbd6e2;
+            border-radius: 12px;
+            background: #fbfcfe;
+            color: #23384d;
+            outline: none;
+        }
+
+        .login-box input:focus {
+            border-color: #4d8ec8;
+            box-shadow: 0 0 0 4px rgba(77, 142, 200, .13);
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 20px;
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #245b88, #397fb6);
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .login-button:disabled { opacity: .6; cursor: wait; }
+
+        .login-error {
+            min-height: 22px;
+            margin-top: 13px;
+            color: #b42318;
+            font-weight: 700;
+            text-align: center;
+            font-size: .9rem;
+        }
+
+        .login-note {
+            margin-top: 13px;
+            color: #7b8997;
+            text-align: center;
+            font-size: .8rem;
+            line-height: 1.5;
+        }
+
+        .logout-top {
+            border-color: #d7e0ea !important;
+            background: #fff !important;
+            color: #38536d !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="loginOverlay" class="login-overlay open" aria-hidden="false">
+        <section class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <div class="login-brand">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA">
+                <div>
+                    <h2 id="loginTitle">Admin Login</h2>
+                    <p>CHAYNOVA Product Manager</p>
+                </div>
+            </div>
+
+            <label for="adminUsername">Username</label>
+            <input id="adminUsername" type="text" autocomplete="username" placeholder="Enter admin username">
+
+            <label for="adminPassword">Password</label>
+            <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter password">
+
+            <button id="adminLoginBtn" class="login-button" type="button">Log In</button>
+            <div id="adminLoginError" class="login-error" aria-live="polite"></div>
+            <p class="login-note">Your username and password are checked securely by your Cloudflare Worker.</p>
+        </section>
+    </div>
+
+    <header class="app-header admin-protected">
+        <a href="index.html" class="brand">
+            <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA logo">
+            <span class="brand-copy">
+                <strong>CHAYNOVA</strong>
+                <span>Product & Inventory Workspace</span>
+            </span>
+        </a>
+
+        <div class="header-actions">
+            <span class="status-pill"><span class="status-dot"></span> Cloud API not connected</span>
+            <button class="top-btn" type="button" id="newProductTop">＋ New</button>
+            <button class="top-btn" type="button" id="saveDraftTop">Save Draft</button>
+            <button class="top-btn logout-top" type="button" id="logoutAdmin">Logout</button>
+        </div>
+    </header>
+
+    <main class="page-shell admin-protected">
+        <div class="page-heading">
+            <div class="heading-copy">
+                <span class="eyebrow">Internal catalog</span>
+                <h1>Add or Edit Product</h1>
+                <p>Record product details, variants, purchasing costs, inventory, supplier information, photos, documents, and website content in one organized workspace.</p>
+            </div>
+            <div class="product-state">● Draft product</div>
+        </div>
+
+        <div class="layout">
+            <nav class="sidebar card" aria-label="Product form sections">
+                <div class="sidebar-title">Sections</div>
+                <a href="#basic" class="section-link active"><span>▣</span><span>Basic details</span></a>
+                <a href="#variants" class="section-link"><span>▦</span><span>Variants</span></a>
+                <a href="#inventory" class="section-link"><span>◫</span><span>Inventory</span></a>
+                <a href="#supplier" class="section-link"><span>◎</span><span>Supplier</span></a>
+                <a href="#media" class="section-link"><span>▧</span><span>Photos</span></a>
+                <a href="#documents" class="section-link"><span>▤</span><span>Documents</span></a>
+                <a href="#website" class="section-link"><span>⌁</span><span>Website & SEO</span></a>
+            </nav>
+
+            <form id="productForm" class="main-column" novalidate>
+                <section id="basic" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">▣</span>
+                            <div><h2>Basic Product Details</h2><p>Identity, origin, labels, and customer-facing description.</p></div>
+                        </div>
+                        <span class="section-badge">Required first</span>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="productId">Product ID</label>
+                                <div class="input-row">
+                                    <input id="productId" name="productId" placeholder="CHA-000001">
+                                    <button class="mini-btn" type="button" id="generateId">Generate</button>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="sku">Store SKU <span class="required">*</span></label>
+                                <input id="sku" name="sku" required placeholder="CHA-FBT-JER-001">
+                            </div>
+                            <div class="field">
+                                <label for="status">Product Status</label>
+                                <select id="status" name="status">
+                                    <option value="draft">Draft</option>
+                                    <option value="active">Active</option>
+                                    <option value="hidden">Hidden</option>
+                                    <option value="archived">Archived</option>
+                                </select>
+                            </div>
+
+                            <div class="field half">
+                                <label for="productName">Product Name <span class="required">*</span></label>
+                                <input id="productName" name="productName" required placeholder="FBT Men's Training Jersey">
+                            </div>
+                            <div class="field quarter">
+                                <label for="brand">Brand <span class="required">*</span></label>
+                                <input id="brand" name="brand" required placeholder="FBT">
+                            </div>
+                            <div class="field quarter">
+                                <label for="manufacturer">Manufacturer</label>
+                                <input id="manufacturer" name="manufacturer" placeholder="Manufacturer name">
+                            </div>
+
+                            <div class="field">
+                                <label for="category">Category</label>
+                                <select id="category" name="category">
+                                    <option value="">Select category</option>
+                                    <option>Jersey</option>
+                                    <option>T-Shirt</option>
+                                    <option>Polo Shirt</option>
+                                    <option>Shorts</option>
+                                    <option>Track Pants</option>
+                                    <option>Jacket</option>
+                                    <option>Sports Uniform</option>
+                                    <option>Accessories</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="subcategory">Subcategory</label>
+                                <input id="subcategory" name="subcategory" placeholder="Soccer training jersey">
+                            </div>
+                            <div class="field">
+                                <label for="gender">Department</label>
+                                <select id="gender" name="gender">
+                                    <option value="unisex">Unisex</option>
+                                    <option value="men">Men</option>
+                                    <option value="women">Women</option>
+                                    <option value="kids">Kids</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="countryOrigin">Country of Origin</label>
+                                <input id="countryOrigin" name="countryOrigin" value="Thailand">
+                            </div>
+                            <div class="field">
+                                <label for="manufacturedDate">Manufactured Date</label>
+                                <input type="date" id="manufacturedDate" name="manufacturedDate">
+                                <div class="help-text">Use only when supplied by the manufacturer.</div>
+                            </div>
+                            <div class="field">
+                                <label for="dateReceived">Date Received in Store</label>
+                                <input type="date" id="dateReceived" name="dateReceived">
+                            </div>
+
+                            <div class="field half">
+                                <label for="manufacturerBarcode">Thailand / Manufacturer Barcode</label>
+                                <input id="manufacturerBarcode" name="manufacturerBarcode" inputmode="numeric" placeholder="8851234567890">
+                            </div>
+                            <div class="field half">
+                                <label for="storeBarcode">CHAYNOVA Store Barcode</label>
+                                <input id="storeBarcode" name="storeBarcode" inputmode="numeric" placeholder="Your UPC, EAN, or internal barcode">
+                            </div>
+
+                            <div class="field half">
+                                <label for="material">Material / Fabric</label>
+                                <input id="material" name="material" placeholder="100% polyester">
+                            </div>
+                            <div class="field half">
+                                <label for="careInstructions">Care Instructions</label>
+                                <input id="careInstructions" name="careInstructions" placeholder="Machine wash cold, do not bleach, hang dry">
+                            </div>
+
+                            <div class="field wide">
+                                <label for="shortDescription">Short Product Summary</label>
+                                <textarea id="shortDescription" name="shortDescription" placeholder="A short, clear description for product cards and listings."></textarea>
+                            </div>
+                            <div class="field wide">
+                                <label for="fullDescription">Full Product Details</label>
+                                <textarea id="fullDescription" name="fullDescription" placeholder="Explain fit, fabric, performance features, use, packaging, and other important details."></textarea>
+                            </div>
+                            <div class="field wide">
+                                <label for="additionalInfo">Additional Information</label>
+                                <textarea id="additionalInfo" name="additionalInfo" placeholder="Batch information, special notes, translation, packaging differences, or other internal details."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="variants" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">▦</span>
+                            <div><h2>Sizes, Colors & Variants</h2><p>Track every sellable variation with its own stock and barcode.</p></div>
+                        </div>
+                        <span class="section-badge" id="variantCountBadge">1 variant</span>
+                    </div>
+                    <div class="section-body">
+                        <div class="variant-table-wrap">
+                            <table class="variant-table">
+                                <thead>
+                                    <tr><th>Size</th><th>Color</th><th>Variant SKU</th><th>Barcode</th><th>Quantity</th><th>Location</th><th></th></tr>
+                                </thead>
+                                <tbody id="variantRows"></tbody>
+                            </table>
+                        </div>
+                        <button class="add-row" type="button" id="addVariant">＋ Add another variant</button>
+                    </div>
+                </section>
+
+                <section id="inventory" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">◫</span>
+                            <div><h2>Purchasing, Price & Inventory</h2><p>Calculate landed cost and record stock control information.</p></div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-grid">
+                            <div class="field quarter"><label for="purchaseCost">Purchase Cost (USD)</label><input type="number" min="0" step="0.01" id="purchaseCost" name="purchaseCost" placeholder="0.00"></div>
+                            <div class="field quarter"><label for="shippingCost">Shipping per Item</label><input type="number" min="0" step="0.01" id="shippingCost" name="shippingCost" placeholder="0.00"></div>
+                            <div class="field quarter"><label for="dutyCost">Duty / Import Cost</label><input type="number" min="0" step="0.01" id="dutyCost" name="dutyCost" placeholder="0.00"></div>
+                            <div class="field quarter"><label for="landedCost">Landed Cost</label><input type="number" min="0" step="0.01" id="landedCost" name="landedCost" placeholder="Auto calculated"></div>
+
+                            <div class="field quarter"><label for="sellingPrice">Selling Price <span class="required">*</span></label><input type="number" min="0" step="0.01" id="sellingPrice" name="sellingPrice" required placeholder="0.00"></div>
+                            <div class="field quarter"><label for="comparePrice">Compare-at Price</label><input type="number" min="0" step="0.01" id="comparePrice" name="comparePrice" placeholder="0.00"></div>
+                            <div class="field quarter"><label for="reorderLevel">Low Stock Level</label><input type="number" min="0" step="1" id="reorderLevel" name="reorderLevel" placeholder="5"></div>
+                            <div class="field quarter"><label for="packageWeight">Package Weight (lb)</label><input type="number" min="0" step="0.01" id="packageWeight" name="packageWeight" placeholder="0.00"></div>
+
+                            <div class="field half"><label for="purchaseOrder">Purchase Order / Invoice Number</label><input id="purchaseOrder" name="purchaseOrder" placeholder="PO-2026-001"></div>
+                            <div class="field half"><label for="stockLocation">Default Stock Location</label><input id="stockLocation" name="stockLocation" placeholder="Shelf A-03"></div>
+
+                            <div class="field wide">
+                                <div class="checkbox-row">
+                                    <label class="check"><input type="checkbox" name="trackInventory" checked> Track inventory</label>
+                                    <label class="check"><input type="checkbox" name="allowBackorder"> Allow backorders</label>
+                                    <label class="check"><input type="checkbox" name="taxable" checked> Taxable product</label>
+                                    <label class="check"><input type="checkbox" name="featured"> Featured product</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="supplier" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">◎</span>
+                            <div><h2>Supplier & Import Information</h2><p>Keep supplier contact and shipment references with the product.</p></div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-grid">
+                            <div class="field half"><label for="supplierName">Supplier Name</label><input id="supplierName" name="supplierName" placeholder="FBT or wholesaler name"></div>
+                            <div class="field half"><label for="supplierContact">Contact Person</label><input id="supplierContact" name="supplierContact" placeholder="Contact name"></div>
+                            <div class="field"><label for="supplierEmail">Email</label><input type="email" id="supplierEmail" name="supplierEmail" placeholder="supplier@example.com"></div>
+                            <div class="field"><label for="supplierPhone">Phone</label><input type="tel" id="supplierPhone" name="supplierPhone" placeholder="+66 ..."></div>
+                            <div class="field"><label for="supplierWebsite">Website</label><input type="url" id="supplierWebsite" name="supplierWebsite" placeholder="https://"></div>
+                            <div class="field half"><label for="shipmentReference">Shipment / Tracking Reference</label><input id="shipmentReference" name="shipmentReference" placeholder="Airway bill, container, or tracking number"></div>
+                            <div class="field half"><label for="importEntry">Customs / Entry Reference</label><input id="importEntry" name="importEntry" placeholder="Customs entry or broker reference"></div>
+                            <div class="field wide"><label for="supplierNotes">Supplier Notes</label><textarea id="supplierNotes" name="supplierNotes" placeholder="Minimum order, wholesale terms, payment method, lead time, authorization, or contact history."></textarea></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="media" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">▧</span>
+                            <div><h2>Product Photos</h2><p>Add front, back, side, fabric, tag, barcode, packaging, and lifestyle photos.</p></div>
+                        </div>
+                        <span class="section-badge">3–8 recommended</span>
+                    </div>
+                    <div class="section-body">
+                        <div class="drop-zone" id="photoDropZone">
+                            <strong>Drop product photos here</strong>
+                            <p>JPG, PNG, or WebP. You can select multiple images.</p>
+                            <label class="file-button">Choose Photos<input type="file" id="photoInput" accept="image/*" multiple></label>
+                        </div>
+                        <div class="preview-grid" id="photoPreview"></div>
+                    </div>
+                </section>
+
+                <section id="documents" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">▤</span>
+                            <div><h2>Documents</h2><p>Store invoices, packing lists, customs documents, certificates, and brand permissions.</p></div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="drop-zone" id="documentDropZone">
+                            <strong>Choose product documents</strong>
+                            <p>PDF, DOC, XLS, images, and common office files.</p>
+                            <label class="file-button">Choose Documents<input type="file" id="documentInput" multiple></label>
+                        </div>
+                        <div class="document-list" id="documentList"></div>
+                    </div>
+                </section>
+
+                <section id="website" class="form-section card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-icon">⌁</span>
+                            <div><h2>Website, Search & Internal Tags</h2><p>Prepare clean content for the CHAYNOVA store and internal product search.</p></div>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="form-grid">
+                            <div class="field half"><label for="slug">Page URL Slug</label><input id="slug" name="slug" placeholder="fbt-mens-training-jersey"></div>
+                            <div class="field half"><label for="tags">Search Tags</label><input id="tags" name="tags" placeholder="soccer, training, quick dry, Thailand"></div>
+                            <div class="field wide"><label for="seoTitle">SEO Title</label><input id="seoTitle" name="seoTitle" maxlength="70" placeholder="Product name | CHAYNOVA"></div>
+                            <div class="field wide"><label for="seoDescription">SEO Description</label><textarea id="seoDescription" name="seoDescription" maxlength="170" placeholder="A clear search-result description, usually 140–160 characters."></textarea></div>
+                            <div class="field wide"><label for="internalNotes">Internal Notes</label><textarea id="internalNotes" name="internalNotes" placeholder="Private notes not shown to customers."></textarea></div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+
+            <aside class="right-panel">
+                <section class="summary-card card">
+                    <h3>Live Product Preview</h3>
+                    <div class="product-preview">
+                        <div class="preview-image-main" id="mainPreviewImage">▧</div>
+                        <div class="preview-copy">
+                            <div class="brand-line" id="previewBrand">Your brand</div>
+                            <h4 id="previewName">New Product</h4>
+                            <div class="sku-line" id="previewSku">SKU not entered</div>
+                            <div class="preview-price" id="previewPrice">$0.00</div>
+                        </div>
+                    </div>
+                    <div class="summary-list">
+                        <div class="summary-line"><span>Variants</span><strong id="summaryVariants">1</strong></div>
+                        <div class="summary-line"><span>Total quantity</span><strong id="summaryStock">0</strong></div>
+                        <div class="summary-line"><span>Landed cost</span><strong id="summaryCost">$0.00</strong></div>
+                        <div class="summary-line"><span>Estimated margin</span><strong id="summaryMargin">—</strong></div>
+                    </div>
+                </section>
+
+                <section class="save-panel card">
+                    <h3>Save Product</h3>
+                    <p>Drafts save in this browser. Cloud save will work after you add your Cloudflare Worker API URL in the JavaScript.</p>
+                    <div class="action-stack">
+                        <button class="action-btn primary" type="button" id="saveCloud">Save to Cloudflare</button>
+                        <button class="action-btn secondary" type="button" id="saveDraft">Save Browser Draft</button>
+                        <button class="action-btn secondary" type="button" id="exportJson">Export JSON Backup</button>
+                        <button class="action-btn danger" type="button" id="clearForm">Clear Product</button>
+                    </div>
+                    <div class="connection-box">
+                        <strong>Cloudflare setup:</strong> replace <code>YOUR_WORKER_API_URL</code> near the bottom of this file. The Worker can save product data to D1 and upload files to R2.
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <footer>© 2026 CHAYNOVA • Internal product workspace • Inspired by Thailand • Based in New York</footer>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        const API = "https://chay1api.mikebewise.workers.dev";
+        const LOGIN_URL = `${API}/login`;
+        const CLOUD_API_URL = `${API}/product`;
+        const TOKEN_KEY = "chaynovaAdminToken";
+        const DRAFT_KEY = "chaynova-product-draft-v1";
+
+        const form = document.getElementById("productForm");
+        const variantRows = document.getElementById("variantRows");
+        const photoInput = document.getElementById("photoInput");
+        const photoPreview = document.getElementById("photoPreview");
+        const documentInput = document.getElementById("documentInput");
+        const documentList = document.getElementById("documentList");
+        const toast = document.getElementById("toast");
+
+        let selectedPhotos = [];
+        let selectedDocuments = [];
+
+        const loginOverlay = document.getElementById("loginOverlay");
+        const adminUsername = document.getElementById("adminUsername");
+        const adminPassword = document.getElementById("adminPassword");
+        const adminLoginBtn = document.getElementById("adminLoginBtn");
+        const adminLoginError = document.getElementById("adminLoginError");
+        const protectedElements = document.querySelectorAll(".admin-protected");
+
+        function getAdminToken() {
+            return localStorage.getItem(TOKEN_KEY) || "";
+        }
+
+        function showAdminPage() {
+            protectedElements.forEach(element => element.style.display = "");
+            loginOverlay.classList.remove("open");
+            loginOverlay.setAttribute("aria-hidden", "true");
+            adminLoginError.textContent = "";
+        }
+
+        function showAdminLogin(message = "") {
+            protectedElements.forEach(element => element.style.display = "none");
+            loginOverlay.classList.add("open");
+            loginOverlay.setAttribute("aria-hidden", "false");
+            adminLoginError.textContent = message;
+            setTimeout(() => adminUsername.focus(), 50);
+        }
+
+        async function loginAdmin() {
+            const username = adminUsername.value.trim();
+            const password = adminPassword.value;
+
+            if (!username || !password) {
+                adminLoginError.textContent = "Please enter your username and password.";
+                return;
+            }
+
+            adminLoginBtn.disabled = true;
+            adminLoginError.textContent = "Checking login...";
+
+            try {
+                const response = await fetch(LOGIN_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+
+                let data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                if (!response.ok || !data.success || !data.token) {
+                    throw new Error(data.message || "Wrong username or password.");
+                }
+
+                localStorage.setItem(TOKEN_KEY, data.token);
+                adminPassword.value = "";
+                showAdminPage();
+            } catch (error) {
+                localStorage.removeItem(TOKEN_KEY);
+                adminLoginError.textContent = error.message || "Login failed.";
+            } finally {
+                adminLoginBtn.disabled = false;
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem(TOKEN_KEY);
+            adminUsername.value = "";
+            adminPassword.value = "";
+            showAdminLogin("You have logged out.");
+        }
+
+        adminLoginBtn.addEventListener("click", loginAdmin);
+        adminPassword.addEventListener("keydown", event => {
+            if (event.key === "Enter") loginAdmin();
+        });
+        adminUsername.addEventListener("keydown", event => {
+            if (event.key === "Enter") adminPassword.focus();
+        });
+        document.getElementById("logoutAdmin").addEventListener("click", logoutAdmin);
+
+
+        function showToast(message, type = "") {
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => toast.className = "toast", 2800);
+        }
+
+        function money(value) {
+            const amount = Number(value || 0);
+            return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+        }
+
+        function generateProductId() {
+            const date = new Date();
+            const datePart = date.toISOString().slice(2, 10).replaceAll("-", "");
+            const random = Math.floor(100 + Math.random() * 900);
+            document.getElementById("productId").value = `CHA-${datePart}-${random}`;
+            updatePreview();
+        }
+
+        function addVariant(data = {}) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><input name="variantSize" value="${escapeHtml(data.size || "")}" placeholder="M"></td>
+                <td><input name="variantColor" value="${escapeHtml(data.color || "")}" placeholder="Royal Blue"></td>
+                <td><input name="variantSku" value="${escapeHtml(data.sku || "")}" placeholder="CHA-001-BLU-M"></td>
+                <td><input name="variantBarcode" value="${escapeHtml(data.barcode || "")}" placeholder="Barcode"></td>
+                <td><input name="variantQuantity" type="number" min="0" step="1" value="${Number(data.quantity || 0)}"></td>
+                <td><input name="variantLocation" value="${escapeHtml(data.location || "")}" placeholder="Shelf A-03"></td>
+                <td><button class="remove-row" type="button" title="Remove variant">×</button></td>
+            `;
+            row.querySelector(".remove-row").addEventListener("click", () => {
+                if (variantRows.children.length === 1) return showToast("Keep at least one variant.");
+                row.remove();
+                updatePreview();
+            });
+            row.querySelectorAll("input").forEach(input => input.addEventListener("input", updatePreview));
+            variantRows.appendChild(row);
+            updatePreview();
+        }
+
+        function getVariants() {
+            return [...variantRows.querySelectorAll("tr")].map(row => ({
+                size: row.querySelector('[name="variantSize"]').value.trim(),
+                color: row.querySelector('[name="variantColor"]').value.trim(),
+                sku: row.querySelector('[name="variantSku"]').value.trim(),
+                barcode: row.querySelector('[name="variantBarcode"]').value.trim(),
+                quantity: Number(row.querySelector('[name="variantQuantity"]').value || 0),
+                location: row.querySelector('[name="variantLocation"]').value.trim()
+            }));
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;","\"":"&quot;"}[char]));
+        }
+
+        function getFormObject() {
+            const data = new FormData(form);
+            const product = {};
+            for (const [key, value] of data.entries()) {
+                if (key.startsWith("variant")) continue;
+                product[key] = value;
+            }
+
+            product.trackInventory = form.elements.trackInventory.checked;
+            product.allowBackorder = form.elements.allowBackorder.checked;
+            product.taxable = form.elements.taxable.checked;
+            product.featured = form.elements.featured.checked;
+            product.variants = getVariants();
+            product.photoNames = selectedPhotos.map(file => file.name);
+            product.documentNames = selectedDocuments.map(file => file.name);
+            product.updatedAt = new Date().toISOString();
+            return product;
+        }
+
+        function restoreForm(product) {
+            Object.entries(product || {}).forEach(([key, value]) => {
+                if (["variants", "photoNames", "documentNames", "updatedAt"].includes(key)) return;
+                const field = form.elements[key];
+                if (!field) return;
+                if (field.type === "checkbox") field.checked = Boolean(value);
+                else field.value = value ?? "";
+            });
+
+            variantRows.innerHTML = "";
+            (product.variants?.length ? product.variants : [{}]).forEach(addVariant);
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const name = document.getElementById("productName").value.trim() || "New Product";
+            const brand = document.getElementById("brand").value.trim() || "Your brand";
+            const sku = document.getElementById("sku").value.trim() || "SKU not entered";
+            const price = Number(document.getElementById("sellingPrice").value || 0);
+            const cost = Number(document.getElementById("landedCost").value || 0);
+            const variants = getVariants();
+            const totalStock = variants.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+            const margin = price > 0 ? ((price - cost) / price) * 100 : null;
+
+            document.getElementById("previewName").textContent = name;
+            document.getElementById("previewBrand").textContent = brand;
+            document.getElementById("previewSku").textContent = sku;
+            document.getElementById("previewPrice").textContent = money(price);
+            document.getElementById("summaryVariants").textContent = variants.length;
+            document.getElementById("summaryStock").textContent = totalStock;
+            document.getElementById("summaryCost").textContent = money(cost);
+            document.getElementById("summaryMargin").textContent = margin === null ? "—" : `${margin.toFixed(1)}%`;
+            document.getElementById("variantCountBadge").textContent = `${variants.length} variant${variants.length === 1 ? "" : "s"}`;
+
+            const nameForSlug = name === "New Product" ? "" : name;
+            const slug = document.getElementById("slug");
+            if (!slug.dataset.manual && nameForSlug) {
+                slug.value = nameForSlug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+            }
+        }
+
+        function calculateLandedCost() {
+            const purchase = Number(document.getElementById("purchaseCost").value || 0);
+            const shipping = Number(document.getElementById("shippingCost").value || 0);
+            const duty = Number(document.getElementById("dutyCost").value || 0);
+            document.getElementById("landedCost").value = (purchase + shipping + duty).toFixed(2);
+            updatePreview();
+        }
+
+        function renderPhotos() {
+            photoPreview.innerHTML = "";
+            selectedPhotos.forEach((file, index) => {
+                const card = document.createElement("div");
+                card.className = "preview-card";
+                const img = document.createElement("img");
+                img.alt = file.name;
+                img.src = URL.createObjectURL(file);
+                if (index === 0) {
+                    const main = document.getElementById("mainPreviewImage");
+                    main.innerHTML = "";
+                    const mainImg = document.createElement("img");
+                    mainImg.src = img.src;
+                    mainImg.alt = "Primary product preview";
+                    main.appendChild(mainImg);
+                }
+                const remove = document.createElement("button");
+                remove.type = "button";
+                remove.textContent = "×";
+                remove.title = "Remove photo";
+                remove.addEventListener("click", () => {
+                    selectedPhotos.splice(index, 1);
+                    renderPhotos();
+                    if (!selectedPhotos.length) document.getElementById("mainPreviewImage").innerHTML = "▧";
+                });
+                card.append(img, remove);
+                photoPreview.appendChild(card);
+            });
+        }
+
+        function addPhotos(files) {
+            const images = [...files].filter(file => file.type.startsWith("image/"));
+            selectedPhotos.push(...images);
+            renderPhotos();
+        }
+
+        function renderDocuments() {
+            documentList.innerHTML = "";
+            selectedDocuments.forEach((file, index) => {
+                const item = document.createElement("div");
+                item.className = "doc-item";
+                item.innerHTML = `<span>▤ ${escapeHtml(file.name)}</span><button class="mini-btn" type="button">Remove</button>`;
+                item.querySelector("button").addEventListener("click", () => {
+                    selectedDocuments.splice(index, 1);
+                    renderDocuments();
+                });
+                documentList.appendChild(item);
+            });
+        }
+
+        function saveDraft() {
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(getFormObject()));
+            showToast("Draft saved in this browser.", "success");
+        }
+
+        function loadDraft() {
+            const saved = localStorage.getItem(DRAFT_KEY);
+            if (!saved) return;
+            try {
+                restoreForm(JSON.parse(saved));
+                showToast("Browser draft restored.");
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function saveToCloudflare() {
+            if (!form.reportValidity()) return showToast("Complete the required fields first.", "error");
+            if (!CLOUD_API_URL) {
+                showToast("Add your Cloudflare Worker API URL first.", "error");
+                return;
+            }
+
+            const payload = new FormData();
+            payload.append("product", JSON.stringify(getFormObject()));
+            selectedPhotos.forEach(file => payload.append("photos", file, file.name));
+            selectedDocuments.forEach(file => payload.append("documents", file, file.name));
+
+            try {
+                const response = await fetch(CLOUD_API_URL, {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${getAdminToken()}` },
+                    body: payload
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    showAdminLogin("Your login expired. Please log in again.");
+                    throw new Error("Unauthorized");
+                }
+                if (!response.ok) throw new Error(`Server returned ${response.status}`);
+                const result = await response.json().catch(() => ({}));
+                showToast(result.message || "Product saved to Cloudflare.", "success");
+                localStorage.setItem(DRAFT_KEY, JSON.stringify(getFormObject()));
+            } catch (error) {
+                console.error(error);
+                showToast("Cloud save failed. Check the Worker URL and CORS settings.", "error");
+            }
+        }
+
+        function exportJson() {
+            const product = getFormObject();
+            const file = new Blob([JSON.stringify(product, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(file);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${product.sku || product.productId || "chaynova-product"}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast("JSON backup exported.", "success");
+        }
+
+        function clearProduct() {
+            if (!confirm("Clear all product information on this page?")) return;
+            form.reset();
+            variantRows.innerHTML = "";
+            selectedPhotos = [];
+            selectedDocuments = [];
+            renderPhotos();
+            renderDocuments();
+            document.getElementById("mainPreviewImage").innerHTML = "▧";
+            addVariant();
+            generateProductId();
+            localStorage.removeItem(DRAFT_KEY);
+            showToast("Product form cleared.");
+        }
+
+        document.getElementById("generateId").addEventListener("click", generateProductId);
+        document.getElementById("addVariant").addEventListener("click", () => addVariant());
+        document.getElementById("saveDraft").addEventListener("click", saveDraft);
+        document.getElementById("saveDraftTop").addEventListener("click", saveDraft);
+        document.getElementById("saveCloud").addEventListener("click", saveToCloudflare);
+        document.getElementById("exportJson").addEventListener("click", exportJson);
+        document.getElementById("clearForm").addEventListener("click", clearProduct);
+        document.getElementById("newProductTop").addEventListener("click", clearProduct);
+
+        ["purchaseCost", "shippingCost", "dutyCost"].forEach(id => document.getElementById(id).addEventListener("input", calculateLandedCost));
+        form.addEventListener("input", updatePreview);
+        document.getElementById("slug").addEventListener("input", event => event.target.dataset.manual = event.target.value ? "true" : "");
+
+        photoInput.addEventListener("change", event => addPhotos(event.target.files));
+        documentInput.addEventListener("change", event => {
+            selectedDocuments.push(...event.target.files);
+            renderDocuments();
+        });
+
+        function activateDropZone(zoneId, inputHandler) {
+            const zone = document.getElementById(zoneId);
+            ["dragenter", "dragover"].forEach(type => zone.addEventListener(type, event => {
+                event.preventDefault();
+                zone.classList.add("dragover");
+            }));
+            ["dragleave", "drop"].forEach(type => zone.addEventListener(type, event => {
+                event.preventDefault();
+                zone.classList.remove("dragover");
+            }));
+            zone.addEventListener("drop", event => inputHandler(event.dataTransfer.files));
+        }
+
+        activateDropZone("photoDropZone", addPhotos);
+        activateDropZone("documentDropZone", files => {
+            selectedDocuments.push(...files);
+            renderDocuments();
+        });
+
+        const links = [...document.querySelectorAll(".section-link")];
+        const sections = [...document.querySelectorAll(".form-section")];
+        const observer = new IntersectionObserver(entries => {
+            const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (!visible) return;
+            links.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`));
+        }, { rootMargin: "-100px 0px -65%", threshold: [0.1, 0.4, 0.8] });
+        sections.forEach(section => observer.observe(section));
+
+        addVariant();
+        generateProductId();
+        loadDraft();
+        updatePreview();
+
+        if (getAdminToken()) {
+            showAdminPage();
+        } else {
+            showAdminLogin();
+        }
+
+    </script>
+</body>
+</html>
