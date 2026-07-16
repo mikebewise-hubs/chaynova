@@ -1465,6 +1465,7 @@
 
         let selectedPhotos = [];
         let selectedDocuments = [];
+        let editingProductDatabaseId = "";
 
         const loginOverlay = document.getElementById("loginOverlay");
         const adminUsername = document.getElementById("adminUsername");
@@ -1784,17 +1785,36 @@
 
         function clearProduct() {
             if (!confirm("Clear all product information on this page?")) return;
+            startNewProduct();
+            showToast("Product form cleared.");
+        }
+
+        function startNewProduct() {
+            editingProductDatabaseId = "";
+
             form.reset();
             variantRows.innerHTML = "";
+            addVariant();
+
             selectedPhotos = [];
             selectedDocuments = [];
+            photoInput.value = "";
+            documentInput.value = "";
             renderPhotos();
             renderDocuments();
-            document.getElementById("mainPreviewImage").innerHTML = "▧";
-            addVariant();
-            generateProductId();
+
             localStorage.removeItem(DRAFT_KEY);
-            showToast("Product form cleared.");
+            document.getElementById("slug").dataset.manual = "";
+            document.getElementById("countryOrigin").value = "Thailand";
+            document.getElementById("status").value = "draft";
+            document.getElementById("saveCloud").textContent = "Save to Cloudflare";
+            document.querySelector(".product-state").textContent = "● Draft product";
+            document.getElementById("mainPreviewImage").innerHTML = "▧";
+
+            generateProductId();
+            updatePreview();
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
         document.getElementById("generateId").addEventListener("click", generateProductId);
@@ -1804,7 +1824,7 @@
         document.getElementById("saveCloud").addEventListener("click", saveProductToCloud);
         document.getElementById("exportJson").addEventListener("click", exportJson);
         document.getElementById("clearForm").addEventListener("click", clearProduct);
-        document.getElementById("newProductTop").addEventListener("click", clearProduct);
+        document.getElementById("newProductTop").addEventListener("click", () => { startNewProduct(); showToast("New product form ready."); });
 
         ["purchaseCost", "shippingCost", "dutyCost"].forEach(id => document.getElementById(id).addEventListener("input", calculateLandedCost));
         form.addEventListener("input", updatePreview);
@@ -1957,38 +1977,22 @@
                     throw new Error(result.error || "Save failed.");
                 }
 
-                // Remove saved draft
+                // Remove the browser draft because the product is now saved in D1.
                 localStorage.removeItem(DRAFT_KEY);
 
-                // Success message
+                // Remember the D1 database UUID returned by the Worker.
+                editingProductDatabaseId = result.id || "";
+
+                // Keep the product open and switch the page to saved/editing mode.
+                document.getElementById("saveCloud").textContent = "Update Product";
+                document.querySelector(".product-state").textContent = "● Saved product";
+
                 showToast(
-                    "✅ Product saved successfully!",
+                    "✅ Product saved! You are now editing this product.",
                     "success"
                 );
 
                 console.log(result);
-
-                // Reset the form
-                form.reset();
-
-                // Remove all variant rows
-                variantRows.innerHTML = "";
-
-                // Add one blank variant
-                addVariant();
-
-                // Clear uploaded files
-                selectedPhotos = [];
-                selectedDocuments = [];
-
-                photoPreview.innerHTML = "";
-                documentList.innerHTML = "";
-
-                // Generate a new Product ID
-                generateProductId();
-
-                // Refresh the live preview
-                updatePreview();
 
             }
             catch (error) {
