@@ -2,15 +2,35 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "chaynova-api",
   "compatibility_date": "2026-07-07",
+
   "observability": {
     "enabled": true
   },
+
   "assets": {
     "directory": "."
   },
+
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chaynova-products",
+      "database_id": "PASTE_YOUR_D1_DATABASE_ID_HERE"
+    }
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "PRODUCT_IMAGES",
+      "bucket_name": "product-images"
+    },
+    {
+      "binding": "PRODUCT_DOCUMENTS",
+      "bucket_name": "product-documents"
+    }
   ]
-
 }
-
