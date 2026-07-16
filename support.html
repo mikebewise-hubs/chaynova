@@ -83,7 +83,7 @@ header {
     flex-shrink:0;
 
     font-family:"Oxanium",sans-serif;
-    font-size:1rem;
+    font-size:0.95rem;
     font-weight:700;
     letter-spacing:.5px;
 
@@ -107,7 +107,7 @@ header {
 
 .nav-logo img{
     display:block;
-    height:26px;
+    height:22px;
     width:auto;
     transition:.2s;
 }
@@ -131,7 +131,7 @@ header {
     }
 
     .top-nav a{
-        font-size:.9rem;
+        font-size:clamp(.65rem,2.4vw,.82rem);
         letter-spacing:0;
     }
 
@@ -508,6 +508,22 @@ header {
     cursor:pointer;
 }
 
+.hidden-admin-emoji{
+    display:inline-block;
+    margin-left:6px;
+    font-size:13px;
+    color:rgba(255,255,255,.08);   /* almost invisible */
+    cursor:pointer;
+    user-select:none;
+    transition:.25s;
+}
+
+.hidden-admin-emoji:hover{
+    color:#ffffff;
+    text-shadow:0 0 10px rgba(255,255,255,.8);
+    transform:scale(1.3);
+}
+
     </style>
 </head>
 
@@ -635,8 +651,19 @@ header {
         >🔇</button>
     </div>
 
-    <footer><footer><a href="about.html">© 2026 CHAYNOVA</a> • Inspired by Thailand • Based in New York</footer>
+    <footer>
+    <a href="about.html">© 2026 CHAYNOVA</a>
 
+    <span
+        class="hidden-admin-emoji"
+        title="Admin"
+        onclick="openProductLogin()"
+    >
+        🤍
+    </span>
+
+    • Inspired by Thailand • Based in New York
+</footer>
     <script>
         const bgMusic = document.getElementById("bgMusic");
         const musicBtn = document.getElementById("musicBtn");
@@ -712,6 +739,61 @@ window.onclick = (e) => {
         modal.style.display = "none";
     }
 };
+
+function openProductLogin(){
+
+    const token = localStorage.getItem("chaynovaAdminToken");
+
+    // Already logged in
+    if(token){
+        window.location.href="product-manager.html";
+        return;
+    }
+
+    const username = prompt("Username");
+
+    if(!username) return;
+
+    const password = prompt("Password");
+
+    if(!password) return;
+
+    fetch("https://chay1api.mikebewise.workers.dev/login",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            username,
+            password
+        })
+    })
+    .then(r=>r.json())
+    .then(data=>{
+
+        if(data.success){
+
+            localStorage.setItem(
+                "chaynovaAdminToken",
+                data.token
+            );
+
+            window.location.href="product-manager.html";
+
+        }else{
+
+            alert("Login failed.");
+
+        }
+
+    })
+    .catch(()=>{
+
+        alert("Unable to connect.");
+
+    });
+
+}
 
 
     </script>
