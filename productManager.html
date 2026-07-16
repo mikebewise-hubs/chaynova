@@ -688,10 +688,150 @@
             .field, .field.half, .field.quarter { grid-column: 1 / -1; }
             .checkbox-row { display: grid; }
         }
+    
+        /* Admin login */
+        .admin-protected { display: none; }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(238, 243, 249, .94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .login-overlay.open { display: flex; }
+
+        .login-box {
+            width: min(94vw, 430px);
+            padding: 32px;
+            border: 1px solid #d7e0ea;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 24px 70px rgba(28, 46, 70, .18);
+        }
+
+        .login-brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 24px;
+        }
+
+        .login-brand img {
+            width: 54px;
+            height: 54px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: #f3f7fb;
+            padding: 8px;
+        }
+
+        .login-brand h2 {
+            margin: 0 0 3px;
+            color: #18324d;
+            font-size: 1.35rem;
+        }
+
+        .login-brand p {
+            margin: 0;
+            color: #6f8092;
+            font-size: .9rem;
+        }
+
+        .login-box label {
+            display: block;
+            margin: 14px 0 7px;
+            color: #34495e;
+            font-weight: 700;
+            font-size: .9rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid #cbd6e2;
+            border-radius: 12px;
+            background: #fbfcfe;
+            color: #23384d;
+            outline: none;
+        }
+
+        .login-box input:focus {
+            border-color: #4d8ec8;
+            box-shadow: 0 0 0 4px rgba(77, 142, 200, .13);
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 48px;
+            margin-top: 20px;
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #245b88, #397fb6);
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .login-button:disabled { opacity: .6; cursor: wait; }
+
+        .login-error {
+            min-height: 22px;
+            margin-top: 13px;
+            color: #b42318;
+            font-weight: 700;
+            text-align: center;
+            font-size: .9rem;
+        }
+
+        .login-note {
+            margin-top: 13px;
+            color: #7b8997;
+            text-align: center;
+            font-size: .8rem;
+            line-height: 1.5;
+        }
+
+        .logout-top {
+            border-color: #d7e0ea !important;
+            background: #fff !important;
+            color: #38536d !important;
+        }
+
     </style>
 </head>
 <body>
-    <header class="app-header">
+
+    <div id="loginOverlay" class="login-overlay open" aria-hidden="false">
+        <section class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <div class="login-brand">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA">
+                <div>
+                    <h2 id="loginTitle">Admin Login</h2>
+                    <p>CHAYNOVA Product Manager</p>
+                </div>
+            </div>
+
+            <label for="adminUsername">Username</label>
+            <input id="adminUsername" type="text" autocomplete="username" placeholder="Enter admin username">
+
+            <label for="adminPassword">Password</label>
+            <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter password">
+
+            <button id="adminLoginBtn" class="login-button" type="button">Log In</button>
+            <div id="adminLoginError" class="login-error" aria-live="polite"></div>
+            <p class="login-note">Your username and password are checked securely by your Cloudflare Worker.</p>
+        </section>
+    </div>
+
+    <header class="app-header admin-protected">
         <a href="index.html" class="brand">
             <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA logo">
             <span class="brand-copy">
@@ -704,10 +844,11 @@
             <span class="status-pill"><span class="status-dot"></span> Cloud API not connected</span>
             <button class="top-btn" type="button" id="newProductTop">＋ New</button>
             <button class="top-btn" type="button" id="saveDraftTop">Save Draft</button>
+            <button class="top-btn logout-top" type="button" id="logoutAdmin">Logout</button>
         </div>
     </header>
 
-    <main class="page-shell">
+    <main class="page-shell admin-protected">
         <div class="page-heading">
             <div class="heading-copy">
                 <span class="eyebrow">Internal catalog</span>
@@ -1023,7 +1164,10 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
-        const CLOUD_API_URL = "YOUR_WORKER_API_URL";
+        const API = "https://chay1api.mikebewise.workers.dev";
+        const LOGIN_URL = `${API}/login`;
+        const CLOUD_API_URL = `${API}/product`;
+        const TOKEN_KEY = "chaynovaAdminToken";
         const DRAFT_KEY = "chaynova-product-draft-v1";
 
         const form = document.getElementById("productForm");
@@ -1036,6 +1180,86 @@
 
         let selectedPhotos = [];
         let selectedDocuments = [];
+
+        const loginOverlay = document.getElementById("loginOverlay");
+        const adminUsername = document.getElementById("adminUsername");
+        const adminPassword = document.getElementById("adminPassword");
+        const adminLoginBtn = document.getElementById("adminLoginBtn");
+        const adminLoginError = document.getElementById("adminLoginError");
+        const protectedElements = document.querySelectorAll(".admin-protected");
+
+        function getAdminToken() {
+            return localStorage.getItem(TOKEN_KEY) || "";
+        }
+
+        function showAdminPage() {
+            protectedElements.forEach(element => element.style.display = "");
+            loginOverlay.classList.remove("open");
+            loginOverlay.setAttribute("aria-hidden", "true");
+            adminLoginError.textContent = "";
+        }
+
+        function showAdminLogin(message = "") {
+            protectedElements.forEach(element => element.style.display = "none");
+            loginOverlay.classList.add("open");
+            loginOverlay.setAttribute("aria-hidden", "false");
+            adminLoginError.textContent = message;
+            setTimeout(() => adminUsername.focus(), 50);
+        }
+
+        async function loginAdmin() {
+            const username = adminUsername.value.trim();
+            const password = adminPassword.value;
+
+            if (!username || !password) {
+                adminLoginError.textContent = "Please enter your username and password.";
+                return;
+            }
+
+            adminLoginBtn.disabled = true;
+            adminLoginError.textContent = "Checking login...";
+
+            try {
+                const response = await fetch(LOGIN_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+
+                let data = {};
+                try { data = await response.json(); } catch (_) {}
+
+                if (!response.ok || !data.success || !data.token) {
+                    throw new Error(data.message || "Wrong username or password.");
+                }
+
+                localStorage.setItem(TOKEN_KEY, data.token);
+                adminPassword.value = "";
+                showAdminPage();
+            } catch (error) {
+                localStorage.removeItem(TOKEN_KEY);
+                adminLoginError.textContent = error.message || "Login failed.";
+            } finally {
+                adminLoginBtn.disabled = false;
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem(TOKEN_KEY);
+            adminUsername.value = "";
+            adminPassword.value = "";
+            showAdminLogin("You have logged out.");
+        }
+
+        adminLoginBtn.addEventListener("click", loginAdmin);
+        adminPassword.addEventListener("keydown", event => {
+            if (event.key === "Enter") loginAdmin();
+        });
+        adminUsername.addEventListener("keydown", event => {
+            if (event.key === "Enter") adminPassword.focus();
+        });
+        document.getElementById("logoutAdmin").addEventListener("click", logoutAdmin);
+
 
         function showToast(message, type = "") {
             toast.textContent = message;
@@ -1229,7 +1453,7 @@
 
         async function saveToCloudflare() {
             if (!form.reportValidity()) return showToast("Complete the required fields first.", "error");
-            if (!CLOUD_API_URL || CLOUD_API_URL === "YOUR_WORKER_API_URL") {
+            if (!CLOUD_API_URL) {
                 showToast("Add your Cloudflare Worker API URL first.", "error");
                 return;
             }
@@ -1240,7 +1464,17 @@
             selectedDocuments.forEach(file => payload.append("documents", file, file.name));
 
             try {
-                const response = await fetch(CLOUD_API_URL, { method: "POST", body: payload });
+                const response = await fetch(CLOUD_API_URL, {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${getAdminToken()}` },
+                    body: payload
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    showAdminLogin("Your login expired. Please log in again.");
+                    throw new Error("Unauthorized");
+                }
                 if (!response.ok) throw new Error(`Server returned ${response.status}`);
                 const result = await response.json().catch(() => ({}));
                 showToast(result.message || "Product saved to Cloudflare.", "success");
@@ -1329,6 +1563,13 @@
         generateProductId();
         loadDraft();
         updatePreview();
+
+        if (getAdminToken()) {
+            showAdminPage();
+        } else {
+            showAdminLogin();
+        }
+
     </script>
 </body>
 </html>
