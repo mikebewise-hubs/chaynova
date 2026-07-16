@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Viewer | CHAYNOVA</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --cyan: #66e8ff;
+            --pink: #ff72cf;
+            --purple: #9f7dff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255, 0, 180, .4), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(0, 200, 255, .4), transparent 30%),
+                linear-gradient(135deg, #030010, #080033, #001234);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 30% 70%, rgba(123, 44, 255, .18), transparent 28%),
+                radial-gradient(circle at 70% 75%, rgba(0, 217, 255, .14), transparent 28%);
+            z-index: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(95vw, 1100px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            padding: 8px 18px;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 999px;
+            background: rgba(255,255,255,.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 0 28px rgba(0,217,255,.25);
+        }
+
+        .top-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            gap: clamp(8px, 1.8vw, 22px);
+        }
+
+        .top-nav a {
+            flex-shrink: 0;
+            font-family: "Oxanium", sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .5px;
+            color: #fff;
+            text-decoration: none;
+            transition: .25s;
+        }
+
+        .top-nav a:hover,
+        .top-nav a[aria-current="page"] {
+            color: #8ef2ff;
+            text-shadow: 0 0 14px rgba(255,255,255,.9);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .nav-logo img {
+            display: block;
+            height: 22px;
+            width: auto;
+            transition: .2s;
+        }
+
+        .nav-logo img:hover {
+            transform: scale(1.08);
+        }
+
+        .viewer-page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 110px 20px 50px;
+        }
+
+        .viewer-shell {
+            width: min(96vw, 1200px);
+            padding: clamp(16px, 3vw, 30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            background: rgba(0, 0, 25, 0.48);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                0 0 30px rgba(0, 217, 255, .26),
+                inset 0 0 24px rgba(255,255,255,.05);
+        }
+
+        .viewer-title {
+            font-family: "Oxanium", sans-serif;
+            text-align: center;
+            font-size: clamp(1.3rem, 3vw, 2.2rem);
+            color: #8ef2ff;
+            text-shadow: 0 0 18px rgba(0,217,255,.7);
+            margin-bottom: 18px;
+        }
+
+        .image-stage {
+            position: relative;
+            min-height: min(68vh, 760px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,.18);
+            background:
+                linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+            box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+            cursor: zoom-in;
+            touch-action: pan-x pan-y;
+        }
+
+        .viewer-image {
+            display: block;
+            max-width: 100%;
+            max-height: 68vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 18px;
+            transition: transform .3s ease, opacity .25s ease;
+            transform-origin: center;
+            user-select: none;
+            -webkit-user-drag: none;
+            box-shadow: 0 0 28px rgba(0,217,255,.25);
+        }
+
+        .viewer-image.zoomed {
+            transform: scale(1.8);
+            cursor: zoom-out;
+        }
+
+        .image-stage.zoomed {
+            cursor: zoom-out;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            height: 52px;
+            border: 1px solid rgba(255,255,255,.28);
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            background: rgba(0,0,20,.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 18px rgba(0,217,255,.35);
+            transition: .25s;
+            z-index: 5;
+        }
+
+        .nav-arrow:hover {
+            transform: translateY(-50%) scale(1.08);
+            background: linear-gradient(135deg, rgba(255,114,207,.8), rgba(159,125,255,.8), rgba(102,232,255,.8));
+        }
+
+        .nav-arrow.prev { left: 14px; }
+        .nav-arrow.next { right: 14px; }
+
+        .viewer-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            font-family: "Oxanium", sans-serif;
+            min-width: 130px;
+            padding: 13px 18px;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 16px;
+            color: white;
+            font-size: .95rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(
+                135deg,
+                rgba(249, 87, 211, 0.35),
+                rgba(168, 125, 244, 0.35),
+                rgba(114, 225, 245, 0.35)
+            );
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 0 16px rgba(0,217,255,.24);
+            transition: .25s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: linear-gradient(135deg,#ef94da,#a97df6,#70e0f4);
+            color: #020414;
+        }
+
+        .image-info {
+            margin-top: 15px;
+            text-align: center;
+            color: #c9f5ff;
+            line-height: 1.5;
+        }
+
+        .image-counter {
+            font-family: "Oxanium", sans-serif;
+            color: #8ef2ff;
+            font-weight: 700;
+        }
+
+        footer {
+            position: relative;
+            z-index: 2;
+            padding: 20px 20px 34px;
+            text-align: center;
+            color: #c9f5ff;
+            font-size: .92rem;
+        }
+
+        footer a {
+            color: #c9f5ff;
+            text-decoration: none;
+        }
+
+        .firework {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                box-shadow: 0 0 0 currentColor;
+            }
+            70% {
+                opacity: 1;
+                box-shadow:
+                    0 -80px currentColor,
+                    60px -60px currentColor,
+                    80px 0 currentColor,
+                    60px 60px currentColor,
+                    0 80px currentColor,
+                    -60px 60px currentColor,
+                    -80px 0 currentColor,
+                    -60px -60px currentColor;
+            }
+            100% { opacity: 0; }
+        }
+
+        .error-message {
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+            line-height: 1.6;
+            color: #ffd6f3;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                width: 97vw;
+                padding: 8px 10px;
+                top: 12px;
+            }
+
+            .top-nav {
+                gap: clamp(5px, 1.5vw, 10px);
+            }
+
+            .top-nav a {
+                font-size: .82rem;
+                letter-spacing: 0;
+            }
+
+            .nav-logo img {
+                height: 17px;
+            }
+
+            .viewer-page {
+                padding: 95px 10px 30px;
+            }
+
+            .viewer-shell {
+                width: 100%;
+                border-radius: 22px;
+                padding: 12px;
+            }
+
+            .image-stage {
+                min-height: 58vh;
+                border-radius: 18px;
+            }
+
+            .viewer-image {
+                max-height: 58vh;
+                border-radius: 14px;
+            }
+
+            .nav-arrow {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+
+            .nav-arrow.prev { left: 7px; }
+            .nav-arrow.next { right: 7px; }
+
+            .control-btn {
+                min-width: 0;
+                flex: 1 1 120px;
+                padding: 12px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="top-nav" aria-label="Main navigation">
+            <a href="shop.html" aria-current="page">Store</a>
+            <a href="fun.html">Fun</a>
+            <a href="support.html">Support</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="index.html" class="nav-logo" aria-label="CHAYNOVA home">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+            </a>
+        </nav>
+    </header>
+
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+
+    <main class="viewer-page">
+        <section class="viewer-shell">
+            <h1 class="viewer-title" id="viewerTitle">CHAYNOVA Product Preview</h1>
+
+            <div class="image-stage" id="imageStage">
+                <button class="nav-arrow prev" id="prevBtn" type="button" aria-label="Previous image">‹</button>
+
+                <img
+                    id="viewerImage"
+                    class="viewer-image"
+                    src=""
+                    alt="CHAYNOVA product concept">
+
+                <button class="nav-arrow next" id="nextBtn" type="button" aria-label="Next image">›</button>
+
+                <div class="error-message" id="errorMessage" hidden>
+                    <h2>Image not available</h2>
+                    <p>Please return to the store and choose another picture.</p>
+                </div>
+            </div>
+
+            <div class="viewer-controls">
+                <button class="control-btn" id="zoomBtn" type="button">🔍 Zoom In</button>
+                <button class="control-btn" id="shareBtn" type="button">📤 Share</button>
+                <a class="control-btn" href="shop.html">← Back to Store</a>
+            </div>
+
+            <div class="image-info">
+                <div class="image-counter" id="imageCounter"></div>
+                <div id="imageName"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <a href="about.html">© 2026 CHAYNOVA</a>
+    </footer>
+
+    <script>
+        const products = [
+            { src: "images/sport1.png", title: "Sportswear Concept 1" },
+            { src: "images/sport2.png", title: "Sportswear Concept 2" },
+            { src: "images/sport3.png", title: "Sportswear Concept 3" },
+            { src: "images/sport4.png", title: "Sportswear Concept 4" },
+            { src: "images/sport5.jpg", title: "Sportswear Concept 5" },
+            { src: "images/sport6.jpg", title: "Sportswear Concept 6" },
+            { src: "images/casual1.jpg", title: "Traditional Thai Outfit" },
+            { src: "images/casual2.jpg", title: "Thai Formal Wear" },
+            { src: "images/casual3.jpg", title: "Modern Thai Casual" },
+            { src: "images/casual4.jpg", title: "Modern Thai Jacket" }
+        ];
+
+        const params = new URLSearchParams(window.location.search);
+        const requestedImage = params.get("img");
+
+        const viewerImage = document.getElementById("viewerImage");
+        const viewerTitle = document.getElementById("viewerTitle");
+        const imageName = document.getElementById("imageName");
+        const imageCounter = document.getElementById("imageCounter");
+        const imageStage = document.getElementById("imageStage");
+        const errorMessage = document.getElementById("errorMessage");
+        const zoomBtn = document.getElementById("zoomBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const shareBtn = document.getElementById("shareBtn");
+
+        let currentIndex = products.findIndex(product => product.src === requestedImage);
+        let isZoomed = false;
+
+        if (currentIndex < 0) {
+            currentIndex = 0;
+        }
+
+        function updateUrl() {
+            const url = new URL(window.location.href);
+            url.searchParams.set("img", products[currentIndex].src);
+            window.history.replaceState({}, "", url);
+        }
+
+        function resetZoom() {
+            isZoomed = false;
+            viewerImage.classList.remove("zoomed");
+            imageStage.classList.remove("zoomed");
+            zoomBtn.textContent = "🔍 Zoom In";
+            imageStage.scrollTop = 0;
+            imageStage.scrollLeft = 0;
+        }
+
+        function showImage(index) {
+            currentIndex = (index + products.length) % products.length;
+            const product = products[currentIndex];
+
+            resetZoom();
+            errorMessage.hidden = true;
+            viewerImage.hidden = false;
+            viewerImage.style.opacity = "0";
+            viewerImage.src = product.src;
+            viewerImage.alt = product.title;
+            viewerTitle.textContent = product.title;
+            imageName.textContent = product.src;
+            imageCounter.textContent = `${currentIndex + 1} / ${products.length}`;
+            updateUrl();
+        }
+
+        viewerImage.addEventListener("load", () => {
+            viewerImage.style.opacity = "1";
+        });
+
+        viewerImage.addEventListener("error", () => {
+            viewerImage.hidden = true;
+            errorMessage.hidden = false;
+        });
+
+        function toggleZoom() {
+            if (viewerImage.hidden) return;
+
+            isZoomed = !isZoomed;
+            viewerImage.classList.toggle("zoomed", isZoomed);
+            imageStage.classList.toggle("zoomed", isZoomed);
+            zoomBtn.textContent = isZoomed ? "➖ Zoom Out" : "🔍 Zoom In";
+        }
+
+        viewerImage.addEventListener("click", toggleZoom);
+        zoomBtn.addEventListener("click", toggleZoom);
+        prevBtn.addEventListener("click", () => showImage(currentIndex - 1));
+        nextBtn.addEventListener("click", () => showImage(currentIndex + 1));
+
+        shareBtn.addEventListener("click", async () => {
+            const shareData = {
+                title: products[currentIndex].title,
+                text: "View this CHAYNOVA product concept.",
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    await navigator.clipboard.writeText(window.location.href);
+                    shareBtn.textContent = "✅ Link Copied";
+                    setTimeout(() => {
+                        shareBtn.textContent = "📤 Share";
+                    }, 1800);
+                }
+            } catch (error) {
+                // User may cancel the share window.
+            }
+        });
+
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") showImage(currentIndex - 1);
+            if (event.key === "ArrowRight") showImage(currentIndex + 1);
+            if (event.key === "Escape" && isZoomed) resetZoom();
+            if (event.key === "+" || event.key === "=") toggleZoom();
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        imageStage.addEventListener("touchstart", event => {
+            touchStartX = event.changedTouches[0].screenX;
+        }, { passive: true });
+
+        imageStage.addEventListener("touchend", event => {
+            touchEndX = event.changedTouches[0].screenX;
+            const distance = touchEndX - touchStartX;
+
+            if (!isZoomed && Math.abs(distance) > 60) {
+                if (distance > 0) showImage(currentIndex - 1);
+                else showImage(currentIndex + 1);
+            }
+        }, { passive: true });
+
+        const fireworks = document.querySelectorAll(".firework");
+        const colors = ["#ff2fcf", "#00d9ff", "#ffaa00", "#7b2cff", "#00ff99", "#ff5555"];
+
+        function randomizeFirework(firework) {
+            firework.style.left = Math.random() * 90 + "%";
+            firework.style.top = Math.random() * 70 + "%";
+            firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.color = firework.style.background;
+            firework.style.animation = "none";
+            void firework.offsetWidth;
+            firework.style.animation = "explode 2.8s ease-out";
+        }
+
+        fireworks.forEach((firework, index) => {
+            setTimeout(() => {
+                randomizeFirework(firework);
+                setInterval(() => randomizeFirework(firework), 3600);
+            }, index * 1000);
+        });
+
+        showImage(currentIndex);
+    </script>
+</body>
+</html>
