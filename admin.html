@@ -157,7 +157,107 @@ function setGreeting(){const h=new Date().getHours();const g=h<12?"Good morning"
 async function loginAdmin(event){event.preventDefault();const username=usernameInput.value.trim();const password=passwordInput.value;if(!username||!password){loginMessage.textContent="Please enter your username and password.";return}loginBtn.disabled=true;loginMessage.textContent="Checking login...";try{const response=await fetch(LOGIN_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username,password})});let data={};try{data=await response.json()}catch(_){ }if(!response.ok||!data.success||!data.token)throw new Error(data.message||"Wrong username or password.");localStorage.setItem(TOKEN_KEY,data.token);passwordInput.value="";showDashboard();showToast("Login successful")}catch(error){localStorage.removeItem(TOKEN_KEY);loginMessage.textContent=error.message||"Login failed."}finally{loginBtn.disabled=false}}
 function logoutAdmin(){localStorage.removeItem(TOKEN_KEY);usernameInput.value="";passwordInput.value="";closeMobileMenu();showLogin("You have logged out.")}
 async function apiFetch(path,options={}){const token=getToken();const headers={...(options.headers||{}),...(token?{Authorization:`Bearer ${token}`}:{})};const response=await fetch(`${API}${path}`,{...options,headers,cache:"no-store"});if(response.status===401||response.status===403){localStorage.removeItem(TOKEN_KEY);showLogin("Your login expired. Please log in again.");throw new Error("Unauthorized")}return response}
-async function loadDashboard(){const storyCount=document.getElementById("storyCount");const watchCount=document.getElementById("watchCount");const databaseActivity=document.getElementById("databaseActivity");const lastUpdated=document.getElementById("lastUpdated");storyCount.textContent="…";watchCount.textContent="…";databaseActivity.textContent="Checking stories and watch cards...";let ok=0;try{const [s,w]=await Promise.all([apiFetch("/"),apiFetch("/watch")]);if(s.ok){const data=await s.json();storyCount.textContent=Array.isArray(data)?data.length:0;ok++}else storyCount.textContent="!";if(w.ok){const data=await w.json();watchCount.textContent=Array.isArray(data)?data.length:0;ok++}else watchCount.textContent="!";databaseActivity.textContent=ok===2?"D1 connected. Story and Watch data loaded successfully.":"Some dashboard data could not be loaded."}catch(error){if(error.message!=="Unauthorized"){storyCount.textContent="!";watchCount.textContent="!";databaseActivity.textContent="Could not reach the Cloudflare database API."}}lastUpdated.textContent=`Last refreshed ${new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`}
+async function loadDashboard() {
+  const productCount =
+    document.getElementById("productCount");
+
+  const lowStockCount =
+    document.getElementById("lowStockCount");
+
+  const storyCount =
+    document.getElementById("storyCount");
+
+  const watchCount =
+    document.getElementById("watchCount");
+
+  const databaseActivity =
+    document.getElementById("databaseActivity");
+
+  const lastUpdated =
+    document.getElementById("lastUpdated");
+
+  productCount.textContent = "…";
+  lowStockCount.textContent = "…";
+  storyCount.textContent = "…";
+  watchCount.textContent = "…";
+
+  databaseActivity.textContent =
+    "Checking products, stories, and watch cards...";
+
+  let ok = 0;
+
+  try {
+    const [
+      productResponse,
+      storyResponse,
+      watchResponse
+    ] = await Promise.all([
+      apiFetch("/products/stats"),
+      apiFetch("/"),
+      apiFetch("/watch")
+    ]);
+
+    if (productResponse.ok) {
+      const data = await productResponse.json();
+
+      productCount.textContent =
+        data.products ?? 0;
+
+      lowStockCount.textContent =
+        data.lowStock ?? 0;
+
+      ok++;
+    } else {
+      productCount.textContent = "!";
+      lowStockCount.textContent = "!";
+    }
+
+    if (storyResponse.ok) {
+      const data = await storyResponse.json();
+
+      storyCount.textContent =
+        Array.isArray(data) ? data.length : 0;
+
+      ok++;
+    } else {
+      storyCount.textContent = "!";
+    }
+
+    if (watchResponse.ok) {
+      const data = await watchResponse.json();
+
+      watchCount.textContent =
+        Array.isArray(data) ? data.length : 0;
+
+      ok++;
+    } else {
+      watchCount.textContent = "!";
+    }
+
+    databaseActivity.textContent =
+      ok === 3
+        ? "D1 connected. Product, Story, and Watch data loaded successfully."
+        : "Some dashboard data could not be loaded.";
+  } catch (error) {
+    if (error.message !== "Unauthorized") {
+      productCount.textContent = "!";
+      lowStockCount.textContent = "!";
+      storyCount.textContent = "!";
+      watchCount.textContent = "!";
+
+      databaseActivity.textContent =
+        "Could not reach the Cloudflare database API.";
+    }
+  }
+
+  lastUpdated.textContent =
+    `Last refreshed ${
+      new Date().toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+      })
+    }`;
+}
 function openMobileMenu(){sidebar.classList.add("open");mobileBackdrop.classList.add("open")}
 function closeMobileMenu(){sidebar.classList.remove("open");mobileBackdrop.classList.remove("open")}
 loginForm.addEventListener("submit",loginAdmin);
