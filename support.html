@@ -83,7 +83,7 @@ header {
     flex-shrink:0;
 
     font-family:"Oxanium",sans-serif;
-    font-size:1rem;
+    font-size:0.95rem;
     font-weight:700;
     letter-spacing:.5px;
 
@@ -107,7 +107,7 @@ header {
 
 .nav-logo img{
     display:block;
-    height:26px;
+    height:22px;
     width:auto;
     transition:.2s;
 }
@@ -131,7 +131,7 @@ header {
     }
 
     .top-nav a{
-        font-size:0.9rem;
+        font-size:clamp(.65rem,2.4vw,.82rem);
         letter-spacing:0;
     }
 
@@ -662,7 +662,13 @@ header {
         ✧
     </span>
 
-    • Inspired by Thailand • Based in New York
+     • Inspired by Thailand • Based in New York   <span
+        class="hidden-admin-emoji"
+        title="Admin"
+        onclick="openProductLogin()"
+    >
+        ✧
+    </span>
 </footer>
     <script>
         const bgMusic = document.getElementById("bgMusic");
@@ -746,7 +752,7 @@ function openProductLogin(){
 
     // Already logged in
     if(token){
-        window.location.href="admin.html";
+        window.location.href="product-manager.html";
         return;
     }
 
@@ -778,7 +784,7 @@ function openProductLogin(){
                 data.token
             );
 
-            window.location.href="admin.html";
+            window.location.href="product-manager.html";
 
         }else{
 
