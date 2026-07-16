@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oxanium:wght@600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oxanium:wght@600;700&display=swap"
+        rel="stylesheet">
 
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
             --navy: #17324d;
@@ -33,7 +40,9 @@
             --radius: 14px;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             min-height: 100vh;
@@ -44,9 +53,20 @@
                 linear-gradient(180deg, #f8fafc 0, var(--page) 320px);
         }
 
-        button, input, select, textarea { font: inherit; }
-        button { cursor: pointer; }
-        a { color: inherit; }
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+        }
 
         .app-header {
             position: sticky;
@@ -78,7 +98,7 @@
             height: 42px;
             object-fit: contain;
             border-radius: 10px;
-            background: rgba(255,255,255,.09);
+            background: rgba(255, 255, 255, .09);
             padding: 5px;
         }
 
@@ -110,8 +130,8 @@
             gap: 7px;
             padding: 8px 11px;
             border-radius: 999px;
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .16);
             color: #eaf3fb;
             font-size: .79rem;
         }
@@ -121,21 +141,23 @@
             height: 8px;
             border-radius: 50%;
             background: #f0b54a;
-            box-shadow: 0 0 0 4px rgba(240,181,74,.14);
+            box-shadow: 0 0 0 4px rgba(240, 181, 74, .14);
         }
 
         .top-btn {
             min-height: 38px;
             padding: 8px 13px;
-            border: 1px solid rgba(255,255,255,.22);
+            border: 1px solid rgba(255, 255, 255, .22);
             border-radius: 9px;
             color: #fff;
-            background: rgba(255,255,255,.08);
+            background: rgba(255, 255, 255, .08);
             font-weight: 600;
             transition: .2s ease;
         }
 
-        .top-btn:hover { background: rgba(255,255,255,.16); }
+        .top-btn:hover {
+            background: rgba(255, 255, 255, .16);
+        }
 
         .page-shell {
             width: min(1500px, 96vw);
@@ -246,7 +268,9 @@
             font-size: 1rem;
         }
 
-        .main-column { min-width: 0; }
+        .main-column {
+            min-width: 0;
+        }
 
         .form-section {
             margin-bottom: 18px;
@@ -302,7 +326,9 @@
             font-weight: 700;
         }
 
-        .section-body { padding: 20px; }
+        .section-body {
+            padding: 20px;
+        }
 
         .form-grid {
             display: grid;
@@ -310,10 +336,22 @@
             gap: 16px;
         }
 
-        .field { grid-column: span 4; min-width: 0; }
-        .field.half { grid-column: span 6; }
-        .field.wide { grid-column: 1 / -1; }
-        .field.quarter { grid-column: span 3; }
+        .field {
+            grid-column: span 4;
+            min-width: 0;
+        }
+
+        .field.half {
+            grid-column: span 6;
+        }
+
+        .field.wide {
+            grid-column: 1 / -1;
+        }
+
+        .field.quarter {
+            grid-column: span 3;
+        }
 
         label {
             display: block;
@@ -323,7 +361,9 @@
             font-weight: 700;
         }
 
-        label .required { color: var(--red); }
+        label .required {
+            color: var(--red);
+        }
 
         input,
         select,
@@ -339,17 +379,23 @@
             transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
         }
 
-        textarea { min-height: 110px; resize: vertical; line-height: 1.55; }
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+            line-height: 1.55;
+        }
 
         input:focus,
         select:focus,
         textarea:focus {
             border-color: #78a9d7;
-            box-shadow: 0 0 0 3px rgba(47,114,183,.12);
+            box-shadow: 0 0 0 3px rgba(47, 114, 183, .12);
         }
 
         input::placeholder,
-        textarea::placeholder { color: #9aa8b5; }
+        textarea::placeholder {
+            color: #9aa8b5;
+        }
 
         .help-text {
             margin-top: 6px;
@@ -374,7 +420,9 @@
             font-weight: 700;
         }
 
-        .mini-btn:hover { background: var(--blue-soft); }
+        .mini-btn:hover {
+            background: var(--blue-soft);
+        }
 
         .checkbox-row {
             display: flex;
@@ -393,7 +441,11 @@
             color: #53677a;
         }
 
-        .check input { width: 17px; min-height: 17px; accent-color: var(--blue); }
+        .check input {
+            width: 17px;
+            min-height: 17px;
+            accent-color: var(--blue);
+        }
 
         .variant-table-wrap {
             overflow-x: auto;
@@ -423,8 +475,14 @@
             letter-spacing: .04em;
         }
 
-        .variant-table td input { min-height: 38px; padding: 8px 9px; }
-        .variant-table tr:last-child td { border-bottom: 0; }
+        .variant-table td input {
+            min-height: 38px;
+            padding: 8px 9px;
+        }
+
+        .variant-table tr:last-child td {
+            border-bottom: 0;
+        }
 
         .remove-row {
             width: 36px;
@@ -460,8 +518,16 @@
             background: var(--blue-soft);
         }
 
-        .drop-zone strong { display: block; color: var(--navy); }
-        .drop-zone p { margin: 6px 0 14px; color: var(--muted); font-size: .8rem; }
+        .drop-zone strong {
+            display: block;
+            color: var(--navy);
+        }
+
+        .drop-zone p {
+            margin: 6px 0 14px;
+            color: var(--muted);
+            font-size: .8rem;
+        }
 
         .file-button {
             display: inline-block;
@@ -474,7 +540,9 @@
             cursor: pointer;
         }
 
-        .file-button input { display: none; }
+        .file-button input {
+            display: none;
+        }
 
         .preview-grid {
             display: grid;
@@ -536,7 +604,9 @@
             gap: 16px;
         }
 
-        .summary-card { padding: 18px; }
+        .summary-card {
+            padding: 18px;
+        }
 
         .summary-card h3 {
             color: var(--navy);
@@ -567,13 +637,40 @@
             object-fit: cover;
         }
 
-        .preview-copy { padding: 14px; }
-        .preview-copy .brand-line { color: var(--blue); font-size: .72rem; font-weight: 700; text-transform: uppercase; }
-        .preview-copy h4 { margin-top: 5px; color: var(--navy); font-size: 1rem; line-height: 1.35; }
-        .preview-copy .sku-line { margin-top: 5px; color: var(--muted); font-size: .73rem; }
-        .preview-price { margin-top: 12px; color: var(--navy); font-size: 1.25rem; font-weight: 800; }
+        .preview-copy {
+            padding: 14px;
+        }
 
-        .summary-list { margin-top: 15px; }
+        .preview-copy .brand-line {
+            color: var(--blue);
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .preview-copy h4 {
+            margin-top: 5px;
+            color: var(--navy);
+            font-size: 1rem;
+            line-height: 1.35;
+        }
+
+        .preview-copy .sku-line {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: .73rem;
+        }
+
+        .preview-price {
+            margin-top: 12px;
+            color: var(--navy);
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .summary-list {
+            margin-top: 15px;
+        }
 
         .summary-line {
             display: flex;
@@ -584,10 +681,18 @@
             font-size: .77rem;
         }
 
-        .summary-line span:first-child { color: var(--muted); }
-        .summary-line strong { color: #405466; text-align: right; }
+        .summary-line span:first-child {
+            color: var(--muted);
+        }
 
-        .save-panel { padding: 18px; }
+        .summary-line strong {
+            color: #405466;
+            text-align: right;
+        }
+
+        .save-panel {
+            padding: 18px;
+        }
 
         .save-panel p {
             margin-bottom: 14px;
@@ -596,7 +701,10 @@
             line-height: 1.55;
         }
 
-        .action-stack { display: grid; gap: 9px; }
+        .action-stack {
+            display: grid;
+            gap: 9px;
+        }
 
         .action-btn {
             width: 100%;
@@ -607,11 +715,31 @@
             transition: .18s ease;
         }
 
-        .action-btn.primary { border: 1px solid var(--blue); color: #fff; background: var(--blue); }
-        .action-btn.primary:hover { background: #28649e; }
-        .action-btn.secondary { border: 1px solid var(--border-dark); color: var(--navy); background: #fff; }
-        .action-btn.secondary:hover { background: #f4f8fb; }
-        .action-btn.danger { border: 1px solid #efccd1; color: var(--red); background: #fff7f8; }
+        .action-btn.primary {
+            border: 1px solid var(--blue);
+            color: #fff;
+            background: var(--blue);
+        }
+
+        .action-btn.primary:hover {
+            background: #28649e;
+        }
+
+        .action-btn.secondary {
+            border: 1px solid var(--border-dark);
+            color: var(--navy);
+            background: #fff;
+        }
+
+        .action-btn.secondary:hover {
+            background: #f4f8fb;
+        }
+
+        .action-btn.danger {
+            border: 1px solid #efccd1;
+            color: var(--red);
+            background: #fff7f8;
+        }
 
         .connection-box {
             padding: 12px;
@@ -642,9 +770,18 @@
             font-size: .82rem;
         }
 
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.success { background: #287154; }
-        .toast.error { background: #a73e4c; }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: #287154;
+        }
+
+        .toast.error {
+            background: #a73e4c;
+        }
 
         footer {
             padding: 24px 10px 6px;
@@ -654,7 +791,10 @@
         }
 
         @media (max-width: 1180px) {
-            .layout { grid-template-columns: 210px minmax(0, 1fr); }
+            .layout {
+                grid-template-columns: 210px minmax(0, 1fr);
+            }
+
             .right-panel {
                 position: static;
                 grid-column: 2;
@@ -663,10 +803,24 @@
         }
 
         @media (max-width: 850px) {
-            .app-header { align-items: flex-start; }
-            .brand-copy span, .status-pill { display: none; }
-            .page-heading { align-items: flex-start; flex-direction: column; }
-            .layout { grid-template-columns: 1fr; }
+            .app-header {
+                align-items: flex-start;
+            }
+
+            .brand-copy span,
+            .status-pill {
+                display: none;
+            }
+
+            .page-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
             .sidebar {
                 position: static;
                 display: flex;
@@ -674,23 +828,63 @@
                 gap: 5px;
                 padding: 8px;
             }
-            .sidebar-title { display: none; }
-            .section-link { min-width: max-content; margin: 0; }
-            .right-panel { grid-column: auto; grid-template-columns: 1fr; }
+
+            .sidebar-title {
+                display: none;
+            }
+
+            .section-link {
+                min-width: max-content;
+                margin: 0;
+            }
+
+            .right-panel {
+                grid-column: auto;
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 680px) {
-            .app-header { padding: 9px 12px; }
-            .brand img { width: 38px; height: 38px; }
-            .top-btn { min-height: 36px; padding: 7px 10px; font-size: .78rem; }
-            .page-shell { width: min(100% - 20px, 1500px); padding-top: 20px; }
-            .section-header, .section-body { padding: 16px; }
-            .field, .field.half, .field.quarter { grid-column: 1 / -1; }
-            .checkbox-row { display: grid; }
+            .app-header {
+                padding: 9px 12px;
+            }
+
+            .brand img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .top-btn {
+                min-height: 36px;
+                padding: 7px 10px;
+                font-size: .78rem;
+            }
+
+            .page-shell {
+                width: min(100% - 20px, 1500px);
+                padding-top: 20px;
+            }
+
+            .section-header,
+            .section-body {
+                padding: 16px;
+            }
+
+            .field,
+            .field.half,
+            .field.quarter {
+                grid-column: 1 / -1;
+            }
+
+            .checkbox-row {
+                display: grid;
+            }
         }
-    
+
         /* Admin login */
-        .admin-protected { display: none; }
+        .admin-protected {
+            display: none;
+        }
 
         .login-overlay {
             position: fixed;
@@ -705,7 +899,9 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
-        .login-overlay.open { display: flex; }
+        .login-overlay.open {
+            display: flex;
+        }
 
         .login-box {
             width: min(94vw, 430px);
@@ -780,7 +976,10 @@
             cursor: pointer;
         }
 
-        .login-button:disabled { opacity: .6; cursor: wait; }
+        .login-button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
 
         .login-error {
             min-height: 22px;
@@ -804,9 +1003,9 @@
             background: #fff !important;
             color: #38536d !important;
         }
-
     </style>
 </head>
+
 <body>
 
     <div id="loginOverlay" class="login-overlay open" aria-hidden="false">
@@ -853,7 +1052,8 @@
             <div class="heading-copy">
                 <span class="eyebrow">Internal catalog</span>
                 <h1>Add or Edit Product</h1>
-                <p>Record product details, variants, purchasing costs, inventory, supplier information, photos, documents, and website content in one organized workspace.</p>
+                <p>Record product details, variants, purchasing costs, inventory, supplier information, photos,
+                    documents, and website content in one organized workspace.</p>
             </div>
             <div class="product-state">● Draft product</div>
         </div>
@@ -875,7 +1075,10 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">▣</span>
-                            <div><h2>Basic Product Details</h2><p>Identity, origin, labels, and customer-facing description.</p></div>
+                            <div>
+                                <h2>Basic Product Details</h2>
+                                <p>Identity, origin, labels, and customer-facing description.</p>
+                            </div>
                         </div>
                         <span class="section-badge">Required first</span>
                     </div>
@@ -904,7 +1107,8 @@
 
                             <div class="field half">
                                 <label for="productName">Product Name <span class="required">*</span></label>
-                                <input id="productName" name="productName" required placeholder="FBT Men's Training Jersey">
+                                <input id="productName" name="productName" required
+                                    placeholder="FBT Men's Training Jersey">
                             </div>
                             <div class="field quarter">
                                 <label for="brand">Brand <span class="required">*</span></label>
@@ -960,11 +1164,13 @@
 
                             <div class="field half">
                                 <label for="manufacturerBarcode">Thailand / Manufacturer Barcode</label>
-                                <input id="manufacturerBarcode" name="manufacturerBarcode" inputmode="numeric" placeholder="8851234567890">
+                                <input id="manufacturerBarcode" name="manufacturerBarcode" inputmode="numeric"
+                                    placeholder="8851234567890">
                             </div>
                             <div class="field half">
                                 <label for="storeBarcode">CHAYNOVA Store Barcode</label>
-                                <input id="storeBarcode" name="storeBarcode" inputmode="numeric" placeholder="Your UPC, EAN, or internal barcode">
+                                <input id="storeBarcode" name="storeBarcode" inputmode="numeric"
+                                    placeholder="Your UPC, EAN, or internal barcode">
                             </div>
 
                             <div class="field half">
@@ -973,20 +1179,24 @@
                             </div>
                             <div class="field half">
                                 <label for="careInstructions">Care Instructions</label>
-                                <input id="careInstructions" name="careInstructions" placeholder="Machine wash cold, do not bleach, hang dry">
+                                <input id="careInstructions" name="careInstructions"
+                                    placeholder="Machine wash cold, do not bleach, hang dry">
                             </div>
 
                             <div class="field wide">
                                 <label for="shortDescription">Short Product Summary</label>
-                                <textarea id="shortDescription" name="shortDescription" placeholder="A short, clear description for product cards and listings."></textarea>
+                                <textarea id="shortDescription" name="shortDescription"
+                                    placeholder="A short, clear description for product cards and listings."></textarea>
                             </div>
                             <div class="field wide">
                                 <label for="fullDescription">Full Product Details</label>
-                                <textarea id="fullDescription" name="fullDescription" placeholder="Explain fit, fabric, performance features, use, packaging, and other important details."></textarea>
+                                <textarea id="fullDescription" name="fullDescription"
+                                    placeholder="Explain fit, fabric, performance features, use, packaging, and other important details."></textarea>
                             </div>
                             <div class="field wide">
                                 <label for="additionalInfo">Additional Information</label>
-                                <textarea id="additionalInfo" name="additionalInfo" placeholder="Batch information, special notes, translation, packaging differences, or other internal details."></textarea>
+                                <textarea id="additionalInfo" name="additionalInfo"
+                                    placeholder="Batch information, special notes, translation, packaging differences, or other internal details."></textarea>
                             </div>
                         </div>
                     </div>
@@ -996,7 +1206,10 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">▦</span>
-                            <div><h2>Sizes, Colors & Variants</h2><p>Track every sellable variation with its own stock and barcode.</p></div>
+                            <div>
+                                <h2>Sizes, Colors & Variants</h2>
+                                <p>Track every sellable variation with its own stock and barcode.</p>
+                            </div>
                         </div>
                         <span class="section-badge" id="variantCountBadge">1 variant</span>
                     </div>
@@ -1004,7 +1217,15 @@
                         <div class="variant-table-wrap">
                             <table class="variant-table">
                                 <thead>
-                                    <tr><th>Size</th><th>Color</th><th>Variant SKU</th><th>Barcode</th><th>Quantity</th><th>Location</th><th></th></tr>
+                                    <tr>
+                                        <th>Size</th>
+                                        <th>Color</th>
+                                        <th>Variant SKU</th>
+                                        <th>Barcode</th>
+                                        <th>Quantity</th>
+                                        <th>Location</th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody id="variantRows"></tbody>
                             </table>
@@ -1017,30 +1238,56 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">◫</span>
-                            <div><h2>Purchasing, Price & Inventory</h2><p>Calculate landed cost and record stock control information.</p></div>
+                            <div>
+                                <h2>Purchasing, Price & Inventory</h2>
+                                <p>Calculate landed cost and record stock control information.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="section-body">
                         <div class="form-grid">
-                            <div class="field quarter"><label for="purchaseCost">Purchase Cost (USD)</label><input type="number" min="0" step="0.01" id="purchaseCost" name="purchaseCost" placeholder="0.00"></div>
-                            <div class="field quarter"><label for="shippingCost">Shipping per Item</label><input type="number" min="0" step="0.01" id="shippingCost" name="shippingCost" placeholder="0.00"></div>
-                            <div class="field quarter"><label for="dutyCost">Duty / Import Cost</label><input type="number" min="0" step="0.01" id="dutyCost" name="dutyCost" placeholder="0.00"></div>
-                            <div class="field quarter"><label for="landedCost">Landed Cost</label><input type="number" min="0" step="0.01" id="landedCost" name="landedCost" placeholder="Auto calculated"></div>
+                            <div class="field quarter"><label for="purchaseCost">Purchase Cost (USD)</label><input
+                                    type="number" min="0" step="0.01" id="purchaseCost" name="purchaseCost"
+                                    placeholder="0.00"></div>
+                            <div class="field quarter"><label for="shippingCost">Shipping per Item</label><input
+                                    type="number" min="0" step="0.01" id="shippingCost" name="shippingCost"
+                                    placeholder="0.00"></div>
+                            <div class="field quarter"><label for="dutyCost">Duty / Import Cost</label><input
+                                    type="number" min="0" step="0.01" id="dutyCost" name="dutyCost" placeholder="0.00">
+                            </div>
+                            <div class="field quarter"><label for="landedCost">Landed Cost</label><input type="number"
+                                    min="0" step="0.01" id="landedCost" name="landedCost" placeholder="Auto calculated">
+                            </div>
 
-                            <div class="field quarter"><label for="sellingPrice">Selling Price <span class="required">*</span></label><input type="number" min="0" step="0.01" id="sellingPrice" name="sellingPrice" required placeholder="0.00"></div>
-                            <div class="field quarter"><label for="comparePrice">Compare-at Price</label><input type="number" min="0" step="0.01" id="comparePrice" name="comparePrice" placeholder="0.00"></div>
-                            <div class="field quarter"><label for="reorderLevel">Low Stock Level</label><input type="number" min="0" step="1" id="reorderLevel" name="reorderLevel" placeholder="5"></div>
-                            <div class="field quarter"><label for="packageWeight">Package Weight (lb)</label><input type="number" min="0" step="0.01" id="packageWeight" name="packageWeight" placeholder="0.00"></div>
+                            <div class="field quarter"><label for="sellingPrice">Selling Price <span
+                                        class="required">*</span></label><input type="number" min="0" step="0.01"
+                                    id="sellingPrice" name="sellingPrice" required placeholder="0.00"></div>
+                            <div class="field quarter"><label for="comparePrice">Compare-at Price</label><input
+                                    type="number" min="0" step="0.01" id="comparePrice" name="comparePrice"
+                                    placeholder="0.00"></div>
+                            <div class="field quarter"><label for="reorderLevel">Low Stock Level</label><input
+                                    type="number" min="0" step="1" id="reorderLevel" name="reorderLevel"
+                                    placeholder="5"></div>
+                            <div class="field quarter"><label for="packageWeight">Package Weight (lb)</label><input
+                                    type="number" min="0" step="0.01" id="packageWeight" name="packageWeight"
+                                    placeholder="0.00"></div>
 
-                            <div class="field half"><label for="purchaseOrder">Purchase Order / Invoice Number</label><input id="purchaseOrder" name="purchaseOrder" placeholder="PO-2026-001"></div>
-                            <div class="field half"><label for="stockLocation">Default Stock Location</label><input id="stockLocation" name="stockLocation" placeholder="Shelf A-03"></div>
+                            <div class="field half"><label for="purchaseOrder">Purchase Order / Invoice
+                                    Number</label><input id="purchaseOrder" name="purchaseOrder"
+                                    placeholder="PO-2026-001"></div>
+                            <div class="field half"><label for="stockLocation">Default Stock Location</label><input
+                                    id="stockLocation" name="stockLocation" placeholder="Shelf A-03"></div>
 
                             <div class="field wide">
                                 <div class="checkbox-row">
-                                    <label class="check"><input type="checkbox" name="trackInventory" checked> Track inventory</label>
-                                    <label class="check"><input type="checkbox" name="allowBackorder"> Allow backorders</label>
-                                    <label class="check"><input type="checkbox" name="taxable" checked> Taxable product</label>
-                                    <label class="check"><input type="checkbox" name="featured"> Featured product</label>
+                                    <label class="check"><input type="checkbox" name="trackInventory" checked> Track
+                                        inventory</label>
+                                    <label class="check"><input type="checkbox" name="allowBackorder"> Allow
+                                        backorders</label>
+                                    <label class="check"><input type="checkbox" name="taxable" checked> Taxable
+                                        product</label>
+                                    <label class="check"><input type="checkbox" name="featured"> Featured
+                                        product</label>
                                 </div>
                             </div>
                         </div>
@@ -1051,19 +1298,34 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">◎</span>
-                            <div><h2>Supplier & Import Information</h2><p>Keep supplier contact and shipment references with the product.</p></div>
+                            <div>
+                                <h2>Supplier & Import Information</h2>
+                                <p>Keep supplier contact and shipment references with the product.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="section-body">
                         <div class="form-grid">
-                            <div class="field half"><label for="supplierName">Supplier Name</label><input id="supplierName" name="supplierName" placeholder="FBT or wholesaler name"></div>
-                            <div class="field half"><label for="supplierContact">Contact Person</label><input id="supplierContact" name="supplierContact" placeholder="Contact name"></div>
-                            <div class="field"><label for="supplierEmail">Email</label><input type="email" id="supplierEmail" name="supplierEmail" placeholder="supplier@example.com"></div>
-                            <div class="field"><label for="supplierPhone">Phone</label><input type="tel" id="supplierPhone" name="supplierPhone" placeholder="+66 ..."></div>
-                            <div class="field"><label for="supplierWebsite">Website</label><input type="url" id="supplierWebsite" name="supplierWebsite" placeholder="https://"></div>
-                            <div class="field half"><label for="shipmentReference">Shipment / Tracking Reference</label><input id="shipmentReference" name="shipmentReference" placeholder="Airway bill, container, or tracking number"></div>
-                            <div class="field half"><label for="importEntry">Customs / Entry Reference</label><input id="importEntry" name="importEntry" placeholder="Customs entry or broker reference"></div>
-                            <div class="field wide"><label for="supplierNotes">Supplier Notes</label><textarea id="supplierNotes" name="supplierNotes" placeholder="Minimum order, wholesale terms, payment method, lead time, authorization, or contact history."></textarea></div>
+                            <div class="field half"><label for="supplierName">Supplier Name</label><input
+                                    id="supplierName" name="supplierName" placeholder="FBT or wholesaler name"></div>
+                            <div class="field half"><label for="supplierContact">Contact Person</label><input
+                                    id="supplierContact" name="supplierContact" placeholder="Contact name"></div>
+                            <div class="field"><label for="supplierEmail">Email</label><input type="email"
+                                    id="supplierEmail" name="supplierEmail" placeholder="supplier@example.com"></div>
+                            <div class="field"><label for="supplierPhone">Phone</label><input type="tel"
+                                    id="supplierPhone" name="supplierPhone" placeholder="+66 ..."></div>
+                            <div class="field"><label for="supplierWebsite">Website</label><input type="url"
+                                    id="supplierWebsite" name="supplierWebsite" placeholder="https://"></div>
+                            <div class="field half"><label for="shipmentReference">Shipment / Tracking
+                                    Reference</label><input id="shipmentReference" name="shipmentReference"
+                                    placeholder="Airway bill, container, or tracking number"></div>
+                            <div class="field half"><label for="importEntry">Customs / Entry Reference</label><input
+                                    id="importEntry" name="importEntry" placeholder="Customs entry or broker reference">
+                            </div>
+                            <div class="field wide"><label for="supplierNotes">Supplier Notes</label><textarea
+                                    id="supplierNotes" name="supplierNotes"
+                                    placeholder="Minimum order, wholesale terms, payment method, lead time, authorization, or contact history."></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1072,7 +1334,10 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">▧</span>
-                            <div><h2>Product Photos</h2><p>Add front, back, side, fabric, tag, barcode, packaging, and lifestyle photos.</p></div>
+                            <div>
+                                <h2>Product Photos</h2>
+                                <p>Add front, back, side, fabric, tag, barcode, packaging, and lifestyle photos.</p>
+                            </div>
                         </div>
                         <span class="section-badge">3–8 recommended</span>
                     </div>
@@ -1080,7 +1345,8 @@
                         <div class="drop-zone" id="photoDropZone">
                             <strong>Drop product photos here</strong>
                             <p>JPG, PNG, or WebP. You can select multiple images.</p>
-                            <label class="file-button">Choose Photos<input type="file" id="photoInput" accept="image/*" multiple></label>
+                            <label class="file-button">Choose Photos<input type="file" id="photoInput" accept="image/*"
+                                    multiple></label>
                         </div>
                         <div class="preview-grid" id="photoPreview"></div>
                     </div>
@@ -1090,14 +1356,19 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">▤</span>
-                            <div><h2>Documents</h2><p>Store invoices, packing lists, customs documents, certificates, and brand permissions.</p></div>
+                            <div>
+                                <h2>Documents</h2>
+                                <p>Store invoices, packing lists, customs documents, certificates, and brand
+                                    permissions.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="section-body">
                         <div class="drop-zone" id="documentDropZone">
                             <strong>Choose product documents</strong>
                             <p>PDF, DOC, XLS, images, and common office files.</p>
-                            <label class="file-button">Choose Documents<input type="file" id="documentInput" multiple></label>
+                            <label class="file-button">Choose Documents<input type="file" id="documentInput"
+                                    multiple></label>
                         </div>
                         <div class="document-list" id="documentList"></div>
                     </div>
@@ -1107,16 +1378,27 @@
                     <div class="section-header">
                         <div class="section-title">
                             <span class="section-icon">⌁</span>
-                            <div><h2>Website, Search & Internal Tags</h2><p>Prepare clean content for the CHAYNOVA store and internal product search.</p></div>
+                            <div>
+                                <h2>Website, Search & Internal Tags</h2>
+                                <p>Prepare clean content for the CHAYNOVA store and internal product search.</p>
+                            </div>
                         </div>
                     </div>
                     <div class="section-body">
                         <div class="form-grid">
-                            <div class="field half"><label for="slug">Page URL Slug</label><input id="slug" name="slug" placeholder="fbt-mens-training-jersey"></div>
-                            <div class="field half"><label for="tags">Search Tags</label><input id="tags" name="tags" placeholder="soccer, training, quick dry, Thailand"></div>
-                            <div class="field wide"><label for="seoTitle">SEO Title</label><input id="seoTitle" name="seoTitle" maxlength="70" placeholder="Product name | CHAYNOVA"></div>
-                            <div class="field wide"><label for="seoDescription">SEO Description</label><textarea id="seoDescription" name="seoDescription" maxlength="170" placeholder="A clear search-result description, usually 140–160 characters."></textarea></div>
-                            <div class="field wide"><label for="internalNotes">Internal Notes</label><textarea id="internalNotes" name="internalNotes" placeholder="Private notes not shown to customers."></textarea></div>
+                            <div class="field half"><label for="slug">Page URL Slug</label><input id="slug" name="slug"
+                                    placeholder="fbt-mens-training-jersey"></div>
+                            <div class="field half"><label for="tags">Search Tags</label><input id="tags" name="tags"
+                                    placeholder="soccer, training, quick dry, Thailand"></div>
+                            <div class="field wide"><label for="seoTitle">SEO Title</label><input id="seoTitle"
+                                    name="seoTitle" maxlength="70" placeholder="Product name | CHAYNOVA"></div>
+                            <div class="field wide"><label for="seoDescription">SEO Description</label><textarea
+                                    id="seoDescription" name="seoDescription" maxlength="170"
+                                    placeholder="A clear search-result description, usually 140–160 characters."></textarea>
+                            </div>
+                            <div class="field wide"><label for="internalNotes">Internal Notes</label><textarea
+                                    id="internalNotes" name="internalNotes"
+                                    placeholder="Private notes not shown to customers."></textarea></div>
                         </div>
                     </div>
                 </section>
@@ -1138,13 +1420,15 @@
                         <div class="summary-line"><span>Variants</span><strong id="summaryVariants">1</strong></div>
                         <div class="summary-line"><span>Total quantity</span><strong id="summaryStock">0</strong></div>
                         <div class="summary-line"><span>Landed cost</span><strong id="summaryCost">$0.00</strong></div>
-                        <div class="summary-line"><span>Estimated margin</span><strong id="summaryMargin">—</strong></div>
+                        <div class="summary-line"><span>Estimated margin</span><strong id="summaryMargin">—</strong>
+                        </div>
                     </div>
                 </section>
 
                 <section class="save-panel card">
                     <h3>Save Product</h3>
-                    <p>Drafts save in this browser. Cloud save will work after you add your Cloudflare Worker API URL in the JavaScript.</p>
+                    <p>Drafts save in this browser. Cloud save will work after you add your Cloudflare Worker API URL in
+                        the JavaScript.</p>
                     <div class="action-stack">
                         <button class="action-btn primary" type="button" id="saveCloud">Save to Cloudflare</button>
                         <button class="action-btn secondary" type="button" id="saveDraft">Save Browser Draft</button>
@@ -1152,7 +1436,8 @@
                         <button class="action-btn danger" type="button" id="clearForm">Clear Product</button>
                     </div>
                     <div class="connection-box">
-                        <strong>Cloudflare setup:</strong> replace <code>YOUR_WORKER_API_URL</code> near the bottom of this file. The Worker can save product data to D1 and upload files to R2.
+                        <strong>Cloudflare setup:</strong> replace <code>YOUR_WORKER_API_URL</code> near the bottom of
+                        this file. The Worker can save product data to D1 and upload files to R2.
                     </div>
                 </section>
             </aside>
@@ -1227,7 +1512,7 @@
                 });
 
                 let data = {};
-                try { data = await response.json(); } catch (_) {}
+                try { data = await response.json(); } catch (_) { }
 
                 if (!response.ok || !data.success || !data.token) {
                     throw new Error(data.message || "Wrong username or password.");
@@ -1314,7 +1599,7 @@
         }
 
         function escapeHtml(value) {
-            return String(value).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;","\"":"&quot;"}[char]));
+            return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", "\"": "&quot;" }[char]));
         }
 
         function getFormObject() {
@@ -1516,7 +1801,7 @@
         document.getElementById("addVariant").addEventListener("click", () => addVariant());
         document.getElementById("saveDraft").addEventListener("click", saveDraft);
         document.getElementById("saveDraftTop").addEventListener("click", saveDraft);
-        document.getElementById("saveCloud").addEventListener("click", saveToCloudflare);
+        document.getElementById("saveCloud").addEventListener("click",saveProductToCloud);
         document.getElementById("exportJson").addEventListener("click", exportJson);
         document.getElementById("clearForm").addEventListener("click", clearProduct);
         document.getElementById("newProductTop").addEventListener("click", clearProduct);
@@ -1572,130 +1857,131 @@
 
         async function saveProductToCloud() {
 
-    const product = getFormObject();
+            const product = getFormObject();
 
-    try {
+            try {
 
-        const response = await fetch(CLOUD_API_URL, {
+                const response = await fetch(CLOUD_API_URL, {
 
-            method: "POST",
+                    method: "POST",
 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization":
-                    "Bearer " + getAdminToken()
-            },
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization":
+                            "Bearer " + getAdminToken()
+                    },
 
-            body: JSON.stringify({
+                    body: JSON.stringify({
 
-                product_id: product.productId,
+                        product_id: product.productId,
 
-                sku: product.sku,
+                        sku: product.sku,
 
-                product_name: product.productName,
+                        product_name: product.productName,
 
-                brand: product.brand,
+                        brand: product.brand,
 
-                category: product.category,
+                        category: product.category,
 
-                subcategory: product.subcategory,
+                        subcategory: product.subcategory,
 
-                gender: product.gender,
+                        gender: product.gender,
 
-                manufacturer: product.manufacturer,
+                        manufacturer: product.manufacturer,
 
-                country_of_origin: product.countryOrigin,
+                        country_of_origin: product.countryOrigin,
 
-                manufacturer_barcode: product.manufacturerBarcode,
+                        manufacturer_barcode: product.manufacturerBarcode,
 
-                store_barcode: product.storeBarcode,
+                        store_barcode: product.storeBarcode,
 
-                description: product.fullDescription,
+                        description: product.fullDescription,
 
-                additional_info: product.additionalInfo,
+                        additional_info: product.additionalInfo,
 
-                material: product.material,
+                        material: product.material,
 
-                care_instructions: product.careInstructions,
+                        care_instructions: product.careInstructions,
 
-                manufacture_date: product.manufacturedDate,
+                        manufacture_date: product.manufacturedDate,
 
-                date_received: product.dateReceived,
+                        date_received: product.dateReceived,
 
-                purchase_cost: Number(product.purchaseCost || 0),
+                        purchase_cost: Number(product.purchaseCost || 0),
 
-                shipping_cost: Number(product.shippingCost || 0),
+                        shipping_cost: Number(product.shippingCost || 0),
 
-                import_cost: Number(product.dutyCost || 0),
+                        import_cost: Number(product.dutyCost || 0),
 
-                landed_cost: Number(product.landedCost || 0),
+                        landed_cost: Number(product.landedCost || 0),
 
-                selling_price: Number(product.sellingPrice || 0),
+                        selling_price: Number(product.sellingPrice || 0),
 
-                reorder_level: Number(product.reorderLevel || 0),
+                        reorder_level: Number(product.reorderLevel || 0),
 
-                warehouse_location: product.stockLocation,
+                        warehouse_location: product.stockLocation,
 
-                supplier_name: product.supplierName,
+                        supplier_name: product.supplierName,
 
-                supplier_email: product.supplierEmail,
+                        supplier_email: product.supplierEmail,
 
-                supplier_phone: product.supplierPhone,
+                        supplier_phone: product.supplierPhone,
 
-                supplier_website: product.supplierWebsite,
+                        supplier_website: product.supplierWebsite,
 
-                invoice_number: product.purchaseOrder,
+                        invoice_number: product.purchaseOrder,
 
-                customs_entry_number: product.importEntry,
+                        customs_entry_number: product.importEntry,
 
-                seo_title: product.seoTitle,
+                        seo_title: product.seoTitle,
 
-                seo_description: product.seoDescription,
+                        seo_description: product.seoDescription,
 
-                website_slug: product.slug,
+                        website_slug: product.slug,
 
-                tags: product.tags,
+                        tags: product.tags,
 
-                status: product.status,
+                        status: product.status,
 
-                featured: product.featured,
+                        featured: product.featured,
 
-                variants: product.variants
+                        variants: product.variants
 
-            })
+                    })
 
-        });
+                });
 
-        const result = await response.json();
+                const result = await response.json();
 
-        if (!response.ok) {
+                if (!response.ok) {
 
-            throw new Error(result.error || "Save failed.");
+                    throw new Error(result.error || "Save failed.");
+
+                }
+
+                showToast(
+                    "✅ Product saved successfully!",
+                    "success"
+                );
+
+                console.log(result);
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                showToast(
+                    error.message,
+                    "error"
+                );
+
+            }
 
         }
-
-        showToast(
-            "✅ Product saved successfully!",
-            "success"
-        );
-
-        console.log(result);
-
-    }
-    catch (error) {
-
-        console.error(error);
-
-        showToast(
-            error.message,
-            "error"
-        );
-
-    }
-
-}
 
 
     </script>
 </body>
+
 </html>
