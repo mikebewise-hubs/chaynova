@@ -1193,14 +1193,14 @@
         }
 
         function showAdminPage() {
-            protectedElements.forEach(element => element.style.display = "");
+            protectedElements.forEach(element => element.classList.remove("admin-protected"));
             loginOverlay.classList.remove("open");
             loginOverlay.setAttribute("aria-hidden", "true");
             adminLoginError.textContent = "";
         }
 
         function showAdminLogin(message = "") {
-            protectedElements.forEach(element => element.style.display = "none");
+            protectedElements.forEach(element => element.classList.add("admin-protected"));
             loginOverlay.classList.add("open");
             loginOverlay.setAttribute("aria-hidden", "false");
             adminLoginError.textContent = message;
