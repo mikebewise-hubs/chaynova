@@ -1292,8 +1292,27 @@
             font-size: 0.72rem;
         }
 
+        /* Keep CHAYNOVA visible on small iPhones. */
+        .brand {
+            gap: 7px;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .brand img {
+            width: 34px;
+            height: 34px;
+        }
+
         .brand-copy {
-            display: none;
+            display: block;
+            min-width: 0;
+        }
+
+        .brand-copy strong {
+            max-width: 88px;
+            font-size: 0.78rem;
+            letter-spacing: 0.35px;
         }
     }
 
