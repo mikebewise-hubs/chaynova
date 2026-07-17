@@ -16,6 +16,16 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --glass: rgba(255, 255, 255, .12);
+            --glass-border: rgba(255, 255, 255, .25);
+            --cyan: #79e7ff;
+            --pink: #ff84d8;
+            --purple: #b08cff;
+            --yellow: #ffe27a;
+        }
+
+
         body {
             min-height: 100vh;
             overflow-x: hidden;
@@ -101,7 +111,7 @@
             transform: scale(1.08);
         }
 
-       /* Mobile */
+        /* Mobile */
 
         @media (max-width:700px) {
 
@@ -154,36 +164,6 @@
         }
 
 
-        /* Hide volume slider on iPhone, iPad, and other touch devices */
-        @media (hover: none) and (pointer: coarse) {
-            .music-control {
-                width: 56px;
-                height: 56px;
-                padding: 0;
-                border: none;
-                background: transparent;
-                box-shadow: none;
-                overflow: visible;
-            }
-
-            .volume-slider {
-                display: none;
-            }
-
-            .music-btn {
-                width: 56px;
-                height: 56px;
-                border-radius: 50%;
-                border: 1px solid rgba(255, 255, 255, .25);
-                background: rgba(255, 255, 255, .12);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                box-shadow:
-                    0 0 18px rgba(0, 217, 255, .45),
-                    inset 0 0 10px rgba(255, 255, 255, .15);
-            }
-        }
-           
 
         /* BACKGROUND */
 
@@ -357,7 +337,32 @@
         .music-btn:hover {
             background: rgba(255, 255, 255, .12);
         }
-
+        @media (hover: none) and (pointer: coarse) {
+            .music-control {
+                width: 56px;
+                height: 56px;
+                padding: 0;
+                border: none;
+                background: transparent;
+                box-shadow: none;
+                overflow: visible;
+            }
+            .volume-slider {
+                display: none;
+            }
+            .music-btn {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                border: 1px solid var(--glass-border);
+                background: var(--glass);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                box-shadow:
+                    0 0 18px rgba(0, 217, 255, .45),
+                    inset 0 0 10px rgba(255, 255, 255, .15);
+            }
+        }
 
 
         /* FOOTER */
@@ -504,7 +509,7 @@
             }
         }
 
-    
+
 
         .category {
             width: 100%;
@@ -624,25 +629,24 @@
         }
 
         .secret-admin {
-    display: inline-block;
-    margin-left: 2px;
-    font-size: 10px;
-    color: rgba(255,255,255,0.03); /* Almost invisible */
-    cursor: pointer;
-    user-select: none;
-    transition: all .25s ease;
-}
+            display: inline-block;
+            margin-left: 2px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.03);
+            /* Almost invisible */
+            cursor: pointer;
+            user-select: none;
+            transition: all .25s ease;
+        }
 
-.secret-admin:hover {
-    color: rgba(255,255,255,0.35);
-    transform: scale(1.3);
-}
+        .secret-admin:hover {
+            color: rgba(255, 255, 255, 0.35);
+            transform: scale(1.3);
+        }
 
-.secret-admin:active {
-    transform: scale(0.9);
-}
-
-
+        .secret-admin:active {
+            transform: scale(0.9);
+        }
     </style>
 </head>
 
@@ -654,7 +658,7 @@
 
     <header>
         <nav class="top-nav" aria-label="Main navigation">
-            <a href="shop.html"  aria-current="page">Store</a>
+            <a href="shop.html" aria-current="page">Store</a>
             <a href="fun.html">Fun</a>
             <a href="support.html">Support</a>
             <a href="about.html">About</a>
@@ -698,7 +702,7 @@
                         <a href="viewer.html?img=images/sport1.png">
                             <img src="images/sport1.png" class="product-img" alt="Sportswear Concept 1">
                         </a>
-                    
+
 
                     </div>
 
@@ -716,7 +720,7 @@
                     <a href="viewer.html?img=images/casual1.jpg">
                         <img src="images/casual1.jpg" class="product-img" alt="Traditional Thai Outfit">
                     </a>
-                
+
 
                 </div>
 
@@ -755,7 +759,6 @@
     </div>
 
     <footer id="siteFooter">
-           <footer>
         <a href="about.html">© 2026 CHAYNOVA</a>
         <span class="hidden-admin-emoji" title="Admin" onclick="openProductLogin()"> ✧
         </span>
@@ -763,198 +766,198 @@
         <span class="hidden-admin-emoji" title="Admin" onclick="openProductLogin()"> ✧ </span>
     </footer>
 
-        <div id="loginOverlay" class="login-overlay">
-            <div class="login-box">
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
 
-                <h2>CHAYNOVA Admin</h2>
+            <h2>CHAYNOVA Admin</h2>
 
-                <div id="loginForm">
-                    <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-                    <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+            <div id="loginForm">
+                <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+                <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
-                    <div class="login-actions">
-                        <button onclick="checkLogin()">Login</button>
-                        <button onclick="closeLogin()">Cancel</button>
-                    </div>
-
-                    <div id="loginError" class="login-error"></div>
-
-                    <div class="admin-note">
-                        Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
-                    </div>
+                <div class="login-actions">
+                    <button onclick="checkLogin()">Login</button>
+                    <button onclick="closeLogin()">Cancel</button>
                 </div>
 
-                <div id="adminPanel" class="admin-panel">
-                    <a href="story-admin.html">Post New Story</a>
-                    <a href="story.html?admin=1">Open Story Admin View</a>
-                    <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-                    <button class="logout-btn" onclick="closeLogin()">Close</button>
-                </div>
+                <div id="loginError" class="login-error"></div>
 
+                <div class="admin-note">
+                    Login is checked by your Cloudflare Worker. Your password is not inside this HTML.
+                </div>
             </div>
+
+            <div id="adminPanel" class="admin-panel">
+                <a href="story-admin.html">Post New Story</a>
+                <a href="story.html?admin=1">Open Story Admin View</a>
+                <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+                <button class="logout-btn" onclick="closeLogin()">Close</button>
+            </div>
+
         </div>
+    </div>
 
-        <script>
-            const API = "https://chay1api.mikebewise.workers.dev";
+    <script>
+        const API = "https://chay1api.mikebewise.workers.dev";
 
-            const music = document.getElementById("bgMusic");
-            const musicBtn = document.getElementById("musicBtn");
-            const volumeSlider = document.getElementById("volumeSlider");
+        const music = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
+        const volumeSlider = document.getElementById("volumeSlider");
 
+        music.volume = Number(volumeSlider.value) / 100;
+
+        volumeSlider.addEventListener("input", () => {
             music.volume = Number(volumeSlider.value) / 100;
+        });
 
-            volumeSlider.addEventListener("input", () => {
-                music.volume = Number(volumeSlider.value) / 100;
-            });
+        /*
+        Most browsers block music autoplay.
+        The music button lets the user start music manually.
+        */
 
-            /*
-            Most browsers block music autoplay.
-            The music button lets the user start music manually.
-            */
+        musicBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
 
-            musicBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
+            if (music.paused) {
+                music.play();
+                musicBtn.innerHTML = "🔊";
+                musicBtn.title = "Pause Music";
+            } else {
+                music.pause();
+                musicBtn.innerHTML = "🔇";
+                musicBtn.title = "Play Music";
+            }
+        });
 
-                if (music.paused) {
-                    music.play();
-                    musicBtn.innerHTML = "🔊";
-                    musicBtn.title = "Pause Music";
+        function openLogin() {
+            document.getElementById("loginOverlay").style.display = "flex";
+            updateAdminPanel();
+
+            setTimeout(() => {
+                const usernameInput = document.getElementById("usernameInput");
+                if (usernameInput && usernameInput.offsetParent !== null) {
+                    usernameInput.focus();
+                }
+            }, 100);
+        }
+
+        function closeLogin() {
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("loginError").innerText = "";
+        }
+
+        async function checkLogin() {
+            const username = document.getElementById("usernameInput").value.trim();
+            const password = document.getElementById("passwordInput").value.trim();
+            const errorBox = document.getElementById("loginError");
+
+            if (!username || !password) {
+                errorBox.innerText = "Please enter username and password.";
+                return;
+            }
+
+            errorBox.innerText = "Checking login...";
+
+            try {
+                const response = await fetch(API + "/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success && data.token) {
+                    localStorage.setItem("chaynovaAdminToken", data.token);
+                    errorBox.innerText = "";
+                    updateAdminPanel();
                 } else {
-                    music.pause();
-                    musicBtn.innerHTML = "🔇";
-                    musicBtn.title = "Play Music";
+                    localStorage.removeItem("chaynovaAdminToken");
+                    errorBox.innerText = "Wrong username or password.";
                 }
-            });
 
-            function openLogin() {
-                document.getElementById("loginOverlay").style.display = "flex";
-                updateAdminPanel();
-
-                setTimeout(() => {
-                    const usernameInput = document.getElementById("usernameInput");
-                    if (usernameInput && usernameInput.offsetParent !== null) {
-                        usernameInput.focus();
-                    }
-                }, 100);
+            } catch (error) {
+                errorBox.innerText = "Login failed. Check your Worker API.";
             }
+        }
 
-            function closeLogin() {
-                document.getElementById("loginOverlay").style.display = "none";
-                document.getElementById("loginError").innerText = "";
+        function updateAdminPanel() {
+            const token = localStorage.getItem("chaynovaAdminToken");
+
+            if (token) {
+                document.getElementById("loginForm").style.display = "none";
+                document.getElementById("adminPanel").style.display = "flex";
+            } else {
+                document.getElementById("loginForm").style.display = "block";
+                document.getElementById("adminPanel").style.display = "none";
             }
+        }
 
-            async function checkLogin() {
-                const username = document.getElementById("usernameInput").value.trim();
-                const password = document.getElementById("passwordInput").value.trim();
-                const errorBox = document.getElementById("loginError");
+        function logoutAdmin() {
+            localStorage.removeItem("chaynovaAdminToken");
+            document.getElementById("usernameInput").value = "";
+            document.getElementById("passwordInput").value = "";
+            updateAdminPanel();
+        }
 
-                if (!username || !password) {
-                    errorBox.innerText = "Please enter username and password.";
-                    return;
-                }
-
-                errorBox.innerText = "Checking login...";
-
-                try {
-                    const response = await fetch(API + "/login", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            username: username,
-                            password: password
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok && data.success && data.token) {
-                        localStorage.setItem("chaynovaAdminToken", data.token);
-                        errorBox.innerText = "";
-                        updateAdminPanel();
-                    } else {
-                        localStorage.removeItem("chaynovaAdminToken");
-                        errorBox.innerText = "Wrong username or password.";
-                    }
-
-                } catch (error) {
-                    errorBox.innerText = "Login failed. Check your Worker API.";
-                }
+        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                checkLogin();
             }
+        });
 
-            function updateAdminPanel() {
-                const token = localStorage.getItem("chaynovaAdminToken");
-
-                if (token) {
-                    document.getElementById("loginForm").style.display = "none";
-                    document.getElementById("adminPanel").style.display = "flex";
-                } else {
-                    document.getElementById("loginForm").style.display = "block";
-                    document.getElementById("adminPanel").style.display = "none";
-                }
+        document.getElementById("usernameInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                document.getElementById("passwordInput").focus();
             }
+        });
 
-            function logoutAdmin() {
-                localStorage.removeItem("chaynovaAdminToken");
-                document.getElementById("usernameInput").value = "";
-                document.getElementById("passwordInput").value = "";
-                updateAdminPanel();
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                closeLogin();
             }
+        });
 
-            document.getElementById("passwordInput").addEventListener("keydown", function (e) {
-                if (e.key === "Enter") {
-                    checkLogin();
-                }
-            });
+        const fireworks = document.querySelectorAll(".firework");
 
-            document.getElementById("usernameInput").addEventListener("keydown", function (e) {
-                if (e.key === "Enter") {
-                    document.getElementById("passwordInput").focus();
-                }
-            });
+        const colors = [
+            "#ff2fcf",
+            "#00d9ff",
+            "#ffaa00",
+            "#7b2cff",
+            "#00ff99",
+            "#ff5555"
+        ];
 
-            window.addEventListener("keydown", function (e) {
-                if (e.key === "Escape") {
-                    closeLogin();
-                }
-            });
+        function randomizeFirework(fw) {
+            fw.style.left = Math.random() * 90 + "%";
+            fw.style.top = Math.random() * 70 + "%";
+            fw.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-            const fireworks = document.querySelectorAll(".firework");
+            // Restart animation
+            fw.style.animation = "none";
+            void fw.offsetWidth;
+            fw.style.animation = "explode 2.8s ease-out";
+        }
 
-            const colors = [
-                "#ff2fcf",
-                "#00d9ff",
-                "#ffaa00",
-                "#7b2cff",
-                "#00ff99",
-                "#ff5555"
-            ];
+        // Start each firework at a different time
+        fireworks.forEach((fw, i) => {
+            setTimeout(() => {
+                randomizeFirework(fw);
 
-            function randomizeFirework(fw) {
-                fw.style.left = Math.random() * 90 + "%";
-                fw.style.top = Math.random() * 70 + "%";
-                fw.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-                // Restart animation
-                fw.style.animation = "none";
-                void fw.offsetWidth;
-                fw.style.animation = "explode 2.8s ease-out";
-            }
-
-            // Start each firework at a different time
-            fireworks.forEach((fw, i) => {
-                setTimeout(() => {
+                setInterval(() => {
                     randomizeFirework(fw);
+                }, 2800);
 
-                    setInterval(() => {
-                        randomizeFirework(fw);
-                    }, 2800);
+            }, i * 900);
+        });
 
-                }, i * 900);
-            });
-
-function openProductLogin() {
+        function openProductLogin() {
 
             const token = localStorage.getItem("chaynovaAdminToken");
 
@@ -1009,7 +1012,7 @@ function openProductLogin() {
 
         }
 
-        </script>
+    </script>
 
 </body>
 
