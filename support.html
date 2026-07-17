@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,105 +41,106 @@
                 linear-gradient(135deg, #da7b06, #7864eb, #72a1f8);
         }
 
-       /* ===========================
+        /* ===========================
    CHAYNOVA Universal Header
    =========================== */
 
-header {
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(95vw, 1100px);
-    z-index: 1000;
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(95vw, 1100px);
+            z-index: 1000;
 
-    display: flex;
-    justify-content: center;
+            display: flex;
+            justify-content: center;
 
-    padding: 8px 18px;
+            padding: 8px 18px;
 
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
 
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
 
-    box-shadow: 0 0 28px rgba(0,217,255,.25);
-}
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+        }
 
-.top-nav{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+        .top-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    flex-wrap:nowrap;
-    white-space:nowrap;
+            flex-wrap: nowrap;
+            white-space: nowrap;
 
-    gap:clamp(8px,1.8vw,22px);
-}
+            gap: clamp(8px, 1.8vw, 22px);
+        }
 
-.top-nav a{
-    flex-shrink:0;
+        .top-nav a {
+            flex-shrink: 0;
 
-    font-family:"Oxanium",sans-serif;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.5px;
+            font-family: "Oxanium", sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .5px;
 
-    color:#fff;
-    text-decoration:none;
+            color: #fff;
+            text-decoration: none;
 
-    transition:.25s;
-}
+            transition: .25s;
+        }
 
-.top-nav a:hover,
-.top-nav a[aria-current="page"]{
-    color:#001019;
-    text-shadow:0 0 14px rgba(255,255,255,.9);
-}
+        .top-nav a:hover,
+        .top-nav a[aria-current="page"] {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
 
-.nav-logo{
-    display:flex;
-    align-items:center;
-    flex-shrink:0;
-}
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
 
-.nav-logo img{
-    display:block;
-    height:26px;
-    width:auto;
-    transition:.2s;
-}
+        .nav-logo img {
+            display: block;
+            height: 26px;
+            width: auto;
+            transition: .2s;
+        }
 
-.nav-logo img:hover{
-    transform:scale(1.08);
-}
+        .nav-logo img:hover {
+            transform: scale(1.08);
+        }
 
-/* Mobile */
+        /* Mobile */
 
-@media (max-width:700px){
+        @media (max-width:700px) {
 
-    header{
-        width:97vw;
-        padding:8px 10px;
-        top:12px;
-    }
+            header {
+                width: 97vw;
+                padding: 8px 10px;
+                top: 12px;
+            }
 
-    .top-nav{
-        gap:clamp(5px,1.5vw,10px);
-    }
+            .top-nav {
+                gap: clamp(5px, 1.5vw, 10px);
+            }
 
-    .top-nav a{
-        font-size:0.9rem;
-        letter-spacing:0;
-    }
+            .top-nav a {
+                font-size: 0.9rem;
+                letter-spacing: 0;
+            }
 
-    .nav-logo img{
-        height:18px;
-    }
-}
+            .nav-logo img {
+                height: 18px;
+            }
+        }
+
         .page-shell {
             position: relative;
             z-index: 5;
@@ -170,8 +172,7 @@ header {
             margin: 2px auto 10px;
             display: block;
             filter:
-                drop-shadow(0 0 10px rgba(255, 255, 255, .35))
-                drop-shadow(0 0 25px rgba(0, 217, 255, .45));
+                drop-shadow(0 0 10px rgba(255, 255, 255, .35)) drop-shadow(0 0 25px rgba(0, 217, 255, .45));
             animation: logoFloat 3s ease-in-out infinite;
         }
 
@@ -280,14 +281,45 @@ header {
             animation: starExplode 2.8s ease-out;
         }
 
-        .firework span:nth-child(1) { --x: 0px; --y: -80px; }
-        .firework span:nth-child(2) { --x: 60px; --y: -60px; }
-        .firework span:nth-child(3) { --x: 80px; --y: 0px; }
-        .firework span:nth-child(4) { --x: 60px; --y: 60px; }
-        .firework span:nth-child(5) { --x: 0px; --y: 80px; }
-        .firework span:nth-child(6) { --x: -60px; --y: 60px; }
-        .firework span:nth-child(7) { --x: -80px; --y: 0px; }
-        .firework span:nth-child(8) { --x: -60px; --y: -60px; }
+        .firework span:nth-child(1) {
+            --x: 0px;
+            --y: -80px;
+        }
+
+        .firework span:nth-child(2) {
+            --x: 60px;
+            --y: -60px;
+        }
+
+        .firework span:nth-child(3) {
+            --x: 80px;
+            --y: 0px;
+        }
+
+        .firework span:nth-child(4) {
+            --x: 60px;
+            --y: 60px;
+        }
+
+        .firework span:nth-child(5) {
+            --x: 0px;
+            --y: 80px;
+        }
+
+        .firework span:nth-child(6) {
+            --x: -60px;
+            --y: 60px;
+        }
+
+        .firework span:nth-child(7) {
+            --x: -80px;
+            --y: 0px;
+        }
+
+        .firework span:nth-child(8) {
+            --x: -60px;
+            --y: -60px;
+        }
 
         .music-control {
             position: fixed;
@@ -364,10 +396,12 @@ header {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(.3);
             }
+
             70% {
                 opacity: 1;
                 transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1);
             }
+
             100% {
                 opacity: 0;
                 transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(.5);
@@ -375,13 +409,27 @@ header {
         }
 
         @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
         @keyframes panelIn {
-            from { opacity: 0; transform: translateY(22px) scale(.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         @media (max-width: 640px) {
@@ -440,6 +488,7 @@ header {
                     inset 0 0 10px rgba(255, 255, 255, .15);
             }
         }
+
         footer {
             position: relative;
             z-index: 2;
@@ -449,81 +498,88 @@ header {
             font-size: 0.92rem;
         }
 
-        .fun-button{
-    margin-top:20px;
-    text-align:center;
-}
+        .fun-button {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-#qrEmoji{
-    font-size:60px;
-    cursor:pointer;
-    display:inline-block;
-    transition:.3s;
-    animation:bounce 2s infinite;
-    user-select:none;
-}
+        #qrEmoji {
+            font-size: 60px;
+            cursor: pointer;
+            display: inline-block;
+            transition: .3s;
+            animation: bounce 2s infinite;
+            user-select: none;
+        }
 
-#qrEmoji:hover{
-    transform:scale(1.3) rotate(15deg);
-}
+        #qrEmoji:hover {
+            transform: scale(1.3) rotate(15deg);
+        }
 
-@keyframes bounce{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-12px);}
-}
+        @keyframes bounce {
 
-/* Popup */
+            0%,
+            100% {
+                transform: translateY(0);
+            }
 
-.qr-modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    z-index:9999;
-}
+            50% {
+                transform: translateY(-12px);
+            }
+        }
 
-.qr-content{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    background:#fff;
-    color:#333;
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
-    max-width:340px;
-    box-shadow:0 0 40px rgba(255,255,255,.25);
-}
+        /* Popup */
 
-.qr-content img{
-    border-radius:12px;
-}
+        .qr-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .75);
+            z-index: 9999;
+        }
 
-.close{
-    position:absolute;
-    right:15px;
-    top:10px;
-    font-size:32px;
-    cursor:pointer;
-}
+        .qr-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            color: #333;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 340px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, .25);
+        }
 
-.hidden-admin-emoji{
-    display:inline-block;
-    margin-left:6px;
-    font-size:13px;
-    color:rgba(255,255,255,.08);   /* almost invisible */
-    cursor:pointer;
-    user-select:none;
-    transition:.25s;
-}
+        .qr-content img {
+            border-radius: 12px;
+        }
 
-.hidden-admin-emoji:hover{
-    color:#ffffff;
-    text-shadow:0 0 10px rgba(255,255,255,.8);
-    transform:scale(1.3);
-}
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 32px;
+            cursor: pointer;
+        }
 
+        .hidden-admin-emoji {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, .08);
+            /* almost invisible */
+            cursor: pointer;
+            user-select: none;
+            transition: .25s;
+        }
+
+        .hidden-admin-emoji:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, .8);
+            transform: scale(1.3);
+        }
     </style>
 </head>
 
@@ -611,65 +667,40 @@ header {
             <p class="motto">Keep Learning • Keep Playing • Keep Moving</p>
 
             <p class="coming-soon">
-    More questions and answers will be added here soon.<br>
-    <strong>Keep Learning • Keep Playing • Keep Moving</strong>
-</p>
+                More questions and answers will be added here soon.<br>
+                <strong>Keep Learning • Keep Playing • Keep Moving</strong>
+            </p>
 
-<div class="fun-button">
-    <span id="qrEmoji" title="Scan me!">✌︎</span>
-</div>
+            <div class="fun-button">
+                <span id="qrEmoji" title="Scan me!">✌︎</span>
+            </div>
 
-<!-- QR Code Popup -->
-<div id="qrModal" class="qr-modal">
-    <div class="qr-content">
-        <span class="close">&times;</span>
+            <!-- QR Code Popup -->
+            <div id="qrModal" class="qr-modal">
+                <div class="qr-content">
+                    <span class="close">&times;</span>
 
-        <img
-            src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://www.chaynova.com/funtime"
-            alt="QR Code">
-    </div>
-</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://www.chaynova.com/funtime"
+                        alt="QR Code">
+                </div>
+            </div>
         </section>
     </main>
 
     <div class="music-control">
-        <input
-            type="range"
-            id="volumeSlider"
-            class="volume-slider"
-            min="0"
-            max="100"
-            value="29"
-            aria-label="Music volume"
-        >
-        <button
-            id="musicBtn"
-            class="music-btn"
-            type="button"
-            title="Play Music"
-            aria-label="Play or pause background music"
-        >🔇</button>
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="29"
+            aria-label="Music volume">
+        <button id="musicBtn" class="music-btn" type="button" title="Play Music"
+            aria-label="Play or pause background music">🔇</button>
     </div>
 
     <footer>
-    <a href="about.html">© 2026 CHAYNOVA</a>
-
-    <span
-        class="hidden-admin-emoji"
-        title="Admin"
-        onclick="openProductLogin()"
-    >
-        ✧
-    </span>
-
-     • Inspired by Thailand • Based in New York   <span
-        class="hidden-admin-emoji"
-        title="Admin"
-        onclick="openProductLogin()"
-    >
-        ✧
-    </span>
-</footer>
+        <a href="about.html">© 2026 CHAYNOVA</a>
+        <span class="hidden-admin-emoji" title="Admin" onclick="openProductLogin()"> ✧
+        </span>
+        • Inspired by Thailand • Based in New York
+        <span class="hidden-admin-emoji" title="Admin" onclick="openProductLogin()"> ✧ </span>
+    </footer>
     <script>
         const bgMusic = document.getElementById("bgMusic");
         const musicBtn = document.getElementById("musicBtn");
@@ -728,80 +759,81 @@ header {
         });
 
 
-const modal = document.getElementById("qrModal");
-const emoji = document.getElementById("qrEmoji");
-const closeBtn = document.querySelector(".close");
+        const modal = document.getElementById("qrModal");
+        const emoji = document.getElementById("qrEmoji");
+        const closeBtn = document.querySelector(".close");
 
-emoji.onclick = () => {
-    modal.style.display = "block";
-};
+        emoji.onclick = () => {
+            modal.style.display = "block";
+        };
 
-closeBtn.onclick = () => {
-    modal.style.display = "none";
-};
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
 
-window.onclick = (e) => {
-    if (e.target === modal) {
-        modal.style.display = "none";
-    }
-};
+        window.onclick = (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        };
 
-function openProductLogin(){
+        function openProductLogin() {
 
-    const token = localStorage.getItem("chaynovaAdminToken");
+            const token = localStorage.getItem("chaynovaAdminToken");
 
-    // Already logged in
-    if(token){
-        window.location.href="product-manager.html";
-        return;
-    }
+            // Already logged in
+            if (token) {
+                window.location.href = "product-manager.html";
+                return;
+            }
 
-    const username = prompt("Username");
+            const username = prompt("Username");
 
-    if(!username) return;
+            if (!username) return;
 
-    const password = prompt("Password");
+            const password = prompt("Password");
 
-    if(!password) return;
+            if (!password) return;
 
-    fetch("https://chay1api.mikebewise.workers.dev/login",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            username,
-            password
-        })
-    })
-    .then(r=>r.json())
-    .then(data=>{
+            fetch("https://chay1api.mikebewise.workers.dev/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            })
+                .then(r => r.json())
+                .then(data => {
 
-        if(data.success){
+                    if (data.success) {
 
-            localStorage.setItem(
-                "chaynovaAdminToken",
-                data.token
-            );
+                        localStorage.setItem(
+                            "chaynovaAdminToken",
+                            data.token
+                        );
 
-            window.location.href="product-manager.html";
+                        window.location.href = "product-manager.html";
 
-        }else{
+                    } else {
 
-            alert("Login failed.");
+                        alert("Login failed.");
+
+                    }
+
+                })
+                .catch(() => {
+
+                    alert("Unable to connect.");
+
+                });
 
         }
-
-    })
-    .catch(()=>{
-
-        alert("Unable to connect.");
-
-    });
-
-}
 
 
     </script>
 </body>
+
 </html>
