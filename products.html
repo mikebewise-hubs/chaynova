@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="CHAYNOVA secure product catalog and inventory list.">
     <title>All Products | CHAYNOVA Admin</title>
 
@@ -765,6 +765,523 @@
             flex-direction: column;
         }
     }
+
+    /* =========================================================
+       iPhone-friendly layout + comfortable work style
+       ========================================================= */
+    :root {
+        color-scheme: dark;
+    }
+
+    body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        -webkit-text-size-adjust: 100%;
+    }
+
+    button,
+    a,
+    input,
+    select {
+        touch-action: manipulation;
+    }
+
+    .view-toggle {
+        min-width: 126px;
+    }
+
+    .view-toggle-icon {
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    /* Softer, eye-comfortable work theme */
+    body.work-mode {
+        color-scheme: light;
+        --pink: #496d8a;
+        --purple: #536b85;
+        --cyan: #287895;
+        --green: #23765d;
+        --yellow: #9a6b19;
+        --red: #b23a48;
+        --page-1: #eef3f7;
+        --page-2: #f5f7f9;
+        --page-3: #e8eef3;
+        --glass: rgba(255, 255, 255, 0.86);
+        --glass-strong: rgba(255, 255, 255, 0.96);
+        --border: rgba(31, 55, 76, 0.16);
+        --muted: #587083;
+        --text: #172634;
+        --shadow: 0 12px 34px rgba(40, 67, 88, 0.12);
+        background:
+            radial-gradient(circle at 15% 5%, rgba(90, 145, 175, 0.12), transparent 30%),
+            radial-gradient(circle at 88% 10%, rgba(105, 125, 160, 0.10), transparent 32%),
+            linear-gradient(145deg, var(--page-1), var(--page-2), var(--page-3));
+        background-attachment: fixed;
+    }
+
+    body.work-mode .orb {
+        opacity: 0.08;
+        animation: none;
+    }
+
+    body.work-mode header,
+    body.work-mode .summary-card,
+    body.work-mode .login-card {
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: var(--shadow);
+    }
+
+    body.work-mode .panel {
+        background: rgba(255, 255, 255, 0.93);
+        box-shadow: var(--shadow);
+    }
+
+    body.work-mode .toolbar,
+    body.work-mode .table-footer {
+        background: rgba(39, 72, 96, 0.04);
+    }
+
+    body.work-mode .brand,
+    body.work-mode .nav-link,
+    body.work-mode .nav-button,
+    body.work-mode .action-button,
+    body.work-mode .small-btn,
+    body.work-mode .summary-value,
+    body.work-mode .product-name,
+    body.work-mode .empty-state strong,
+    body.work-mode .loading-state strong {
+        color: #172634;
+    }
+
+    body.work-mode .brand-copy span,
+    body.work-mode .hero p,
+    body.work-mode .summary-label,
+    body.work-mode .summary-note,
+    body.work-mode .table-footer,
+    body.work-mode .empty-state,
+    body.work-mode .loading-state,
+    body.work-mode footer,
+    body.work-mode .product-id {
+        color: #5f7484;
+    }
+
+    body.work-mode .eyebrow,
+    body.work-mode th {
+        color: #2c6b83;
+    }
+
+    body.work-mode h1 {
+        text-shadow: none;
+    }
+
+    body.work-mode .api-status {
+        color: #294252;
+        background: rgba(255, 255, 255, 0.82);
+    }
+
+    body.work-mode .nav-link,
+    body.work-mode .nav-button,
+    body.work-mode .small-btn {
+        border-color: rgba(31, 55, 76, 0.15);
+        background: rgba(35, 67, 91, 0.06);
+    }
+
+    body.work-mode .nav-link.primary,
+    body.work-mode .action-button {
+        color: #ffffff;
+        border-color: transparent;
+        background: linear-gradient(135deg, #4d758e, #536f87, #3f8396);
+    }
+
+    body.work-mode .control {
+        color: #172634;
+        border-color: rgba(31, 55, 76, 0.18);
+        background: #ffffff;
+    }
+
+    body.work-mode .control::placeholder {
+        color: #7b8c99;
+    }
+
+    body.work-mode th {
+        background: #e9f0f4;
+    }
+
+    body.work-mode td,
+    body.work-mode th {
+        border-bottom-color: rgba(31, 55, 76, 0.10);
+    }
+
+    body.work-mode tbody tr:hover {
+        background: rgba(55, 111, 139, 0.06);
+    }
+
+    body.work-mode .sku,
+    body.work-mode .money,
+    body.work-mode .quantity {
+        color: #203746;
+    }
+
+    body.work-mode .small-btn.emergency-delete {
+        color: #9c2937;
+        background: rgba(178, 58, 72, 0.07);
+    }
+
+    body.work-mode .toast {
+        color: #ffffff;
+        background: #263d4c;
+        box-shadow: 0 12px 30px rgba(25, 48, 65, 0.24);
+    }
+
+    body.work-mode .login-overlay {
+        background: rgba(224, 233, 239, 0.88);
+    }
+
+    body.work-mode .login-brand h2,
+    body.work-mode .login-card label {
+        color: #274a60;
+    }
+
+    body.work-mode .login-brand p,
+    body.work-mode .login-note {
+        color: #647b8b;
+    }
+
+    @media (max-width: 680px) {
+        body {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        header {
+            padding: 8px 9px;
+        }
+
+        .top-nav {
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand img {
+            width: 36px;
+            height: 36px;
+        }
+
+        .brand-copy strong {
+            font-size: 0.88rem;
+        }
+
+        .nav-actions {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            justify-content: flex-start;
+            padding-bottom: 2px;
+            scrollbar-width: none;
+        }
+
+        .nav-actions::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-link,
+        .nav-button {
+            flex: 0 0 auto;
+            min-height: 42px;
+            padding: 8px 11px;
+        }
+
+        .view-toggle {
+            min-width: auto;
+        }
+
+        .view-toggle-text {
+            display: none;
+        }
+
+        .page {
+            width: calc(100% - 16px);
+            padding: 28px 0 42px;
+        }
+
+        .hero {
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: clamp(1.9rem, 10vw, 2.7rem);
+        }
+
+        .hero p {
+            font-size: 0.94rem;
+            line-height: 1.5;
+        }
+
+        .api-status {
+            width: 100%;
+            min-width: 0;
+            justify-content: center;
+        }
+
+        .summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .summary-card {
+            min-height: 96px;
+            padding: 14px;
+            border-radius: 16px;
+        }
+
+        .summary-value {
+            margin-top: 8px;
+            font-size: 1.55rem;
+        }
+
+        .summary-note {
+            font-size: 0.68rem;
+            line-height: 1.35;
+        }
+
+        .panel {
+            overflow: visible;
+            border-radius: 18px;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .toolbar {
+            position: sticky;
+            top: 72px;
+            z-index: 20;
+            gap: 9px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            background: rgba(5, 8, 38, 0.94);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: var(--shadow);
+        }
+
+        body.work-mode .toolbar {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .control,
+        .action-button {
+            min-height: 48px;
+            font-size: 16px; /* Prevents iPhone Safari input zoom */
+        }
+
+        .table-wrap {
+            overflow: visible;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            display: block;
+            width: 100%;
+        }
+
+        table {
+            min-width: 0;
+            border-collapse: separate;
+        }
+
+        thead {
+            display: none;
+        }
+
+        tbody {
+            display: grid;
+            gap: 12px;
+        }
+
+        tbody tr {
+            overflow: hidden;
+            padding: 8px 13px 12px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(3, 5, 34, 0.82);
+            box-shadow: 0 10px 28px rgba(0, 0, 20, 0.17);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        body.work-mode tbody tr {
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 8px 24px rgba(40, 67, 88, 0.10);
+        }
+
+        tbody tr:hover {
+            transform: none;
+        }
+
+        td {
+            min-width: 0 !important;
+            display: grid;
+            grid-template-columns: minmax(92px, 36%) 1fr;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+            text-align: right;
+        }
+
+        body.work-mode td {
+            border-bottom-color: rgba(31, 55, 76, 0.10);
+        }
+
+        td::before {
+            content: attr(data-label);
+            color: #9edfee;
+            font-family: "Oxanium", sans-serif;
+            font-size: 0.69rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        body.work-mode td::before {
+            color: #527083;
+        }
+
+        td.product-cell {
+            display: block;
+            padding: 13px 0 14px;
+            text-align: left;
+        }
+
+        td.product-cell::before {
+            display: none;
+        }
+
+        .product-name {
+            font-size: 1.05rem;
+        }
+
+        td:last-child {
+            display: block;
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        td:last-child::before {
+            display: block;
+            margin-bottom: 9px;
+        }
+
+        .row-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .small-btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .small-btn.emergency-delete {
+            grid-column: 1 / -1;
+        }
+
+        .table-footer {
+            margin-top: 12px;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: rgba(3, 5, 34, 0.76);
+        }
+
+        body.work-mode .table-footer {
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .table-footer .small-btn {
+            width: 100%;
+        }
+
+        .loading-state,
+        .empty-state {
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            background: rgba(3, 5, 34, 0.76);
+        }
+
+        body.work-mode .loading-state,
+        body.work-mode .empty-state {
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .toast {
+            left: 10px;
+            right: 10px;
+            bottom: calc(10px + env(safe-area-inset-bottom));
+            max-width: none;
+            text-align: center;
+        }
+
+        .login-overlay {
+            padding:
+                calc(16px + env(safe-area-inset-top))
+                calc(14px + env(safe-area-inset-right))
+                calc(16px + env(safe-area-inset-bottom))
+                calc(14px + env(safe-area-inset-left));
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 22px 18px;
+            border-radius: 21px;
+        }
+
+        .login-card input,
+        .login-submit {
+            min-height: 50px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 390px) {
+        .summary-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .nav-link {
+            font-size: 0.72rem;
+        }
+
+        .brand-copy {
+            display: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            scroll-behavior: auto !important;
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
 </style>
 
 </head>
@@ -810,6 +1327,11 @@
             <div class="nav-actions">
                 <a class="nav-link" href="admin.html">Dashboard</a>
                 <a class="nav-link primary" href="product-manager.html">＋ Add Product</a>
+                <button class="nav-button view-toggle" id="viewToggle" type="button"
+                    aria-label="Switch to comfortable work style" aria-pressed="false">
+                    <span class="view-toggle-icon" id="viewToggleIcon">☀</span>
+                    <span class="view-toggle-text" id="viewToggleText">Comfort</span>
+                </button>
                 <button class="nav-button" id="logoutButton" type="button">Logout</button>
             </div>
         </nav>
@@ -930,6 +1452,7 @@
     const PRODUCTS_URL = `${API}/products`;
     const STATS_URL = `${API}/products/stats`;
     const TOKEN_KEY = "chaynovaAdminToken";
+    const VIEW_KEY = "chaynovaProductsView";
 
     const loginOverlay = document.getElementById("loginOverlay");
     const loginForm = document.getElementById("loginForm");
@@ -939,6 +1462,9 @@
     const passwordInput = document.getElementById("password");
     const app = document.getElementById("app");
     const logoutButton = document.getElementById("logoutButton");
+    const viewToggle = document.getElementById("viewToggle");
+    const viewToggleIcon = document.getElementById("viewToggleIcon");
+    const viewToggleText = document.getElementById("viewToggleText");
     const refreshButton = document.getElementById("refreshButton");
     const exportButton = document.getElementById("exportButton");
     const searchInput = document.getElementById("searchInput");
@@ -956,6 +1482,29 @@
     let products = [];
     let visibleProducts = [];
     let toastTimer = null;
+
+
+    function applyView(view) {
+        const workMode = view === "work";
+        document.body.classList.toggle("work-mode", workMode);
+        viewToggle.setAttribute("aria-pressed", String(workMode));
+        viewToggle.setAttribute(
+            "aria-label",
+            workMode ? "Switch to colorful product style" : "Switch to comfortable work style"
+        );
+        viewToggleIcon.textContent = workMode ? "✦" : "☀";
+        viewToggleText.textContent = workMode ? "Neon" : "Comfort";
+        localStorage.setItem(VIEW_KEY, workMode ? "work" : "product");
+    }
+
+    function toggleView() {
+        applyView(document.body.classList.contains("work-mode") ? "product" : "work");
+    }
+
+    function loadSavedView() {
+        const savedView = localStorage.getItem(VIEW_KEY);
+        applyView(savedView === "work" ? "work" : "product");
+    }
 
     function getToken() {
         return localStorage.getItem(TOKEN_KEY) || "";
@@ -1217,18 +1766,18 @@
             const editUrl = `product-manager.html?id=${encodeURIComponent(product.id)}`;
 
             row.innerHTML = `
-      <td class="product-cell">
+      <td class="product-cell" data-label="Product">
         <span class="product-name">${escapeHtml(product.product_name)}</span>
         <span class="product-id">${escapeHtml(product.product_id || product.id)}</span>
       </td>
-      <td><span class="sku">${escapeHtml(product.sku || "—")}</span></td>
-      <td>${escapeHtml(product.brand || "—")}</td>
-      <td>${escapeHtml(product.category || "—")}</td>
-      <td class="money">${money(product.selling_price)}</td>
-      <td class="${quantityClass}">${product.total_quantity.toLocaleString()}</td>
-      <td><span class="status ${statusClass}">${escapeHtml(product.status)}</span></td>
-      <td>${formatDate(product.updated_at || product.created_at)}</td>
-      <td>
+      <td data-label="SKU"><span class="sku">${escapeHtml(product.sku || "—")}</span></td>
+      <td data-label="Brand">${escapeHtml(product.brand || "—")}</td>
+      <td data-label="Category">${escapeHtml(product.category || "—")}</td>
+      <td data-label="Price" class="money">${money(product.selling_price)}</td>
+      <td data-label="Quantity" class="${quantityClass}">${product.total_quantity.toLocaleString()}</td>
+      <td data-label="Status"><span class="status ${statusClass}">${escapeHtml(product.status)}</span></td>
+      <td data-label="Updated">${formatDate(product.updated_at || product.created_at)}</td>
+      <td data-label="Actions">
         <div class="row-actions">
 
 <a class="small-btn" href="${editUrl}">Edit</a>
@@ -1370,11 +1919,14 @@ try {
 
     loginForm.addEventListener("submit", login);
     logoutButton.addEventListener("click", () => logout());
+    viewToggle.addEventListener("click", toggleView);
     refreshButton.addEventListener("click", loadPageData);
     exportButton.addEventListener("click", exportCsv);
     searchInput.addEventListener("input", applyFilters);
     statusFilter.addEventListener("change", applyFilters);
     stockFilter.addEventListener("change", applyFilters);
+
+    loadSavedView();
 
     if (getToken()) {
         showApp();
