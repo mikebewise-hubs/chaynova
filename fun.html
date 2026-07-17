@@ -39,105 +39,105 @@
             opacity: .35;
         }
 
-   /* ===========================
+        /* ===========================
    CHAYNOVA Universal Header
    =========================== */
 
-header {
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(95vw, 1100px);
-    z-index: 1000;
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(95vw, 1100px);
+            z-index: 1000;
 
-    display: flex;
-    justify-content: center;
+            display: flex;
+            justify-content: center;
 
-    padding: 8px 18px;
+            padding: 8px 18px;
 
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
 
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
 
-    box-shadow: 0 0 28px rgba(0,217,255,.25);
-}
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+        }
 
-.top-nav{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+        .top-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    flex-wrap:nowrap;
-    white-space:nowrap;
+            flex-wrap: nowrap;
+            white-space: nowrap;
 
-    gap:clamp(8px,1.8vw,22px);
-}
+            gap: clamp(8px, 1.8vw, 22px);
+        }
 
-.top-nav a{
-    flex-shrink:0;
+        .top-nav a {
+            flex-shrink: 0;
 
-    font-family:"Oxanium",sans-serif;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.5px;
+            font-family: "Oxanium", sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .5px;
 
-    color:#fff;
-    text-decoration:none;
+            color: #fff;
+            text-decoration: none;
 
-    transition:.25s;
-}
+            transition: .25s;
+        }
 
-.top-nav a:hover,
-.top-nav a[aria-current="page"]{
-    color:#001019;
-    text-shadow:0 0 14px rgba(255,255,255,.9);
-}
+        .top-nav a:hover,
+        .top-nav a[aria-current="page"] {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
 
-.nav-logo{
-    display:flex;
-    align-items:center;
-    flex-shrink:0;
-}
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
 
-.nav-logo img{
-    display:block;
-    height:26px;
-    width:auto;
-    transition:.2s;
-}
+        .nav-logo img {
+            display: block;
+            height: 26px;
+            width: auto;
+            transition: .2s;
+        }
 
-.nav-logo img:hover{
-    transform:scale(1.08);
-}
+        .nav-logo img:hover {
+            transform: scale(1.08);
+        }
 
-/* Mobile */
+        /* Mobile */
 
-@media (max-width:700px){
+        @media (max-width:700px) {
 
-    header{
-        width:97vw;
-        padding:8px 10px;
-        top:12px;
-    }
+            header {
+                width: 97vw;
+                padding: 8px 10px;
+                top: 12px;
+            }
 
-    .top-nav{
-        gap:clamp(5px,1.5vw,10px);
-    }
+            .top-nav {
+                gap: clamp(5px, 1.5vw, 10px);
+            }
 
-    .top-nav a{
-        font-size:.9rem;
-        letter-spacing:0;
-    }
+            .top-nav a {
+                font-size: .9rem;
+                letter-spacing: 0;
+            }
 
-    .nav-logo img{
-        height:18px;
-    }
-}
+            .nav-logo img {
+                height: 18px;
+            }
+        }
 
 
 
@@ -1057,6 +1057,116 @@ header {
                 top .25s ease,
                 transform .25s ease;
         }
+
+        .story-link-banner {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 10px 18px;
+            border-radius: 999px;
+
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+
+            color: #fff;
+
+            background: linear-gradient(90deg, #ff2fcf, #ff9800, #00d9ff);
+
+            box-shadow:
+                0 0 14px rgba(255, 255, 255, .35),
+                0 0 22px rgba(0, 217, 255, .45);
+
+            animation:
+                pulseGlow 1.6s infinite,
+                floatBanner 3s ease-in-out infinite;
+        }
+
+        .story-link-banner:hover {
+            transform: scale(1.08);
+            filter: brightness(1.15);
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow:
+                    0 0 14px rgba(255, 255, 255, .35),
+                    0 0 22px rgba(0, 217, 255, .45);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 24px rgba(255, 255, 255, .9),
+                    0 0 36px rgba(255, 47, 207, .7),
+                    0 0 50px rgba(0, 217, 255, .8);
+            }
+        }
+
+        @keyframes floatBanner {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .updates-title{
+    font-family:"Oxanium",sans-serif;
+    font-size:clamp(28px,5vw,40px);
+    font-weight:700;
+    text-align:center;
+    color:#fff;
+    animation:
+        titleFloat 3s ease-in-out infinite,
+        titleGlow 1.8s ease-in-out infinite alternate;
+}
+
+.updates-title::after{
+    content:" ✨";
+    display:inline-block;
+    animation: sparkle .8s infinite alternate;
+}
+
+@keyframes titleFloat{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-5px);
+    }
+}
+
+@keyframes titleGlow{
+    from{
+        text-shadow:
+            0 0 10px #fff,
+            0 0 20px #00d9ff;
+    }
+    to{
+        text-shadow:
+            0 0 16px #fff,
+            0 0 32px #00d9ff,
+            0 0 50px #ff2fcf;
+    }
+}
+
+@keyframes sparkle{
+    from{
+        transform:rotate(-10deg) scale(.9);
+    }
+    to{
+        transform:rotate(10deg) scale(1.3);
+    }
+}
+
+
+
+
     </style>
 </head>
 
@@ -1101,7 +1211,10 @@ header {
 
         <section id="storyList">
 
-            <h2>CHAYNOVA Updates</h2>
+            <h2 class="updates-title">
+                CHAYNOVA Updates
+                <a href="story.html" class="story-link-banner"> ☞ Easy Read</a>
+            </h2>
 
             <div id="storyButtons"></div>
 
@@ -1148,9 +1261,9 @@ header {
 
         <script>
 
-const balloonPopSound = new Audio("audio/bubblePopUp.mp3");
-balloonPopSound.preload = "auto";
-balloonPopSound.volume = 0.8;
+            const balloonPopSound = new Audio("audio/bubblePopUp.mp3");
+            balloonPopSound.preload = "auto";
+            balloonPopSound.volume = 0.8;
 
 
             const songs = [
@@ -1401,7 +1514,7 @@ balloonPopSound.volume = 0.8;
             const volumePathLength = volumePath.getTotalLength();
             let currentVolume = music.volume;
 
-            
+
             // Detect iPhone/iPad
             const isIOS =
                 /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
@@ -1583,15 +1696,15 @@ balloonPopSound.volume = 0.8;
                 bubble.classList.add("bubble-expand");
 
                 setTimeout(() => {
-    createLargeBubbleExplosion();
+                    createLargeBubbleExplosion();
 
-    balloonPopSound.currentTime = 0;
+                    balloonPopSound.currentTime = 0;
 
-    balloonPopSound.play().catch(error => {
-        console.log("Pop sound could not play:", error);
-    });
+                    balloonPopSound.play().catch(error => {
+                        console.log("Pop sound could not play:", error);
+                    });
 
-    bubble.classList.add("bubble-big-pop");
+                    bubble.classList.add("bubble-big-pop");
 
                     setTimeout(() => {
                         bubble.remove();
@@ -1739,24 +1852,24 @@ balloonPopSound.volume = 0.8;
             }
 
             function openLogin() {
-    if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
-        window.location.href = "admin-edit-post.html";
-        return;
-    }
+                if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
+                    window.location.href = "admin-edit-post.html";
+                    return;
+                }
 
-    const overlay = document.getElementById("loginOverlay");
-    overlay.style.display = "flex";
-    overlay.setAttribute("aria-hidden", "false");
-    document.getElementById("loginError").innerText = "";
-    updateAdminPanel();
+                const overlay = document.getElementById("loginOverlay");
+                overlay.style.display = "flex";
+                overlay.setAttribute("aria-hidden", "false");
+                document.getElementById("loginError").innerText = "";
+                updateAdminPanel();
 
-    setTimeout(() => {
-        const usernameInput = document.getElementById("usernameInput");
-        if (usernameInput && usernameInput.offsetParent !== null) {
-            usernameInput.focus();
-        }
-    }, 100);
-}
+                setTimeout(() => {
+                    const usernameInput = document.getElementById("usernameInput");
+                    if (usernameInput && usernameInput.offsetParent !== null) {
+                        usernameInput.focus();
+                    }
+                }, 100);
+            }
 
             function closeLogin() {
                 const overlay = document.getElementById("loginOverlay");
