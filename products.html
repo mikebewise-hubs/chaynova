@@ -44,6 +44,7 @@
 
     body {
         min-height: 100vh;
+        min-height: 100dvh;
         overflow-x: hidden;
         font-family: Arial, Helvetica, sans-serif;
         color: var(--text);
@@ -111,7 +112,7 @@
     /* Top navigation */
     header {
         position: sticky;
-        top: 14px;
+        top: max(8px, env(safe-area-inset-top));
         z-index: 1000;
         width: min(96vw, 1450px);
         margin: 14px auto 0;
@@ -1296,6 +1297,101 @@
         }
     }
 
+    /* Match admin.html iPhone navigation and spacing */
+    @media (max-width: 680px) {
+        header {
+            top: max(8px, env(safe-area-inset-top));
+            width: calc(100% - 16px);
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 20px;
+        }
+
+        .top-nav {
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-actions {
+            gap: 5px;
+            flex-wrap: nowrap;
+            overflow: visible;
+            padding-bottom: 0;
+        }
+
+        .nav-link,
+        .nav-button {
+            flex: 0 0 auto;
+            min-width: 38px;
+            min-height: 38px;
+            padding: 7px 10px;
+            font-size: 0.74rem;
+        }
+
+        .nav-label-desktop {
+            display: none;
+        }
+
+        .view-toggle {
+            min-width: 38px;
+        }
+
+        .page {
+            width: calc(100% - 18px);
+            padding-top: 38px;
+            padding-bottom: max(42px, env(safe-area-inset-bottom));
+        }
+
+        .hero {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .api-status {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .summary-card {
+            min-height: 108px;
+            padding: 15px;
+        }
+
+        .summary-value {
+            font-size: 1.65rem;
+        }
+    }
+
+    @media (max-width: 430px) {
+        .brand-copy strong {
+            max-width: 105px;
+            overflow: hidden;
+            font-size: 0.88rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .nav-link,
+        .nav-button {
+            min-width: 38px;
+            padding-inline: 9px;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+        }
+
+        .summary-note {
+            display: none;
+        }
+    }
+
     @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -1354,14 +1450,26 @@
             </a>
 
             <div class="nav-actions">
-                <a class="nav-link" href="admin.html">Dashboard</a>
-                <a class="nav-link primary" href="product-manager.html">＋ Add Product</a>
+                <a class="nav-link" href="admin.html">
+                    <span>⌂</span>
+                    <span class="nav-label-desktop">Dashboard</span>
+                </a>
+
+                <a class="nav-link primary" href="product-manager.html">
+                    <span>＋</span>
+                    <span class="nav-label-desktop">Add Product</span>
+                </a>
+
                 <button class="nav-button view-toggle theme-button" id="themeButton" type="button"
                     aria-label="Switch to comfortable work style" aria-pressed="false">
                     <span class="view-toggle-icon" id="themeIcon">☀</span>
-                    <span class="view-toggle-text" id="themeText">Comfort</span>
+                    <span class="nav-label-desktop" id="themeText">Comfort</span>
                 </button>
-                <button class="nav-button" id="logoutButton" type="button">Logout</button>
+
+                <button class="nav-button" id="logoutButton" type="button">
+                    <span>⇥</span>
+                    <span class="nav-label-desktop">Logout</span>
+                </button>
             </div>
         </nav>
     </header>
