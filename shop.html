@@ -59,10 +59,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-
             flex-wrap: nowrap;
             white-space: nowrap;
-
             gap: clamp(8px, 1.8vw, 22px);
         }
 
@@ -103,7 +101,7 @@
             transform: scale(1.08);
         }
 
-        /* Mobile */
+       /* Mobile */
 
         @media (max-width:700px) {
 
@@ -126,6 +124,67 @@
                 height: 18px;
             }
         }
+
+        @media (max-width: 640px) {
+            header {
+                top: 12px;
+                border-radius: 24px;
+            }
+
+            .top-nav {
+                gap: 13px;
+            }
+
+            header a {
+                font-size: .82rem;
+            }
+
+            .page-shell {
+                padding-top: 120px;
+            }
+
+            .support-panel {
+                padding: 30px 18px;
+                border-radius: 24px;
+            }
+
+            .support-content {
+                padding-top: 22px;
+            }
+        }
+
+
+        /* Hide volume slider on iPhone, iPad, and other touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .music-control {
+                width: 56px;
+                height: 56px;
+                padding: 0;
+                border: none;
+                background: transparent;
+                box-shadow: none;
+                overflow: visible;
+            }
+
+            .volume-slider {
+                display: none;
+            }
+
+            .music-btn {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                border: 1px solid rgba(255, 255, 255, .25);
+                background: rgba(255, 255, 255, .12);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                box-shadow:
+                    0 0 18px rgba(0, 217, 255, .45),
+                    inset 0 0 10px rgba(255, 255, 255, .15);
+            }
+        }
+           
+
         /* BACKGROUND */
 
 
@@ -300,35 +359,6 @@
         }
 
 
-        /* Hide volume slider on iPhone, iPad, and other touch devices */
-        @media (hover: none) and (pointer: coarse) {
-            .music-control {
-                width: 56px;
-                height: 56px;
-                padding: 0;
-                border: none;
-                background: transparent;
-                box-shadow: none;
-                overflow: visible;
-            }
-
-            .volume-slider {
-                display: none;
-            }
-
-            .music-btn {
-                width: 56px;
-                height: 56px;
-                border-radius: 50%;
-                border: 1px solid rgba(255, 255, 255, .25);
-                background: rgba(255, 255, 255, .12);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                box-shadow:
-                    0 0 18px rgba(0, 217, 255, .45),
-                    inset 0 0 10px rgba(255, 255, 255, .15);
-            }
-        }
 
         /* FOOTER */
         footer {
@@ -474,25 +504,7 @@
             }
         }
 
-        /* MOBILE */
-        @media screen and (max-width:768px) {
-            .menu-bar {
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-                max-width: 360px;
-            }
-
-            .menu-bar a {
-                width: 100%;
-                min-width: 0;
-                padding: 16px;
-            }
-
-            .login-actions {
-                flex-direction: column;
-            }
-        }
+    
 
         .category {
             width: 100%;
@@ -559,23 +571,6 @@
             box-shadow: 0 0 30px rgba(0, 217, 255, .6);
         }
 
-        /* Mobile */
-        @media (max-width:900px) {
-
-            .categories {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-        }
-
-        .top-nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
 
 
 
@@ -610,12 +605,6 @@
             font-size: 0.92rem;
         }
 
-        @media (max-width: 560px) {
-            .sample-notice {
-                margin-top: 120px;
-                padding: 16px;
-            }
-        }
 
         .hidden-admin-emoji {
             display: inline-block;
@@ -663,7 +652,7 @@
         <source src="audio/background.mp3" type="audio/mpeg">
     </audio>
 
-    <header class="top-header">
+    <header>
         <nav class="top-nav" aria-label="Main navigation">
             <a href="shop.html"  aria-current="page">Store</a>
             <a href="fun.html">Fun</a>
