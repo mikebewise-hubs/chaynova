@@ -1164,8 +1164,41 @@
     }
 }
 
+.hidden-admin-emoji {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, .08);
+            /* almost invisible */
+            cursor: pointer;
+            user-select: none;
+            transition: .25s;
+        }
 
+        .hidden-admin-emoji:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, .8);
+            transform: scale(1.3);
+        }
 
+.secret-admin {
+    display: inline-block;
+    margin-left: 2px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.03); /* Almost invisible */
+    cursor: pointer;
+    user-select: none;
+    transition: all .25s ease;
+}
+
+.secret-admin:hover {
+    color: rgba(255,255,255,0.35);
+    transform: scale(1.3);
+}
+
+.secret-admin:active {
+    transform: scale(0.9);
+}
 
     </style>
 </head>
@@ -1179,9 +1212,16 @@
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
 
-            <a href="index.html" class="nav-logo">
-                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-            </a>
+             <a href="index.html" class="nav-logo">
+    <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+    <span
+        class="secret-admin"
+        onclick="window.location.href='admin.html'"
+        title="Admin"
+        aria-label="Admin">
+        ✴︎
+    </span>
+</a>
         </nav>
     </header>
 
