@@ -1258,38 +1258,39 @@
         }
     }
 
-    @media (max-width: 390px) {
-        .summary-grid {
-            grid-template-columns: 1fr 1fr;
+    
+        @media (max-width: 390px) {
+            .page-shell {
+                width: calc(100% - 14px);
+            }
+
+            .section-header, .section-body, .summary-card, .save-panel {
+                padding: 14px;
+            }
+
+            .section-title {
+                gap: 9px;
+            }
+
+            .section-icon {
+                width: 34px;
+                height: 34px;
+                flex-basis: 34px;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .nav-link {
-            font-size: 0.72rem;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+            }
         }
-
-        /* Keep CHAYNOVA visible on small iPhones. */
-        .brand {
-            gap: 7px;
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-
-        .brand img {
-            width: 38px;
-            height: 38px;
-        }
-
-        .brand-copy {
-            display: block;
-            min-width: 0;
-        }
-
-        .brand-copy strong {
-            max-width: 88px;
-            font-size: 0.78rem;
-            letter-spacing: 0.35px;
-        }
-    }
 
     @media (max-width: 430px) {
         .brand-copy strong {
