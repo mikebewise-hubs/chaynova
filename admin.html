@@ -1202,11 +1202,11 @@
         function setGreeting() {
             const hour = new Date().getHours();
             const greeting =
-                hour < 12 ? "Good morning" :
-                hour < 18 ? "Good afternoon" :
-                "Good evening";
+                hour < 12 ? "Good morning!" :
+                hour < 18 ? "Good afternoon!" :
+                "Good evening!";
 
-            document.getElementById("greeting").textContent = `${greeting}, Michael`;
+            document.getElementById("greeting").textContent = `Dashboard, ${greeting}`;
         }
 
         async function requestJson(url, options = {}) {
