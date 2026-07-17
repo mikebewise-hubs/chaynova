@@ -2028,48 +2028,124 @@
         }
 
         async function deleteSavedProduct() {
-            const id = editingProductDatabaseId || getEditingIdFromUrl();
-            if (!id) {
-                showToast("This product has not been saved yet.", "error");
-                return;
-            }
-            if (!getAdminToken()) {
-                showAdminLogin("Please log in before deleting.");
-                return;
-            }
-            const name = document.getElementById("productName").value.trim() || "this product";
-            if (!confirm(`Permanently delete ${name}? This cannot be undone.`)) return;
+    const id = editingProductDatabaseId || getEditingIdFromUrl();
 
-            deleteProductButton.disabled = true;
-            deleteProductButton.textContent = "Deleting…";
-            try {
-                const response = await fetch(`${CLOUD_API_URL}/${encodeURIComponent(id)}`, {
-                    method: "DELETE",
-                    headers: { "Authorization": "Bearer " + getAdminToken() },
-                    cache: "no-store"
-                });
-                let result = {};
-                try { result = await response.json(); } catch (_) {}
+    if (!id) {
+        showToast("This product has not been saved yet.", "error");
+        return;
+    }
 
-                if (response.status === 401 || response.status === 403) {
-                    localStorage.removeItem(TOKEN_KEY);
-                    showAdminLogin("Your login expired. Please log in again.");
-                    throw new Error("Not authorized.");
-                }
-                if (!response.ok) {
-                    throw new Error(result.error || result.message || `Delete failed (${response.status}).`);
-                }
+    if (!getAdminToken()) {
+        showAdminLogin("Please log in before deleting.");
+        return;
+    }
 
-                localStorage.removeItem(DRAFT_KEY);
-                showToast("Product deleted successfully.", "success");
-                setTimeout(() => { window.location.href = "products.html"; }, 650);
-            } catch (error) {
-                console.error(error);
-                if (error.message !== "Not authorized.") showToast(error.message, "error");
-                deleteProductButton.disabled = false;
-                deleteProductButton.textContent = "Delete Saved Product";
+    const productName =
+        document.getElementById("productName").value.trim();
+
+    if (!productName) {
+        showToast("Product name is missing.", "error");
+        return;
+    }
+
+    const typedName = prompt(
+        `DELETE SAVED PRODUCT\n\n` +
+        `This will permanently delete:\n\n` +
+        `${productName}\n\n` +
+        `Type the product name exactly to confirm:`
+    );
+
+    // User clicked Cancel
+    if (typedName === null) {
+        showToast("Delete cancelled.");
+        return;
+    }
+
+    // Name does not match
+    if (typedName.trim() !== productName) {
+        showToast(
+            "Delete cancelled. Product name did not match.",
+            "error"
+        );
+        return;
+    }
+
+    const finalConfirmation = confirm(
+        `Are you sure you want to permanently delete "${productName}"?\n\n` +
+        `This action cannot be undone.`
+    );
+
+    if (!finalConfirmation) {
+        showToast("Delete cancelled.");
+        return;
+    }
+
+    deleteProductButton.disabled = true;
+    deleteProductButton.textContent = "Deleting…";
+
+    try {
+        const response = await fetch(
+            `${CLOUD_API_URL}/${encodeURIComponent(id)}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + getAdminToken()
+                },
+                cache: "no-store"
             }
+        );
+
+        let result = {};
+
+        try {
+            result = await response.json();
+        } catch (_) {}
+
+        if (
+            response.status === 401 ||
+            response.status === 403
+        ) {
+            localStorage.removeItem(TOKEN_KEY);
+            showAdminLogin(
+                "Your login expired. Please log in again."
+            );
+            throw new Error("Not authorized.");
         }
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                result.message ||
+                `Delete failed (${response.status}).`
+            );
+        }
+
+        localStorage.removeItem(DRAFT_KEY);
+
+        showToast(
+            `"${productName}" was permanently deleted.`,
+            "success"
+        );
+
+        setTimeout(() => {
+            window.location.href = "products.html";
+        }, 650);
+
+    } catch (error) {
+        console.error(error);
+
+        if (error.message !== "Not authorized.") {
+            showToast(
+                error.message || "Delete failed.",
+                "error"
+            );
+        }
+
+        deleteProductButton.disabled = false;
+        deleteProductButton.textContent =
+            "Delete Saved Product";
+    }
+}
 
         async function saveProductToCloud() {
 
