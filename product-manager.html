@@ -2682,37 +2682,174 @@
             });
         }
 
-        function renderSavedPhotos(images = []) {
-            photoPreview.innerHTML = "";
+       function renderSavedPhotos(images = []) {
+    photoPreview.innerHTML = "";
 
-            const main = document.getElementById("mainPreviewImage");
-            main.innerHTML = "▧";
+    const main = document.getElementById("mainPreviewImage");
+    main.innerHTML = "▧";
 
-            images.forEach((image, index) => {
-                const card = document.createElement("div");
-                card.className = "preview-card";
+    images.forEach((image, index) => {
+        const card = document.createElement("div");
+        card.className = "preview-card";
 
-                const img = document.createElement("img");
-                img.src = image.url;
-                img.alt =
-                    image.alt_text ||
-                    image.original_name ||
-                    "Product image";
+        const img = document.createElement("img");
+        img.src = image.url;
+        img.alt =
+            image.alt_text ||
+            image.original_name ||
+            "Product image";
 
-                if (index === 0 || Number(image.is_primary) === 1) {
-                    main.innerHTML = "";
+        if (index === 0 || Number(image.is_primary) === 1) {
+            main.innerHTML = "";
 
-                    const mainImg = document.createElement("img");
-                    mainImg.src = image.url;
-                    mainImg.alt = img.alt;
+            const mainImg = document.createElement("img");
+            mainImg.src = image.url;
+            mainImg.alt = img.alt;
 
-                    main.appendChild(mainImg);
+            main.appendChild(mainImg);
+        }
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.textContent = "×";
+        deleteButton.title = "Delete saved photo";
+
+        deleteButton.addEventListener("click", async () => {
+            const productId =
+                editingProductDatabaseId ||
+                getEditingIdFromUrl();
+
+            if (!productId) {
+                showToast(
+                    "Product ID is missing.",
+                    "error"
+                );
+                return;
+            }
+
+            const confirmed = confirm(
+                `Delete "${image.original_name || "this photo"}"?\n\n` +
+                "This will permanently remove it from R2."
+            );
+
+            if (!confirmed) return;
+
+            deleteButton.disabled = true;
+            deleteButton.textContent = "…";
+
+            try {
+                const response = await fetch(
+                    `${CLOUD_API_URL}/${encodeURIComponent(productId)}/images/${encodeURIComponent(image.id)}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization":
+                                "Bearer " + getAdminToken()
+                        },
+                        cache: "no-store"
+                    }
+                );
+
+                let result = {};
+
+                try {
+                    result = await response.json();
+                } catch (_) {
+                    throw new Error(
+                        `Server returned ${response.status} without valid JSON.`
+                    );
                 }
 
-                card.appendChild(img);
-                photoPreview.appendChild(card);
-            });
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    showAdminLogin(
+                        "Your login expired. Please log in again."
+                    );
+                    throw new Error("Not authorized.");
+                }
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.error ||
+                        "Could not delete the photo."
+                    );
+                }
+
+                showToast(
+                    "Photo deleted successfully.",
+                    "success"
+                );
+
+                await loadSavedProductImages(productId);
+
+            } catch (error) {
+                console.error(error);
+
+                if (error.message !== "Not authorized.") {
+                    showToast(
+                        error.message ||
+                        "Photo deletion failed.",
+                        "error"
+                    );
+                }
+
+                deleteButton.disabled = false;
+                deleteButton.textContent = "×";
+            }
+        });
+
+        card.append(img, deleteButton);
+        photoPreview.appendChild(card);
+    });
+}
+
+async function loadSavedProductImages(productId) {
+    const response = await fetch(
+        `${CLOUD_API_URL}/${encodeURIComponent(productId)}/images`,
+        {
+            method: "GET",
+            headers: {
+                "Authorization":
+                    "Bearer " + getAdminToken()
+            },
+            cache: "no-store"
         }
+    );
+
+    let result = {};
+
+    try {
+        result = await response.json();
+    } catch (_) {
+        throw new Error(
+            `Image list returned ${response.status} without valid JSON.`
+        );
+    }
+
+    if (
+        response.status === 401 ||
+        response.status === 403
+    ) {
+        localStorage.removeItem(TOKEN_KEY);
+        showAdminLogin(
+            "Your login expired. Please log in again."
+        );
+        throw new Error("Not authorized.");
+    }
+
+    if (!response.ok || !result.success) {
+        throw new Error(
+            result.error ||
+            "Could not load saved product images."
+        );
+    }
+
+    renderSavedPhotos(result.images || []);
+}
+
 
 
         function addPhotos(files) {
@@ -3009,27 +3146,7 @@
 
                 localStorage.removeItem(DRAFT_KEY);
                 restoreForm(databaseProductToFormProduct(loadedProduct, loadedVariants));
-                const imageResponse = await fetch(
-                    `${CLOUD_API_URL}/${encodeURIComponent(id)}/images`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Authorization": "Bearer " + getAdminToken()
-                        },
-                        cache: "no-store"
-                    }
-                );
-
-                const imageResult = await imageResponse.json();
-
-                if (!imageResponse.ok) {
-                    throw new Error(
-                        imageResult.error ||
-                        "Could not load saved product images."
-                    );
-                }
-
-                renderSavedPhotos(imageResult.images || []);
+                await loadSavedProductImages(id);
                 document.getElementById("slug").dataset.manual =
                     loadedProduct.website_slug ? "true" : "";
 
