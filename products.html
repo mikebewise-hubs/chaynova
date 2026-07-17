@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="CHAYNOVA secure product catalog and inventory list.">
+    <meta name="theme-color" content="#030010">
     <title>All Products | CHAYNOVA Admin</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -671,6 +672,30 @@
         line-height: 1.5;
     }
 
+    .login-theme-row {
+        display: flex;
+        justify-content: center;
+        margin-top: 14px;
+    }
+
+    .login-theme-button {
+        min-height: 42px;
+        padding: 9px 13px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.09);
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    body.work-mode .login-theme-button {
+        color: #172634;
+        background: rgba(35, 67, 91, 0.06);
+    }
+
     /* Toast */
     .toast {
         position: fixed;
@@ -1310,6 +1335,10 @@
         <div id="loginMessage" class="login-message" aria-live="polite"></div>
         <p class="login-note">Your login is checked by the Cloudflare Worker. The password is not stored in this
             page.</p>
+
+        <div class="login-theme-row">
+            <button id="loginThemeButton" class="login-theme-button" type="button">☀ Eye-comfort style</button>
+        </div>
     </form>
 </section>
 
@@ -1327,10 +1356,10 @@
             <div class="nav-actions">
                 <a class="nav-link" href="admin.html">Dashboard</a>
                 <a class="nav-link primary" href="product-manager.html">＋ Add Product</a>
-                <button class="nav-button view-toggle" id="viewToggle" type="button"
+                <button class="nav-button view-toggle theme-button" id="themeButton" type="button"
                     aria-label="Switch to comfortable work style" aria-pressed="false">
-                    <span class="view-toggle-icon" id="viewToggleIcon">☀</span>
-                    <span class="view-toggle-text" id="viewToggleText">Comfort</span>
+                    <span class="view-toggle-icon" id="themeIcon">☀</span>
+                    <span class="view-toggle-text" id="themeText">Comfort</span>
                 </button>
                 <button class="nav-button" id="logoutButton" type="button">Logout</button>
             </div>
@@ -1452,7 +1481,7 @@
     const PRODUCTS_URL = `${API}/products`;
     const STATS_URL = `${API}/products/stats`;
     const TOKEN_KEY = "chaynovaAdminToken";
-    const VIEW_KEY = "chaynovaProductsView";
+    const THEME_KEY = "chaynovaAdminTheme";
 
     const loginOverlay = document.getElementById("loginOverlay");
     const loginForm = document.getElementById("loginForm");
@@ -1462,9 +1491,10 @@
     const passwordInput = document.getElementById("password");
     const app = document.getElementById("app");
     const logoutButton = document.getElementById("logoutButton");
-    const viewToggle = document.getElementById("viewToggle");
-    const viewToggleIcon = document.getElementById("viewToggleIcon");
-    const viewToggleText = document.getElementById("viewToggleText");
+    const themeButton = document.getElementById("themeButton");
+    const loginThemeButton = document.getElementById("loginThemeButton");
+    const themeIcon = document.getElementById("themeIcon");
+    const themeText = document.getElementById("themeText");
     const refreshButton = document.getElementById("refreshButton");
     const exportButton = document.getElementById("exportButton");
     const searchInput = document.getElementById("searchInput");
@@ -1484,26 +1514,44 @@
     let toastTimer = null;
 
 
-    function applyView(view) {
-        const workMode = view === "work";
+    function getTheme() {
+        return localStorage.getItem(THEME_KEY) || "neon";
+    }
+
+    function applyTheme(theme) {
+        const workMode = theme === "work";
         document.body.classList.toggle("work-mode", workMode);
-        viewToggle.setAttribute("aria-pressed", String(workMode));
-        viewToggle.setAttribute(
-            "aria-label",
-            workMode ? "Switch to colorful product style" : "Switch to comfortable work style"
+        localStorage.setItem(THEME_KEY, workMode ? "work" : "neon");
+
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) {
+            themeMeta.setAttribute("content", workMode ? "#eef3f7" : "#030010");
+        }
+
+        if (themeButton) {
+            themeButton.setAttribute("aria-pressed", String(workMode));
+            themeButton.setAttribute(
+                "aria-label",
+                workMode ? "Switch to products neon style" : "Switch to eye-comfort style"
+            );
+        }
+
+        if (themeIcon) themeIcon.textContent = workMode ? "✦" : "☀";
+        if (themeText) themeText.textContent = workMode ? "Neon" : "Comfort";
+        if (loginThemeButton) {
+            loginThemeButton.textContent = workMode
+                ? "✦ Products neon style"
+                : "☀ Eye-comfort style";
+        }
+    }
+
+    function toggleTheme() {
+        const nextTheme = getTheme() === "work" ? "neon" : "work";
+        applyTheme(nextTheme);
+        showToast(nextTheme === "work"
+            ? "Eye-comfort work style enabled."
+            : "Products neon style enabled."
         );
-        viewToggleIcon.textContent = workMode ? "✦" : "☀";
-        viewToggleText.textContent = workMode ? "Neon" : "Comfort";
-        localStorage.setItem(VIEW_KEY, workMode ? "work" : "product");
-    }
-
-    function toggleView() {
-        applyView(document.body.classList.contains("work-mode") ? "product" : "work");
-    }
-
-    function loadSavedView() {
-        const savedView = localStorage.getItem(VIEW_KEY);
-        applyView(savedView === "work" ? "work" : "product");
     }
 
     function getToken() {
@@ -1919,14 +1967,15 @@ try {
 
     loginForm.addEventListener("submit", login);
     logoutButton.addEventListener("click", () => logout());
-    viewToggle.addEventListener("click", toggleView);
+    themeButton.addEventListener("click", toggleTheme);
+    loginThemeButton.addEventListener("click", toggleTheme);
     refreshButton.addEventListener("click", loadPageData);
     exportButton.addEventListener("click", exportCsv);
     searchInput.addEventListener("input", applyFilters);
     statusFilter.addEventListener("change", applyFilters);
     stockFilter.addEventListener("change", applyFilters);
 
-    loadSavedView();
+    applyTheme(getTheme());
 
     if (getToken()) {
         showApp();
