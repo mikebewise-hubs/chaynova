@@ -39,7 +39,7 @@
             opacity: .35;
         }
 
-        /* ===========================
+   /* ===========================
    CHAYNOVA Universal Header
    =========================== */
 
@@ -138,6 +138,8 @@ header {
         height:18px;
     }
 }
+
+
 
         #musicPlayer {
             position: fixed;
@@ -1737,19 +1739,24 @@ balloonPopSound.volume = 0.8;
             }
 
             function openLogin() {
-                const overlay = document.getElementById("loginOverlay");
-                overlay.style.display = "flex";
-                overlay.setAttribute("aria-hidden", "false");
-                document.getElementById("loginError").innerText = "";
-                updateAdminPanel();
+    if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        window.location.href = "admin-edit-post.html";
+        return;
+    }
 
-                setTimeout(() => {
-                    const usernameInput = document.getElementById("usernameInput");
-                    if (usernameInput && usernameInput.offsetParent !== null) {
-                        usernameInput.focus();
-                    }
-                }, 100);
-            }
+    const overlay = document.getElementById("loginOverlay");
+    overlay.style.display = "flex";
+    overlay.setAttribute("aria-hidden", "false");
+    document.getElementById("loginError").innerText = "";
+    updateAdminPanel();
+
+    setTimeout(() => {
+        const usernameInput = document.getElementById("usernameInput");
+        if (usernameInput && usernameInput.offsetParent !== null) {
+            usernameInput.focus();
+        }
+    }, 100);
+}
 
             function closeLogin() {
                 const overlay = document.getElementById("loginOverlay");
