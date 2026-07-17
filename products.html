@@ -1050,12 +1050,15 @@
 
         async function requestJson(url, options = {}) {
             const response = await fetch(url, options);
+            const rawText = await response.text();
             let data = {};
 
-            try {
-                data = await response.json();
-            } catch (_) {
-                throw new Error(`Server returned ${response.status} without valid JSON.`);
+            if (rawText.trim()) {
+                try {
+                    data = JSON.parse(rawText);
+                } catch (_) {
+                    data = { message: rawText.trim() };
+                }
             }
 
             if (response.status === 401 || response.status === 403) {
@@ -1068,6 +1071,40 @@
             }
 
             return data;
+        }
+
+        async function deleteProductFromApi(id) {
+            const headers = {
+                ...authHeaders(),
+                "Content-Type": "application/json"
+            };
+
+            const attempts = [
+                {
+                    url: `${PRODUCTS_URL}/${encodeURIComponent(id)}`,
+                    options: { method: "DELETE", headers, body: JSON.stringify({ id }) }
+                },
+                {
+                    url: `${PRODUCTS_URL}?id=${encodeURIComponent(id)}`,
+                    options: { method: "DELETE", headers, body: JSON.stringify({ id }) }
+                },
+                {
+                    url: PRODUCTS_URL,
+                    options: { method: "DELETE", headers, body: JSON.stringify({ id, product_id: id }) }
+                }
+            ];
+
+            let lastError;
+            for (const attempt of attempts) {
+                try {
+                    return await requestJson(attempt.url, attempt.options);
+                } catch (error) {
+                    if (error.message === "Not authorized.") throw error;
+                    lastError = error;
+                }
+            }
+
+            throw lastError || new Error("Delete failed.");
         }
 
         async function login(event) {
@@ -1286,46 +1323,41 @@ document.querySelectorAll(".emergency-delete").forEach(button => {
     const id = button.dataset.id || "";
     const productName = button.dataset.name || "this product";
 
-    const firstConfirm = confirm(
-      `DELETE PRODUCT\n\nPermanently delete "${productName}"?\n\nThis cannot be undone.`
-    );
-
-    if (!firstConfirm) return;
-
-    const typedName = prompt(
-      `To confirm permanent deletion, type the product name exactly:\n\n${productName}`
-    );
-
-    if (typedName !== productName) {
-      showToast("Delete cancelled. Product name did not match.");
+    if (!id) {
+      showToast("Delete failed: this product has no database ID.");
       return;
     }
+
+    const confirmed = confirm(
+      `Permanently delete "${productName}"?\n\nThis cannot be undone.`
+    );
+
+    if (!confirmed) return;
 
     button.disabled = true;
     button.textContent = "Deleting…";
 
     try {
-      const result = await requestJson(
-        `${PRODUCTS_URL}/${encodeURIComponent(id)}`,
-        {
-          method: "DELETE",
-          headers: authHeaders()
-        }
-      );
+      const result = await deleteProductFromApi(id);
 
-      products = products.filter(product => (product.id || product.product_id) !== id);
+      products = products.filter(product =>
+        String(product.id || product.product_id) !== String(id)
+      );
 
       applyFilters();
       updateSummary({});
       showToast(result.message || "Product permanently deleted.");
+
+      // Reload from D1 to confirm the record is really gone.
+      await loadProducts();
     } catch (error) {
-      showToast(error.message || "Delete failed.");
+      console.error("Delete error:", error);
+      showToast(error.message || "Delete failed. Your Worker may not support DELETE yet.");
       button.disabled = false;
       button.textContent = "Delete";
     }
   });
 });
-
 
 
 
