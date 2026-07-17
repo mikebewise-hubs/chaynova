@@ -145,6 +145,10 @@
         }
 
         .top-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
             min-height: 38px;
             padding: 8px 13px;
             border: 1px solid rgba(255, 255, 255, .22);
@@ -1031,7 +1035,7 @@
     </div>
 
     <header class="app-header admin-protected">
-        <a href="index.html" class="brand">
+        <a href="admin.html" class="brand">
             <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA logo">
             <span class="brand-copy">
                 <strong>CHAYNOVA</strong>
@@ -1040,7 +1044,9 @@
         </a>
 
         <div class="header-actions">
-            <span class="status-pill"><span class="status-dot"></span> Cloud API not connected</span>
+            <span class="status-pill"><span class="status-dot"></span> Cloudflare Product API</span>
+            <a class="top-btn" href="admin.html">⌂ Dashboard</a>
+            <a class="top-btn" href="products.html">▣ Products</a>
             <button class="top-btn" type="button" id="newProductTop">＋ New</button>
             <button class="top-btn" type="button" id="saveDraftTop">Save Draft</button>
             <button class="top-btn logout-top" type="button" id="logoutAdmin">Logout</button>
