@@ -116,9 +116,7 @@
         }
 
         /* Mobile */
-
         @media (max-width:700px) {
-
             header {
                 width: 97vw;
                 padding: 8px 10px;
@@ -137,8 +135,90 @@
             .nav-logo img {
                 height: 18px;
             }
+
+            .top-bar {
+                flex-direction: column;
+            }
+
+            .menu-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .menu-row a {
+                width: 240px;
+            }
         }
 
+        @media (max-width: 640px) {
+            header {
+                top: 12px;
+                border-radius: 24px;
+            }
+
+            .top-nav {
+                gap: 13px;
+            }
+
+            header a {
+                font-size: .82rem;
+            }
+
+            .page-shell {
+                padding-top: 120px;
+            }
+
+            .support-panel {
+                padding: 30px 18px;
+                border-radius: 24px;
+            }
+
+            .support-content {
+                padding-top: 22px;
+            }
+        }
+
+        @media screen and (max-width:560px) {
+
+            header {
+                top: 12px;
+                border-radius: 24px;
+            }
+
+            nav {
+                gap: 13px;
+            }
+
+            nav a {
+                font-size: .82rem;
+            }
+
+            #musicPlayer {
+                top: 100px;
+                width: 94vw;
+            }
+            main {
+                padding-top: 305px;
+            }
+            .storyBubble {
+                width: 64px;
+                height: 64px;
+                font-size: 13px;
+            }
+            .storyWindow {
+                width: calc(100vw - 28px);
+                max-height: 74vh;
+                padding: 60px 18px 20px;
+                border-radius: 26px;
+            }
+            .storyWindow h2 {
+                font-size: 25px;
+            }
+            .storyWindow p {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
 
 
         #musicPlayer {
@@ -486,35 +566,7 @@
             }
         }
 
-        @media screen and (max-width: 560px) {
-            header {
-                top: 12px;
-                border-radius: 24px;
-            }
 
-            nav {
-                gap: 13px;
-            }
-
-            nav a {
-                font-size: .82rem;
-            }
-
-            #musicPlayer {
-                top: 100px;
-                width: 94vw;
-            }
-
-            main {
-                padding-top: 305px;
-            }
-
-            .storyBubble {
-                width: 64px;
-                height: 64px;
-                font-size: 13px;
-            }
-        }
 
         .storyPhoto {
             width: 100%;
@@ -640,14 +692,7 @@
             opacity: .8;
             margin-top: 4px;
         }
-
-        .top-nav {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-
+        
         footer {
             position: relative;
             z-index: 5;
@@ -751,20 +796,7 @@
             line-height: 1.5;
         }
 
-        @media(max-width:700px) {
-            .top-bar {
-                flex-direction: column;
-            }
 
-            .menu-row {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .menu-row a {
-                width: 240px;
-            }
-        }
 
         .storyTitle {
             display: flex;
@@ -1033,23 +1065,7 @@
                 0 0 55px rgba(255, 47, 207, .45);
         }
 
-        @media screen and (max-width: 560px) {
-            .storyWindow {
-                width: calc(100vw - 28px);
-                max-height: 74vh;
-                padding: 60px 18px 20px;
-                border-radius: 26px;
-            }
 
-            .storyWindow h2 {
-                font-size: 25px;
-            }
-
-            .storyWindow p {
-                padding: 14px;
-                font-size: 15px;
-            }
-        }
 
         .storyWindow {
             transition:
@@ -1115,56 +1131,61 @@
             }
         }
 
-        .updates-title{
-    font-family:"Oxanium",sans-serif;
-    font-size:clamp(28px,5vw,40px);
-    font-weight:700;
-    text-align:center;
-    color:#fff;
-    animation:
-        titleFloat 3s ease-in-out infinite,
-        titleGlow 1.8s ease-in-out infinite alternate;
-}
+        .updates-title {
+            font-family: "Oxanium", sans-serif;
+            font-size: clamp(28px, 5vw, 40px);
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+            animation:
+                titleFloat 3s ease-in-out infinite,
+                titleGlow 1.8s ease-in-out infinite alternate;
+        }
 
-.updates-title::after{
-    content:" ✨";
-    display:inline-block;
-    animation: sparkle .8s infinite alternate;
-}
+        .updates-title::after {
+            content: " ✨";
+            display: inline-block;
+            animation: sparkle .8s infinite alternate;
+        }
 
-@keyframes titleFloat{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-5px);
-    }
-}
+        @keyframes titleFloat {
 
-@keyframes titleGlow{
-    from{
-        text-shadow:
-            0 0 10px #fff,
-            0 0 20px #00d9ff;
-    }
-    to{
-        text-shadow:
-            0 0 16px #fff,
-            0 0 32px #00d9ff,
-            0 0 50px #ff2fcf;
-    }
-}
+            0%,
+            100% {
+                transform: translateY(0);
+            }
 
-@keyframes sparkle{
-    from{
-        transform:rotate(-10deg) scale(.9);
-    }
-    to{
-        transform:rotate(10deg) scale(1.3);
-    }
-}
+            50% {
+                transform: translateY(-5px);
+            }
+        }
 
-.hidden-admin-emoji {
+        @keyframes titleGlow {
+            from {
+                text-shadow:
+                    0 0 10px #fff,
+                    0 0 20px #00d9ff;
+            }
+
+            to {
+                text-shadow:
+                    0 0 16px #fff,
+                    0 0 32px #00d9ff,
+                    0 0 50px #ff2fcf;
+            }
+        }
+
+        @keyframes sparkle {
+            from {
+                transform: rotate(-10deg) scale(.9);
+            }
+
+            to {
+                transform: rotate(10deg) scale(1.3);
+            }
+        }
+
+        .hidden-admin-emoji {
             display: inline-block;
             margin-left: 6px;
             font-size: 13px;
@@ -1181,25 +1202,25 @@
             transform: scale(1.3);
         }
 
-.secret-admin {
-    display: inline-block;
-    margin-left: 2px;
-    font-size: 10px;
-    color: rgba(255,255,255,0.03); /* Almost invisible */
-    cursor: pointer;
-    user-select: none;
-    transition: all .25s ease;
-}
+        .secret-admin {
+            display: inline-block;
+            margin-left: 2px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.03);
+            /* Almost invisible */
+            cursor: pointer;
+            user-select: none;
+            transition: all .25s ease;
+        }
 
-.secret-admin:hover {
-    color: rgba(255,255,255,0.35);
-    transform: scale(1.3);
-}
+        .secret-admin:hover {
+            color: rgba(255, 255, 255, 0.35);
+            transform: scale(1.3);
+        }
 
-.secret-admin:active {
-    transform: scale(0.9);
-}
-
+        .secret-admin:active {
+            transform: scale(0.9);
+        }
     </style>
 </head>
 
@@ -1212,16 +1233,12 @@
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
 
-             <a href="index.html" class="nav-logo">
-    <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
-</a>
-    <span
-        class="secret-admin"
-        onclick="window.location.href='admin.html'"
-        title="Admin"
-        aria-label="Admin">
-        ✴︎
-    </span>
+            <a href="index.html" class="nav-logo">
+                <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+            </a>
+            <span class="secret-admin" onclick="window.location.href='admin.html'" title="Admin" aria-label="Admin">
+                ✴︎
+            </span>
         </nav>
     </header>
 
@@ -1262,7 +1279,7 @@
 
     </main>
 
-     <footer>
+    <footer>
         <a href="about.html">© 2026 CHAYNOVA</a>
         <span class="hidden-admin-emoji" title="Admin" onclick="openLogin()"> ✧
         </span>
@@ -1270,405 +1287,388 @@
         <span class="hidden-admin-emoji" title="Admin" onclick="openLogin()"> ✧ </span>
     </footer>
 
-        <div id="loginOverlay" class="login-overlay" aria-hidden="true">
-            <div class="login-box">
+    <div id="loginOverlay" class="login-overlay" aria-hidden="true">
+        <div class="login-box">
 
-                <h2>CHAYNOVA Admin</h2>
+            <h2>CHAYNOVA Admin</h2>
 
-                <div id="loginForm">
-                    <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
-                    <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+            <div id="loginForm">
+                <input id="usernameInput" type="text" placeholder="Username" autocomplete="username">
+                <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
 
-                    <div class="login-actions">
-                        <button type="button" onclick="checkLogin()">Login</button>
-                        <button type="button" onclick="closeLogin()">Cancel</button>
-                    </div>
-
-                    <div id="loginError" class="login-error"></div>
-
-                    <div class="admin-note">
-                        Login is checked by your Cloudflare Worker.
-                    </div>
+                <div class="login-actions">
+                    <button type="button" onclick="checkLogin()">Login</button>
+                    <button type="button" onclick="closeLogin()">Cancel</button>
                 </div>
 
-                <div id="adminPanel" class="admin-panel">
-                    <a href="admin-edit-post.html">Edit Fun</a>
-                    <a href="fun.html">Open Fun</a>
-                    <a href="index.html">Home</a>
-                    <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
-                    <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
-                </div>
+                <div id="loginError" class="login-error"></div>
 
+                <div class="admin-note">
+                    Login is checked by your Cloudflare Worker.
+                </div>
             </div>
+
+            <div id="adminPanel" class="admin-panel">
+                <a href="admin-edit-post.html">Edit Fun</a>
+                <a href="fun.html">Open Fun</a>
+                <a href="index.html">Home</a>
+                <button class="logout-btn" type="button" onclick="logoutAdmin()">Logout</button>
+                <button class="logout-btn" type="button" onclick="closeLogin()">Close</button>
+            </div>
+
         </div>
+    </div>
 
-        <script>
+    <script>
 
-            const balloonPopSound = new Audio("audio/bubblePopUp.mp3");
-            balloonPopSound.preload = "auto";
-            balloonPopSound.volume = 0.8;
+        const balloonPopSound = new Audio("audio/bubblePopUp.mp3");
+        balloonPopSound.preload = "auto";
+        balloonPopSound.volume = 0.8;
 
 
-            const songs = [
-                {
-                    title: "Strawberry Elephant one",
-                    file: "audio/strawberryElephantE.mp3"
-                },
-                {
-                    title: "I Miss You Every Day",
-                    file: "audio/background.mp3"
-                },
-                {
-                    title: "The 25th Floor",
-                    file: "audio/the25thFloor.mp3"
-                },
-                {
-                    title: "Love Defenders Do",
-                    file: "audio/LoveDefendersDo.mp3"
-                },
-                {
-                    title: "Strawberry Elephant Thai",
-                    file: "audio/strawberryElephant.mp3"
-                }
-            ];
+        const songs = [
+            {
+                title: "Strawberry Elephant one",
+                file: "audio/strawberryElephantE.mp3"
+            },
+            {
+                title: "I Miss You Every Day",
+                file: "audio/background.mp3"
+            },
+            {
+                title: "The 25th Floor",
+                file: "audio/the25thFloor.mp3"
+            },
+            {
+                title: "Love Defenders Do",
+                file: "audio/LoveDefendersDo.mp3"
+            },
+            {
+                title: "Strawberry Elephant Thai",
+                file: "audio/strawberryElephant.mp3"
+            }
+        ];
 
-            const API = "https://chay1api.mikebewise.workers.dev";
-            const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
+        const API = "https://chay1api.mikebewise.workers.dev";
+        const ADMIN_TOKEN_KEY = "chaynovaAdminToken";
 
-            let stories = [];
+        let stories = [];
 
-            const storyButtons = document.getElementById("storyButtons");
+        const storyButtons = document.getElementById("storyButtons");
 
-            function escapeHtml(value = "") {
-                return String(value)
-                    .replaceAll("&", "&amp;")
-                    .replaceAll("<", "&lt;")
-                    .replaceAll(">", "&gt;")
-                    .replaceAll('"', "&quot;")
-                    .replaceAll("'", "&#039;");
+        function escapeHtml(value = "") {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function makeLinksClickable(text = "") {
+            const safeText = escapeHtml(text);
+
+            return safeText.replace(
+                /(https?:\/\/[^\s<]+)/g,
+                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+            );
+        }
+
+        function imageUrl(imageName) {
+            if (!imageName) return "";
+            if (/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")) {
+                return imageName;
+            }
+            return `${API}/image/${encodeURIComponent(imageName)}`;
+        }
+
+        function normalizeStory(item) {
+            return {
+                id: item.id,
+                title: item.title || "Untitled",
+                text: item.story || "",
+                photo: imageUrl(item.image || ""),
+                position: Number(item.position || 0),
+                created_at: item.created_at || "",
+                updated_at: item.updated_at || item.created_at || ""
+            };
+        }
+
+        function isAdminLoggedIn() {
+            return Boolean(localStorage.getItem(ADMIN_TOKEN_KEY));
+        }
+
+        function openStoryEditor(storyId) {
+            localStorage.setItem("chaynovaEditStoryId", String(storyId));
+            window.location.href = `admin-edit-post.html?edit=${encodeURIComponent(storyId)}`;
+        }
+
+        async function deleteSavedStory(story) {
+            if (!isAdminLoggedIn()) {
+                alert("Your admin login has expired. Please log in again.");
+                openLogin();
+                return;
             }
 
-            function makeLinksClickable(text = "") {
-                const safeText = escapeHtml(text);
+            const confirmed = confirm(`Delete “${story.title}”?`);
+            if (!confirmed) return;
 
-                return safeText.replace(
-                    /(https?:\/\/[^\s<]+)/g,
-                    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-                );
-            }
-
-            function imageUrl(imageName) {
-                if (!imageName) return "";
-                if (/^https?:\/\//i.test(imageName) || imageName.startsWith("data:")) {
-                    return imageName;
-                }
-                return `${API}/image/${encodeURIComponent(imageName)}`;
-            }
-
-            function normalizeStory(item) {
-                return {
-                    id: item.id,
-                    title: item.title || "Untitled",
-                    text: item.story || "",
-                    photo: imageUrl(item.image || ""),
-                    position: Number(item.position || 0),
-                    created_at: item.created_at || "",
-                    updated_at: item.updated_at || item.created_at || ""
-                };
-            }
-
-            function isAdminLoggedIn() {
-                return Boolean(localStorage.getItem(ADMIN_TOKEN_KEY));
-            }
-
-            function openStoryEditor(storyId) {
-                localStorage.setItem("chaynovaEditStoryId", String(storyId));
-                window.location.href = `admin-edit-post.html?edit=${encodeURIComponent(storyId)}`;
-            }
-
-            async function deleteSavedStory(story) {
-                if (!isAdminLoggedIn()) {
-                    alert("Your admin login has expired. Please log in again.");
-                    openLogin();
-                    return;
-                }
-
-                const confirmed = confirm(`Delete “${story.title}”?`);
-                if (!confirmed) return;
-
-                try {
-                    const response = await fetch(`${API}/story/${encodeURIComponent(story.id)}`, {
-                        method: "DELETE",
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN_KEY)}`
-                        }
-                    });
-
-                    const message = await response.text();
-
-                    if (response.status === 401 || response.status === 403) {
-                        localStorage.removeItem(ADMIN_TOKEN_KEY);
-                        updateAdminPanel();
-                        throw new Error("Your admin login expired. Please log in again.");
+            try {
+                const response = await fetch(`${API}/story/${encodeURIComponent(story.id)}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(ADMIN_TOKEN_KEY)}`
                     }
+                });
 
-                    if (!response.ok) {
-                        throw new Error(message || "Could not delete the story.");
-                    }
+                const message = await response.text();
 
-                    document.querySelector(".storyWindow")?.remove();
-                    await loadSavedStories();
-                } catch (error) {
-                    alert(error.message || "Could not delete the story.");
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem(ADMIN_TOKEN_KEY);
+                    updateAdminPanel();
+                    throw new Error("Your admin login expired. Please log in again.");
                 }
+
+                if (!response.ok) {
+                    throw new Error(message || "Could not delete the story.");
+                }
+
+                document.querySelector(".storyWindow")?.remove();
+                await loadSavedStories();
+            } catch (error) {
+                alert(error.message || "Could not delete the story.");
             }
+        }
 
-            // Check if a story is new (created within the last 2 days) (2 * 24 * 60 * 60 * 1000)
-            function isNewStory(createdAt) {
-                if (!createdAt) return false;
+        // Check if a story is new (created within the last 2 days) (2 * 24 * 60 * 60 * 1000)
+        function isNewStory(createdAt) {
+            if (!createdAt) return false;
 
-                const created = new Date(createdAt);
-                const now = new Date();
+            const created = new Date(createdAt);
+            const now = new Date();
 
-                return (now - created) < (1 * 24 * 60 * 60 * 1000); // 1 day
-            }
+            return (now - created) < (1 * 24 * 60 * 60 * 1000); // 1 day
+        }
 
 
-            function renderStoryList() {
-                storyButtons.innerHTML = "";
+        function renderStoryList() {
+            storyButtons.innerHTML = "";
 
-                if (!stories.length) {
-                    storyButtons.innerHTML = `
+            if (!stories.length) {
+                storyButtons.innerHTML = `
             <div style="padding:18px;text-align:center;opacity:.85;">
                 No saved stories yet.
             </div>
         `;
-                    return;
-                }
+                return;
+            }
 
-                const showAdminActions = isAdminLoggedIn();
+            const showAdminActions = isAdminLoggedIn();
 
-                stories.forEach(story => {
-                    const wrapper = document.createElement("div");
-                    wrapper.className = "story-card-wrap";
+            stories.forEach(story => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "story-card-wrap";
 
-                    const button = document.createElement("button");
-                    button.className = "storyItem";
+                const button = document.createElement("button");
+                button.className = "storyItem";
 
-                    const previewText = story.text.length > 80
-                        ? `${story.text.substring(0, 80)}...`
-                        : story.text;
+                const previewText = story.text.length > 80
+                    ? `${story.text.substring(0, 80)}...`
+                    : story.text;
 
-                    const imageHtml = story.photo
-                        ? `<img class="storyThumb" src="${story.photo}" alt="${escapeHtml(story.title)}">`
-                        : `<div class="storyThumb" style="display:grid;place-items:center;background:rgba(255,255,255,.12);">📖</div>`;
+                const imageHtml = story.photo
+                    ? `<img class="storyThumb" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+                    : `<div class="storyThumb" style="display:grid;place-items:center;background:rgba(255,255,255,.12);">📖</div>`;
 
-                    button.innerHTML = `
+                button.innerHTML = `
             ${imageHtml}
             <div>
                 <div class="storyTitle">
     ${escapeHtml(story.title)}
     ${isNewStory(story.updated_at)
-                            ? '<span class="new-badge">NEW</span>'
-                            : ''}
+                        ? '<span class="new-badge">NEW</span>'
+                        : ''}
 </div>
                 <div class="storyPreview">${escapeHtml(previewText)}</div>
             </div>
         `;
 
-                    button.onclick = () => openStoryWindow(story);
-                    wrapper.appendChild(button);
+                button.onclick = () => openStoryWindow(story);
+                wrapper.appendChild(button);
 
-                    if (showAdminActions) {
-                        const actions = document.createElement("div");
-                        actions.className = "story-admin-actions";
+                if (showAdminActions) {
+                    const actions = document.createElement("div");
+                    actions.className = "story-admin-actions";
 
-                        const editButton = document.createElement("button");
-                        editButton.type = "button";
-                        editButton.textContent = "Edit";
-                        editButton.onclick = () => openStoryEditor(story.id);
+                    const editButton = document.createElement("button");
+                    editButton.type = "button";
+                    editButton.textContent = "Edit";
+                    editButton.onclick = () => openStoryEditor(story.id);
 
-                        const deleteButton = document.createElement("button");
-                        deleteButton.type = "button";
-                        deleteButton.className = "delete-story-btn";
-                        deleteButton.textContent = "Delete";
-                        deleteButton.onclick = () => deleteSavedStory(story);
+                    const deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.className = "delete-story-btn";
+                    deleteButton.textContent = "Delete";
+                    deleteButton.onclick = () => deleteSavedStory(story);
 
-                        actions.append(editButton, deleteButton);
-                        wrapper.appendChild(actions);
-                    }
+                    actions.append(editButton, deleteButton);
+                    wrapper.appendChild(actions);
+                }
 
-                    storyButtons.appendChild(wrapper);
-                });
-            }
+                storyButtons.appendChild(wrapper);
+            });
+        }
 
-            async function loadSavedStories() {
-                storyButtons.innerHTML = `
+        async function loadSavedStories() {
+            storyButtons.innerHTML = `
         <div style="padding:18px;text-align:center;opacity:.85;">
             Loading saved stories...
         </div>
     `;
 
-                try {
-                    const response = await fetch(API, {
-                        method: "GET",
-                        cache: "no-store"
-                    });
+            try {
+                const response = await fetch(API, {
+                    method: "GET",
+                    cache: "no-store"
+                });
 
-                    if (!response.ok) {
-                        throw new Error("Could not load saved stories.");
-                    }
+                if (!response.ok) {
+                    throw new Error("Could not load saved stories.");
+                }
 
-                    const data = await response.json();
+                const data = await response.json();
 
-                    stories = (Array.isArray(data) ? data : [])
-                        .map(normalizeStory)
-                        .sort((a, b) =>
-                            new Date(b.updated_at) - new Date(a.updated_at)
-                        );
+                stories = (Array.isArray(data) ? data : [])
+                    .map(normalizeStory)
+                    .sort((a, b) =>
+                        new Date(b.updated_at) - new Date(a.updated_at)
+                    );
 
-                    renderStoryList();
-                } catch (error) {
-                    console.error(error);
-                    storyButtons.innerHTML = `
+                renderStoryList();
+            } catch (error) {
+                console.error(error);
+                storyButtons.innerHTML = `
             <div style="padding:18px;text-align:center;color:#ffd966;">
                 ${escapeHtml(error.message || "Could not load saved stories.")}
             </div>
         `;
-                }
             }
+        }
 
-            const music = document.getElementById("bgMusic");
-            const musicBtn = document.getElementById("musicBtn");
-            const songSelect = document.getElementById("songSelect");
-            const songTitle = document.getElementById("songTitle");
-            const storyLayer = document.getElementById("storyLayer");
-            const volumeControl = document.getElementById("volumeControl");
-            const volumeProgress = document.getElementById("volumeProgress");
-            const volumeKnob = document.getElementById("volumeKnob");
-            const volumeValue = document.getElementById("volumeValue");
+        const music = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
+        const songSelect = document.getElementById("songSelect");
+        const songTitle = document.getElementById("songTitle");
+        const storyLayer = document.getElementById("storyLayer");
+        const volumeControl = document.getElementById("volumeControl");
+        const volumeProgress = document.getElementById("volumeProgress");
+        const volumeKnob = document.getElementById("volumeKnob");
+        const volumeValue = document.getElementById("volumeValue");
 
-            let currentSong = 0;
-            const maxPopups = 3;
+        let currentSong = 0;
+        const maxPopups = 3;
 
-            music.volume = 0.69;
+        music.volume = 0.69;
 
-            const volumePath = volumeProgress;
-            const volumePathLength = volumePath.getTotalLength();
-            let currentVolume = music.volume;
+        const volumePath = volumeProgress;
+        const volumePathLength = volumePath.getTotalLength();
+        let currentVolume = music.volume;
 
 
-            // Detect iPhone/iPad
-            const isIOS =
-                /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+        // Detect iPhone/iPad
+        const isIOS =
+            /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+            (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-            if (isIOS) {
-                document.body.classList.add("iphone-device");
+        if (isIOS) {
+            document.body.classList.add("iphone-device");
 
-                // Use your preferred default volume
-                currentVolume = 1.0;      // 100%
-                music.volume = currentVolume;
-            } else {
-                currentVolume = 0.69;
-                music.volume = currentVolume;
-            }
+            // Use your preferred default volume
+            currentVolume = 1.0;      // 100%
+            music.volume = currentVolume;
+        } else {
+            currentVolume = 0.69;
+            music.volume = currentVolume;
+        }
 
-            updateVolumeControl(currentVolume);
+        updateVolumeControl(currentVolume);
 
-            function updateVolumeControl(volume) {
-                currentVolume = Math.min(1, Math.max(0, volume));
-                music.volume = currentVolume;
+        function updateVolumeControl(volume) {
+            currentVolume = Math.min(1, Math.max(0, volume));
+            music.volume = currentVolume;
 
-                const point = volumePath.getPointAtLength(volumePathLength * currentVolume);
-                volumeKnob.setAttribute("cx", point.x);
-                volumeKnob.setAttribute("cy", point.y);
+            const point = volumePath.getPointAtLength(volumePathLength * currentVolume);
+            volumeKnob.setAttribute("cx", point.x);
+            volumeKnob.setAttribute("cy", point.y);
 
-                volumeProgress.style.strokeDasharray = `${volumePathLength}`;
-                volumeProgress.style.strokeDashoffset =
-                    `${volumePathLength * (1 - currentVolume)}`;
+            volumeProgress.style.strokeDasharray = `${volumePathLength}`;
+            volumeProgress.style.strokeDashoffset =
+                `${volumePathLength * (1 - currentVolume)}`;
 
-                const percentage = Math.round(currentVolume * 100);
-                volumeValue.textContent = `${percentage}%`;
-                volumeControl.setAttribute("aria-valuenow", percentage);
-            }
+            const percentage = Math.round(currentVolume * 100);
+            volumeValue.textContent = `${percentage}%`;
+            volumeControl.setAttribute("aria-valuenow", percentage);
+        }
 
-            function setVolumeFromPointer(event) {
-                const rect = volumeControl.getBoundingClientRect();
-                const x = Math.min(rect.width, Math.max(0, event.clientX - rect.left));
-                updateVolumeControl(x / rect.width);
-            }
+        function setVolumeFromPointer(event) {
+            const rect = volumeControl.getBoundingClientRect();
+            const x = Math.min(rect.width, Math.max(0, event.clientX - rect.left));
+            updateVolumeControl(x / rect.width);
+        }
 
-            volumeControl.addEventListener("pointerdown", event => {
-                volumeControl.setPointerCapture(event.pointerId);
+        volumeControl.addEventListener("pointerdown", event => {
+            volumeControl.setPointerCapture(event.pointerId);
+            setVolumeFromPointer(event);
+        });
+
+        volumeControl.addEventListener("pointermove", event => {
+            if (volumeControl.hasPointerCapture(event.pointerId)) {
                 setVolumeFromPointer(event);
-            });
+            }
+        });
 
-            volumeControl.addEventListener("pointermove", event => {
-                if (volumeControl.hasPointerCapture(event.pointerId)) {
-                    setVolumeFromPointer(event);
-                }
-            });
-
-            volumeControl.addEventListener("keydown", event => {
-                if (event.key === "ArrowRight" || event.key === "ArrowUp") {
-                    event.preventDefault();
-                    updateVolumeControl(currentVolume + 0.05);
-                }
-
-                if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
-                    event.preventDefault();
-                    updateVolumeControl(currentVolume - 0.05);
-                }
-
-                if (event.key === "Home") {
-                    event.preventDefault();
-                    updateVolumeControl(0);
-                }
-
-                if (event.key === "End") {
-                    event.preventDefault();
-                    updateVolumeControl(1);
-                }
-            });
-
-            updateVolumeControl(currentVolume);
-
-            songs.forEach((song, index) => {
-                const option = document.createElement("option");
-                option.value = index;
-                option.textContent = song.title;
-                songSelect.appendChild(option);
-            });
-
-            function loadSong(index) {
-                currentSong = index;
-                music.src = songs[index].file;
-                songTitle.textContent = songs[index].title;
-                songSelect.value = index;
+        volumeControl.addEventListener("keydown", event => {
+            if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+                event.preventDefault();
+                updateVolumeControl(currentVolume + 0.05);
             }
 
-            loadSong(currentSong);
+            if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+                event.preventDefault();
+                updateVolumeControl(currentVolume - 0.05);
+            }
 
-            musicBtn.addEventListener("click", () => {
-                if (music.paused) {
-                    music.play()
-                        .then(() => {
-                            musicBtn.textContent = "❚❚";
-                        })
-                        .catch(() => {
-                            musicBtn.textContent = "▶";
-                        });
-                } else {
-                    music.pause();
-                    musicBtn.textContent = "▶";
-                }
-            });
+            if (event.key === "Home") {
+                event.preventDefault();
+                updateVolumeControl(0);
+            }
 
-            songSelect.addEventListener("change", () => {
-                const selectedSong = Number(songSelect.value);
-                loadSong(selectedSong);
+            if (event.key === "End") {
+                event.preventDefault();
+                updateVolumeControl(1);
+            }
+        });
 
+        updateVolumeControl(currentVolume);
+
+        songs.forEach((song, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = song.title;
+            songSelect.appendChild(option);
+        });
+
+        function loadSong(index) {
+            currentSong = index;
+            music.src = songs[index].file;
+            songTitle.textContent = songs[index].title;
+            songSelect.value = index;
+        }
+
+        loadSong(currentSong);
+
+        musicBtn.addEventListener("click", () => {
+            if (music.paused) {
                 music.play()
                     .then(() => {
                         musicBtn.textContent = "❚❚";
@@ -1676,199 +1676,216 @@
                     .catch(() => {
                         musicBtn.textContent = "▶";
                     });
+            } else {
+                music.pause();
+                musicBtn.textContent = "▶";
+            }
+        });
+
+        songSelect.addEventListener("change", () => {
+            const selectedSong = Number(songSelect.value);
+            loadSong(selectedSong);
+
+            music.play()
+                .then(() => {
+                    musicBtn.textContent = "❚❚";
+                })
+                .catch(() => {
+                    musicBtn.textContent = "▶";
+                });
+        });
+
+        music.addEventListener("ended", () => {
+            currentSong = (currentSong + 1) % songs.length;
+            loadSong(currentSong);
+            music.play();
+        });
+
+        function showRandomStory() {
+            if (!stories.length) return;
+
+            const currentPopups = document.querySelectorAll(".storyBubble").length;
+
+            if (currentPopups >= maxPopups) return;
+
+            const story = stories[Math.floor(Math.random() * stories.length)];
+
+            const bubble = document.createElement("button");
+            bubble.className = "storyBubble";
+            bubble.textContent = story.title;
+
+            const bubbleSize = 74;
+            const safeTop = 170;
+            const safeBottom = 90;
+
+            const maxX = window.innerWidth - bubbleSize - 20;
+            const maxY = window.innerHeight - bubbleSize - safeBottom;
+
+            const x = 20 + Math.random() * Math.max(0, maxX - 20);
+            const y = safeTop + Math.random() * Math.max(0, maxY - safeTop);
+
+            bubble.style.left = `${x}px`;
+            bubble.style.top = `${y}px`;
+
+            bubble.addEventListener("click", () => {
+                expandBubbleToStory(bubble, story);
             });
 
-            music.addEventListener("ended", () => {
-                currentSong = (currentSong + 1) % songs.length;
-                loadSong(currentSong);
-                music.play();
-            });
+            storyLayer.appendChild(bubble);
 
-            function showRandomStory() {
-                if (!stories.length) return;
+            setTimeout(() => {
+                bubble.remove();
+            }, 9000);
+        }
 
-                const currentPopups = document.querySelectorAll(".storyBubble").length;
+        let bubbleIsOpening = false;
 
-                if (currentPopups >= maxPopups) return;
+        function expandBubbleToStory(bubble, story) {
+            if (bubbleIsOpening) return;
 
-                const story = stories[Math.floor(Math.random() * stories.length)];
+            bubbleIsOpening = true;
+            bubble.disabled = true;
 
-                const bubble = document.createElement("button");
-                bubble.className = "storyBubble";
-                bubble.textContent = story.title;
+            // Save the original clicked bubble position before it moves.
+            const clickedRect = bubble.getBoundingClientRect();
+            const clickedPosition = {
+                x: clickedRect.left + clickedRect.width / 2,
+                y: clickedRect.top + clickedRect.height / 2
+            };
 
-                const bubbleSize = 74;
-                const safeTop = 170;
-                const safeBottom = 90;
+            bubble.classList.add("bubble-expand");
 
-                const maxX = window.innerWidth - bubbleSize - 20;
-                const maxY = window.innerHeight - bubbleSize - safeBottom;
+            setTimeout(() => {
+                createLargeBubbleExplosion();
 
-                const x = 20 + Math.random() * Math.max(0, maxX - 20);
-                const y = safeTop + Math.random() * Math.max(0, maxY - safeTop);
+                balloonPopSound.currentTime = 0;
 
-                bubble.style.left = `${x}px`;
-                bubble.style.top = `${y}px`;
-
-                bubble.addEventListener("click", () => {
-                    expandBubbleToStory(bubble, story);
+                balloonPopSound.play().catch(error => {
+                    console.log("Pop sound could not play:", error);
                 });
 
-                storyLayer.appendChild(bubble);
+                bubble.classList.add("bubble-big-pop");
 
                 setTimeout(() => {
                     bubble.remove();
-                }, 9000);
+                    openStoryWindow(story, clickedPosition);
+
+                    const storyWindow = document.querySelector(".storyWindow");
+                    if (storyWindow) {
+                        storyWindow.classList.add("story-window-enter");
+                    }
+
+                    bubbleIsOpening = false;
+                }, 1000);
+            }, 1200);
+        }
+
+        function createLargeBubbleExplosion() {
+            const particleCount = 36;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement("span");
+
+                particle.className = "large-pop-particle";
+
+                const angle =
+                    (Math.PI * 2 * i) / particleCount +
+                    Math.random() * .25;
+
+                const distance =
+                    Math.min(window.innerWidth, window.innerHeight)
+                    * (.22 + Math.random() * .3);
+
+                const moveX =
+                    Math.cos(angle) * distance;
+
+                const moveY =
+                    Math.sin(angle) * distance;
+
+                const size =
+                    10 + Math.random() * 32;
+
+                const rotation =
+                    -360 + Math.random() * 720;
+
+                particle.style.setProperty(
+                    "--move-x",
+                    `${moveX}px`
+                );
+
+                particle.style.setProperty(
+                    "--move-y",
+                    `${moveY}px`
+                );
+
+                particle.style.setProperty(
+                    "--size",
+                    `${size}px`
+                );
+
+                particle.style.setProperty(
+                    "--rotate",
+                    `${rotation}deg`
+                );
+
+                document.body.appendChild(particle);
+
+                particle.addEventListener(
+                    "animationend",
+                    () => particle.remove(),
+                    { once: true }
+                );
+            }
+        }
+
+        function openStoryWindow(story, clickedPosition = null) {
+            document.querySelector(".storyWindow")?.remove();
+
+            const storyWindow = document.createElement("div");
+            storyWindow.className = "storyWindow";
+
+            // Put the popup between the clicked bubble and screen center.
+            if (clickedPosition) {
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const factor = 0.68;
+
+                let popupX = clickedPosition.x + (centerX - clickedPosition.x) * factor;
+                let popupY = clickedPosition.y + (centerY - clickedPosition.y) * factor;
+
+                // Keep the popup safely inside the screen.
+                const estimatedHalfWidth = Math.min(window.innerWidth * 0.46, 310);
+                const estimatedHalfHeight = Math.min(window.innerHeight * 0.39, 300);
+                const margin = 16;
+
+                popupX = Math.max(
+                    estimatedHalfWidth + margin,
+                    Math.min(window.innerWidth - estimatedHalfWidth - margin, popupX)
+                );
+
+                popupY = Math.max(
+                    estimatedHalfHeight + margin,
+                    Math.min(window.innerHeight - estimatedHalfHeight - margin, popupY)
+                );
+
+                storyWindow.style.left = `${popupX}px`;
+                storyWindow.style.top = `${popupY}px`;
             }
 
-            let bubbleIsOpening = false;
+            const storyImage = story.photo
+                ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
+                : "";
 
-            function expandBubbleToStory(bubble, story) {
-                if (bubbleIsOpening) return;
-
-                bubbleIsOpening = true;
-                bubble.disabled = true;
-
-                // Save the original clicked bubble position before it moves.
-                const clickedRect = bubble.getBoundingClientRect();
-                const clickedPosition = {
-                    x: clickedRect.left + clickedRect.width / 2,
-                    y: clickedRect.top + clickedRect.height / 2
-                };
-
-                bubble.classList.add("bubble-expand");
-
-                setTimeout(() => {
-                    createLargeBubbleExplosion();
-
-                    balloonPopSound.currentTime = 0;
-
-                    balloonPopSound.play().catch(error => {
-                        console.log("Pop sound could not play:", error);
-                    });
-
-                    bubble.classList.add("bubble-big-pop");
-
-                    setTimeout(() => {
-                        bubble.remove();
-                        openStoryWindow(story, clickedPosition);
-
-                        const storyWindow = document.querySelector(".storyWindow");
-                        if (storyWindow) {
-                            storyWindow.classList.add("story-window-enter");
-                        }
-
-                        bubbleIsOpening = false;
-                    }, 1000);
-                }, 1200);
-            }
-
-            function createLargeBubbleExplosion() {
-                const particleCount = 36;
-
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement("span");
-
-                    particle.className = "large-pop-particle";
-
-                    const angle =
-                        (Math.PI * 2 * i) / particleCount +
-                        Math.random() * .25;
-
-                    const distance =
-                        Math.min(window.innerWidth, window.innerHeight)
-                        * (.22 + Math.random() * .3);
-
-                    const moveX =
-                        Math.cos(angle) * distance;
-
-                    const moveY =
-                        Math.sin(angle) * distance;
-
-                    const size =
-                        10 + Math.random() * 32;
-
-                    const rotation =
-                        -360 + Math.random() * 720;
-
-                    particle.style.setProperty(
-                        "--move-x",
-                        `${moveX}px`
-                    );
-
-                    particle.style.setProperty(
-                        "--move-y",
-                        `${moveY}px`
-                    );
-
-                    particle.style.setProperty(
-                        "--size",
-                        `${size}px`
-                    );
-
-                    particle.style.setProperty(
-                        "--rotate",
-                        `${rotation}deg`
-                    );
-
-                    document.body.appendChild(particle);
-
-                    particle.addEventListener(
-                        "animationend",
-                        () => particle.remove(),
-                        { once: true }
-                    );
-                }
-            }
-
-            function openStoryWindow(story, clickedPosition = null) {
-                document.querySelector(".storyWindow")?.remove();
-
-                const storyWindow = document.createElement("div");
-                storyWindow.className = "storyWindow";
-
-                // Put the popup between the clicked bubble and screen center.
-                if (clickedPosition) {
-                    const centerX = window.innerWidth / 2;
-                    const centerY = window.innerHeight / 2;
-                    const factor = 0.68;
-
-                    let popupX = clickedPosition.x + (centerX - clickedPosition.x) * factor;
-                    let popupY = clickedPosition.y + (centerY - clickedPosition.y) * factor;
-
-                    // Keep the popup safely inside the screen.
-                    const estimatedHalfWidth = Math.min(window.innerWidth * 0.46, 310);
-                    const estimatedHalfHeight = Math.min(window.innerHeight * 0.39, 300);
-                    const margin = 16;
-
-                    popupX = Math.max(
-                        estimatedHalfWidth + margin,
-                        Math.min(window.innerWidth - estimatedHalfWidth - margin, popupX)
-                    );
-
-                    popupY = Math.max(
-                        estimatedHalfHeight + margin,
-                        Math.min(window.innerHeight - estimatedHalfHeight - margin, popupY)
-                    );
-
-                    storyWindow.style.left = `${popupX}px`;
-                    storyWindow.style.top = `${popupY}px`;
-                }
-
-                const storyImage = story.photo
-                    ? `<img class="storyPhoto" src="${story.photo}" alt="${escapeHtml(story.title)}">`
-                    : "";
-
-                const adminButtons = isAdminLoggedIn()
-                    ? `
+            const adminButtons = isAdminLoggedIn()
+                ? `
                         <div class="story-window-admin">
                             <button type="button" class="edit-story-btn">Edit</button>
                             <button type="button" class="delete-story-btn">Delete</button>
                         </div>
                     `
-                    : "";
+                : "";
 
-                storyWindow.innerHTML = `
+            storyWindow.innerHTML = `
                     <button type="button" class="storyCloseX" aria-label="Close story">&times;</button>
                     ${storyImage}
                     <h2>${escapeHtml(story.title)}</h2>
@@ -1876,255 +1893,255 @@
                     ${adminButtons}
                 `;
 
-                storyWindow.querySelector(".storyCloseX").addEventListener("click", () => {
-                    storyWindow.remove();
+            storyWindow.querySelector(".storyCloseX").addEventListener("click", () => {
+                storyWindow.remove();
+            });
+
+            const editButton = storyWindow.querySelector(".edit-story-btn");
+            if (editButton) {
+                editButton.addEventListener("click", () => openStoryEditor(story.id));
+            }
+
+            const deleteButton = storyWindow.querySelector(".delete-story-btn");
+            if (deleteButton) {
+                deleteButton.addEventListener("click", () => deleteSavedStory(story));
+            }
+
+            document.body.appendChild(storyWindow);
+            makePopupDraggable(storyWindow);
+        }
+
+        function openLogin() {
+            if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
+                window.location.href = "admin-edit-post.html";
+                return;
+            }
+
+            const overlay = document.getElementById("loginOverlay");
+            overlay.style.display = "flex";
+            overlay.setAttribute("aria-hidden", "false");
+            document.getElementById("loginError").innerText = "";
+            updateAdminPanel();
+
+            setTimeout(() => {
+                const usernameInput = document.getElementById("usernameInput");
+                if (usernameInput && usernameInput.offsetParent !== null) {
+                    usernameInput.focus();
+                }
+            }, 100);
+        }
+
+        function closeLogin() {
+            const overlay = document.getElementById("loginOverlay");
+            overlay.style.display = "none";
+            overlay.setAttribute("aria-hidden", "true");
+            document.getElementById("loginError").innerText = "";
+        }
+
+        async function checkLogin() {
+            const usernameInput = document.getElementById("usernameInput");
+            const passwordInput = document.getElementById("passwordInput");
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            const errorBox = document.getElementById("loginError");
+
+            if (!username || !password) {
+                errorBox.innerText = "Please enter username and password.";
+                return;
+            }
+
+            errorBox.innerText = "Checking login...";
+
+            try {
+                const response = await fetch(`${API}/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username, password })
                 });
 
-                const editButton = storyWindow.querySelector(".edit-story-btn");
-                if (editButton) {
-                    editButton.addEventListener("click", () => openStoryEditor(story.id));
-                }
-
-                const deleteButton = storyWindow.querySelector(".delete-story-btn");
-                if (deleteButton) {
-                    deleteButton.addEventListener("click", () => deleteSavedStory(story));
-                }
-
-                document.body.appendChild(storyWindow);
-                makePopupDraggable(storyWindow);
-            }
-
-            function openLogin() {
-                if (localStorage.getItem(ADMIN_TOKEN_KEY)) {
-                    window.location.href = "admin-edit-post.html";
-                    return;
-                }
-
-                const overlay = document.getElementById("loginOverlay");
-                overlay.style.display = "flex";
-                overlay.setAttribute("aria-hidden", "false");
-                document.getElementById("loginError").innerText = "";
-                updateAdminPanel();
-
-                setTimeout(() => {
-                    const usernameInput = document.getElementById("usernameInput");
-                    if (usernameInput && usernameInput.offsetParent !== null) {
-                        usernameInput.focus();
-                    }
-                }, 100);
-            }
-
-            function closeLogin() {
-                const overlay = document.getElementById("loginOverlay");
-                overlay.style.display = "none";
-                overlay.setAttribute("aria-hidden", "true");
-                document.getElementById("loginError").innerText = "";
-            }
-
-            async function checkLogin() {
-                const usernameInput = document.getElementById("usernameInput");
-                const passwordInput = document.getElementById("passwordInput");
-                const username = usernameInput.value.trim();
-                const password = passwordInput.value;
-                const errorBox = document.getElementById("loginError");
-
-                if (!username || !password) {
-                    errorBox.innerText = "Please enter username and password.";
-                    return;
-                }
-
-                errorBox.innerText = "Checking login...";
-
+                let data = {};
                 try {
-                    const response = await fetch(`${API}/login`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ username, password })
-                    });
+                    data = await response.json();
+                } catch (_) {
+                    throw new Error("The login API returned an invalid response.");
+                }
 
-                    let data = {};
-                    try {
-                        data = await response.json();
-                    } catch (_) {
-                        throw new Error("The login API returned an invalid response.");
-                    }
-
-                    if (response.ok && data.success && data.token) {
-                        localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
-                        passwordInput.value = "";
-                        errorBox.innerText = "";
-                        updateAdminPanel();
-                        renderStoryList();
-                    } else {
-                        localStorage.removeItem(ADMIN_TOKEN_KEY);
-                        updateAdminPanel();
-                        errorBox.innerText = data.message || "Wrong username or password.";
-                    }
-                } catch (error) {
+                if (response.ok && data.success && data.token) {
+                    localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+                    passwordInput.value = "";
+                    errorBox.innerText = "";
+                    updateAdminPanel();
+                    renderStoryList();
+                } else {
                     localStorage.removeItem(ADMIN_TOKEN_KEY);
                     updateAdminPanel();
-                    errorBox.innerText = error.message || "Login failed. Check your Worker API.";
+                    errorBox.innerText = data.message || "Wrong username or password.";
                 }
-            }
-
-            function updateAdminPanel() {
-                const token = localStorage.getItem(ADMIN_TOKEN_KEY);
-                const loginForm = document.getElementById("loginForm");
-                const adminPanel = document.getElementById("adminPanel");
-
-                if (token) {
-                    loginForm.style.display = "none";
-                    adminPanel.style.display = "flex";
-                } else {
-                    loginForm.style.display = "block";
-                    adminPanel.style.display = "none";
-                }
-            }
-
-            function logoutAdmin() {
+            } catch (error) {
                 localStorage.removeItem(ADMIN_TOKEN_KEY);
-                document.getElementById("usernameInput").value = "";
-                document.getElementById("passwordInput").value = "";
-                document.getElementById("loginError").innerText = "";
                 updateAdminPanel();
-                renderStoryList();
+                errorBox.innerText = error.message || "Login failed. Check your Worker API.";
             }
+        }
 
-            document.getElementById("passwordInput").addEventListener("keydown", function (e) {
-                if (e.key === "Enter") {
-                    checkLogin();
-                }
-            });
+        function updateAdminPanel() {
+            const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+            const loginForm = document.getElementById("loginForm");
+            const adminPanel = document.getElementById("adminPanel");
 
-            document.getElementById("usernameInput").addEventListener("keydown", function (e) {
-                if (e.key === "Enter") {
-                    document.getElementById("passwordInput").focus();
-                }
-            });
+            if (token) {
+                loginForm.style.display = "none";
+                adminPanel.style.display = "flex";
+            } else {
+                loginForm.style.display = "block";
+                adminPanel.style.display = "none";
+            }
+        }
 
-            document.getElementById("loginOverlay").addEventListener("click", function (e) {
-                if (e.target === this) {
-                    closeLogin();
-                }
-            });
-
-            window.addEventListener("keydown", function (e) {
-                if (e.key === "Escape") {
-                    closeLogin();
-                }
-            });
-
-            window.openLogin = openLogin;
-            window.closeLogin = closeLogin;
-            window.checkLogin = checkLogin;
-            window.logoutAdmin = logoutAdmin;
-
+        function logoutAdmin() {
+            localStorage.removeItem(ADMIN_TOKEN_KEY);
+            document.getElementById("usernameInput").value = "";
+            document.getElementById("passwordInput").value = "";
+            document.getElementById("loginError").innerText = "";
             updateAdminPanel();
-            loadSavedStories();
+            renderStoryList();
+        }
 
-            setInterval(showRandomStory, 3000);
+        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                checkLogin();
+            }
+        });
 
-            function popBubble(bubble, story) {
+        document.getElementById("usernameInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                document.getElementById("passwordInput").focus();
+            }
+        });
 
-                const rect = bubble.getBoundingClientRect();
-                const cx = rect.left + rect.width / 2;
-                const cy = rect.top + rect.height / 2;
+        document.getElementById("loginOverlay").addEventListener("click", function (e) {
+            if (e.target === this) {
+                closeLogin();
+            }
+        });
 
-                // create particles
-                for (let i = 0; i < 18; i++) {
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                closeLogin();
+            }
+        });
 
-                    const p = document.createElement("div");
-                    p.className = "popParticle";
+        window.openLogin = openLogin;
+        window.closeLogin = closeLogin;
+        window.checkLogin = checkLogin;
+        window.logoutAdmin = logoutAdmin;
 
-                    p.style.left = (cx - 6) + "px";
-                    p.style.top = (cy - 6) + "px";
+        updateAdminPanel();
+        loadSavedStories();
 
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = 40 + Math.random() * 80;
+        setInterval(showRandomStory, 3000);
 
-                    p.style.setProperty("--dx",
-                        Math.cos(angle) * distance + "px");
+        function popBubble(bubble, story) {
 
-                    p.style.setProperty("--dy",
-                        Math.sin(angle) * distance + "px");
+            const rect = bubble.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
 
-                    document.body.appendChild(p);
+            // create particles
+            for (let i = 0; i < 18; i++) {
 
-                    p.addEventListener("animationend", () => {
-                        p.remove();
-                    });
-                }
+                const p = document.createElement("div");
+                p.className = "popParticle";
 
-                bubble.style.animation = "bubblePop .35s forwards";
+                p.style.left = (cx - 6) + "px";
+                p.style.top = (cy - 6) + "px";
 
-                bubble.addEventListener("animationend", () => {
-                    bubble.remove();
-                    openStoryWindow(story);
-                }, { once: true });
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 40 + Math.random() * 80;
+
+                p.style.setProperty("--dx",
+                    Math.cos(angle) * distance + "px");
+
+                p.style.setProperty("--dy",
+                    Math.sin(angle) * distance + "px");
+
+                document.body.appendChild(p);
+
+                p.addEventListener("animationend", () => {
+                    p.remove();
+                });
             }
 
-            function makePopupDraggable(popup) {
+            bubble.style.animation = "bubblePop .35s forwards";
 
-                let dragging = false;
-                let startX = 0;
-                let startY = 0;
+            bubble.addEventListener("animationend", () => {
+                bubble.remove();
+                openStoryWindow(story);
+            }, { once: true });
+        }
 
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
+        function makePopupDraggable(popup) {
 
-                const LIMIT = 80;   // movement distance
+            let dragging = false;
+            let startX = 0;
+            let startY = 0;
 
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            const LIMIT = 80;   // movement distance
+
+            popup.style.cursor = "grab";
+
+            popup.addEventListener("pointerdown", e => {
+
+                if (
+                    e.target.closest(".storyCloseX") ||
+                    e.target.closest("button") ||
+                    e.target.closest("a")
+                ) return;
+
+                dragging = true;
+
+                popup.style.cursor = "grabbing";
+
+                startX = e.clientX;
+                startY = e.clientY;
+
+                popup.setPointerCapture(e.pointerId);
+
+            });
+
+            popup.addEventListener("pointermove", e => {
+
+                if (!dragging) return;
+
+                let dx = e.clientX - startX;
+                let dy = e.clientY - startY;
+
+                dx = Math.max(-LIMIT, Math.min(LIMIT, dx));
+                dy = Math.max(-LIMIT, Math.min(LIMIT, dy));
+
+                popup.style.left = `${centerX + dx}px`;
+                popup.style.top = `${centerY + dy}px`;
+
+            });
+
+            popup.addEventListener("pointerup", () => {
+
+                dragging = false;
+                popup.style.left = "50%";
+                popup.style.top = "50%";
                 popup.style.cursor = "grab";
 
-                popup.addEventListener("pointerdown", e => {
+            });
 
-                    if (
-                        e.target.closest(".storyCloseX") ||
-                        e.target.closest("button") ||
-                        e.target.closest("a")
-                    ) return;
-
-                    dragging = true;
-
-                    popup.style.cursor = "grabbing";
-
-                    startX = e.clientX;
-                    startY = e.clientY;
-
-                    popup.setPointerCapture(e.pointerId);
-
-                });
-
-                popup.addEventListener("pointermove", e => {
-
-                    if (!dragging) return;
-
-                    let dx = e.clientX - startX;
-                    let dy = e.clientY - startY;
-
-                    dx = Math.max(-LIMIT, Math.min(LIMIT, dx));
-                    dy = Math.max(-LIMIT, Math.min(LIMIT, dy));
-
-                    popup.style.left = `${centerX + dx}px`;
-                    popup.style.top = `${centerY + dy}px`;
-
-                });
-
-                popup.addEventListener("pointerup", () => {
-
-                    dragging = false;
-                    popup.style.left = "50%";
-                    popup.style.top = "50%";
-                    popup.style.cursor = "grab";
-
-                });
-
-            }
+        }
 
 
-        </script>
+    </script>
 </body>
 
 </html>
