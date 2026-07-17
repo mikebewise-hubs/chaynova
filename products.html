@@ -1114,19 +1114,33 @@
             setApiStatus("", "Connecting to Cloudflare…");
 
             try {
-                const [productData, statsData] = await Promise.all([
-                    requestJson(PRODUCTS_URL, { headers: authHeaders() }),
-                    requestJson(STATS_URL, { headers: authHeaders() })
-                ]);
+                // Products are required. Stats are optional so a missing /products/stats
+                // route does not prevent the product list from loading.
+                const productData = await requestJson(PRODUCTS_URL, {
+                    headers: authHeaders(),
+                    cache: "no-store"
+                });
+
+                let statsData = {};
+                try {
+                    statsData = await requestJson(STATS_URL, {
+                        headers: authHeaders(),
+                        cache: "no-store"
+                    });
+                } catch (statsError) {
+                    console.warn("Stats endpoint unavailable; using calculated totals.", statsError);
+                }
 
                 const list = Array.isArray(productData)
                     ? productData
                     : Array.isArray(productData.products)
                         ? productData.products
-                        : [];
+                        : Array.isArray(productData.data)
+                            ? productData.data
+                            : [];
 
                 products = list.map(normalizeProduct);
-                updateSummary(statsData);
+                updateSummary(statsData.stats || statsData);
                 applyFilters();
 
                 loadingState.classList.add("hidden");
@@ -1151,16 +1165,16 @@
             const fallbackOut = products.filter(item => item.total_quantity <= 0).length;
 
             document.getElementById("totalProducts").textContent =
-                Number(stats?.products ?? products.length).toLocaleString();
+                Number(stats?.products ?? stats?.totalProducts ?? stats?.total_products ?? products.length).toLocaleString();
 
             document.getElementById("totalUnits").textContent =
-                Number(stats?.totalUnits ?? fallbackUnits).toLocaleString();
+                Number(stats?.totalUnits ?? stats?.total_units ?? fallbackUnits).toLocaleString();
 
             document.getElementById("lowStock").textContent =
-                Number(stats?.lowStock ?? fallbackLow).toLocaleString();
+                Number(stats?.lowStock ?? stats?.low_stock ?? fallbackLow).toLocaleString();
 
             document.getElementById("outOfStock").textContent =
-                Number(stats?.outOfStock ?? fallbackOut).toLocaleString();
+                Number(stats?.outOfStock ?? stats?.out_of_stock ?? fallbackOut).toLocaleString();
         }
 
         function applyFilters() {
@@ -1212,7 +1226,8 @@
                     ? product.status
                     : "draft";
 
-                const editUrl = `product-manager.html?id=${encodeURIComponent(product.id)}`;
+                const recordId = product.id || product.product_id;
+                const editUrl = `product-manager.html?id=${encodeURIComponent(recordId)}`;
 
                 row.innerHTML = `
           <td class="product-cell">
@@ -1233,16 +1248,16 @@
   <button
     class="small-btn copy-id"
     type="button"
-    data-id="${escapeHtml(product.id)}">
+    data-id="${escapeHtml(recordId)}">
     Copy ID
   </button>
 
   <button
     class="small-btn emergency-delete"
     type="button"
-    data-id="${escapeHtml(product.id)}"
+    data-id="${escapeHtml(recordId)}"
     data-name="${escapeHtml(product.product_name)}">
-    Emergency Delete
+    Delete
   </button>
 </div>
           </td>
@@ -1272,7 +1287,7 @@ document.querySelectorAll(".emergency-delete").forEach(button => {
     const productName = button.dataset.name || "this product";
 
     const firstConfirm = confirm(
-      `EMERGENCY DELETE\n\nPermanently delete "${productName}"?\n\nThis cannot be undone.`
+      `DELETE PRODUCT\n\nPermanently delete "${productName}"?\n\nThis cannot be undone.`
     );
 
     if (!firstConfirm) return;
@@ -1298,7 +1313,7 @@ document.querySelectorAll(".emergency-delete").forEach(button => {
         }
       );
 
-      products = products.filter(product => product.id !== id);
+      products = products.filter(product => (product.id || product.product_id) !== id);
 
       applyFilters();
       updateSummary({});
@@ -1306,7 +1321,7 @@ document.querySelectorAll(".emergency-delete").forEach(button => {
     } catch (error) {
       showToast(error.message || "Delete failed.");
       button.disabled = false;
-      button.textContent = "Emergency Delete";
+      button.textContent = "Delete";
     }
   });
 });
