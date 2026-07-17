@@ -27,99 +27,83 @@
                 linear-gradient(135deg, #da7b06, #7864eb, #72a1f8);
         }
 
-        /* ===========================
-   CHAYNOVA Universal Header
-   =========================== */
-
-        header {
+      /* ===== HEADER ===== */
+        .top-header {
             position: fixed;
             top: 18px;
             left: 50%;
             transform: translateX(-50%);
-            width: min(95vw, 1100px);
-            z-index: 1000;
-
+            width: min(92vw, 1050px);
             display: flex;
             justify-content: center;
-
+            align-items: center;
             padding: 8px 18px;
-
             border: 1px solid rgba(255, 255, 255, .25);
             border-radius: 999px;
-
             background: rgba(255, 255, 255, .12);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-
             box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+            z-index: 1000;
         }
 
+        /* ===== NAVIGATION ===== */
         .top-nav {
-            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            flex-wrap: nowrap;
-            white-space: nowrap;
-
-            gap: clamp(8px, 1.8vw, 22px);
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
+        /* ===== LINKS ===== */
         .top-nav a {
-            flex-shrink: 0;
-
             font-family: "Oxanium", sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: .5px;
-
             color: #fff;
             text-decoration: none;
-
-            transition: .25s;
+            letter-spacing: .6px;
+            transition: .25s ease;
         }
 
-        .top-nav a:hover,
-        .top-nav a[aria-current="page"] {
+        .top-nav a:hover {
             color: #001019;
             text-shadow: 0 0 14px rgba(255, 255, 255, .9);
         }
 
+        /* ===== LOGO ===== */
         .nav-logo {
             display: flex;
             align-items: center;
-            flex-shrink: 0;
         }
 
         .nav-logo img {
-            display: block;
-            height: 26px;
+            height: 22px;
+            /* Increase to 26px, 28px, etc. if desired */
             width: auto;
-            transition: .2s;
+            display: block;
+            transition: transform .2s ease;
         }
 
-        .nav-logo img:hover {
-            transform: scale(1.08);
+        .nav-logo:hover img {
+            transform: scale(1.1);
         }
 
-        /* Mobile */
+        /* ===== MOBILE ===== */
+        @media (max-width:560px) {
 
-        @media (max-width:700px) {
-
-            header {
-                width: 97vw;
-                padding: 8px 10px;
+            .top-header {
                 top: 12px;
+                border-radius: 24px;
             }
 
             .top-nav {
-                gap: clamp(5px, 1.5vw, 10px);
+                gap: 13px;
             }
 
             .top-nav a {
-                font-size: .9rem;
-                letter-spacing: 0;
+                font-size: .82rem;
             }
 
             .nav-logo img {
