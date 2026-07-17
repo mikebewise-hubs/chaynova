@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn about CHAYNOVA, our Thailand-inspired sportswear story, vision, beliefs, and promise.">
+    <meta name="description"
+        content="Learn about CHAYNOVA, our Thailand-inspired sportswear story, vision, beliefs, and promise.">
     <title>About CHAYNOVA | More Than Sportswear</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,105 +63,105 @@
             color: inherit;
         }
 
-       /* ===========================
+        /* ===========================
    CHAYNOVA Universal Header
    =========================== */
 
-header {
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(95vw, 1100px);
-    z-index: 1000;
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(95vw, 1100px);
+            z-index: 1000;
 
-    display: flex;
-    justify-content: center;
+            display: flex;
+            justify-content: center;
 
-    padding: 8px 18px;
+            padding: 8px 18px;
 
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
 
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
 
-    box-shadow: 0 0 28px rgba(0,217,255,.25);
-}
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+        }
 
-.top-nav{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+        .top-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    flex-wrap:nowrap;
-    white-space:nowrap;
+            flex-wrap: nowrap;
+            white-space: nowrap;
 
-    gap:clamp(8px,1.8vw,22px);
-}
+            gap: clamp(8px, 1.8vw, 22px);
+        }
 
-.top-nav a{
-    flex-shrink:0;
+        .top-nav a {
+            flex-shrink: 0;
 
-    font-family:"Oxanium",sans-serif;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.5px;
+            font-family: "Oxanium", sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .5px;
 
-    color:#fff;
-    text-decoration:none;
+            color: #fff;
+            text-decoration: none;
 
-    transition:.25s;
-}
+            transition: .25s;
+        }
 
-.top-nav a:hover,
-.top-nav a[aria-current="page"]{
-    color:#001019;
-    text-shadow:0 0 14px rgba(255,255,255,.9);
-}
+        .top-nav a:hover,
+        .top-nav a[aria-current="page"] {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
 
-.nav-logo{
-    display:flex;
-    align-items:center;
-    flex-shrink:0;
-}
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
 
-.nav-logo img{
-    display:block;
-    height:26px;
-    width:auto;
-    transition:.2s;
-}
+        .nav-logo img {
+            display: block;
+            height: 26px;
+            width: auto;
+            transition: .2s;
+        }
 
-.nav-logo img:hover{
-    transform:scale(1.08);
-}
+        .nav-logo img:hover {
+            transform: scale(1.08);
+        }
 
-/* Mobile */
+        /* Mobile */
 
-@media (max-width:700px){
+        @media (max-width:700px) {
 
-    header{
-        width:97vw;
-        padding:8px 10px;
-        top:12px;
-    }
+            header {
+                width: 97vw;
+                padding: 8px 10px;
+                top: 12px;
+            }
 
-    .top-nav{
-        gap:clamp(5px,1.5vw,10px);
-    }
+            .top-nav {
+                gap: clamp(5px, 1.5vw, 10px);
+            }
 
-    .top-nav a{
-        font-size:0.9rem;
-        letter-spacing:0;
-    }
+            .top-nav a {
+                font-size: .9rem;
+                letter-spacing: 0;
+            }
 
-    .nav-logo img{
-        height:18px;
-    }
-}
+            .nav-logo img {
+                height: 18px;
+            }
+        }
 
 
         /* Page layout */
@@ -356,7 +358,7 @@ header {
             background-clip: text;
         }
 
-        .section-panel p + p {
+        .section-panel p+p {
             margin-top: 17px;
         }
 
@@ -436,6 +438,7 @@ header {
                 opacity: 0;
                 transform: translateY(24px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -518,7 +521,8 @@ header {
                 transition-duration: 0.01ms !important;
             }
         }
-           .mainB-logo {
+
+        .mainB-logo {
             width: 48px;
             height: 48px;
             object-fit: contain;
@@ -539,6 +543,26 @@ header {
             }
         }
 
+.secret-admin {
+    display: inline-block;
+    margin-left: 2px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.03); /* Almost invisible */
+    cursor: pointer;
+    user-select: none;
+    transition: all .25s ease;
+}
+
+.secret-admin:hover {
+    color: rgba(255,255,255,0.35);
+    transform: scale(1.3);
+}
+
+.secret-admin:active {
+    transform: scale(0.9);
+}
+
+
     </style>
 </head>
 
@@ -550,9 +574,11 @@ header {
             <a href="support.html">Support</a>
             <a href="about.html" aria-current="page">About</a>
             <a href="contact.html">Contact</a>
-
             <a href="index.html" class="nav-logo">
                 <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA Logo">
+                <span class="secret-admin" onclick="window.location.href='admin.html'" title="Admin" aria-label="Admin">
+                    ✴︎
+                </span>
             </a>
 
         </nav>
@@ -562,13 +588,16 @@ header {
         <section class="hero" aria-labelledby="about-title">
             <div class="hero-copy">
                 <div class="eyebrow">
-                  <img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo">
-                  <span> CHAYNOVA </span> </div>
+                    <img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo">
+                    <span> CHAYNOVA </span>
+                </div>
                 <h1 id="about-title">More Than Sportswear</h1>
                 <div class="hero-subtitle">Inspired by Thailand. Built to move with you.</div>
 
                 <p>
-                    At <strong>CHAYNOVA</strong>, our primary mission is to provide high-quality sportswear that combines performance, comfort, durability, and value. We believe that the right sportswear is more than just clothing, it can help people feel confident, stay active, and embrace new challenges.
+                    At <strong>CHAYNOVA</strong>, our primary mission is to provide high-quality sportswear that
+                    combines performance, comfort, durability, and value. We believe that the right sportswear is more
+                    than just clothing, it can help people feel confident, stay active, and embrace new challenges.
                 </p>
 
                 <div class="hero-actions">
@@ -581,7 +610,8 @@ header {
                 <div class="story-card-content">
                     <h2>A Story of Lasting Quality</h2>
                     <p>
-                        One special piece of sportswear has remained with the founder since the 24th SEA Games in Nakhon Ratchasima, Thailand. Its lasting quality helped inspire the vision behind CHAYNOVA.
+                        One special piece of sportswear has remained with the founder since the 24th SEA Games in Nakhon
+                        Ratchasima, Thailand. Its lasting quality helped inspire the vision behind CHAYNOVA.
                     </p>
                 </div>
             </article>
@@ -589,52 +619,66 @@ header {
 
         <section class="section-panel" aria-labelledby="our-story">
             <div class="section-heading">
-                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo"></div>
+                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo"
+                        class="mainB-logo"></div>
                 <h2 id="our-story">Our Inspiration</h2>
             </div>
 
             <p>
-                Our inspiration comes from Thailand, where the founder discovered sportswear that delivered exceptional quality at a reasonable price. After years of personal experience wearing these products, it became clear that outstanding performance doesn't always require a premium price.
+                Our inspiration comes from Thailand, where the founder discovered sportswear that delivered exceptional
+                quality at a reasonable price. After years of personal experience wearing these products, it became
+                clear that outstanding performance doesn't always require a premium price.
             </p>
 
             <p>
-                One special piece of sportswear has remained with the founder since the <strong>24th SEA Games held in Nakhon Ratchasima, Thailand, in 2007</strong>. Even after many years, it is still in excellent condition and continues to be worn casually today. That lasting quality inspired the vision behind CHAYNOVA.
+                One special piece of sportswear has remained with the founder since the <strong>24th SEA Games held in
+                    Nakhon Ratchasima, Thailand, in 2007</strong>. Even after many years, it is still in excellent
+                condition and continues to be worn casually today. That lasting quality inspired the vision behind
+                CHAYNOVA.
             </p>
         </section>
 
         <section class="section-panel" id="our-vision" aria-labelledby="vision-title">
             <div class="section-heading">
-                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo"></div>
+                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo"
+                        class="mainB-logo"></div>
                 <h2 id="vision-title">Our Vision</h2>
             </div>
 
             <p><strong>CHAYNOVA is more than a sportswear brand.</strong></p>
 
             <p>
-                We want to encourage people of all ages to live active, meaningful, and enjoyable lives. Whether it's playing sports, listening to music, enjoying computer games, or continuing to learn new skills, we believe every stage of life offers opportunities to grow.
+                We want to encourage people of all ages to live active, meaningful, and enjoyable lives. Whether it's
+                playing sports, listening to music, enjoying computer games, or continuing to learn new skills, we
+                believe every stage of life offers opportunities to grow.
             </p>
 
             <p>
-                We believe that confidence often begins with taking the first step. Sometimes that first step is as simple as putting on clothing that makes you feel comfortable, capable, and ready to move.
+                We believe that confidence often begins with taking the first step. Sometimes that first step is as
+                simple as putting on clothing that makes you feel comfortable, capable, and ready to move.
             </p>
 
             <p>
-                For us, sportswear is not just something you wear. It can become a tool that helps you build confidence, step outside your comfort zone, and discover new possibilities.
+                For us, sportswear is not just something you wear. It can become a tool that helps you build confidence,
+                step outside your comfort zone, and discover new possibilities.
             </p>
         </section>
 
         <section class="section-panel promise" aria-labelledby="promise-title">
             <div class="section-heading">
-                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo" class="mainB-logo"></div>
+                <div class="icon" aria-hidden="true"><img src="logo/WHITEDYNAMICTRANS.png" alt="CHAYNOVA Watch Logo"
+                        class="mainB-logo"></div>
                 <h2 id="promise-title">Our Promise</h2>
             </div>
 
             <p>
-                We carefully select products that we would proudly wear ourselves. Our goal is to offer sportswear that provides excellent quality, lasting durability, comfort, and great value.
+                We carefully select products that we would proudly wear ourselves. Our goal is to offer sportswear that
+                provides excellent quality, lasting durability, comfort, and great value.
             </p>
 
             <p>
-                As CHAYNOVA grows, we hope to build more than a store. We hope to build a community that inspires people to move, learn, play, and enjoy life together.
+                As CHAYNOVA grows, we hope to build more than a store. We hope to build a community that inspires people
+                to move, learn, play, and enjoy life together.
             </p>
 
             <p><strong>Thank you for being part of the CHAYNOVA journey.</strong></p>
@@ -645,6 +689,7 @@ header {
 
     <footer>
         <footer><a href="about.html">© 2026 CHAYNOVA</a>• Inspired by Thailand • Based in New York
-    </footer>
+        </footer>
 </body>
+
 </html>
