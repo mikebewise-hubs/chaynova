@@ -27,105 +27,106 @@
                 linear-gradient(135deg, #da7b06, #7864eb, #72a1f8);
         }
 
-      /* ===========================
+        /* ===========================
    CHAYNOVA Universal Header
    =========================== */
 
-header {
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(95vw, 1100px);
-    z-index: 1000;
+        header {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(95vw, 1100px);
+            z-index: 1000;
 
-    display: flex;
-    justify-content: center;
+            display: flex;
+            justify-content: center;
 
-    padding: 8px 18px;
+            padding: 8px 18px;
 
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 999px;
 
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
 
-    box-shadow: 0 0 28px rgba(0,217,255,.25);
-}
+            box-shadow: 0 0 28px rgba(0, 217, 255, .25);
+        }
 
-.top-nav{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+        .top-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    flex-wrap:nowrap;
-    white-space:nowrap;
+            flex-wrap: nowrap;
+            white-space: nowrap;
 
-    gap:clamp(8px,1.8vw,22px);
-}
+            gap: clamp(8px, 1.8vw, 22px);
+        }
 
-.top-nav a{
-    flex-shrink:0;
+        .top-nav a {
+            flex-shrink: 0;
 
-    font-family:"Oxanium",sans-serif;
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.5px;
+            font-family: "Oxanium", sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .5px;
 
-    color:#fff;
-    text-decoration:none;
+            color: #fff;
+            text-decoration: none;
 
-    transition:.25s;
-}
+            transition: .25s;
+        }
 
-.top-nav a:hover,
-.top-nav a[aria-current="page"]{
-    color:#001019;
-    text-shadow:0 0 14px rgba(255,255,255,.9);
-}
+        .top-nav a:hover,
+        .top-nav a[aria-current="page"] {
+            color: #001019;
+            text-shadow: 0 0 14px rgba(255, 255, 255, .9);
+        }
 
-.nav-logo{
-    display:flex;
-    align-items:center;
-    flex-shrink:0;
-}
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
 
-.nav-logo img{
-    display:block;
-    height:26px;
-    width:auto;
-    transition:.2s;
-}
+        .nav-logo img {
+            display: block;
+            height: 26px;
+            width: auto;
+            transition: .2s;
+        }
 
-.nav-logo img:hover{
-    transform:scale(1.08);
-}
+        .nav-logo img:hover {
+            transform: scale(1.08);
+        }
 
-/* Mobile */
+        /* Mobile */
 
-@media (max-width:700px){
+        @media (max-width:700px) {
 
-    header{
-        width:97vw;
-        padding:8px 10px;
-        top:12px;
-    }
+            header {
+                width: 97vw;
+                padding: 8px 10px;
+                top: 12px;
+            }
 
-    .top-nav{
-        gap:clamp(5px,1.5vw,10px);
-    }
+            .top-nav {
+                gap: clamp(5px, 1.5vw, 10px);
+            }
 
-    .top-nav a{
-        font-size:.9rem;
-        letter-spacing:0;
-    }
+            .top-nav a {
+                font-size: .9rem;
+                letter-spacing: 0;
+            }
 
-    .nav-logo img{
-        height:18px;
-    }
-}
+            .nav-logo img {
+                height: 18px;
+            }
+        }
+
         /* BACKGROUND */
         .firework {
             position: fixed;
@@ -795,6 +796,7 @@ header {
                 text-shadow: none;
             }
         }
+
 
         .main-logo-link {
             display: inline-block;
