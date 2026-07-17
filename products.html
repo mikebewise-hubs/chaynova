@@ -745,53 +745,6 @@
         }
     }
 
-    @media (max-width: 680px) {
-        header {
-            top: 8px;
-            width: calc(100% - 16px);
-            margin-top: 8px;
-            border-radius: 20px;
-        }
-
-        .top-nav {
-            align-items: flex-start;
-        }
-
-        .brand-copy span {
-            display: none;
-        }
-
-        .nav-actions {
-            gap: 5px;
-        }
-
-        .nav-link,
-        .nav-button {
-            min-height: 36px;
-            padding: 7px 10px;
-            font-size: 0.76rem;
-        }
-
-        .page {
-            width: calc(100% - 18px);
-            padding-top: 38px;
-        }
-
-        .summary-grid,
-        .toolbar {
-            grid-template-columns: 1fr;
-        }
-
-        .summary-card {
-            min-height: 108px;
-        }
-
-        .table-footer {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-    }
-
     /* =========================================================
        iPhone-friendly layout + comfortable work style
        ========================================================= */
@@ -974,13 +927,18 @@
         color: #647b8b;
     }
 
+    /* iPhone-friendly responsive layout */
     @media (max-width: 680px) {
         body {
             padding-bottom: env(safe-area-inset-bottom);
         }
 
         header {
-            padding: 8px 9px;
+            top: max(8px, env(safe-area-inset-top));
+            width: calc(100% - 16px);
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 20px;
         }
 
         .top-nav {
@@ -993,15 +951,20 @@
             height: 38px;
         }
 
+        .brand-copy span {
+            display: none;
+        }
+
         .brand-copy strong {
             font-size: 0.88rem;
         }
 
         .nav-actions {
+            gap: 5px;
             flex-wrap: nowrap;
-            overflow-x: auto;
+            overflow: visible;
             justify-content: flex-start;
-            padding-bottom: 2px;
+            padding-bottom: 0;
             scrollbar-width: none;
         }
 
@@ -1012,12 +975,18 @@
         .nav-link,
         .nav-button {
             flex: 0 0 auto;
-            min-height: 42px;
-            padding: 8px 11px;
+            min-width: 38px;
+            min-height: 38px;
+            padding: 7px 10px;
+            font-size: 0.74rem;
+        }
+
+        .nav-label-desktop {
+            display: none;
         }
 
         .view-toggle {
-            min-width: auto;
+            min-width: 38px;
         }
 
         .view-toggle-text {
@@ -1025,12 +994,14 @@
         }
 
         .page {
-            width: calc(100% - 16px);
-            padding: 28px 0 42px;
+            width: calc(100% - 18px);
+            padding: 38px 0 max(42px, env(safe-area-inset-bottom));
         }
 
         .hero {
-            gap: 15px;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 16px;
             margin-bottom: 16px;
         }
 
@@ -1046,23 +1017,24 @@
         .api-status {
             width: 100%;
             min-width: 0;
+            max-width: 100%;
             justify-content: center;
         }
 
         .summary-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 9px;
+            gap: 10px;
         }
 
         .summary-card {
-            min-height: 96px;
-            padding: 14px;
+            min-height: 108px;
+            padding: 15px;
             border-radius: 16px;
         }
 
         .summary-value {
             margin-top: 8px;
-            font-size: 1.55rem;
+            font-size: 1.65rem;
         }
 
         .summary-note {
@@ -1072,9 +1044,9 @@
 
         .panel {
             overflow: visible;
+            border: 0;
             border-radius: 18px;
             background: transparent;
-            border: 0;
             box-shadow: none;
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
@@ -1084,6 +1056,7 @@
             position: sticky;
             top: 72px;
             z-index: 20;
+            grid-template-columns: 1fr;
             gap: 9px;
             padding: 12px;
             margin-bottom: 12px;
@@ -1198,8 +1171,8 @@
 
         td:last-child {
             display: block;
-            border-bottom: 0;
             padding-bottom: 0;
+            border-bottom: 0;
         }
 
         td:last-child::before {
@@ -1226,6 +1199,8 @@
         }
 
         .table-footer {
+            align-items: flex-start;
+            flex-direction: column;
             margin-top: 12px;
             padding: 13px;
             border: 1px solid var(--border);
@@ -1313,77 +1288,6 @@
             max-width: 88px;
             font-size: 0.78rem;
             letter-spacing: 0.35px;
-        }
-    }
-
-    /* Match admin.html iPhone navigation and spacing */
-    @media (max-width: 680px) {
-        header {
-            top: max(8px, env(safe-area-inset-top));
-            width: calc(100% - 16px);
-            margin-top: 8px;
-            padding: 8px 10px;
-            border-radius: 20px;
-        }
-
-        .top-nav {
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-actions {
-            gap: 5px;
-            flex-wrap: nowrap;
-            overflow: visible;
-            padding-bottom: 0;
-        }
-
-        .nav-link,
-        .nav-button {
-            flex: 0 0 auto;
-            min-width: 38px;
-            min-height: 38px;
-            padding: 7px 10px;
-            font-size: 0.74rem;
-        }
-
-        .nav-label-desktop {
-            display: none;
-        }
-
-        .view-toggle {
-            min-width: 38px;
-        }
-
-        .page {
-            width: calc(100% - 18px);
-            padding-top: 38px;
-            padding-bottom: max(42px, env(safe-area-inset-bottom));
-        }
-
-        .hero {
-            align-items: flex-start;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .api-status {
-            min-width: 0;
-            max-width: 100%;
-        }
-
-        .summary-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .summary-card {
-            min-height: 108px;
-            padding: 15px;
-        }
-
-        .summary-value {
-            font-size: 1.65rem;
         }
     }
 
