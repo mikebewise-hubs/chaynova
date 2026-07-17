@@ -2682,6 +2682,39 @@
             });
         }
 
+        function renderSavedPhotos(images = []) {
+            photoPreview.innerHTML = "";
+
+            const main = document.getElementById("mainPreviewImage");
+            main.innerHTML = "▧";
+
+            images.forEach((image, index) => {
+                const card = document.createElement("div");
+                card.className = "preview-card";
+
+                const img = document.createElement("img");
+                img.src = image.url;
+                img.alt =
+                    image.alt_text ||
+                    image.original_name ||
+                    "Product image";
+
+                if (index === 0 || Number(image.is_primary) === 1) {
+                    main.innerHTML = "";
+
+                    const mainImg = document.createElement("img");
+                    mainImg.src = image.url;
+                    mainImg.alt = img.alt;
+
+                    main.appendChild(mainImg);
+                }
+
+                card.appendChild(img);
+                photoPreview.appendChild(card);
+            });
+        }
+
+
         function addPhotos(files) {
             const images = [...files].filter(file => file.type.startsWith("image/"));
             selectedPhotos.push(...images);
@@ -2976,7 +3009,27 @@
 
                 localStorage.removeItem(DRAFT_KEY);
                 restoreForm(databaseProductToFormProduct(loadedProduct, loadedVariants));
+                const imageResponse = await fetch(
+                    `${CLOUD_API_URL}/${encodeURIComponent(id)}/images`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": "Bearer " + getAdminToken()
+                        },
+                        cache: "no-store"
+                    }
+                );
 
+                const imageResult = await imageResponse.json();
+
+                if (!imageResponse.ok) {
+                    throw new Error(
+                        imageResult.error ||
+                        "Could not load saved product images."
+                    );
+                }
+
+                renderSavedPhotos(imageResult.images || []);
                 document.getElementById("slug").dataset.manual =
                     loadedProduct.website_slug ? "true" : "";
 
