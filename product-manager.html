@@ -1924,7 +1924,148 @@
                 top: 76px;
             }
         }
+
+        .live-preview-gallery {
+            width: 100%;
+        }
+
+        .preview-thumbnail-strip {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 3px 1px 5px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .preview-thumbnail-button {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 7px;
+            overflow: hidden;
+            background: transparent;
+            cursor: pointer;
+            opacity: 0.72;
+            transition:
+                opacity 0.18s ease,
+                border-color 0.18s ease,
+                transform 0.18s ease;
+        }
+
+        .preview-thumbnail-button:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        .preview-thumbnail-button.active {
+            opacity: 1;
+            border-color: currentColor;
+            box-shadow: 0 0 0 1px currentColor;
+        }
+
+        .preview-thumbnail-button img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .preview-thumbnail-strip:empty {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+            .preview-thumbnail-button {
+                width: 34px;
+                height: 34px;
+                flex-basis: 34px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .preview-thumbnail-button {
+                transition: none;
+            }
+        }
+
+        .preview-image-main {
+            cursor: zoom-in;
+        }
+
+        .preview-image-main img {
+            cursor: zoom-in;
+        }
+
+        .preview-image-main:hover img {
+            transform: scale(1.01);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .preview-image-main:hover img {
+                transform: none;
+            }
+        }
+    
+        /* Product identity and barcode previews */
+        .field.product-id-field {
+            grid-column: span 6;
+        }
+
+        .field.store-sku-field {
+            grid-column: span 6;
+        }
+
+        .barcode-preview-box {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #ffffff;
+            text-align: center;
+        }
+
+        .barcode-preview-box.visible {
+            display: block;
+        }
+
+        .barcode-preview-box svg {
+            display: block;
+            width: max-content;
+            max-width: none;
+            min-width: 260px;
+            height: 82px;
+            margin: 0 auto;
+        }
+
+        body:not(.work-theme) .barcode-preview-box {
+            background: rgba(255, 255, 255, .96);
+        }
+
+        .barcode-preview-note {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: .7rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 680px) {
+            .field.product-id-field,
+            .field.store-sku-field {
+                grid-column: 1 / -1;
+            }
+
+            .barcode-preview-box {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 </head>
 
 <body data-theme="neon">
@@ -2020,16 +2161,22 @@
                     </div>
                     <div class="section-body">
                         <div class="form-grid">
-                            <div class="field">
+                            <div class="field product-id-field">
                                 <label for="productId">Product ID</label>
                                 <div class="input-row">
                                     <input id="productId" name="productId" placeholder="CHA-000001">
                                     <button class="mini-btn" type="button" id="generateId">Generate</button>
                                 </div>
                             </div>
-                            <div class="field">
+                            <div class="field store-sku-field">
                                 <label for="sku">Store SKU <span class="required">*</span></label>
                                 <input id="sku" name="sku" required placeholder="CHA-FBT-JER-001">
+
+                                <div id="skuBarcodeBox" class="barcode-preview-box"
+                                    aria-label="Store SKU barcode image">
+                                    <svg id="skuBarcodeImage"></svg>
+                                    <div class="barcode-preview-note">Store SKU barcode image</div>
+                                </div>
                             </div>
                             <div class="field">
                                 <label for="status">Product Status</label>
@@ -2102,11 +2249,24 @@
                                 <label for="manufacturerBarcode">Thailand / Manufacturer Barcode</label>
                                 <input id="manufacturerBarcode" name="manufacturerBarcode" inputmode="numeric"
                                     placeholder="8851234567890">
+
+                                <div id="manufacturerBarcodeBox" class="barcode-preview-box"
+                                    aria-label="Thailand or manufacturer barcode preview">
+                                    <svg id="manufacturerBarcodeImage"></svg>
+                                    <div class="barcode-preview-note">Manufacturer barcode image</div>
+                                </div>
                             </div>
+
                             <div class="field half">
                                 <label for="storeBarcode">CHAYNOVA Store Barcode</label>
-                                <input id="storeBarcode" name="storeBarcode" inputmode="numeric"
+                                <input id="storeBarcode" name="storeBarcode" inputmode="text"
                                     placeholder="Your UPC, EAN, or internal barcode">
+
+                                <div id="storeBarcodeBox" class="barcode-preview-box"
+                                    aria-label="CHAYNOVA store barcode preview">
+                                    <svg id="storeBarcodeImage"></svg>
+                                    <div class="barcode-preview-note">CHAYNOVA store barcode image</div>
+                                </div>
                             </div>
 
                             <div class="field half">
@@ -2344,7 +2504,12 @@
                 <section class="summary-card card">
                     <h3>Live Product Preview</h3>
                     <div class="product-preview">
-                        <div class="preview-image-main" id="mainPreviewImage">▧</div>
+                        <div class="live-preview-gallery">
+                            <div id="mainPreviewImage" class="preview-image-main">▧</div>
+
+                            <div id="mainPreviewThumbnails" class="preview-thumbnail-strip"
+                                aria-label="Product image thumbnails"></div>
+                        </div>
                         <div class="preview-copy">
                             <div class="brand-line" id="previewBrand">Your brand</div>
                             <h4 id="previewName">New Product</h4>
@@ -2405,6 +2570,7 @@
         function applyTheme(theme) {
             const selectedTheme = theme === "work" ? "work" : "neon";
             const workMode = selectedTheme === "work";
+
             document.body.dataset.theme = selectedTheme;
             document.body.classList.toggle("work-theme", workMode);
 
@@ -2415,10 +2581,21 @@
             });
 
             const themeMeta = document.querySelector('meta[name="theme-color"]');
-            if (themeMeta) themeMeta.setAttribute("content", workMode ? "#edf2f5" : "#030010");
 
-            if (themeIcon) themeIcon.textContent = workMode ? "✦" : "☀";
-            if (themeText) themeText.textContent = workMode ? "Neon" : "Comfort";
+            if (themeMeta) {
+                themeMeta.setAttribute(
+                    "content",
+                    workMode ? "#edf2f5" : "#030010"
+                );
+            }
+
+            if (themeIcon) {
+                themeIcon.textContent = workMode ? "✦" : "☀";
+            }
+
+            if (themeText) {
+                themeText.textContent = workMode ? "Neon" : "Comfort";
+            }
 
             localStorage.setItem(THEME_KEY, selectedTheme);
         }
@@ -2428,9 +2605,15 @@
         }
 
         document.querySelectorAll("[data-theme-choice]").forEach(button => {
-            button.addEventListener("click", () => applyTheme(button.dataset.themeChoice));
+            button.addEventListener(
+                "click",
+                () => applyTheme(button.dataset.themeChoice)
+            );
         });
-        if (themeButton) themeButton.addEventListener("click", toggleTheme);
+
+        if (themeButton) {
+            themeButton.addEventListener("click", toggleTheme);
+        }
 
         applyTheme(getTheme());
 
@@ -2445,31 +2628,59 @@
         let selectedPhotos = [];
         let selectedDocuments = [];
         let editingProductDatabaseId = "";
-        const deleteProductButton = document.getElementById("deleteProduct");
 
-        const loginOverlay = document.getElementById("loginOverlay");
-        const adminUsername = document.getElementById("adminUsername");
-        const adminPassword = document.getElementById("adminPassword");
-        const adminLoginBtn = document.getElementById("adminLoginBtn");
-        const adminLoginError = document.getElementById("adminLoginError");
-        const protectedElements = document.querySelectorAll(".admin-protected");
+        /*
+         * Changes whenever saved media is refreshed.
+         * This prevents an old browser/CDN copy from remaining visible when an
+         * R2 object is replaced while preserving its original public URL.
+         */
+        let savedImageRevision = Date.now();
+        let savedImagesLoading = false;
+
+        const deleteProductButton =
+            document.getElementById("deleteProduct");
+
+        const loginOverlay =
+            document.getElementById("loginOverlay");
+
+        const adminUsername =
+            document.getElementById("adminUsername");
+
+        const adminPassword =
+            document.getElementById("adminPassword");
+
+        const adminLoginBtn =
+            document.getElementById("adminLoginBtn");
+
+        const adminLoginError =
+            document.getElementById("adminLoginError");
+
+        const protectedElements =
+            document.querySelectorAll(".admin-protected");
 
         function getAdminToken() {
             return localStorage.getItem(TOKEN_KEY) || "";
         }
 
         function showAdminPage() {
-            protectedElements.forEach(element => element.classList.remove("admin-protected"));
+            protectedElements.forEach(element => {
+                element.classList.remove("admin-protected");
+            });
+
             loginOverlay.classList.remove("open");
             loginOverlay.setAttribute("aria-hidden", "true");
             adminLoginError.textContent = "";
         }
 
         function showAdminLogin(message = "") {
-            protectedElements.forEach(element => element.classList.add("admin-protected"));
+            protectedElements.forEach(element => {
+                element.classList.add("admin-protected");
+            });
+
             loginOverlay.classList.add("open");
             loginOverlay.setAttribute("aria-hidden", "false");
             adminLoginError.textContent = message;
+
             setTimeout(() => adminUsername.focus(), 50);
         }
 
@@ -2478,7 +2689,8 @@
             const password = adminPassword.value;
 
             if (!username || !password) {
-                adminLoginError.textContent = "Please enter your username and password.";
+                adminLoginError.textContent =
+                    "Please enter your username and password.";
                 return;
             }
 
@@ -2488,24 +2700,50 @@
             try {
                 const response = await fetch(LOGIN_URL, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
                 });
 
                 let data = {};
-                try { data = await response.json(); } catch (_) { }
 
-                if (!response.ok || !data.success || !data.token) {
-                    throw new Error(data.message || "Wrong username or password.");
+                try {
+                    data = await response.json();
+                } catch (_) {
+                    throw new Error(
+                        `Login returned ${response.status} without valid JSON.`
+                    );
+                }
+
+                if (
+                    !response.ok ||
+                    !data.success ||
+                    !data.token
+                ) {
+                    throw new Error(
+                        data.message ||
+                        data.error ||
+                        "Wrong username or password."
+                    );
                 }
 
                 localStorage.setItem(TOKEN_KEY, data.token);
                 adminPassword.value = "";
+
                 showAdminPage();
                 await loadProductForEditing();
+
             } catch (error) {
                 localStorage.removeItem(TOKEN_KEY);
-                adminLoginError.textContent = error.message || "Login failed.";
+
+                adminLoginError.textContent =
+                    error.message ||
+                    "Login failed.";
+
             } finally {
                 adminLoginBtn.disabled = false;
             }
@@ -2515,236 +2753,911 @@
             localStorage.removeItem(TOKEN_KEY);
             adminUsername.value = "";
             adminPassword.value = "";
+
             showAdminLogin("You have logged out.");
         }
 
         adminLoginBtn.addEventListener("click", loginAdmin);
-        adminPassword.addEventListener("keydown", event => {
-            if (event.key === "Enter") loginAdmin();
-        });
-        adminUsername.addEventListener("keydown", event => {
-            if (event.key === "Enter") adminPassword.focus();
-        });
-        document.getElementById("logoutAdmin").addEventListener("click", logoutAdmin);
 
+        adminPassword.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                loginAdmin();
+            }
+        });
+
+        adminUsername.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                adminPassword.focus();
+            }
+        });
+
+        document
+            .getElementById("logoutAdmin")
+            .addEventListener("click", logoutAdmin);
 
         function showToast(message, type = "") {
             toast.textContent = message;
             toast.className = `toast show ${type}`;
+
             clearTimeout(showToast.timer);
-            showToast.timer = setTimeout(() => toast.className = "toast", 2800);
+
+            showToast.timer = setTimeout(() => {
+                toast.className = "toast";
+            }, 2800);
         }
 
         function money(value) {
             const amount = Number(value || 0);
-            return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+
+            return new Intl.NumberFormat(
+                "en-US",
+                {
+                    style: "currency",
+                    currency: "USD"
+                }
+            ).format(amount);
         }
 
         function generateProductId() {
             const date = new Date();
-            const datePart = date.toISOString().slice(2, 10).replaceAll("-", "");
-            const random = Math.floor(100 + Math.random() * 900);
-            document.getElementById("productId").value = `CHA-${datePart}-${random}`;
+
+            const datePart = date
+                .toISOString()
+                .slice(2, 10)
+                .replaceAll("-", "");
+
+            const random =
+                Math.floor(100 + Math.random() * 900);
+
+            document.getElementById("productId").value =
+                `CHA-${datePart}-${random}`;
+
             updatePreview();
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(
+                /[&<>'"]/g,
+                char => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    "'": "&#039;",
+                    "\"": "&quot;"
+                }[char])
+            );
         }
 
         function addVariant(data = {}) {
             const row = document.createElement("tr");
+
             row.innerHTML = `
-                <td><input name="variantSize" value="${escapeHtml(data.size || "")}" placeholder="M"></td>
-                <td><input name="variantColor" value="${escapeHtml(data.color || "")}" placeholder="Royal Blue"></td>
-                <td><input name="variantSku" value="${escapeHtml(data.sku || "")}" placeholder="CHA-001-BLU-M"></td>
-                <td><input name="variantBarcode" value="${escapeHtml(data.barcode || "")}" placeholder="Barcode"></td>
-                <td><input name="variantQuantity" type="number" min="0" step="1" value="${Number(data.quantity || 0)}"></td>
-                <td><input name="variantLocation" value="${escapeHtml(data.location || "")}" placeholder="Shelf A-03"></td>
-                <td><button class="remove-row" type="button" title="Remove variant">×</button></td>
-            `;
-            row.querySelector(".remove-row").addEventListener("click", () => {
-                if (variantRows.children.length === 1) return showToast("Keep at least one variant.");
-                row.remove();
-                updatePreview();
+        <td>
+            <input
+                name="variantSize"
+                value="${escapeHtml(data.size || "")}"
+                placeholder="M"
+            >
+        </td>
+        <td>
+            <input
+                name="variantColor"
+                value="${escapeHtml(data.color || "")}"
+                placeholder="Royal Blue"
+            >
+        </td>
+        <td>
+            <input
+                name="variantSku"
+                value="${escapeHtml(data.sku || "")}"
+                placeholder="CHA-001-BLU-M"
+            >
+        </td>
+        <td>
+            <input
+                name="variantBarcode"
+                value="${escapeHtml(data.barcode || "")}"
+                placeholder="Barcode"
+            >
+        </td>
+        <td>
+            <input
+                name="variantQuantity"
+                type="number"
+                min="0"
+                step="1"
+                value="${Number(data.quantity || 0)}"
+            >
+        </td>
+        <td>
+            <input
+                name="variantLocation"
+                value="${escapeHtml(data.location || "")}"
+                placeholder="Shelf A-03"
+            >
+        </td>
+        <td>
+            <button
+                class="remove-row"
+                type="button"
+                title="Remove variant"
+            >×</button>
+        </td>
+    `;
+
+            row
+                .querySelector(".remove-row")
+                .addEventListener("click", () => {
+                    if (variantRows.children.length === 1) {
+                        showToast("Keep at least one variant.");
+                        return;
+                    }
+
+                    row.remove();
+                    updatePreview();
+                });
+
+            row.querySelectorAll("input").forEach(input => {
+                input.addEventListener("input", updatePreview);
             });
-            row.querySelectorAll("input").forEach(input => input.addEventListener("input", updatePreview));
+
             variantRows.appendChild(row);
             updatePreview();
         }
 
         function getVariants() {
-            return [...variantRows.querySelectorAll("tr")].map(row => ({
-                size: row.querySelector('[name="variantSize"]').value.trim(),
-                color: row.querySelector('[name="variantColor"]').value.trim(),
-                sku: row.querySelector('[name="variantSku"]').value.trim(),
-                barcode: row.querySelector('[name="variantBarcode"]').value.trim(),
-                quantity: Number(row.querySelector('[name="variantQuantity"]').value || 0),
-                location: row.querySelector('[name="variantLocation"]').value.trim()
-            }));
-        }
+            return [...variantRows.querySelectorAll("tr")]
+                .map(row => ({
+                    size:
+                        row.querySelector('[name="variantSize"]')
+                            .value.trim(),
 
-        function escapeHtml(value) {
-            return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", "\"": "&quot;" }[char]));
+                    color:
+                        row.querySelector('[name="variantColor"]')
+                            .value.trim(),
+
+                    sku:
+                        row.querySelector('[name="variantSku"]')
+                            .value.trim(),
+
+                    barcode:
+                        row.querySelector('[name="variantBarcode"]')
+                            .value.trim(),
+
+                    quantity:
+                        Number(
+                            row.querySelector('[name="variantQuantity"]')
+                                .value || 0
+                        ),
+
+                    location:
+                        row.querySelector('[name="variantLocation"]')
+                            .value.trim()
+                }));
         }
 
         function getFormObject() {
             const data = new FormData(form);
             const product = {};
+
             for (const [key, value] of data.entries()) {
-                if (key.startsWith("variant")) continue;
+                if (key.startsWith("variant")) {
+                    continue;
+                }
+
                 product[key] = value;
             }
 
-            product.trackInventory = form.elements.trackInventory.checked;
-            product.allowBackorder = form.elements.allowBackorder.checked;
-            product.taxable = form.elements.taxable.checked;
-            product.featured = form.elements.featured.checked;
+            product.trackInventory =
+                form.elements.trackInventory.checked;
+
+            product.allowBackorder =
+                form.elements.allowBackorder.checked;
+
+            product.taxable =
+                form.elements.taxable.checked;
+
+            product.featured =
+                form.elements.featured.checked;
+
             product.variants = getVariants();
-            product.photoNames = selectedPhotos.map(file => file.name);
-            product.documentNames = selectedDocuments.map(file => file.name);
-            product.updatedAt = new Date().toISOString();
+
+            product.photoNames =
+                selectedPhotos.map(file => file.name);
+
+            product.documentNames =
+                selectedDocuments.map(file => file.name);
+
+            product.updatedAt =
+                new Date().toISOString();
+
             return product;
         }
 
         function restoreForm(product) {
-            Object.entries(product || {}).forEach(([key, value]) => {
-                if (["variants", "photoNames", "documentNames", "updatedAt"].includes(key)) return;
-                const field = form.elements[key];
-                if (!field) return;
-                if (field.type === "checkbox") field.checked = Boolean(value);
-                else field.value = value ?? "";
-            });
+            Object.entries(product || {}).forEach(
+                ([key, value]) => {
+                    if (
+                        [
+                            "variants",
+                            "photoNames",
+                            "documentNames",
+                            "updatedAt"
+                        ].includes(key)
+                    ) {
+                        return;
+                    }
+
+                    const field = form.elements[key];
+
+                    if (!field) {
+                        return;
+                    }
+
+                    if (field.type === "checkbox") {
+                        field.checked = Boolean(value);
+                    } else {
+                        field.value = value ?? "";
+                    }
+                }
+            );
 
             variantRows.innerHTML = "";
-            (product.variants?.length ? product.variants : [{}]).forEach(addVariant);
+
+            (
+                product.variants?.length
+                    ? product.variants
+                    : [{}]
+            ).forEach(addVariant);
+
             updatePreview();
         }
 
+
+        function renderBarcode(inputId, svgId, boxId) {
+            const value =
+                document
+                    .getElementById(inputId)
+                    .value.trim();
+
+            const svg =
+                document.getElementById(svgId);
+
+            const box =
+                document.getElementById(boxId);
+
+            if (!value) {
+                box.classList.remove("visible");
+                svg.innerHTML = "";
+                return;
+            }
+
+            if (typeof JsBarcode !== "function") {
+                box.classList.remove("visible");
+                console.error("JsBarcode library did not load.");
+                return;
+            }
+
+            try {
+                JsBarcode(svg, value, {
+                    format: "CODE128",
+                    displayValue: true,
+                    font: "Inter",
+                    fontSize: 15,
+                    textMargin: 4,
+                    height: 48,
+                    width: 2,
+                    margin: 8,
+                    background: "#ffffff",
+                    lineColor: "#111111"
+                });
+
+                box.classList.add("visible");
+            } catch (error) {
+                box.classList.remove("visible");
+                svg.innerHTML = "";
+                console.error(
+                    `Could not create barcode for ${inputId}:`,
+                    error
+                );
+            }
+        }
+
+        function renderProductBarcodes() {
+            renderBarcode(
+                "sku",
+                "skuBarcodeImage",
+                "skuBarcodeBox"
+            );
+
+            renderBarcode(
+                "manufacturerBarcode",
+                "manufacturerBarcodeImage",
+                "manufacturerBarcodeBox"
+            );
+
+            renderBarcode(
+                "storeBarcode",
+                "storeBarcodeImage",
+                "storeBarcodeBox"
+            );
+        }
+
         function updatePreview() {
-            const name = document.getElementById("productName").value.trim() || "New Product";
-            const brand = document.getElementById("brand").value.trim() || "Your brand";
-            const sku = document.getElementById("sku").value.trim() || "SKU not entered";
-            const price = Number(document.getElementById("sellingPrice").value || 0);
-            const cost = Number(document.getElementById("landedCost").value || 0);
+            const name =
+                document
+                    .getElementById("productName")
+                    .value.trim() ||
+                "New Product";
+
+            const brand =
+                document
+                    .getElementById("brand")
+                    .value.trim() ||
+                "Your brand";
+
+            const sku =
+                document
+                    .getElementById("sku")
+                    .value.trim() ||
+                "SKU not entered";
+
+            const price =
+                Number(
+                    document
+                        .getElementById("sellingPrice")
+                        .value || 0
+                );
+
+            const cost =
+                Number(
+                    document
+                        .getElementById("landedCost")
+                        .value || 0
+                );
+
             const variants = getVariants();
-            const totalStock = variants.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-            const margin = price > 0 ? ((price - cost) / price) * 100 : null;
 
-            document.getElementById("previewName").textContent = name;
-            document.getElementById("previewBrand").textContent = brand;
-            document.getElementById("previewSku").textContent = sku;
-            document.getElementById("previewPrice").textContent = money(price);
-            document.getElementById("summaryVariants").textContent = variants.length;
-            document.getElementById("summaryStock").textContent = totalStock;
-            document.getElementById("summaryCost").textContent = money(cost);
-            document.getElementById("summaryMargin").textContent = margin === null ? "—" : `${margin.toFixed(1)}%`;
-            document.getElementById("variantCountBadge").textContent = `${variants.length} variant${variants.length === 1 ? "" : "s"}`;
+            const totalStock =
+                variants.reduce(
+                    (sum, item) =>
+                        sum + Number(item.quantity || 0),
+                    0
+                );
 
-            const nameForSlug = name === "New Product" ? "" : name;
-            const slug = document.getElementById("slug");
-            if (!slug.dataset.manual && nameForSlug) {
-                slug.value = nameForSlug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+            const margin =
+                price > 0
+                    ? ((price - cost) / price) * 100
+                    : null;
+
+            document.getElementById("previewName").textContent =
+                name;
+
+            document.getElementById("previewBrand").textContent =
+                brand;
+
+            document.getElementById("previewSku").textContent =
+                sku;
+
+            document.getElementById("previewPrice").textContent =
+                money(price);
+
+            renderProductBarcodes();
+
+            document.getElementById("summaryVariants").textContent =
+                variants.length;
+
+            document.getElementById("summaryStock").textContent =
+                totalStock;
+
+            document.getElementById("summaryCost").textContent =
+                money(cost);
+
+            document.getElementById("summaryMargin").textContent =
+                margin === null
+                    ? "—"
+                    : `${margin.toFixed(1)}%`;
+
+            document.getElementById("variantCountBadge").textContent =
+                `${variants.length} variant${variants.length === 1 ? "" : "s"}`;
+
+            const nameForSlug =
+                name === "New Product"
+                    ? ""
+                    : name;
+
+            const slug =
+                document.getElementById("slug");
+
+            if (
+                !slug.dataset.manual &&
+                nameForSlug
+            ) {
+                slug.value = nameForSlug
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-|-$/g, "");
             }
         }
 
         function calculateLandedCost() {
-            const purchase = Number(document.getElementById("purchaseCost").value || 0);
-            const shipping = Number(document.getElementById("shippingCost").value || 0);
-            const duty = Number(document.getElementById("dutyCost").value || 0);
-            document.getElementById("landedCost").value = (purchase + shipping + duty).toFixed(2);
+            const purchase =
+                Number(
+                    document
+                        .getElementById("purchaseCost")
+                        .value || 0
+                );
+
+            const shipping =
+                Number(
+                    document
+                        .getElementById("shippingCost")
+                        .value || 0
+                );
+
+            const duty =
+                Number(
+                    document
+                        .getElementById("dutyCost")
+                        .value || 0
+                );
+
+            document.getElementById("landedCost").value =
+                (purchase + shipping + duty).toFixed(2);
+
             updatePreview();
+        }
+
+        /*
+         * Produces a fresh URL for saved R2 media.
+         *
+         * Preferred version values:
+         * 1. Current R2 ETag
+         * 2. Database updated timestamp
+         * 3. Upload timestamp
+         * 4. Current Product Manager refresh revision
+         */
+        function getVersionedImageUrl(image) {
+            const rawUrl =
+                String(image?.url || "").trim();
+
+            if (!rawUrl) {
+                return "";
+            }
+
+            const version =
+                String(
+                    image?.etag ||
+                    image?.updated_at ||
+                    image?.uploaded_at ||
+                    savedImageRevision
+                ).replace(/["']/g, "");
+
+            const separator =
+                rawUrl.includes("?")
+                    ? "&"
+                    : "?";
+
+            return (
+                `${rawUrl}${separator}` +
+                `v=${encodeURIComponent(version)}`
+            );
+        }
+
+
+
+        function setMainPreviewImage(imageUrl, altText = "Product preview") {
+            const mainPreview =
+                document.getElementById("mainPreviewImage");
+
+            mainPreview.innerHTML = "";
+
+            if (!imageUrl) {
+                mainPreview.textContent = "▧";
+                mainPreview.style.cursor = "default";
+                mainPreview.removeAttribute("title");
+                return;
+            }
+
+            const image =
+                document.createElement("img");
+
+            image.src = imageUrl;
+            image.alt = altText;
+            image.decoding = "async";
+
+            mainPreview.appendChild(image);
+
+            mainPreview.style.cursor = "zoom-in";
+            mainPreview.title = "Click to view full size";
+
+            mainPreview.onclick = () => {
+                window.open(imageUrl, "_blank", "noopener");
+            };
+        }
+
+        function setActivePreviewThumbnail(activeButton) {
+            document
+                .querySelectorAll(".preview-thumbnail-button")
+                .forEach(button => {
+                    const isActive =
+                        button === activeButton;
+
+                    button.classList.toggle(
+                        "active",
+                        isActive
+                    );
+
+                    button.setAttribute(
+                        "aria-pressed",
+                        String(isActive)
+                    );
+                });
+        }
+
+        function createPreviewThumbnail(
+            imageUrl,
+            altText,
+            isActive = false
+        ) {
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+            button.className =
+                "preview-thumbnail-button";
+
+            button.setAttribute(
+                "aria-label",
+                `Preview ${altText}`
+            );
+
+            button.setAttribute(
+                "aria-pressed",
+                String(isActive)
+            );
+
+            if (isActive) {
+                button.classList.add("active");
+            }
+
+            const image =
+                document.createElement("img");
+
+            image.src = imageUrl;
+            image.alt = "";
+            image.loading = "lazy";
+            image.decoding = "async";
+
+            button.appendChild(image);
+
+            button.addEventListener("click", () => {
+                setMainPreviewImage(
+                    imageUrl,
+                    altText
+                );
+
+                setActivePreviewThumbnail(button);
+            });
+
+            return button;
         }
 
         function renderPhotos() {
             photoPreview.innerHTML = "";
+
+            const thumbnailStrip =
+                document.getElementById(
+                    "mainPreviewThumbnails"
+                );
+
+            thumbnailStrip.innerHTML = "";
+
+            if (!selectedPhotos.length) {
+                setMainPreviewImage("");
+                return;
+            }
+
             selectedPhotos.forEach((file, index) => {
-                const card = document.createElement("div");
+                const imageUrl =
+                    URL.createObjectURL(file);
+
+                const card =
+                    document.createElement("div");
+
                 card.className = "preview-card";
-                const img = document.createElement("img");
-                img.alt = file.name;
-                img.src = URL.createObjectURL(file);
+
+                const image =
+                    document.createElement("img");
+
+                image.alt = file.name;
+                image.src = imageUrl;
+
+                const thumbnail =
+                    createPreviewThumbnail(
+                        imageUrl,
+                        file.name,
+                        index === 0
+                    );
+
+                thumbnailStrip.appendChild(
+                    thumbnail
+                );
+
                 if (index === 0) {
-                    const main = document.getElementById("mainPreviewImage");
-                    main.innerHTML = "";
-                    const mainImg = document.createElement("img");
-                    mainImg.src = img.src;
-                    mainImg.alt = "Primary product preview";
-                    main.appendChild(mainImg);
+                    setMainPreviewImage(
+                        imageUrl,
+                        file.name
+                    );
                 }
-                const remove = document.createElement("button");
+
+                const remove =
+                    document.createElement("button");
+
                 remove.type = "button";
                 remove.textContent = "×";
                 remove.title = "Remove photo";
-                remove.addEventListener("click", () => {
-                    selectedPhotos.splice(index, 1);
-                    renderPhotos();
-                    if (!selectedPhotos.length) document.getElementById("mainPreviewImage").innerHTML = "▧";
-                });
-                card.append(img, remove);
+
+                remove.addEventListener(
+                    "click",
+                    () => {
+                        selectedPhotos.splice(
+                            index,
+                            1
+                        );
+
+                        renderPhotos();
+                    }
+                );
+
+                card.append(image, remove);
                 photoPreview.appendChild(card);
             });
         }
 
-       function renderSavedPhotos(images = []) {
-    photoPreview.innerHTML = "";
+        function renderSavedPhotos(images = []) {
+            photoPreview.innerHTML = "";
 
-    const main = document.getElementById("mainPreviewImage");
-    main.innerHTML = "▧";
-
-    images.forEach((image, index) => {
-        const card = document.createElement("div");
-        card.className = "preview-card";
-
-        const img = document.createElement("img");
-        img.src = image.url;
-        img.alt =
-            image.alt_text ||
-            image.original_name ||
-            "Product image";
-
-        if (index === 0 || Number(image.is_primary) === 1) {
-            main.innerHTML = "";
-
-            const mainImg = document.createElement("img");
-            mainImg.src = image.url;
-            mainImg.alt = img.alt;
-
-            main.appendChild(mainImg);
-        }
-
-        const deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.textContent = "×";
-        deleteButton.title = "Delete saved photo";
-
-        deleteButton.addEventListener("click", async () => {
-            const productId =
-                editingProductDatabaseId ||
-                getEditingIdFromUrl();
-
-            if (!productId) {
-                showToast(
-                    "Product ID is missing.",
-                    "error"
+            const thumbnailStrip =
+                document.getElementById(
+                    "mainPreviewThumbnails"
                 );
+
+            thumbnailStrip.innerHTML = "";
+
+            const savedImages =
+                Array.isArray(images)
+                    ? images
+                    : [];
+
+            if (!savedImages.length) {
+                setMainPreviewImage("");
                 return;
             }
 
-            const confirmed = confirm(
-                `Delete "${image.original_name || "this photo"}"?\n\n` +
-                "This will permanently remove it from R2."
-            );
+            const primaryImage =
+                savedImages.find(
+                    image =>
+                        Number(image.is_primary) === 1
+                ) ||
+                savedImages[0];
 
-            if (!confirmed) return;
+            savedImages.forEach(image => {
+                const imageUrl =
+                    getVersionedImageUrl(image);
 
-            deleteButton.disabled = true;
-            deleteButton.textContent = "…";
+                const altText =
+                    image.alt_text ||
+                    image.original_name ||
+                    "Product image";
+
+                const isPrimary =
+                    image === primaryImage;
+
+                const thumbnail =
+                    createPreviewThumbnail(
+                        imageUrl,
+                        altText,
+                        isPrimary
+                    );
+
+                thumbnailStrip.appendChild(
+                    thumbnail
+                );
+
+                if (isPrimary) {
+                    setMainPreviewImage(
+                        imageUrl,
+                        altText
+                    );
+                }
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "preview-card";
+
+                const img =
+                    document.createElement("img");
+
+                img.src = imageUrl;
+                img.alt = altText;
+                img.loading = "lazy";
+                img.decoding = "async";
+
+                img.addEventListener("click", () => {
+                    setMainPreviewImage(
+                        imageUrl,
+                        altText
+                    );
+
+                    setActivePreviewThumbnail(
+                        thumbnail
+                    );
+                });
+
+                img.addEventListener("error", () => {
+                    console.error(
+                        "Could not load saved product image:",
+                        image.url
+                    );
+                });
+
+                const deleteButton =
+                    document.createElement("button");
+
+                deleteButton.type = "button";
+                deleteButton.textContent = "×";
+                deleteButton.title =
+                    "Delete saved photo";
+
+                deleteButton.setAttribute(
+                    "aria-label",
+                    `Delete ${image.original_name ||
+                    "saved photo"
+                    }`
+                );
+
+                deleteButton.addEventListener(
+                    "click",
+                    async () => {
+                        const productId =
+                            editingProductDatabaseId ||
+                            getEditingIdFromUrl();
+
+                        if (!productId) {
+                            showToast(
+                                "Product ID is missing.",
+                                "error"
+                            );
+                            return;
+                        }
+
+                        const confirmed = confirm(
+                            `Delete "${image.original_name ||
+                            "this photo"
+                            }"?\n\n` +
+                            "This will permanently remove it from R2."
+                        );
+
+                        if (!confirmed) {
+                            return;
+                        }
+
+                        deleteButton.disabled = true;
+                        deleteButton.textContent = "…";
+
+                        try {
+                            const response = await fetch(
+                                `${CLOUD_API_URL}/` +
+                                `${encodeURIComponent(productId)}/` +
+                                `images/` +
+                                `${encodeURIComponent(image.id)}`,
+                                {
+                                    method: "DELETE",
+                                    headers: {
+                                        "Authorization":
+                                            "Bearer " +
+                                            getAdminToken()
+                                    },
+                                    cache: "no-store"
+                                }
+                            );
+
+                            let result = {};
+
+                            try {
+                                result =
+                                    await response.json();
+                            } catch (_) {
+                                throw new Error(
+                                    `Server returned ${response.status} without valid JSON.`
+                                );
+                            }
+
+                            if (response.status === 401) {
+                                localStorage.removeItem(
+                                    TOKEN_KEY
+                                );
+
+                                showAdminLogin(
+                                    "Your login expired. Please log in again."
+                                );
+
+                                throw new Error(
+                                    "Not authorized."
+                                );
+                            }
+
+                            if (
+                                !response.ok ||
+                                !result.success
+                            ) {
+                                throw new Error(
+                                    result.error ||
+                                    result.message ||
+                                    "Could not delete the photo."
+                                );
+                            }
+
+                            showToast(
+                                "Photo deleted successfully.",
+                                "success"
+                            );
+
+                            await loadSavedProductImages(
+                                productId
+                            );
+
+                        } catch (error) {
+                            console.error(error);
+
+                            if (
+                                error.message !==
+                                "Not authorized."
+                            ) {
+                                showToast(
+                                    error.message ||
+                                    "Photo deletion failed.",
+                                    "error"
+                                );
+                            }
+
+                            deleteButton.disabled = false;
+                            deleteButton.textContent = "×";
+                        }
+                    }
+                );
+
+                card.append(
+                    img,
+                    deleteButton
+                );
+
+                photoPreview.appendChild(card);
+            });
+        }
+
+        async function loadSavedProductImages(productId) {
+            if (
+                !productId ||
+                savedImagesLoading
+            ) {
+                return;
+            }
+
+            savedImagesLoading = true;
 
             try {
                 const response = await fetch(
-                    `${CLOUD_API_URL}/${encodeURIComponent(productId)}/images/${encodeURIComponent(image.id)}`,
+                    `${CLOUD_API_URL}/` +
+                    `${encodeURIComponent(productId)}/images`,
                     {
-                        method: "DELETE",
+                        method: "GET",
                         headers: {
                             "Authorization":
-                                "Bearer " + getAdminToken()
+                                "Bearer " +
+                                getAdminToken()
                         },
                         cache: "no-store"
                     }
@@ -2756,186 +3669,183 @@
                     result = await response.json();
                 } catch (_) {
                     throw new Error(
-                        `Server returned ${response.status} without valid JSON.`
+                        `Image list returned ` +
+                        `${response.status} ` +
+                        `without valid JSON.`
                     );
                 }
 
-                if (
-                    response.status === 401 ||
-                    response.status === 403
-                ) {
+                /*
+                 * Only a 401 means the stored token is invalid or expired.
+                 */
+                if (response.status === 401) {
                     localStorage.removeItem(TOKEN_KEY);
+
                     showAdminLogin(
-                        "Your login expired. Please log in again."
+                        "Your login expired. " +
+                        "Please log in again."
                     );
+
                     throw new Error("Not authorized.");
                 }
 
-                if (!response.ok || !result.success) {
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
                     throw new Error(
                         result.error ||
-                        "Could not delete the photo."
+                        result.message ||
+                        "Could not load saved product images."
                     );
                 }
 
-                showToast(
-                    "Photo deleted successfully.",
-                    "success"
-                );
+                /*
+                 * A new revision ensures that an R2 replacement using the same
+                 * object key and public URL is requested again by the browser.
+                 */
+                savedImageRevision = Date.now();
 
-                await loadSavedProductImages(productId);
+                renderSavedPhotos(result.images || []);
 
-            } catch (error) {
-                console.error(error);
-
-                if (error.message !== "Not authorized.") {
-                    showToast(
-                        error.message ||
-                        "Photo deletion failed.",
-                        "error"
-                    );
-                }
-
-                deleteButton.disabled = false;
-                deleteButton.textContent = "×";
+            } finally {
+                savedImagesLoading = false;
             }
-        });
-
-        card.append(img, deleteButton);
-        photoPreview.appendChild(card);
-    });
-}
-
-async function loadSavedProductImages(productId) {
-    const response = await fetch(
-        `${CLOUD_API_URL}/${encodeURIComponent(productId)}/images`,
-        {
-            method: "GET",
-            headers: {
-                "Authorization":
-                    "Bearer " + getAdminToken()
-            },
-            cache: "no-store"
         }
-    );
-
-    let result = {};
-
-    try {
-        result = await response.json();
-    } catch (_) {
-        throw new Error(
-            `Image list returned ${response.status} without valid JSON.`
-        );
-    }
-
-    if (
-        response.status === 401 ||
-        response.status === 403
-    ) {
-        localStorage.removeItem(TOKEN_KEY);
-        showAdminLogin(
-            "Your login expired. Please log in again."
-        );
-        throw new Error("Not authorized.");
-    }
-
-    if (!response.ok || !result.success) {
-        throw new Error(
-            result.error ||
-            "Could not load saved product images."
-        );
-    }
-
-    renderSavedPhotos(result.images || []);
-}
-
-
 
         function addPhotos(files) {
-            const images = [...files].filter(file => file.type.startsWith("image/"));
+            const images =
+                [...files].filter(
+                    file =>
+                        file.type.startsWith("image/")
+                );
+
             selectedPhotos.push(...images);
             renderPhotos();
         }
 
         function renderDocuments() {
             documentList.innerHTML = "";
-            selectedDocuments.forEach((file, index) => {
-                const item = document.createElement("div");
-                item.className = "doc-item";
-                item.innerHTML = `<span>▤ ${escapeHtml(file.name)}</span><button class="mini-btn" type="button">Remove</button>`;
-                item.querySelector("button").addEventListener("click", () => {
-                    selectedDocuments.splice(index, 1);
-                    renderDocuments();
-                });
-                documentList.appendChild(item);
-            });
+
+            selectedDocuments.forEach(
+                (file, index) => {
+                    const item =
+                        document.createElement("div");
+
+                    item.className = "doc-item";
+
+                    item.innerHTML = `
+                <span>
+                    ▤ ${escapeHtml(file.name)}
+                </span>
+                <button
+                    class="mini-btn"
+                    type="button"
+                >
+                    Remove
+                </button>
+            `;
+
+                    item
+                        .querySelector("button")
+                        .addEventListener(
+                            "click",
+                            () => {
+                                selectedDocuments.splice(
+                                    index,
+                                    1
+                                );
+
+                                renderDocuments();
+                            }
+                        );
+
+                    documentList.appendChild(item);
+                }
+            );
         }
 
         function saveDraft() {
-            localStorage.setItem(DRAFT_KEY, JSON.stringify(getFormObject()));
-            showToast("Draft saved in this browser.", "success");
+            localStorage.setItem(
+                DRAFT_KEY,
+                JSON.stringify(getFormObject())
+            );
+
+            showToast(
+                "Draft saved in this browser.",
+                "success"
+            );
         }
 
         function loadDraft() {
-            const saved = localStorage.getItem(DRAFT_KEY);
-            if (!saved) return;
-            try {
-                restoreForm(JSON.parse(saved));
-                showToast("Browser draft restored.");
-            } catch (error) {
-                console.error(error);
-            }
-        }
+            const saved =
+                localStorage.getItem(DRAFT_KEY);
 
-        async function saveToCloudflare() {
-            if (!form.reportValidity()) return showToast("Complete the required fields first.", "error");
-            if (!CLOUD_API_URL) {
-                showToast("Add your Cloudflare Worker API URL first.", "error");
+            if (!saved) {
                 return;
             }
 
-            const payload = new FormData();
-            payload.append("product", JSON.stringify(getFormObject()));
-            selectedPhotos.forEach(file => payload.append("photos", file, file.name));
-            selectedDocuments.forEach(file => payload.append("documents", file, file.name));
-
             try {
-                const response = await fetch(CLOUD_API_URL, {
-                    method: "POST",
-                    headers: { Authorization: `Bearer ${getAdminToken()}` },
-                    body: payload
-                });
+                restoreForm(JSON.parse(saved));
 
-                if (response.status === 401 || response.status === 403) {
-                    localStorage.removeItem(TOKEN_KEY);
-                    showAdminLogin("Your login expired. Please log in again.");
-                    throw new Error("Unauthorized");
-                }
-                if (!response.ok) throw new Error(`Server returned ${response.status}`);
-                const result = await response.json().catch(() => ({}));
-                showToast(result.message || "Product saved to Cloudflare.", "success");
-                localStorage.setItem(DRAFT_KEY, JSON.stringify(getFormObject()));
+                showToast(
+                    "Browser draft restored."
+                );
+
             } catch (error) {
                 console.error(error);
-                showToast("Cloud save failed. Check the Worker URL and CORS settings.", "error");
             }
         }
 
         function exportJson() {
             const product = getFormObject();
-            const file = new Blob([JSON.stringify(product, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(file);
-            const link = document.createElement("a");
+
+            const file = new Blob(
+                [
+                    JSON.stringify(
+                        product,
+                        null,
+                        2
+                    )
+                ],
+                {
+                    type: "application/json"
+                }
+            );
+
+            const url =
+                URL.createObjectURL(file);
+
+            const link =
+                document.createElement("a");
+
             link.href = url;
-            link.download = `${product.sku || product.productId || "chaynova-product"}.json`;
+
+            link.download =
+                `${product.sku ||
+                product.productId ||
+                "chaynova-product"
+                }.json`;
+
             link.click();
+
             URL.revokeObjectURL(url);
-            showToast("JSON backup exported.", "success");
+
+            showToast(
+                "JSON backup exported.",
+                "success"
+            );
         }
 
         function clearProduct() {
-            if (!confirm("Clear all product information on this page?")) return;
+            if (
+                !confirm(
+                    "Clear all product information on this page?"
+                )
+            ) {
+                return;
+            }
+
             startNewProduct();
             showToast("Product form cleared.");
         }
@@ -2949,74 +3859,1282 @@ async function loadSavedProductImages(productId) {
 
             selectedPhotos = [];
             selectedDocuments = [];
+
             photoInput.value = "";
             documentInput.value = "";
+
             renderPhotos();
             renderDocuments();
 
             localStorage.removeItem(DRAFT_KEY);
-            document.getElementById("slug").dataset.manual = "";
-            document.getElementById("countryOrigin").value = "Thailand";
-            document.getElementById("status").value = "draft";
-            document.getElementById("saveCloud").textContent = "Save to Cloudflare";
+
+            document
+                .getElementById("slug")
+                .dataset.manual = "";
+
+            document
+                .getElementById("countryOrigin")
+                .value = "Thailand";
+
+            document
+                .getElementById("status")
+                .value = "draft";
+
+            document
+                .getElementById("saveCloud")
+                .textContent =
+                "Save to Cloudflare";
+
             deleteProductButton.hidden = true;
-            document.querySelector(".product-state").textContent = "● Draft product";
-            document.getElementById("mainPreviewImage").innerHTML = "▧";
+
+            document
+                .querySelector(".product-state")
+                .textContent =
+                "● Draft product";
+
+            setMainPreviewImage("");
+
+            document
+                .getElementById("mainPreviewThumbnails")
+                .innerHTML = "";
 
             generateProductId();
             updatePreview();
 
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
         }
 
-        document.getElementById("generateId").addEventListener("click", generateProductId);
-        document.getElementById("addVariant").addEventListener("click", () => addVariant());
-        document.getElementById("saveDraft").addEventListener("click", saveDraft);
-        document.getElementById("saveDraftTop").addEventListener("click", saveDraft);
-        document.getElementById("saveCloud").addEventListener("click", saveProductToCloud);
-        document.getElementById("exportJson").addEventListener("click", exportJson);
-        document.getElementById("clearForm").addEventListener("click", clearProduct);
-        deleteProductButton.addEventListener("click", deleteSavedProduct);
-        document.getElementById("newProductTop").addEventListener("click", () => { startNewProduct(); showToast("New product form ready."); });
+        document
+            .getElementById("generateId")
+            .addEventListener(
+                "click",
+                generateProductId
+            );
 
-        ["purchaseCost", "shippingCost", "dutyCost"].forEach(id => document.getElementById(id).addEventListener("input", calculateLandedCost));
-        form.addEventListener("input", updatePreview);
-        document.getElementById("slug").addEventListener("input", event => event.target.dataset.manual = event.target.value ? "true" : "");
+        document
+            .getElementById("addVariant")
+            .addEventListener(
+                "click",
+                () => addVariant()
+            );
 
-        photoInput.addEventListener("change", event => addPhotos(event.target.files));
-        documentInput.addEventListener("change", event => {
-            selectedDocuments.push(...event.target.files);
-            renderDocuments();
+        document
+            .getElementById("saveDraft")
+            .addEventListener(
+                "click",
+                saveDraft
+            );
+
+        document
+            .getElementById("saveDraftTop")
+            .addEventListener(
+                "click",
+                saveDraft
+            );
+
+        document
+            .getElementById("saveCloud")
+            .addEventListener(
+                "click",
+                saveProductToCloud
+            );
+
+        document
+            .getElementById("exportJson")
+            .addEventListener(
+                "click",
+                exportJson
+            );
+
+        document
+            .getElementById("clearForm")
+            .addEventListener(
+                "click",
+                clearProduct
+            );
+
+        deleteProductButton.addEventListener(
+            "click",
+            deleteSavedProduct
+        );
+
+        document
+            .getElementById("newProductTop")
+            .addEventListener(
+                "click",
+                () => {
+                    startNewProduct();
+                    showToast(
+                        "New product form ready."
+                    );
+                }
+            );
+
+        [
+            "purchaseCost",
+            "shippingCost",
+            "dutyCost"
+        ].forEach(id => {
+            document
+                .getElementById(id)
+                .addEventListener(
+                    "input",
+                    calculateLandedCost
+                );
         });
 
-        function activateDropZone(zoneId, inputHandler) {
-            const zone = document.getElementById(zoneId);
-            ["dragenter", "dragover"].forEach(type => zone.addEventListener(type, event => {
-                event.preventDefault();
-                zone.classList.add("dragover");
-            }));
-            ["dragleave", "drop"].forEach(type => zone.addEventListener(type, event => {
-                event.preventDefault();
-                zone.classList.remove("dragover");
-            }));
-            zone.addEventListener("drop", event => inputHandler(event.dataTransfer.files));
+        form.addEventListener(
+            "input",
+            updatePreview
+        );
+
+        document
+            .getElementById("slug")
+            .addEventListener(
+                "input",
+                event => {
+                    event.target.dataset.manual =
+                        event.target.value
+                            ? "true"
+                            : "";
+                }
+            );
+
+        photoInput.addEventListener(
+            "change",
+            event => {
+                addPhotos(event.target.files);
+
+                /*
+                 * Allows choosing the same local filename again later.
+                 */
+                event.target.value = "";
+            }
+        );
+
+        documentInput.addEventListener(
+            "change",
+            event => {
+                selectedDocuments.push(
+                    ...event.target.files
+                );
+
+                renderDocuments();
+                event.target.value = "";
+            }
+        );
+
+        function activateDropZone(
+            zoneId,
+            inputHandler
+        ) {
+            const zone =
+                document.getElementById(zoneId);
+
+            [
+                "dragenter",
+                "dragover"
+            ].forEach(type => {
+                zone.addEventListener(
+                    type,
+                    event => {
+                        event.preventDefault();
+                        zone.classList.add("dragover");
+                    }
+                );
+            });
+
+            [
+                "dragleave",
+                "drop"
+            ].forEach(type => {
+                zone.addEventListener(
+                    type,
+                    event => {
+                        event.preventDefault();
+                        zone.classList.remove(
+                            "dragover"
+                        );
+                    }
+                );
+            });
+
+            zone.addEventListener(
+                "drop",
+                event => {
+                    inputHandler(
+                        event.dataTransfer.files
+                    );
+                }
+            );
         }
 
-        activateDropZone("photoDropZone", addPhotos);
-        activateDropZone("documentDropZone", files => {
-            selectedDocuments.push(...files);
-            renderDocuments();
+        activateDropZone(
+            "photoDropZone",
+            addPhotos
+        );
+
+        activateDropZone(
+            "documentDropZone",
+            files => {
+                selectedDocuments.push(...files);
+                renderDocuments();
+            }
+        );
+
+        const links = [
+            ...document.querySelectorAll(
+                ".section-link"
+            )
+        ];
+
+        const sections = [
+            ...document.querySelectorAll(
+                ".form-section"
+            )
+        ];
+
+        const observer =
+            new IntersectionObserver(
+                entries => {
+                    const visible =
+                        entries
+                            .filter(
+                                entry =>
+                                    entry.isIntersecting
+                            )
+                            .sort(
+                                (a, b) =>
+                                    b.intersectionRatio -
+                                    a.intersectionRatio
+                            )[0];
+
+                    if (!visible) {
+                        return;
+                    }
+
+                    links.forEach(link => {
+                        link.classList.toggle(
+                            "active",
+                            link.getAttribute("href") ===
+                            `#${visible.target.id}`
+                        );
+                    });
+                },
+                {
+                    rootMargin:
+                        "-100px 0px -65%",
+
+                    threshold:
+                        [0.1, 0.4, 0.8]
+                }
+            );
+
+        sections.forEach(section => {
+            observer.observe(section);
         });
 
-        const links = [...document.querySelectorAll(".section-link")];
-        const sections = [...document.querySelectorAll(".form-section")];
-        const observer = new IntersectionObserver(entries => {
-            const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-            if (!visible) return;
-            links.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`));
-        }, { rootMargin: "-100px 0px -65%", threshold: [0.1, 0.4, 0.8] });
-        sections.forEach(section => observer.observe(section));
+        function getEditingIdFromUrl() {
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
 
+            return (
+                params.get("id") ||
+                ""
+            ).trim();
+        }
+
+        function databaseProductToFormProduct(
+            product,
+            variants = []
+        ) {
+            return {
+                productId:
+                    product.product_id || "",
+
+                sku:
+                    product.sku || "",
+
+                productName:
+                    product.product_name || "",
+
+                brand:
+                    product.brand || "",
+
+                category:
+                    product.category || "",
+
+                subcategory:
+                    product.subcategory || "",
+
+                gender:
+                    product.gender || "unisex",
+
+                manufacturer:
+                    product.manufacturer || "",
+
+                countryOrigin:
+                    product.country_of_origin ||
+                    "Thailand",
+
+                manufacturerBarcode:
+                    product.manufacturer_barcode ||
+                    "",
+
+                storeBarcode:
+                    product.store_barcode || "",
+
+                fullDescription:
+                    product.description || "",
+
+                additionalInfo:
+                    product.additional_info || "",
+
+                material:
+                    product.material || "",
+
+                careInstructions:
+                    product.care_instructions || "",
+
+                manufacturedDate:
+                    product.manufacture_date || "",
+
+                dateReceived:
+                    product.date_received || "",
+
+                purchaseCost:
+                    Number(
+                        product.purchase_cost || 0
+                    ),
+
+                shippingCost:
+                    Number(
+                        product.shipping_cost || 0
+                    ),
+
+                dutyCost:
+                    Number(
+                        product.import_cost || 0
+                    ),
+
+                landedCost:
+                    Number(
+                        product.landed_cost || 0
+                    ),
+
+                sellingPrice:
+                    Number(
+                        product.selling_price || 0
+                    ),
+
+                comparePrice:
+                    Number(product.msrp || 0),
+
+                reorderLevel:
+                    Number(
+                        product.reorder_level || 0
+                    ),
+
+                stockLocation:
+                    product.warehouse_location ||
+                    "",
+
+                supplierName:
+                    product.supplier_name || "",
+
+                supplierEmail:
+                    product.supplier_email || "",
+
+                supplierPhone:
+                    product.supplier_phone || "",
+
+                supplierWebsite:
+                    product.supplier_website || "",
+
+                purchaseOrder:
+                    product.invoice_number || "",
+
+                importEntry:
+                    product.customs_entry_number ||
+                    "",
+
+                seoTitle:
+                    product.seo_title || "",
+
+                seoDescription:
+                    product.seo_description || "",
+
+                slug:
+                    product.website_slug || "",
+
+                tags:
+                    product.tags || "",
+
+                status:
+                    product.status || "draft",
+
+                featured:
+                    Boolean(
+                        Number(
+                            product.featured || 0
+                        )
+                    ),
+
+                variants:
+                    Array.isArray(variants) &&
+                        variants.length
+                        ? variants.map(
+                            variant => ({
+                                size:
+                                    variant.size ||
+                                    "",
+
+                                color:
+                                    variant.color ||
+                                    "",
+
+                                sku:
+                                    variant.sku ||
+                                    "",
+
+                                barcode:
+                                    variant.barcode ||
+                                    "",
+
+                                quantity:
+                                    Number(
+                                        variant.quantity ||
+                                        0
+                                    ),
+
+                                location:
+                                    variant.location ||
+                                    ""
+                            })
+                        )
+                        : [{}]
+            };
+        }
+
+        async function loadProductForEditing() {
+            const id =
+                getEditingIdFromUrl();
+
+            if (!id) {
+                return;
+            }
+
+            if (!getAdminToken()) {
+                showAdminLogin(
+                    "Please log in to edit this product."
+                );
+                return;
+            }
+
+            editingProductDatabaseId = id;
+
+            const saveButton =
+                document.getElementById("saveCloud");
+
+            saveButton.disabled = true;
+            saveButton.textContent =
+                "Loading Product…";
+
+            document
+                .querySelector(".product-state")
+                .textContent =
+                "● Loading product";
+
+            try {
+                const response = await fetch(
+                    `${CLOUD_API_URL}/` +
+                    `${encodeURIComponent(id)}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization":
+                                "Bearer " +
+                                getAdminToken()
+                        },
+                        cache: "no-store"
+                    }
+                );
+
+                let result = {};
+
+                try {
+                    result = await response.json();
+                } catch (_) {
+                    throw new Error(
+                        `Server returned ` +
+                        `${response.status} ` +
+                        `without valid JSON.`
+                    );
+                }
+
+                /*
+                 * Only 401 removes the shared token.
+                 */
+                if (response.status === 401) {
+                    localStorage.removeItem(TOKEN_KEY);
+                    editingProductDatabaseId = "";
+
+                    showAdminLogin(
+                        "Your login expired. " +
+                        "Please log in again."
+                    );
+
+                    throw new Error(
+                        "Not authorized."
+                    );
+                }
+
+                const loadedProduct =
+                    result.product ||
+                    result.data?.product ||
+                    result.data ||
+                    (
+                        result.id
+                            ? result
+                            : null
+                    );
+
+                const loadedVariants =
+                    result.variants ||
+                    result.data?.variants ||
+                    loadedProduct?.variants ||
+                    [];
+
+                if (
+                    !response.ok ||
+                    !loadedProduct
+                ) {
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        "Could not load this product."
+                    );
+                }
+
+                localStorage.removeItem(DRAFT_KEY);
+
+                restoreForm(
+                    databaseProductToFormProduct(
+                        loadedProduct,
+                        loadedVariants
+                    )
+                );
+
+                await loadSavedProductImages(id);
+
+                document
+                    .getElementById("slug")
+                    .dataset.manual =
+                    loadedProduct.website_slug
+                        ? "true"
+                        : "";
+
+                saveButton.textContent =
+                    "Update Product";
+
+                document
+                    .querySelector(".product-state")
+                    .textContent =
+                    "● Editing saved product";
+
+                deleteProductButton.hidden = false;
+
+                document.title =
+                    `${loadedProduct.product_name ||
+                    "Edit Product"
+                    } | CHAYNOVA`;
+
+                showToast(
+                    "Product loaded from Cloudflare.",
+                    "success"
+                );
+
+            } catch (error) {
+                console.error(error);
+
+                if (getAdminToken()) {
+                    editingProductDatabaseId = "";
+
+                    saveButton.textContent =
+                        "Save to Cloudflare";
+
+                    document
+                        .querySelector(".product-state")
+                        .textContent =
+                        "● Product load failed";
+
+                    showToast(
+                        error.message ||
+                        "Unable to load product.",
+                        "error"
+                    );
+                }
+
+            } finally {
+                saveButton.disabled = false;
+            }
+        }
+
+        async function deleteSavedProduct() {
+            const id =
+                editingProductDatabaseId ||
+                getEditingIdFromUrl();
+
+            if (!id) {
+                showToast(
+                    "This product has not been saved yet.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!getAdminToken()) {
+                showAdminLogin(
+                    "Please log in before deleting."
+                );
+                return;
+            }
+
+            const productName =
+                document
+                    .getElementById("productName")
+                    .value.trim();
+
+            if (!productName) {
+                showToast(
+                    "Product name is missing.",
+                    "error"
+                );
+                return;
+            }
+
+            const firstConfirm = confirm(
+                `EMERGENCY DELETE\n\n` +
+                `Permanently delete ` +
+                `"${productName}"?\n\n` +
+                `This cannot be undone.`
+            );
+
+            if (!firstConfirm) {
+                showToast("Delete cancelled.");
+                return;
+            }
+
+            const typedName = prompt(
+                `To confirm permanent deletion, ` +
+                `type the product name exactly:\n\n` +
+                productName
+            );
+
+            if (typedName === null) {
+                showToast("Delete cancelled.");
+                return;
+            }
+
+            if (
+                typedName.trim() !==
+                productName
+            ) {
+                showToast(
+                    "Delete cancelled. " +
+                    "Product name did not match.",
+                    "error"
+                );
+                return;
+            }
+
+            const finalConfirmation = confirm(
+                `Are you sure you want to ` +
+                `permanently delete ` +
+                `"${productName}"?\n\n` +
+                `This action cannot be undone.`
+            );
+
+            if (!finalConfirmation) {
+                showToast("Delete cancelled.");
+                return;
+            }
+
+            deleteProductButton.disabled = true;
+            deleteProductButton.textContent =
+                "Deleting…";
+
+            try {
+                const response = await fetch(
+                    `${CLOUD_API_URL}/` +
+                    `${encodeURIComponent(id)}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization":
+                                "Bearer " +
+                                getAdminToken()
+                        },
+                        cache: "no-store"
+                    }
+                );
+
+                let result = {};
+
+                try {
+                    result = await response.json();
+                } catch (_) { }
+
+                /*
+                 * Only 401 clears the shared token.
+                 */
+                if (response.status === 401) {
+                    localStorage.removeItem(TOKEN_KEY);
+
+                    showAdminLogin(
+                        "Your login expired. " +
+                        "Please log in again."
+                    );
+
+                    throw new Error(
+                        "Not authorized."
+                    );
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        `Delete failed ` +
+                        `(${response.status}).`
+                    );
+                }
+
+                localStorage.removeItem(DRAFT_KEY);
+
+                showToast(
+                    `"${productName}" was ` +
+                    `permanently deleted.`,
+                    "success"
+                );
+
+                setTimeout(() => {
+                    window.location.href =
+                        "products.html";
+                }, 650);
+
+            } catch (error) {
+                console.error(error);
+
+                if (
+                    error.message !==
+                    "Not authorized."
+                ) {
+                    showToast(
+                        error.message ||
+                        "Delete failed.",
+                        "error"
+                    );
+                }
+
+                deleteProductButton.disabled = false;
+                deleteProductButton.textContent =
+                    "Delete Saved Product";
+            }
+        }
+
+        async function saveProductToCloud() {
+            if (!form.reportValidity()) {
+                showToast(
+                    "Complete the required fields first.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!getAdminToken()) {
+                showAdminLogin(
+                    "Please log in before saving."
+                );
+                return;
+            }
+
+            const product =
+                getFormObject();
+
+            const saveButton =
+                document.getElementById("saveCloud");
+
+            saveButton.disabled = true;
+
+            const originalButtonText =
+                saveButton.textContent;
+
+            try {
+                const isEditing =
+                    Boolean(editingProductDatabaseId);
+
+                const requestUrl =
+                    isEditing
+                        ? `${CLOUD_API_URL}/` +
+                        `${encodeURIComponent(
+                            editingProductDatabaseId
+                        )}`
+                        : CLOUD_API_URL;
+
+                const response = await fetch(
+                    requestUrl,
+                    {
+                        method:
+                            isEditing
+                                ? "PUT"
+                                : "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " +
+                                getAdminToken()
+                        },
+
+                        body: JSON.stringify({
+                            product_id:
+                                product.productId,
+
+                            sku:
+                                product.sku,
+
+                            product_name:
+                                product.productName,
+
+                            brand:
+                                product.brand,
+
+                            category:
+                                product.category,
+
+                            subcategory:
+                                product.subcategory,
+
+                            gender:
+                                product.gender,
+
+                            manufacturer:
+                                product.manufacturer,
+
+                            country_of_origin:
+                                product.countryOrigin,
+
+                            manufacturer_barcode:
+                                product.manufacturerBarcode,
+
+                            store_barcode:
+                                product.storeBarcode,
+
+                            description:
+                                product.fullDescription,
+
+                            additional_info:
+                                product.additionalInfo,
+
+                            material:
+                                product.material,
+
+                            care_instructions:
+                                product.careInstructions,
+
+                            manufacture_date:
+                                product.manufacturedDate,
+
+                            date_received:
+                                product.dateReceived,
+
+                            purchase_cost:
+                                Number(
+                                    product.purchaseCost ||
+                                    0
+                                ),
+
+                            shipping_cost:
+                                Number(
+                                    product.shippingCost ||
+                                    0
+                                ),
+
+                            import_cost:
+                                Number(
+                                    product.dutyCost ||
+                                    0
+                                ),
+
+                            landed_cost:
+                                Number(
+                                    product.landedCost ||
+                                    0
+                                ),
+
+                            selling_price:
+                                Number(
+                                    product.sellingPrice ||
+                                    0
+                                ),
+
+                            reorder_level:
+                                Number(
+                                    product.reorderLevel ||
+                                    0
+                                ),
+
+                            warehouse_location:
+                                product.stockLocation,
+
+                            supplier_name:
+                                product.supplierName,
+
+                            supplier_email:
+                                product.supplierEmail,
+
+                            supplier_phone:
+                                product.supplierPhone,
+
+                            supplier_website:
+                                product.supplierWebsite,
+
+                            invoice_number:
+                                product.purchaseOrder,
+
+                            customs_entry_number:
+                                product.importEntry,
+
+                            seo_title:
+                                product.seoTitle,
+
+                            seo_description:
+                                product.seoDescription,
+
+                            website_slug:
+                                product.slug,
+
+                            tags:
+                                product.tags,
+
+                            status:
+                                product.status,
+
+                            featured:
+                                product.featured,
+
+                            variants:
+                                product.variants
+                        })
+                    }
+                );
+
+                let result = {};
+
+                try {
+                    result = await response.json();
+                } catch (_) {
+                    throw new Error(
+                        `Server returned ` +
+                        `${response.status} ` +
+                        `without valid JSON.`
+                    );
+                }
+
+                /*
+                 * Only 401 clears the shared token.
+                 */
+                if (response.status === 401) {
+                    localStorage.removeItem(TOKEN_KEY);
+
+                    showAdminLogin(
+                        "Your login expired. " +
+                        "Please log in again."
+                    );
+
+                    throw new Error(
+                        "Not authorized."
+                    );
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        "Save failed."
+                    );
+                }
+
+                localStorage.removeItem(DRAFT_KEY);
+
+                editingProductDatabaseId =
+                    result.id ||
+                    result.product?.id ||
+                    result.data?.id ||
+                    editingProductDatabaseId ||
+                    "";
+
+                /*
+                 * Upload newly selected photos after D1 has returned a product ID.
+                 */
+                if (
+                    editingProductDatabaseId &&
+                    selectedPhotos.length > 0
+                ) {
+                    saveButton.textContent =
+                        "Uploading Photos…";
+
+                    for (
+                        let index = 0;
+                        index < selectedPhotos.length;
+                        index++
+                    ) {
+                        const photo =
+                            selectedPhotos[index];
+
+                        const imageForm =
+                            new FormData();
+
+                        imageForm.append(
+                            "image",
+                            photo,
+                            photo.name
+                        );
+
+                        imageForm.append(
+                            "alt_text",
+                            product.productName ||
+                            photo.name
+                        );
+
+                        const imageResponse =
+                            await fetch(
+                                `${CLOUD_API_URL}/` +
+                                `${encodeURIComponent(
+                                    editingProductDatabaseId
+                                )}/images`,
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Authorization":
+                                            "Bearer " +
+                                            getAdminToken()
+                                    },
+
+                                    body: imageForm
+                                }
+                            );
+
+                        let imageResult = {};
+
+                        try {
+                            imageResult =
+                                await imageResponse.json();
+                        } catch (_) {
+                            throw new Error(
+                                `Photo upload returned ` +
+                                `${imageResponse.status} ` +
+                                `without valid JSON.`
+                            );
+                        }
+
+                        /*
+                         * Only 401 clears the shared token.
+                         */
+                        if (
+                            imageResponse.status ===
+                            401
+                        ) {
+                            localStorage.removeItem(
+                                TOKEN_KEY
+                            );
+
+                            showAdminLogin(
+                                "Your login expired. " +
+                                "Please log in again."
+                            );
+
+                            throw new Error(
+                                "Not authorized."
+                            );
+                        }
+
+                        if (
+                            !imageResponse.ok ||
+                            !imageResult.success
+                        ) {
+                            throw new Error(
+                                imageResult.error ||
+                                imageResult.message ||
+                                `Could not upload ` +
+                                `${photo.name}.`
+                            );
+                        }
+
+                        console.log(
+                            "Photo uploaded:",
+                            imageResult
+                        );
+                    }
+
+                    /*
+                     * New photos now exist in R2 and product_images.
+                     * Clear temporary local files and reload the saved image list.
+                     */
+                    selectedPhotos = [];
+                    photoInput.value = "";
+
+                    await loadSavedProductImages(
+                        editingProductDatabaseId
+                    );
+                } else if (
+                    editingProductDatabaseId
+                ) {
+                    /*
+                     * Refresh even when no new upload occurred. This allows a photo
+                     * replaced from CloudflareMe to appear immediately after save.
+                     */
+                    await loadSavedProductImages(
+                        editingProductDatabaseId
+                    );
+                }
+
+                saveButton.textContent =
+                    "Update Product";
+
+                deleteProductButton.hidden =
+                    !editingProductDatabaseId;
+
+                document
+                    .querySelector(".product-state")
+                    .textContent =
+                    "● Saved product";
+
+                showToast(
+                    isEditing
+                        ? "✅ Product updated successfully!"
+                        : "✅ Product saved! You are now editing this product.",
+                    "success"
+                );
+
+                if (
+                    !isEditing &&
+                    editingProductDatabaseId
+                ) {
+                    const editUrl =
+                        `${window.location.pathname}` +
+                        `?id=${encodeURIComponent(
+                            editingProductDatabaseId
+                        )}`;
+
+                    window.history.replaceState(
+                        {},
+                        "",
+                        editUrl
+                    );
+                }
+
+                console.log(result);
+
+            } catch (error) {
+                console.error(error);
+
+                if (
+                    error.message !==
+                    "Not authorized."
+                ) {
+                    showToast(
+                        error.message ||
+                        "Save failed.",
+                        "error"
+                    );
+                }
+
+            } finally {
+                saveButton.disabled = false;
+
+                saveButton.textContent =
+                    editingProductDatabaseId
+                        ? "Update Product"
+                        : originalButtonText;
+            }
+        }
+
+        /*
+         * Reload saved media after returning to this tab/page.
+         * This covers photo replacement performed from CloudflareMe.
+         */
+        async function refreshSavedPhotosWhenReturning() {
+            const productId =
+                editingProductDatabaseId ||
+                getEditingIdFromUrl();
+
+            if (
+                !productId ||
+                !getAdminToken() ||
+                loginOverlay.classList.contains(
+                    "open"
+                ) ||
+                savedImagesLoading
+            ) {
+                return;
+            }
+
+            try {
+                await loadSavedProductImages(
+                    productId
+                );
+            } catch (error) {
+                if (
+                    error.message !==
+                    "Not authorized."
+                ) {
+                    console.error(
+                        "Could not refresh saved product images:",
+                        error
+                    );
+                }
+            }
+        }
+
+        window.addEventListener(
+            "focus",
+            refreshSavedPhotosWhenReturning
+        );
+
+        window.addEventListener(
+            "pageshow",
+            event => {
+                if (event.persisted) {
+                    refreshSavedPhotosWhenReturning();
+                }
+            }
+        );
+
+        document.addEventListener(
+            "visibilitychange",
+            () => {
+                if (
+                    document.visibilityState ===
+                    "visible"
+                ) {
+                    refreshSavedPhotosWhenReturning();
+                }
+            }
+        );
+
+        /*
+         * Initial page setup.
+         */
         addVariant();
 
         if (getEditingIdFromUrl()) {
@@ -3036,501 +5154,6 @@ async function loadSavedProductImages(productId) {
                     ? "Please log in to edit this product."
                     : ""
             );
-        }
-
-
-        function getEditingIdFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return (params.get("id") || "").trim();
-        }
-
-        function databaseProductToFormProduct(product, variants = []) {
-            return {
-                productId: product.product_id || "",
-                sku: product.sku || "",
-                productName: product.product_name || "",
-                brand: product.brand || "",
-                category: product.category || "",
-                subcategory: product.subcategory || "",
-                gender: product.gender || "unisex",
-                manufacturer: product.manufacturer || "",
-                countryOrigin: product.country_of_origin || "Thailand",
-                manufacturerBarcode: product.manufacturer_barcode || "",
-                storeBarcode: product.store_barcode || "",
-                fullDescription: product.description || "",
-                additionalInfo: product.additional_info || "",
-                material: product.material || "",
-                careInstructions: product.care_instructions || "",
-                manufacturedDate: product.manufacture_date || "",
-                dateReceived: product.date_received || "",
-                purchaseCost: Number(product.purchase_cost || 0),
-                shippingCost: Number(product.shipping_cost || 0),
-                dutyCost: Number(product.import_cost || 0),
-                landedCost: Number(product.landed_cost || 0),
-                sellingPrice: Number(product.selling_price || 0),
-                comparePrice: Number(product.msrp || 0),
-                reorderLevel: Number(product.reorder_level || 0),
-                stockLocation: product.warehouse_location || "",
-                supplierName: product.supplier_name || "",
-                supplierEmail: product.supplier_email || "",
-                supplierPhone: product.supplier_phone || "",
-                supplierWebsite: product.supplier_website || "",
-                purchaseOrder: product.invoice_number || "",
-                importEntry: product.customs_entry_number || "",
-                seoTitle: product.seo_title || "",
-                seoDescription: product.seo_description || "",
-                slug: product.website_slug || "",
-                tags: product.tags || "",
-                status: product.status || "draft",
-                featured: Boolean(Number(product.featured || 0)),
-                variants: Array.isArray(variants) && variants.length
-                    ? variants.map(variant => ({
-                        size: variant.size || "",
-                        color: variant.color || "",
-                        sku: variant.sku || "",
-                        barcode: variant.barcode || "",
-                        quantity: Number(variant.quantity || 0),
-                        location: variant.location || ""
-                    }))
-                    : [{}]
-            };
-        }
-
-        async function loadProductForEditing() {
-            const id = getEditingIdFromUrl();
-
-            if (!id) return;
-
-            if (!getAdminToken()) {
-                showAdminLogin("Please log in to edit this product.");
-                return;
-            }
-
-            editingProductDatabaseId = id;
-            document.getElementById("saveCloud").disabled = true;
-            document.getElementById("saveCloud").textContent = "Loading Product…";
-            document.querySelector(".product-state").textContent = "● Loading product";
-
-            try {
-                const response = await fetch(
-                    `${CLOUD_API_URL}/${encodeURIComponent(id)}`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Authorization": "Bearer " + getAdminToken()
-                        },
-                        cache: "no-store"
-                    }
-                );
-
-                let result = {};
-                try {
-                    result = await response.json();
-                } catch (_) {
-                    throw new Error(`Server returned ${response.status} without valid JSON.`);
-                }
-
-                if (response.status === 401 || response.status === 403) {
-                    localStorage.removeItem(TOKEN_KEY);
-                    editingProductDatabaseId = "";
-                    showAdminLogin("Your login expired. Please log in again.");
-                    throw new Error("Not authorized.");
-                }
-
-                const loadedProduct = result.product || result.data?.product || result.data || (result.id ? result : null);
-                const loadedVariants = result.variants || result.data?.variants || loadedProduct?.variants || [];
-
-                if (!response.ok || !loadedProduct) {
-                    throw new Error(result.error || result.message || "Could not load this product.");
-                }
-
-                localStorage.removeItem(DRAFT_KEY);
-                restoreForm(databaseProductToFormProduct(loadedProduct, loadedVariants));
-                await loadSavedProductImages(id);
-                document.getElementById("slug").dataset.manual =
-                    loadedProduct.website_slug ? "true" : "";
-
-                document.getElementById("saveCloud").textContent = "Update Product";
-                document.querySelector(".product-state").textContent = "● Editing saved product";
-                deleteProductButton.hidden = false;
-                document.title = `${loadedProduct.product_name || "Edit Product"} | CHAYNOVA`;
-                showToast("Product loaded from Cloudflare.", "success");
-            } catch (error) {
-                console.error(error);
-
-                if (getAdminToken()) {
-                    editingProductDatabaseId = "";
-                    document.getElementById("saveCloud").textContent = "Save to Cloudflare";
-                    document.querySelector(".product-state").textContent = "● Product load failed";
-                    showToast(error.message || "Unable to load product.", "error");
-                }
-            } finally {
-                document.getElementById("saveCloud").disabled = false;
-            }
-        }
-
-        async function deleteSavedProduct() {
-            const id = editingProductDatabaseId || getEditingIdFromUrl();
-
-            if (!id) {
-                showToast("This product has not been saved yet.", "error");
-                return;
-            }
-
-            if (!getAdminToken()) {
-                showAdminLogin("Please log in before deleting.");
-                return;
-            }
-
-            const productName =
-                document.getElementById("productName").value.trim();
-
-            if (!productName) {
-                showToast("Product name is missing.", "error");
-                return;
-            }
-
-            const firstConfirm = confirm(
-                `EMERGENCY DELETE\n\nPermanently delete "${productName}"?\n\nThis cannot be undone.`
-            );
-            const typedName = prompt(`To confirm permanent deletion, type the product name exactly:\n\n${productName}`
-            );
-
-            // User clicked Cancel
-            if (typedName === null) {
-                showToast("Delete cancelled.");
-                return;
-            }
-
-            // Name does not match
-            if (typedName.trim() !== productName) {
-                showToast(
-                    "Delete cancelled. Product name did not match.",
-                    "error"
-                );
-                return;
-            }
-
-            const finalConfirmation = confirm(
-                `Are you sure you want to permanently delete "${productName}"?\n\n` +
-                `This action cannot be undone.`
-            );
-
-            if (!finalConfirmation) {
-                showToast("Delete cancelled.");
-                return;
-            }
-
-            deleteProductButton.disabled = true;
-            deleteProductButton.textContent = "Deleting…";
-
-            try {
-                const response = await fetch(
-                    `${CLOUD_API_URL}/${encodeURIComponent(id)}`,
-                    {
-                        method: "DELETE",
-                        headers: {
-                            "Authorization": "Bearer " + getAdminToken()
-                        },
-                        cache: "no-store"
-                    }
-                );
-
-                let result = {};
-
-                try {
-                    result = await response.json();
-                } catch (_) { }
-
-                if (
-                    response.status === 401 ||
-                    response.status === 403
-                ) {
-                    localStorage.removeItem(TOKEN_KEY);
-                    showAdminLogin(
-                        "Your login expired. Please log in again."
-                    );
-                    throw new Error("Not authorized.");
-                }
-
-                if (!response.ok) {
-                    throw new Error(
-                        result.error ||
-                        result.message ||
-                        `Delete failed (${response.status}).`
-                    );
-                }
-
-                localStorage.removeItem(DRAFT_KEY);
-
-                showToast(
-                    `"${productName}" was permanently deleted.`,
-                    "success"
-                );
-
-                setTimeout(() => {
-                    window.location.href = "products.html";
-                }, 650);
-
-            } catch (error) {
-                console.error(error);
-
-                if (error.message !== "Not authorized.") {
-                    showToast(
-                        error.message || "Delete failed.",
-                        "error"
-                    );
-                }
-
-                deleteProductButton.disabled = false;
-                deleteProductButton.textContent =
-                    "Delete Saved Product";
-            }
-        }
-
-        async function saveProductToCloud() {
-
-            if (!form.reportValidity()) {
-                showToast("Complete the required fields first.", "error");
-                return;
-            }
-
-            if (!getAdminToken()) {
-                showAdminLogin("Please log in before saving.");
-                return;
-            }
-
-            const product = getFormObject();
-            const saveButton = document.getElementById("saveCloud");
-            saveButton.disabled = true;
-            const originalButtonText = saveButton.textContent;
-
-            try {
-
-                const isEditing = Boolean(editingProductDatabaseId);
-
-                const requestUrl = isEditing
-                    ? `${CLOUD_API_URL}/${encodeURIComponent(editingProductDatabaseId)}`
-                    : CLOUD_API_URL;
-
-                const response = await fetch(requestUrl, {
-                    method: isEditing ? "PUT" : "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization":
-                            "Bearer " + getAdminToken()
-                    },
-
-                    body: JSON.stringify({
-
-                        product_id: product.productId,
-
-                        sku: product.sku,
-
-                        product_name: product.productName,
-
-                        brand: product.brand,
-
-                        category: product.category,
-
-                        subcategory: product.subcategory,
-
-                        gender: product.gender,
-
-                        manufacturer: product.manufacturer,
-
-                        country_of_origin: product.countryOrigin,
-
-                        manufacturer_barcode: product.manufacturerBarcode,
-
-                        store_barcode: product.storeBarcode,
-
-                        description: product.fullDescription,
-
-                        additional_info: product.additionalInfo,
-
-                        material: product.material,
-
-                        care_instructions: product.careInstructions,
-
-                        manufacture_date: product.manufacturedDate,
-
-                        date_received: product.dateReceived,
-
-                        purchase_cost: Number(product.purchaseCost || 0),
-
-                        shipping_cost: Number(product.shippingCost || 0),
-
-                        import_cost: Number(product.dutyCost || 0),
-
-                        landed_cost: Number(product.landedCost || 0),
-
-                        selling_price: Number(product.sellingPrice || 0),
-
-                        reorder_level: Number(product.reorderLevel || 0),
-
-                        warehouse_location: product.stockLocation,
-
-                        supplier_name: product.supplierName,
-
-                        supplier_email: product.supplierEmail,
-
-                        supplier_phone: product.supplierPhone,
-
-                        supplier_website: product.supplierWebsite,
-
-                        invoice_number: product.purchaseOrder,
-
-                        customs_entry_number: product.importEntry,
-
-                        seo_title: product.seoTitle,
-
-                        seo_description: product.seoDescription,
-
-                        website_slug: product.slug,
-
-                        tags: product.tags,
-
-                        status: product.status,
-
-                        featured: product.featured,
-
-                        variants: product.variants
-
-                    })
-
-                });
-
-                let result = {};
-                try {
-                    result = await response.json();
-                } catch (_) {
-                    throw new Error(`Server returned ${response.status} without valid JSON.`);
-                }
-
-                if (response.status === 401 || response.status === 403) {
-                    localStorage.removeItem(TOKEN_KEY);
-                    showAdminLogin("Your login expired. Please log in again.");
-                    throw new Error("Not authorized.");
-                }
-
-                if (!response.ok) {
-                    throw new Error(result.error || "Save failed.");
-                }
-
-                // Remove the browser draft because the product is now saved in D1.
-                localStorage.removeItem(DRAFT_KEY);
-
-                // Remember the D1 database UUID returned by the Worker.
-                editingProductDatabaseId = result.id || result.product?.id || result.data?.id || editingProductDatabaseId || "";
-
-                // Upload newly selected product photos to R2.
-                if (editingProductDatabaseId && selectedPhotos.length > 0) {
-
-                    saveButton.textContent = "Uploading Photos…";
-
-                    for (let index = 0; index < selectedPhotos.length; index++) {
-
-                        const photo = selectedPhotos[index];
-                        const imageForm = new FormData();
-
-                        imageForm.append("image", photo, photo.name);
-                        imageForm.append(
-                            "alt_text",
-                            product.productName || photo.name
-                        );
-
-                        const imageResponse = await fetch(
-                            `${CLOUD_API_URL}/${encodeURIComponent(editingProductDatabaseId)}/images`,
-                            {
-                                method: "POST",
-                                headers: {
-                                    "Authorization":
-                                        "Bearer " + getAdminToken()
-                                },
-                                body: imageForm
-                            }
-                        );
-
-                        let imageResult = {};
-
-                        try {
-                            imageResult = await imageResponse.json();
-                        } catch (_) {
-                            throw new Error(
-                                `Photo upload returned ${imageResponse.status} without valid JSON.`
-                            );
-                        }
-
-                        if (
-                            imageResponse.status === 401 ||
-                            imageResponse.status === 403
-                        ) {
-                            localStorage.removeItem(TOKEN_KEY);
-                            showAdminLogin(
-                                "Your login expired. Please log in again."
-                            );
-                            throw new Error("Not authorized.");
-                        }
-
-                        if (!imageResponse.ok || !imageResult.success) {
-                            throw new Error(
-                                imageResult.error ||
-                                `Could not upload ${photo.name}.`
-                            );
-                        }
-
-                        console.log("Photo uploaded:", imageResult);
-                    }
-
-                    // These photos are now stored in R2.
-                    selectedPhotos = [];
-                    photoInput.value = "";
-                    renderPhotos();
-                }
-
-
-                // Keep the product open and switch the page to saved/editing mode.
-                document.getElementById("saveCloud").textContent = "Update Product";
-                deleteProductButton.hidden = !editingProductDatabaseId;
-                document.querySelector(".product-state").textContent = "● Saved product";
-
-                showToast(
-                    isEditing
-                        ? "✅ Product updated successfully!"
-                        : "✅ Product saved! You are now editing this product.",
-                    "success"
-                );
-
-                if (!isEditing && editingProductDatabaseId) {
-                    const editUrl =
-                        `${window.location.pathname}?id=${encodeURIComponent(editingProductDatabaseId)}`;
-                    window.history.replaceState({}, "", editUrl);
-                }
-
-                console.log(result);
-
-            }
-            catch (error) {
-
-                console.error(error);
-
-                if (error.message !== "Not authorized.") {
-                    showToast(
-                        error.message,
-                        "error"
-                    );
-                }
-
-            }
-            finally {
-                saveButton.disabled = false;
-                saveButton.textContent = editingProductDatabaseId
-                    ? "Update Product"
-                    : originalButtonText;
-            }
-
         }
 
 
