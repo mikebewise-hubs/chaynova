@@ -2009,48 +2009,196 @@
             }
         }
     
-        /* Product identity and barcode previews */
-        .field.product-id-field {
-            grid-column: span 6;
-        }
-
+        /* Product identity and barcode popup */
+        .field.product-id-field,
         .field.store-sku-field {
             grid-column: span 6;
         }
 
-        .barcode-preview-box {
-            display: none;
-            margin-top: 10px;
-            padding: 12px;
-            overflow-x: auto;
+        .barcode-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 7px;
+        }
+
+        .barcode-label-row label {
+            margin-bottom: 0;
+        }
+
+        .barcode-open-btn {
+            display: inline-grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            padding: 0;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            background: #ffffff;
-            text-align: center;
+            border-radius: 999px;
+            color: var(--text);
+            background: var(--button-bg, rgba(255, 255, 255, .09));
+            font-size: 1.05rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .barcode-preview-box.visible {
-            display: block;
+        .barcode-open-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
         }
 
-        .barcode-preview-box svg {
-            display: block;
-            width: 100% !important;
-            max-width: 100%;
+        .barcode-open-btn:focus-visible {
+            outline: 3px solid rgba(0, 217, 255, .28);
+            outline-offset: 2px;
+        }
+
+        .barcode-open-btn:disabled {
+            opacity: .38;
+            cursor: not-allowed;
+        }
+
+        .barcode-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 7000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+            background: rgba(0, 0, 20, .78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .barcode-modal.open {
+            display: flex;
+        }
+
+        .barcode-dialog {
+            width: min(94vw, 760px);
+            max-height: min(90dvh, 820px);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            color: var(--text);
+            background: var(--glass-strong);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .34);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .barcode-dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .barcode-dialog-title {
             min-width: 0;
-            height: auto !important;
-            margin: 0 auto;
         }
 
-        body:not(.work-theme) .barcode-preview-box {
-            background: rgba(255, 255, 255, .96);
+        .barcode-dialog-title h3 {
+            margin: 0;
+            color: var(--text);
+            font-family: "Oxanium", sans-serif;
+            font-size: 1rem;
         }
 
-        .barcode-preview-note {
-            margin-top: 7px;
+        .barcode-dialog-title p {
+            margin-top: 4px;
+            overflow: hidden;
             color: var(--muted);
-            font-size: .7rem;
-            line-height: 1.4;
+            font-size: .78rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .barcode-close-btn {
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--text);
+            background: rgba(255, 255, 255, .08);
+            font-size: 1.25rem;
+        }
+
+        .barcode-stage {
+            display: grid;
+            place-items: center;
+            min-height: 300px;
+            max-height: 52dvh;
+            padding: 28px;
+            overflow: auto;
+            background: #fff;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .barcode-zoom-layer {
+            width: max-content;
+            max-width: none;
+            transform: scale(1);
+            transform-origin: center;
+            transition: transform .16s ease;
+        }
+
+        #barcodeModalImage {
+            display: block;
+            width: auto;
+            min-width: 360px;
+            max-width: none;
+            height: auto;
+        }
+
+        .barcode-controls {
+            display: grid;
+            grid-template-columns: auto auto minmax(120px, 1fr) auto auto;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 18px 18px;
+        }
+
+        .barcode-control-btn {
+            min-height: 42px;
+            padding: 8px 13px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            color: var(--text);
+            background: var(--button-bg, rgba(255, 255, 255, .09));
+            font-weight: 800;
+        }
+
+        .barcode-control-btn.primary {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+        }
+
+        body.work-theme .barcode-control-btn.primary {
+            background: linear-gradient(135deg, #577c90, #426d82);
+        }
+
+        #barcodeZoomRange {
+            width: 100%;
+            min-height: 32px;
+            padding: 0;
+            accent-color: var(--blue);
+        }
+
+        .barcode-zoom-value {
+            min-width: 52px;
+            color: var(--muted);
+            font-size: .78rem;
+            font-weight: 800;
+            text-align: center;
         }
 
         @media (max-width: 680px) {
@@ -2059,8 +2207,92 @@
                 grid-column: 1 / -1;
             }
 
-            .barcode-preview-box {
-                -webkit-overflow-scrolling: touch;
+            .barcode-dialog {
+                width: 100%;
+                max-height: 92dvh;
+                border-radius: 18px;
+            }
+
+            .barcode-stage {
+                min-height: 260px;
+                padding: 20px 14px;
+            }
+
+            #barcodeModalImage {
+                min-width: 300px;
+            }
+
+            .barcode-controls {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            #barcodeZoomRange {
+                grid-column: 1 / -1;
+                grid-row: 1;
+            }
+
+            .barcode-zoom-value {
+                display: none;
+            }
+
+            .barcode-control-btn {
+                padding-inline: 8px;
+            }
+        }
+
+        @media print {
+            body > *:not(#barcodeModal) {
+                display: none !important;
+            }
+
+            #barcodeModal {
+                position: static !important;
+                display: block !important;
+                padding: 0 !important;
+                background: #fff !important;
+            }
+
+            .barcode-dialog {
+                width: 100% !important;
+                max-height: none !important;
+                overflow: visible !important;
+                border: 0 !important;
+                box-shadow: none !important;
+                background: #fff !important;
+            }
+
+            .barcode-dialog-header {
+                color: #000 !important;
+                border: 0 !important;
+                padding: 0 0 18px !important;
+            }
+
+            .barcode-dialog-title h3,
+            .barcode-dialog-title p {
+                color: #000 !important;
+            }
+
+            .barcode-close-btn,
+            .barcode-controls {
+                display: none !important;
+            }
+
+            .barcode-stage {
+                min-height: 0 !important;
+                max-height: none !important;
+                overflow: visible !important;
+                padding: 0 !important;
+            }
+
+            .barcode-zoom-layer {
+                transform: none !important;
+            }
+
+            #barcodeModalImage {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 680px !important;
+                margin: 0 auto !important;
             }
         }
 
@@ -2162,27 +2394,33 @@
                     <div class="section-body">
                         <div class="form-grid">
                             <div class="field product-id-field">
-                                <label for="productId">Product ID</label>
+                                <div class="barcode-label-row">
+                                    <label for="productId">Product ID</label>
+                                    <button class="barcode-open-btn" type="button"
+                                        data-barcode-input="productId"
+                                        data-barcode-title="Product ID Barcode"
+                                        title="Open Product ID barcode" aria-label="Open Product ID barcode"
+                                        disabled>🏷️</button>
+                                </div>
                                 <div class="input-row">
                                     <input id="productId" name="productId" placeholder="CHA-000001">
                                     <button class="mini-btn" type="button" id="generateId">Generate</button>
                                 </div>
 
-                                <div id="productIdBarcodeBox" class="barcode-preview-box"
-                                    aria-label="Product ID barcode image">
-                                    <svg id="productIdBarcodeImage"></svg>
-                                    <div class="barcode-preview-note">Product ID barcode image</div>
-                                </div>
+
                             </div>
                             <div class="field store-sku-field">
-                                <label for="sku">Store SKU <span class="required">*</span></label>
+                                <div class="barcode-label-row">
+                                    <label for="sku">Store SKU <span class="required">*</span></label>
+                                    <button class="barcode-open-btn" type="button"
+                                        data-barcode-input="sku"
+                                        data-barcode-title="Store SKU Barcode"
+                                        title="Open Store SKU barcode" aria-label="Open Store SKU barcode"
+                                        disabled>🏷️</button>
+                                </div>
                                 <input id="sku" name="sku" required placeholder="CHA-FBT-JER-001">
 
-                                <div id="skuBarcodeBox" class="barcode-preview-box"
-                                    aria-label="Store SKU barcode image">
-                                    <svg id="skuBarcodeImage"></svg>
-                                    <div class="barcode-preview-note">Store SKU barcode image</div>
-                                </div>
+
                             </div>
                             <div class="field">
                                 <label for="status">Product Status</label>
@@ -2252,27 +2490,33 @@
                             </div>
 
                             <div class="field half">
-                                <label for="manufacturerBarcode">Thailand / Manufacturer Barcode</label>
+                                <div class="barcode-label-row">
+                                    <label for="manufacturerBarcode">Thailand / Manufacturer Barcode</label>
+                                    <button class="barcode-open-btn" type="button"
+                                        data-barcode-input="manufacturerBarcode"
+                                        data-barcode-title="Manufacturer Barcode"
+                                        title="Open manufacturer barcode" aria-label="Open manufacturer barcode"
+                                        disabled>🏷️</button>
+                                </div>
                                 <input id="manufacturerBarcode" name="manufacturerBarcode" inputmode="numeric"
                                     placeholder="8851234567890">
 
-                                <div id="manufacturerBarcodeBox" class="barcode-preview-box"
-                                    aria-label="Thailand or manufacturer barcode preview">
-                                    <svg id="manufacturerBarcodeImage"></svg>
-                                    <div class="barcode-preview-note">Manufacturer barcode image</div>
-                                </div>
+
                             </div>
 
                             <div class="field half">
-                                <label for="storeBarcode">CHAYNOVA Store Barcode</label>
+                                <div class="barcode-label-row">
+                                    <label for="storeBarcode">CHAYNOVA Store Barcode</label>
+                                    <button class="barcode-open-btn" type="button"
+                                        data-barcode-input="storeBarcode"
+                                        data-barcode-title="CHAYNOVA Store Barcode"
+                                        title="Open CHAYNOVA store barcode" aria-label="Open CHAYNOVA store barcode"
+                                        disabled>🏷️</button>
+                                </div>
                                 <input id="storeBarcode" name="storeBarcode" inputmode="text"
                                     placeholder="Your UPC, EAN, or internal barcode">
 
-                                <div id="storeBarcodeBox" class="barcode-preview-box"
-                                    aria-label="CHAYNOVA store barcode preview">
-                                    <svg id="storeBarcodeImage"></svg>
-                                    <div class="barcode-preview-note">CHAYNOVA store barcode image</div>
-                                </div>
+
                             </div>
 
                             <div class="field half">
@@ -2556,6 +2800,38 @@
     </main>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div id="barcodeModal" class="barcode-modal" aria-hidden="true">
+        <section class="barcode-dialog" role="dialog" aria-modal="true"
+            aria-labelledby="barcodeModalTitle">
+            <div class="barcode-dialog-header">
+                <div class="barcode-dialog-title">
+                    <h3 id="barcodeModalTitle">Barcode</h3>
+                    <p id="barcodeModalValue"></p>
+                </div>
+                <button id="barcodeModalClose" class="barcode-close-btn" type="button"
+                    aria-label="Close barcode viewer">×</button>
+            </div>
+
+            <div id="barcodeStage" class="barcode-stage">
+                <div id="barcodeZoomLayer" class="barcode-zoom-layer">
+                    <svg id="barcodeModalImage" aria-label="Generated barcode"></svg>
+                </div>
+            </div>
+
+            <div class="barcode-controls" aria-label="Barcode controls">
+                <button id="barcodeZoomOut" class="barcode-control-btn" type="button"
+                    aria-label="Zoom out">−</button>
+                <button id="barcodeZoomIn" class="barcode-control-btn" type="button"
+                    aria-label="Zoom in">+</button>
+                <input id="barcodeZoomRange" type="range" min="50" max="250" step="10"
+                    value="100" aria-label="Barcode zoom">
+                <span id="barcodeZoomValue" class="barcode-zoom-value">100%</span>
+                <button id="barcodePrint" class="barcode-control-btn primary" type="button">Print</button>
+            </div>
+        </section>
+    </div>
+
 
     <script>
         const API = "https://chay1api.mikebewise.workers.dev";
@@ -3020,79 +3296,200 @@
         }
 
 
-        function renderBarcode(inputId, svgId, boxId) {
+        const barcodeModal =
+            document.getElementById("barcodeModal");
+
+        const barcodeModalImage =
+            document.getElementById("barcodeModalImage");
+
+        const barcodeZoomLayer =
+            document.getElementById("barcodeZoomLayer");
+
+        const barcodeZoomRange =
+            document.getElementById("barcodeZoomRange");
+
+        const barcodeZoomValue =
+            document.getElementById("barcodeZoomValue");
+
+        let barcodeZoom = 1;
+        let lastBarcodeTrigger = null;
+
+        function updateBarcodeButtons() {
+            document
+                .querySelectorAll(".barcode-open-btn")
+                .forEach(button => {
+                    const input =
+                        document.getElementById(
+                            button.dataset.barcodeInput
+                        );
+
+                    button.disabled =
+                        !input || !input.value.trim();
+                });
+        }
+
+        function setBarcodeZoom(nextZoom) {
+            barcodeZoom =
+                Math.min(2.5, Math.max(.5, nextZoom));
+
+            barcodeZoomLayer.style.transform =
+                `scale(${barcodeZoom})`;
+
+            barcodeZoomRange.value =
+                String(Math.round(barcodeZoom * 100));
+
+            barcodeZoomValue.textContent =
+                `${Math.round(barcodeZoom * 100)}%`;
+        }
+
+        function closeBarcodeModal() {
+            barcodeModal.classList.remove("open");
+            barcodeModal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+
+            if (lastBarcodeTrigger) {
+                lastBarcodeTrigger.focus();
+            }
+        }
+
+        function openBarcodeModal(button) {
+            const input =
+                document.getElementById(
+                    button.dataset.barcodeInput
+                );
+
             const value =
-                document
-                    .getElementById(inputId)
-                    .value.trim();
-
-            const svg =
-                document.getElementById(svgId);
-
-            const box =
-                document.getElementById(boxId);
+                input?.value.trim();
 
             if (!value) {
-                box.classList.remove("visible");
-                svg.innerHTML = "";
+                showToast("Enter a barcode value first.");
                 return;
             }
 
             if (typeof JsBarcode !== "function") {
-                box.classList.remove("visible");
-                console.error("JsBarcode library did not load.");
+                showToast("Barcode library did not load.", "error");
                 return;
             }
 
             try {
-                JsBarcode(svg, value, {
+                barcodeModalImage.innerHTML = "";
+
+                JsBarcode(barcodeModalImage, value, {
                     format: "CODE128",
                     displayValue: true,
                     font: "Inter",
-                    fontSize: 15,
-                    textMargin: 4,
-                    height: 48,
-                    width: 2,
-                    margin: 8,
+                    fontSize: 18,
+                    textMargin: 6,
+                    height: 90,
+                    width: 2.4,
+                    margin: 16,
                     background: "#ffffff",
                     lineColor: "#111111"
                 });
 
-                box.classList.add("visible");
+                document
+                    .getElementById("barcodeModalTitle")
+                    .textContent =
+                    button.dataset.barcodeTitle || "Barcode";
+
+                document
+                    .getElementById("barcodeModalValue")
+                    .textContent = value;
+
+                lastBarcodeTrigger = button;
+                setBarcodeZoom(1);
+
+                barcodeModal.classList.add("open");
+                barcodeModal.setAttribute("aria-hidden", "false");
+                document.body.style.overflow = "hidden";
+
+                document
+                    .getElementById("barcodeModalClose")
+                    .focus();
             } catch (error) {
-                box.classList.remove("visible");
-                svg.innerHTML = "";
-                console.error(
-                    `Could not create barcode for ${inputId}:`,
-                    error
-                );
+                console.error("Could not create barcode:", error);
+                showToast("This value could not be converted to a barcode.", "error");
             }
         }
 
+        document
+            .querySelectorAll(".barcode-open-btn")
+            .forEach(button => {
+                button.addEventListener(
+                    "click",
+                    () => openBarcodeModal(button)
+                );
+
+                const input =
+                    document.getElementById(
+                        button.dataset.barcodeInput
+                    );
+
+                input?.addEventListener(
+                    "input",
+                    updateBarcodeButtons
+                );
+            });
+
+        document
+            .getElementById("barcodeModalClose")
+            .addEventListener("click", closeBarcodeModal);
+
+        barcodeModal.addEventListener("click", event => {
+            if (event.target === barcodeModal) {
+                closeBarcodeModal();
+            }
+        });
+
+        document
+            .getElementById("barcodeZoomOut")
+            .addEventListener(
+                "click",
+                () => setBarcodeZoom(barcodeZoom - .1)
+            );
+
+        document
+            .getElementById("barcodeZoomIn")
+            .addEventListener(
+                "click",
+                () => setBarcodeZoom(barcodeZoom + .1)
+            );
+
+        barcodeZoomRange.addEventListener(
+            "input",
+            () => setBarcodeZoom(
+                Number(barcodeZoomRange.value) / 100
+            )
+        );
+
+        document
+            .getElementById("barcodePrint")
+            .addEventListener("click", () => {
+                window.print();
+            });
+
+        document.addEventListener("keydown", event => {
+            if (!barcodeModal.classList.contains("open")) {
+                return;
+            }
+
+            if (event.key === "Escape") {
+                closeBarcodeModal();
+            }
+
+            if (event.key === "+" || event.key === "=") {
+                event.preventDefault();
+                setBarcodeZoom(barcodeZoom + .1);
+            }
+
+            if (event.key === "-") {
+                event.preventDefault();
+                setBarcodeZoom(barcodeZoom - .1);
+            }
+        });
+
         function renderProductBarcodes() {
-            renderBarcode(
-                "productId",
-                "productIdBarcodeImage",
-                "productIdBarcodeBox"
-            );
-
-            renderBarcode(
-                "sku",
-                "skuBarcodeImage",
-                "skuBarcodeBox"
-            );
-
-            renderBarcode(
-                "manufacturerBarcode",
-                "manufacturerBarcodeImage",
-                "manufacturerBarcodeBox"
-            );
-
-            renderBarcode(
-                "storeBarcode",
-                "storeBarcodeImage",
-                "storeBarcodeBox"
-            );
+            updateBarcodeButtons();
         }
 
         function updatePreview() {
@@ -5170,6 +5567,7 @@
 
 
     </script>
+
 </body>
 
 </html>
