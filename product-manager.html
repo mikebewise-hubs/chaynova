@@ -225,9 +225,50 @@
         .status-dot {
             width: 8px;
             height: 8px;
+            flex: 0 0 8px;
             border-radius: 50%;
             background: #f0b54a;
             box-shadow: 0 0 0 4px rgba(240, 181, 74, .14);
+            transition:
+                background .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .status-dot.checking {
+            background: #f0b54a;
+            box-shadow:
+                0 0 0 4px rgba(240, 181, 74, .14);
+        }
+
+        .status-dot.online {
+            background: #18c77a;
+            box-shadow:
+                0 0 0 4px rgba(24, 199, 122, .16);
+        }
+
+        .status-dot.offline {
+            background: #ee5260;
+            box-shadow:
+                0 0 0 4px rgba(238, 82, 96, .16);
+        }
+
+        .status-dot.session-expired {
+            background: #ee5260;
+            box-shadow:
+                0 0 0 4px rgba(238, 82, 96, .16);
+        }
+
+        .status-pill[data-status="checking"] {
+            cursor: progress;
+        }
+
+        .status-pill[data-status="online"] {
+            cursor: help;
+        }
+
+        .status-pill[data-status="offline"],
+        .status-pill[data-status="session-expired"] {
+            cursor: help;
         }
 
         .top-btn {
@@ -2340,7 +2381,21 @@
         </a>
 
         <div class="header-actions">
-            <span class="status-pill"><span class="status-dot"></span> Cloudflare Product API</span>
+            <span
+                id="apiStatusPill"
+                class="status-pill"
+                data-status="checking"
+                role="status"
+                aria-live="polite"
+                title="Checking Cloudflare Product API">
+                <span
+                    id="apiStatusDot"
+                    class="status-dot checking"
+                    aria-hidden="true"></span>
+                <span id="apiStatusText">
+                    Cloudflare Product API · Checking…
+                </span>
+            </span>
             <a class="top-btn" href="admin.html">⌂ <span class="top-label">Dashboard</span></a>
             <a class="top-btn" href="products.html">▣ <span class="top-label">Products</span></a>
             <button class="top-btn theme-button" type="button" id="themeButton" aria-label="Change page style">
@@ -2841,6 +2896,21 @@
         const DRAFT_KEY = "chaynova-product-draft-v1";
         const THEME_KEY = "chaynovaAdminTheme";
 
+        const API_STATUS_INTERVAL_MS = 30000;
+        const API_STATUS_TIMEOUT_MS = 8000;
+
+        const apiStatusPill =
+            document.getElementById("apiStatusPill");
+
+        const apiStatusDot =
+            document.getElementById("apiStatusDot");
+
+        const apiStatusText =
+            document.getElementById("apiStatusText");
+
+        let apiStatusTimer = null;
+        let apiStatusController = null;
+
         const themeButton = document.getElementById("themeButton");
         const themeIcon = document.getElementById("themeIcon");
         const themeText = document.getElementById("themeText");
@@ -2944,6 +3014,156 @@
             return localStorage.getItem(TOKEN_KEY) || "";
         }
 
+        function setProductApiStatus(
+            state,
+            message,
+            title = message
+        ) {
+            apiStatusPill.dataset.status = state;
+            apiStatusDot.className =
+                `status-dot ${state}`;
+            apiStatusText.textContent =
+                `Cloudflare Product API · ${message}`;
+            apiStatusPill.title = title;
+        }
+
+        function stopProductApiStatusChecks() {
+            if (apiStatusTimer) {
+                clearInterval(apiStatusTimer);
+                apiStatusTimer = null;
+            }
+
+            if (apiStatusController) {
+                apiStatusController.abort();
+                apiStatusController = null;
+            }
+        }
+
+        async function checkProductApiStatus() {
+            const token = getAdminToken();
+
+            if (!token) {
+                setProductApiStatus(
+                    "offline",
+                    "Login required",
+                    "Log in to check the Cloudflare Product API."
+                );
+                return;
+            }
+
+            if (apiStatusController) {
+                apiStatusController.abort();
+            }
+
+            apiStatusController =
+                new AbortController();
+
+            const timeoutId = setTimeout(
+                () => apiStatusController?.abort(),
+                API_STATUS_TIMEOUT_MS
+            );
+
+            setProductApiStatus(
+                "checking",
+                "Checking…",
+                "Checking Cloudflare Product API connection."
+            );
+
+            try {
+                const response = await fetch(
+                    `${CLOUD_API_URL}?limit=1`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`,
+                            "Accept":
+                                "application/json"
+                        },
+                        cache: "no-store",
+                        signal:
+                            apiStatusController.signal
+                    }
+                );
+
+                /*
+                 * Any HTTP response proves the Worker is reachable.
+                 * 401 specifically means the stored login token expired.
+                 * 403 keeps the token because the API is online but access
+                 * to this resource was denied.
+                 */
+                if (response.status === 401) {
+                    localStorage.removeItem(TOKEN_KEY);
+
+                    setProductApiStatus(
+                        "session-expired",
+                        "Session expired",
+                        "The API is online, but your admin login expired."
+                    );
+
+                    showAdminLogin(
+                        "Your login expired. Please log in again."
+                    );
+
+                    return;
+                }
+
+                if (response.status === 403) {
+                    setProductApiStatus(
+                        "online",
+                        "Online · Access denied",
+                        "The Cloudflare Product API is online, but this request returned 403 Forbidden."
+                    );
+
+                    return;
+                }
+
+                if (!response.ok) {
+                    setProductApiStatus(
+                        "offline",
+                        `Error ${response.status}`,
+                        `The Cloudflare Product API returned HTTP ${response.status}.`
+                    );
+
+                    return;
+                }
+
+                setProductApiStatus(
+                    "online",
+                    "Online",
+                    "Cloudflare Product API is online and authenticated."
+                );
+
+            } catch (error) {
+                const timedOut =
+                    error?.name === "AbortError";
+
+                setProductApiStatus(
+                    "offline",
+                    timedOut
+                        ? "Timeout"
+                        : "Offline",
+                    timedOut
+                        ? "The Cloudflare Product API did not respond within 8 seconds."
+                        : "The Cloudflare Product API could not be reached."
+                );
+
+            } finally {
+                clearTimeout(timeoutId);
+                apiStatusController = null;
+            }
+        }
+
+        function startProductApiStatusChecks() {
+            stopProductApiStatusChecks();
+            checkProductApiStatus();
+
+            apiStatusTimer = setInterval(
+                checkProductApiStatus,
+                API_STATUS_INTERVAL_MS
+            );
+        }
+
         function showAdminPage() {
             protectedElements.forEach(element => {
                 element.classList.remove("admin-protected");
@@ -3017,6 +3237,7 @@
                 adminPassword.value = "";
 
                 showAdminPage();
+                startProductApiStatusChecks();
                 await loadProductForEditing();
 
             } catch (error) {
@@ -3033,6 +3254,14 @@
 
         function logoutAdmin() {
             localStorage.removeItem(TOKEN_KEY);
+            stopProductApiStatusChecks();
+
+            setProductApiStatus(
+                "offline",
+                "Logged out",
+                "Log in to check the Cloudflare Product API."
+            );
+
             adminUsername.value = "";
             adminPassword.value = "";
 
@@ -3056,6 +3285,14 @@
         document
             .getElementById("logoutAdmin")
             .addEventListener("click", logoutAdmin);
+
+
+        apiStatusPill.addEventListener(
+            "click",
+            () => {
+                checkProductApiStatus();
+            }
+        );
 
         function showToast(message, type = "") {
             toast.textContent = message;
@@ -5556,8 +5793,15 @@
 
         if (getAdminToken()) {
             showAdminPage();
+            startProductApiStatusChecks();
             loadProductForEditing();
         } else {
+            setProductApiStatus(
+                "offline",
+                "Login required",
+                "Log in to check the Cloudflare Product API."
+            );
+
             showAdminLogin(
                 getEditingIdFromUrl()
                     ? "Please log in to edit this product."
