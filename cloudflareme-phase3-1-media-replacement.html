@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050015">
+<title>CloudflareMe | CHAYNOVA</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#050015;--panel:#10142e;--panel2:#151b3e;--line:rgba(255,255,255,.13);
+  --text:#f7fbff;--muted:#a9bad1;--cyan:#00d9ff;--pink:#ff2fcf;--purple:#7b2cff;
+  --green:#5ee59d;--yellow:#ffd966;--red:#ff6d83;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 12% 3%,rgba(255,47,207,.2),transparent 28%),
+    radial-gradient(circle at 90% 4%,rgba(0,217,255,.2),transparent 28%),
+    linear-gradient(135deg,#03000c,#09002c,#00142c);
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;padding:18px 14px;border-right:1px solid var(--line);
+  background:rgba(5,0,21,.86);backdrop-filter:blur(16px);overflow:auto
+}
+.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 20px;color:white;text-decoration:none}
+.brand img{width:43px;height:43px;object-fit:contain}
+.brand strong{display:block;letter-spacing:.08em}
+.brand small{display:block;color:var(--muted);margin-top:3px}
+.nav-title{padding:16px 10px 7px;color:#768aa7;font-size:.7rem;text-transform:uppercase;letter-spacing:.12em}
+.nav-btn{
+  width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;margin:3px 0;
+  color:#dfeaff;background:transparent;border:1px solid transparent;border-radius:11px;text-align:left
+}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.08);border-color:var(--line)}
+.nav-btn.active{color:white;box-shadow:inset 3px 0 0 var(--cyan)}
+.main{min-width:0}
+.topbar{
+  position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:13px clamp(14px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(5,0,21,.78);backdrop-filter:blur(16px)
+}
+.topbar h1{margin:0;font-size:1.15rem}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn,.file-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:39px;
+  padding:8px 13px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.08);color:white;text-decoration:none;font-weight:750
+}
+.btn:hover,.file-btn:hover{background:rgba(255,255,255,.14)}
+.btn.primary{border:0;background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan))}
+.btn.danger{border-color:rgba(255,109,131,.45);color:#ffdce2;background:rgba(255,109,131,.11)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.content{width:min(1500px,96%);margin:auto;padding:27px 0 70px}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px}
+.hero h2{margin:0;font-size:clamp(1.9rem,4vw,3rem);background:linear-gradient(90deg,#ffb000,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:780px;line-height:1.6;margin:7px 0 0}
+.sync{padding:9px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.stat{padding:16px;border:1px solid var(--line);border-radius:15px;background:rgba(16,20,46,.82)}
+.stat span{display:block;color:var(--muted);font-size:.8rem}
+.stat strong{display:block;margin-top:8px;font-size:1.6rem}
+.toolbar{
+  display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,minmax(140px,auto)) auto;
+  gap:9px;padding:13px;margin-bottom:15px;border:1px solid var(--line);border-radius:15px;background:rgba(16,20,46,.82)
+}
+.control{width:100%;min-height:42px;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:white;outline:none}
+.control:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,217,255,.12)}
+
+.batch-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 13px;margin:-3px 0 15px;border:1px solid var(--line);border-radius:13px;background:rgba(16,20,46,.82)}
+.batch-bar strong{margin-right:auto}.batch-bar .count{color:var(--muted);font-size:.84rem}.select-col{width:50px;text-align:center}.row-check,.select-all{width:18px;height:18px;accent-color:var(--cyan)}
+.batch-progress{min-width:160px;color:var(--muted);font-size:.82rem}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:17px;background:rgba(16,20,46,.82)}
+table{width:100%;border-collapse:collapse;min-width:880px;table-layout:fixed}
+th,td{padding:11px 10px;border-bottom:1px solid rgba(255,255,255,.09);vertical-align:middle;text-align:left}
+th{position:sticky;top:0;z-index:2;background:#111737;color:#cbe9ff;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em}
+.thumb{width:64px;height:50px;border-radius:9px;object-fit:cover;border:1px solid var(--line);background:rgba(255,255,255,.07)}
+.doc-thumb{width:64px;height:50px;border-radius:9px;display:grid;place-items:center;border:1px solid var(--line);background:rgba(255,255,255,.07);font-size:1.45rem}
+.name{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.file-cell{min-width:0}.owner-cell{min-width:0}.owner-cell .name{max-width:100%}
+.sub{margin-top:4px;color:var(--muted);font-size:.76rem;line-height:1.4}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:.74rem;font-weight:850}
+.badge.attached{color:#caffdf;background:rgba(94,229,157,.12);border:1px solid rgba(94,229,157,.35)}
+.badge.detached{color:#ffefb3;background:rgba(255,217,102,.11);border:1px solid rgba(255,217,102,.35)}
+.badge.broken{color:#ffd8df;background:rgba(255,109,131,.12);border:1px solid rgba(255,109,131,.4)}
+.badge.unknown{color:#d9e4ff;background:rgba(120,155,255,.12);border:1px solid rgba(120,155,255,.35)}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}.manage-col{text-align:right}.table-wrap th:nth-child(1){width:50px}.table-wrap th:nth-child(2){width:84px}.table-wrap th:nth-child(3){width:28%}.table-wrap th:nth-child(4){width:110px}.table-wrap th:nth-child(5){width:150px}.table-wrap th:nth-child(6){width:95px}.table-wrap th:nth-child(7){width:24%}.table-wrap th:nth-child(8){width:105px}
+.row-actions .btn,.row-actions .file-btn{min-height:33px;padding:6px 9px;font-size:.77rem}
+.file-btn input{display:none}
+.empty{padding:42px 18px;text-align:center;color:var(--muted)}
+.notice{padding:13px 14px;margin-bottom:15px;border:1px solid rgba(255,217,102,.35);border-radius:12px;background:rgba(255,217,102,.1);color:#fff0b7;line-height:1.55}
+.overlay{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:20px;background:rgba(0,0,18,.87);backdrop-filter:blur(10px)}
+.login{width:min(430px,94vw);padding:26px;border-radius:20px;border:1px solid var(--line);background:#10142e}
+.login h2{margin:0 0 7px}.login p{color:var(--muted);line-height:1.5}
+.login .control{margin-top:9px}.login .btn{width:100%;margin-top:11px}
+.err{min-height:22px;margin-top:10px;color:#ffb9c4;text-align:center;font-weight:750}
+.toast{position:fixed;right:18px;bottom:18px;z-index:3000;max-width:380px;padding:13px 15px;border-radius:10px;background:#2a3c51;opacity:0;transform:translateY(12px);transition:.2s;pointer-events:none}
+.toast.show{opacity:1;transform:none}.toast.success{background:#247452}.toast.error{background:#a53f4d}
+
+.manage-overlay{position:fixed;inset:0;z-index:2600;display:grid;place-items:center;padding:18px;background:rgba(0,0,18,.88);backdrop-filter:blur(12px)}
+.manage-dialog{width:min(650px,96vw);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:20px;background:#10142e;box-shadow:0 28px 90px rgba(0,0,0,.55)}
+.manage-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:20px 22px;border-bottom:1px solid var(--line)}
+.manage-head h2{margin:0}.manage-head p{margin:6px 0 0;color:var(--muted)}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:white;font-size:1.25rem}
+.manage-body{padding:20px 22px}.manage-grid{display:grid;grid-template-columns:120px 1fr;gap:10px 14px;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04)}
+.manage-grid dt{color:var(--muted);font-size:.8rem}.manage-grid dd{margin:0;overflow-wrap:anywhere;font-weight:750}.manage-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.manage-tools .btn{min-height:35px;padding:7px 10px;font-size:.8rem}
+.manage-actions{display:grid;gap:10px;margin-top:18px}.manage-option{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:flex-start;padding:13px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035)}
+.manage-option:hover{background:rgba(255,255,255,.07)}.manage-option input{margin-top:4px}.manage-option strong{display:block}.manage-option span{display:block;margin-top:4px;color:var(--muted);font-size:.83rem;line-height:1.45}
+.manage-option.disabled{opacity:.5;cursor:not-allowed}.manage-foot{display:flex;justify-content:flex-end;gap:9px;padding:16px 22px;border-top:1px solid var(--line)}
+.manage-warning{margin-top:14px;padding:11px 12px;border:1px solid rgba(255,217,102,.35);border-radius:11px;background:rgba(255,217,102,.09);color:#fff0b7;font-size:.85rem;line-height:1.45}
+
+.analytics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.analytics-card{padding:17px;border:1px solid var(--line);border-radius:15px;background:rgba(16,20,46,.82);min-width:0}
+.analytics-card.wide{grid-column:1/-1}.analytics-card h3{margin:0 0 5px;font-size:1rem}.analytics-card>p{margin:0 0 14px;color:var(--muted);font-size:.82rem;line-height:1.45}
+.metric-list{display:grid;gap:11px}.metric-row{display:grid;grid-template-columns:minmax(110px,160px) 1fr auto;gap:10px;align-items:center}.metric-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.82rem}.metric-value{color:#dff8ff;font-weight:800;font-size:.8rem;white-space:nowrap}.metric-track{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}.metric-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan));min-width:2px}
+.analytics-list{display:grid;gap:8px}.analytics-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 11px;border:1px solid rgba(255,255,255,.09);border-radius:11px;background:rgba(255,255,255,.035)}.analytics-item strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem}.analytics-item span{display:block;color:var(--muted);font-size:.75rem;margin-top:3px}.analytics-item b{align-self:center;font-size:.8rem;white-space:nowrap}.health-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.health-box{padding:13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.035)}.health-box span{display:block;color:var(--muted);font-size:.75rem}.health-box strong{display:block;margin-top:6px;font-size:1.15rem}.health-note{margin-top:12px;color:var(--muted);font-size:.8rem;line-height:1.5}
+@media(max-width:900px){.analytics-grid{grid-template-columns:1fr}.analytics-card.wide{grid-column:auto}.health-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.metric-row{grid-template-columns:95px 1fr}.metric-value{grid-column:2}.health-grid{grid-template-columns:1fr 1fr}}
+
+.section{display:none}.section.active{display:block}
+@media(max-width:980px){
+  .shell{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{display:flex;overflow:auto;gap:5px}.nav-title{display:none}.nav-btn{white-space:nowrap;width:auto}
+  .stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search{grid-column:1/-1}
+}
+@media(max-width:580px){
+  .topbar{align-items:flex-start}.content{width:calc(100% - 18px)}.hero{align-items:flex-start;flex-direction:column}
+  .stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}
+  .btn,.control{min-height:46px;font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="loginOverlay" class="overlay" hidden>
+  <section class="login">
+    <h2>CloudflareMe Login</h2>
+    <p>Uses the same protected admin login as your CHAYNOVA story and product tools.</p>
+    <input id="username" class="control" autocomplete="username" placeholder="Username">
+    <input id="password" class="control" type="password" autocomplete="current-password" placeholder="Password">
+    <button id="loginBtn" class="btn primary" type="button">Log In</button>
+    <div id="loginError" class="err" aria-live="polite"></div>
+  </section>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="admin.html">
+      <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA logo">
+      <span><strong>CloudflareMe</strong><small>CHAYNOVA Control Center</small></span>
+    </a>
+    <nav>
+      <div class="nav-title">Overview</div>
+      <button class="nav-btn active" data-section="dashboard">⌂ Dashboard</button>
+      <div class="nav-title">Storage</div>
+      <button class="nav-btn" data-section="all">☁ All Files</button>
+      <button class="nav-btn" data-section="story">▧ Story Images</button>
+      <button class="nav-btn" data-section="product">▣ Product Images</button>
+      <button class="nav-btn" data-section="documents">▤ Product Documents</button>
+      <div class="nav-title">Health</div>
+      <button class="nav-btn" data-section="detached">🧹 Detached Files</button>
+      <button class="nav-btn" data-section="hidden">♻ Recycle Bin</button>
+      <button class="nav-btn" data-section="broken">⚠ Broken References</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h1 id="sectionTitle">Dashboard</h1>
+      <div class="actions">
+        <a class="btn" href="admin.html">Admin</a>
+        <button id="refreshBtn" class="btn" type="button">↻ Refresh</button>
+        <button id="logoutBtn" class="btn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="hero">
+        <div>
+          <h2>CloudflareMe</h2>
+          <p>One place to inspect your Story Images, Product Images, Product Documents, database attachments, unused files, and broken references.</p>
+        </div>
+        <div id="lastSync" class="sync">Not refreshed yet</div>
+      </section>
+
+      <div id="apiNotice" class="notice" hidden>
+        The page is ready, but the Worker route <code>/cloudflareme</code> is not active yet. Add the companion Worker code and connect its authentication function.
+      </div>
+
+      <section id="dashboard" class="section active">
+        <div class="stats">
+          <article class="stat"><span>Story images</span><strong id="storyCount">0</strong></article>
+          <article class="stat"><span>Product images</span><strong id="productCount">0</strong></article>
+          <article class="stat"><span>Documents</span><strong id="documentCount">0</strong></article>
+          <article class="stat"><span>Total storage</span><strong id="storageTotal">0 B</strong></article>
+          <article class="stat"><span>Attached</span><strong id="attachedCount">0</strong></article>
+          <article class="stat"><span>Detached</span><strong id="detachedCount">0</strong></article>
+          <article class="stat"><span>Recycle Bin</span><strong id="hiddenCount">0</strong></article>
+          <article class="stat"><span>Broken references</span><strong id="brokenCount">0</strong></article>
+          <article class="stat"><span>Total files</span><strong id="totalCount">0</strong></article>
+        </div>
+        <div class="analytics-grid">
+          <article class="analytics-card">
+            <h3>Storage by bucket</h3>
+            <p>See which Cloudflare R2 bucket is using the most space.</p>
+            <div id="bucketStorage" class="metric-list"></div>
+          </article>
+          <article class="analytics-card">
+            <h3>Library health</h3>
+            <p>Current attachment and visibility condition across the media library.</p>
+            <div class="health-grid">
+              <div class="health-box"><span>Attached rate</span><strong id="attachedRate">0%</strong></div>
+              <div class="health-box"><span>Detached rate</span><strong id="detachedRate">0%</strong></div>
+              <div class="health-box"><span>Hidden rate</span><strong id="hiddenRate">0%</strong></div>
+              <div class="health-box"><span>Broken rate</span><strong id="brokenRate">0%</strong></div>
+            </div>
+            <div id="healthNote" class="health-note">Waiting for scan data…</div>
+          </article>
+          <article class="analytics-card">
+            <h3>Largest files</h3>
+            <p>The five biggest objects currently stored in R2.</p>
+            <div id="largestFiles" class="analytics-list"></div>
+          </article>
+          <article class="analytics-card">
+            <h3>Oldest detached files</h3>
+            <p>Detached files that may deserve review before future cleanup.</p>
+            <div id="oldestDetached" class="analytics-list"></div>
+          </article>
+          <article class="analytics-card wide">
+            <h3>Recent uploads</h3>
+            <p>The five newest files across Story Images, Product Images, and Product Documents.</p>
+            <div id="recentUploads" class="analytics-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="manager" class="section">
+        <div class="toolbar">
+          <input id="searchInput" class="control search" type="search" placeholder="Search filename, owner, route, bucket, ID…">
+          <select id="bucketFilter" class="control">
+            <option value="all">All buckets</option>
+            <option value="story">Story images</option>
+            <option value="product">Product images</option>
+            <option value="documents">Documents</option>
+          </select>
+          <select id="statusFilter" class="control">
+            <option value="all">All status</option>
+            <option value="attached">Attached</option>
+            <option value="detached">Detached</option>
+            <option value="hidden">Recycle Bin</option>
+            <option value="broken">Broken</option>
+          </select>
+          <select id="sortSelect" class="control">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name">Filename A–Z</option>
+            <option value="size">Largest first</option>
+          </select>
+          <button id="deleteDetachedBtn" class="btn danger" type="button" disabled title="Permanent deletion is available only from the Recycle Bin manage dialog">Protected delete</button>
+        </div>
+
+        <div class="batch-bar">
+          <strong>Batch management</strong>
+          <span id="batchCount" class="count">0 selected</span>
+          <button id="selectVisibleBtn" class="btn" type="button">Select visible</button>
+          <button id="clearSelectionBtn" class="btn" type="button" disabled>Clear</button>
+          <button id="batchHideBtn" class="btn primary" type="button" disabled>Hide selected</button>
+          <button id="batchRestoreBtn" class="btn" type="button" disabled>Restore selected</button>
+          <span id="batchProgress" class="batch-progress"></span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="select-col"><input id="selectAllVisible" class="select-all" type="checkbox" aria-label="Select all visible files"></th><th>Preview</th><th>File</th><th>Type</th><th>Status</th><th>Size</th><th>Owner</th><th class="manage-col">Manage</th>
+              </tr>
+            </thead>
+            <tbody id="fileBody"></tbody>
+          </table>
+          <div id="emptyState" class="empty">Loading Cloudflare data…</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div id="manageOverlay" class="manage-overlay" hidden>
+  <section class="manage-dialog" role="dialog" aria-modal="true" aria-labelledby="manageTitle">
+    <header class="manage-head">
+      <div><h2 id="manageTitle">Manage Media</h2><p id="manageSubtitle">Choose a safe action for this file.</p></div>
+      <button id="manageClose" class="icon-btn" type="button" aria-label="Close">×</button>
+    </header>
+    <div class="manage-body">
+      <dl class="manage-grid">
+        <dt>Filename</dt><dd id="manageFilename">—</dd>
+        <dt>Bucket</dt><dd id="manageBucket">—</dd>
+        <dt>Owner</dt><dd id="manageOwner">—</dd>
+        <dt>Status</dt><dd id="manageStatus">—</dd>
+        <dt>Size</dt><dd id="manageSize">—</dd>
+        <dt>Content type</dt><dd id="manageContentType">—</dd>
+        <dt>Uploaded</dt><dd id="manageUploaded">—</dd>
+        <dt>Updated</dt><dd id="manageUpdated">—</dd>
+        <dt>Route</dt><dd id="manageRoute">—</dd>
+        <dt>Public URL</dt><dd id="manageUrl">—</dd>
+        <dt>Object key</dt><dd id="manageKey">—</dd>
+      </dl>
+      <div class="manage-tools">
+        <button id="manageOpen" class="btn" type="button">Open file</button>
+        <button id="manageCopyUrl" class="btn" type="button">Copy URL</button>
+        <button id="manageCopyKey" class="btn" type="button">Copy key</button>
+      </div>
+      <div id="manageActions" class="manage-actions"></div>
+      <div id="manageWarning" class="manage-warning" hidden></div>
+      <div id="replaceFileBox" class="manage-warning" hidden>
+        <label for="replaceFileInput"><strong>Select replacement file</strong></label>
+        <p>The existing object key and database references will stay unchanged.</p>
+        <input id="replaceFileInput" class="control" type="file">
+        <small id="replaceFileHelp"></small>
+      </div>
+      <div id="deleteConfirmBox" class="manage-warning" hidden>
+        <label for="deleteConfirmInput"><strong>Protected confirmation</strong></label>
+        <p>Type <code>DELETE</code> to unlock the permanent action.</p>
+        <input id="deleteConfirmInput" class="control" type="text" autocomplete="off" spellcheck="false" placeholder="Type DELETE">
+      </div>
+    </div>
+    <footer class="manage-foot">
+      <button id="manageCancel" class="btn" type="button">Cancel</button>
+      <button id="manageConfirm" class="btn primary" type="button" disabled>Confirm</button>
+    </footer>
+  </section>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+const API="https://chay1api.mikebewise.workers.dev";
+const LOGIN_URL=`${API}/login`;
+const CLOUD_URL=`${API}/cloudflareme`;
+const TOKEN_KEY="chaynovaAdminToken";
+const state={files:[],broken:[],active:"dashboard",selected:null,selectedKeys:new Set(),permanentDeleteEnabled:false,selectedAction:""};
+const $=id=>document.getElementById(id);
+
+function token(){return localStorage.getItem(TOKEN_KEY)||""}
+function esc(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function bytes(n=0){n=Number(n)||0;if(!n)return"0 B";const u=["B","KB","MB","GB"];const i=Math.min(Math.floor(Math.log(n)/Math.log(1024)),3);return`${(n/1024**i).toFixed(i?1:0)} ${u[i]}`}
+function date(v){if(!v)return"—";const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"})}
+function toast(m,t=""){const e=$("toast");e.textContent=m;e.className=`toast show ${t}`;clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.className="toast",3000)}
+function showLogin(m=""){$("loginOverlay").hidden=false;$("loginError").textContent=m}
+function hideLogin(){$("loginOverlay").hidden=true;$("loginError").textContent=""}
+async function apiFetch(url,opt={}){
+  const headers={
+    ...(opt.headers||{}),
+    ...(token()?{Authorization:`Bearer ${token()}`}:{})
+  };
+
+  const response=await fetch(url,{
+    ...opt,
+    headers,
+    cache:"no-store"
+  });
+
+  if(response.status===401){
+    localStorage.removeItem(TOKEN_KEY);
+    showLogin("Your login expired.");
+    throw new Error("Unauthorized");
+  }
+
+  return response;
+}
+
+async function login(){
+  $("loginBtn").disabled=true;
+  try{
+    const r=await fetch(LOGIN_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:$("username").value.trim(),password:$("password").value})});
+    const j=await r.json().catch(()=>({}));if(!r.ok||!j.token)throw new Error(j.error||"Login failed.");
+    localStorage.setItem(TOKEN_KEY,j.token);$("password").value="";hideLogin();await loadData();
+  }catch(e){$("loginError").textContent=e.message||"Login failed."}finally{$("loginBtn").disabled=false}
+}
+
+async function loadData(){
+  $("refreshBtn").disabled=true;$("apiNotice").hidden=true;
+  try{
+    const r=await apiFetch(CLOUD_URL);const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||`Request failed (${r.status})`);
+    state.files=Array.isArray(j.files)?j.files:[];
+    const validKeys=new Set(state.files.map(x=>`${x.bucket}::${x.key}`));
+    state.selectedKeys=new Set([...state.selectedKeys].filter(k=>validKeys.has(k)));
+    state.broken=Array.isArray(j.broken_references)?j.broken_references:[];
+    state.permanentDeleteEnabled=j.permanent_delete_enabled===true;
+    $("lastSync").textContent=`Refreshed ${new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`;
+    updateStats();render();
+  }catch(e){
+    if(e.message!=="Unauthorized"){$("apiNotice").hidden=false;toast(e.message||"Could not load Cloudflare data.","error")}
+  }finally{$("refreshBtn").disabled=false}
+}
+
+function updateStats(){
+  const all=[...state.files,...state.broken];
+  $("storyCount").textContent=state.files.filter(x=>x.bucket_type==="story").length;
+  $("productCount").textContent=state.files.filter(x=>x.bucket_type==="product").length;
+  $("documentCount").textContent=state.files.filter(x=>x.bucket_type==="documents").length;
+  $("storageTotal").textContent=bytes(state.files.reduce((s,x)=>s+Number(x.size||0),0));
+  $("attachedCount").textContent=state.files.filter(x=>x.reference_status==="attached").length;
+  $("detachedCount").textContent=state.files.filter(x=>x.reference_status==="detached").length;
+  $("hiddenCount").textContent=state.files.filter(x=>x.media_status==="hidden").length;
+  $("brokenCount").textContent=state.broken.length;
+  $("totalCount").textContent=state.files.length;
+  renderAnalytics();
+}
+
+function analyticsItem(item,detail,value){
+  return `<div class="analytics-item"><div><strong title="${esc(item.filename||item.key||"Unknown")}">${esc(item.filename||item.key||"Unknown")}</strong><span>${esc(detail)}</span></div><b>${esc(value)}</b></div>`;
+}
+
+function renderAnalytics(){
+  const files=[...state.files];
+  const totalFiles=files.length;
+  const totalBytes=files.reduce((sum,item)=>sum+Number(item.size||0),0);
+  const bucketDefs=[
+    ["Story Images","story"],
+    ["Product Images","product"],
+    ["Product Documents","documents"]
+  ];
+  $("bucketStorage").innerHTML=bucketDefs.map(([label,type])=>{
+    const list=files.filter(item=>item.bucket_type===type);
+    const used=list.reduce((sum,item)=>sum+Number(item.size||0),0);
+    const pct=totalBytes?Math.max(0,Math.min(100,used/totalBytes*100)):0;
+    return `<div class="metric-row"><div class="metric-label">${esc(label)}</div><div class="metric-track" aria-label="${esc(label)} ${pct.toFixed(1)} percent"><div class="metric-fill" style="width:${pct.toFixed(2)}%"></div></div><div class="metric-value">${bytes(used)} · ${list.length}</div></div>`;
+  }).join("");
+
+  const attached=files.filter(item=>item.reference_status==="attached").length;
+  const detached=files.filter(item=>item.reference_status==="detached").length;
+  const hidden=files.filter(item=>item.media_status==="hidden").length;
+  const broken=state.broken.length;
+  const pct=n=>totalFiles?`${Math.round(n/totalFiles*100)}%`:"0%";
+  $("attachedRate").textContent=pct(attached);
+  $("detachedRate").textContent=pct(detached);
+  $("hiddenRate").textContent=pct(hidden);
+  $("brokenRate").textContent=totalFiles+broken?`${Math.round(broken/(totalFiles+broken)*100)}%`:"0%";
+  $("healthNote").textContent=broken
+    ?`${broken} broken reference${broken===1?"":"s"} need attention. Detached files remain safely stored until you decide what to do.`
+    :`No broken references detected. ${detached} detached file${detached===1?" is":"s are"} safely retained for review.`;
+
+  const largest=[...files].sort((a,b)=>Number(b.size||0)-Number(a.size||0)).slice(0,5);
+  $("largestFiles").innerHTML=largest.length?largest.map(item=>analyticsItem(item,item.bucket||item.bucket_type||"Unknown bucket",bytes(item.size))).join(""):'<div class="empty">No files found.</div>';
+
+  const detachedFiles=files.filter(item=>item.reference_status==="detached").sort((a,b)=>new Date(a.uploaded_at||0)-new Date(b.uploaded_at||0)).slice(0,5);
+  $("oldestDetached").innerHTML=detachedFiles.length?detachedFiles.map(item=>analyticsItem(item,item.bucket||item.bucket_type||"Unknown bucket",date(item.uploaded_at))).join(""):'<div class="empty">No detached files.</div>';
+
+  const recent=[...files].sort((a,b)=>new Date(b.uploaded_at||0)-new Date(a.uploaded_at||0)).slice(0,5);
+  $("recentUploads").innerHTML=recent.length?recent.map(item=>analyticsItem(item,`${item.bucket||item.bucket_type||"Unknown bucket"} · ${bytes(item.size)}`,date(item.uploaded_at))).join(""):'<div class="empty">No uploads found.</div>';
+}
+
+
+function versionedMediaUrl(item){
+  const raw=String(item?.url||"");
+  if(!raw)return "";
+  const version=String(item?.etag||item?.updated_at||item?.uploaded_at||Date.now()).replace(/["']/g,"");
+  const joiner=raw.includes("?")?"&":"?";
+  return `${raw}${joiner}v=${encodeURIComponent(version)}`;
+}
+
+function selectedRows(){
+  let list=state.active==="broken"?state.broken:[...state.files];
+  const q=$("searchInput").value.trim().toLowerCase();
+  const bucket=$("bucketFilter").value,status=$("statusFilter").value,sort=$("sortSelect").value;
+  list=list.filter(x=>{
+    const hay=[x.filename,x.key,x.bucket,x.bucket_type,x.owner_type,x.owner_id,x.owner_name,x.route].join(" ").toLowerCase();
+    return(!q||hay.includes(q))&&(bucket==="all"||x.bucket_type===bucket)&&(status==="all"||x.status===status);
+  });
+  list.sort((a,b)=>{
+    if(sort==="name")return String(a.filename).localeCompare(String(b.filename));
+    if(sort==="size")return Number(b.size||0)-Number(a.size||0);
+    const ad=new Date(a.uploaded_at||0).getTime(),bd=new Date(b.uploaded_at||0).getTime();
+    return sort==="oldest"?ad-bd:bd-ad;
+  });
+  return list;
+}
+
+function render(){
+  if(state.active==="dashboard")return;
+  const list=selectedRows(),body=$("fileBody");
+  body.innerHTML=list.map(item=>{
+    const isDoc=item.bucket_type==="documents";
+    const mediaUrl=versionedMediaUrl(item);
+    const preview=isDoc?`<div class="doc-thumb">📄</div>`:`<a href="${esc(mediaUrl||"#")}" target="_blank" rel="noopener"><img class="thumb" src="${esc(mediaUrl)}" alt="${esc(item.filename||"file")}" onerror="this.style.visibility='hidden'" loading="lazy"></a>`;
+    const reference=item.reference_status||item.status||"unknown";
+    const typeLabel=item.bucket_type==="story"?"Story":item.bucket_type==="product"?"Product":item.bucket_type==="documents"?"Document":item.bucket_type||"Unknown";
+    const ownerLabel=item.owner_name||"No linked record";
+    const selectionKey=`${item.bucket}::${item.key}`;
+    const checked=state.selectedKeys.has(selectionKey)?"checked":"";
+    const canSelect=item.status!=="broken";
+    return `<tr>
+      <td class="select-col">${canSelect?`<input class="row-check" type="checkbox" data-select-key="${esc(selectionKey)}" ${checked} aria-label="Select ${esc(item.filename||item.key)}">`:"—"}</td>
+      <td>${preview}</td>
+      <td class="file-cell"><div class="name" title="${esc(item.filename||item.key)}">${esc(item.filename||item.key)}</div><div class="sub">${esc(item.content_type||"Unknown type")}</div></td>
+      <td><strong>${esc(typeLabel)}</strong><div class="sub">${esc(item.bucket||"")}</div></td>
+      <td><span class="badge ${esc(item.status||"unknown")}">${esc(item.status||"unknown")}</span><div class="sub">${esc(reference)}</div></td>
+      <td>${bytes(item.size)}</td>
+      <td class="owner-cell"><div class="name" title="${esc(ownerLabel)}">${esc(ownerLabel)}</div><div class="sub">${esc(item.owner_type||"Unassigned")}${item.owner_id?` • ${esc(item.owner_id)}`:""}</div></td>
+      <td class="manage-col">${item.status!=="broken"?`<button class="btn primary" type="button" data-manage-key="${esc(item.key)}" data-manage-bucket="${esc(item.bucket)}">Manage</button>`:"—"}</td>
+    </tr>`;
+  }).join("");
+  $("emptyState").hidden=list.length>0;
+  $("emptyState").textContent=list.length?"":"No matching files found.";
+  body.querySelectorAll("[data-manage-key]").forEach(b=>b.addEventListener("click",()=>openManage(b.dataset.manageBucket,b.dataset.manageKey)));
+  body.querySelectorAll("[data-select-key]").forEach(box=>box.addEventListener("change",()=>{
+    if(box.checked)state.selectedKeys.add(box.dataset.selectKey);else state.selectedKeys.delete(box.dataset.selectKey);
+    updateBatchControls();
+  }));
+  updateBatchControls();
+}
+
+function visibleSelectableItems(){return selectedRows().filter(item=>item.status!=="broken")}
+function selectedItems(){
+  return state.files.filter(item=>state.selectedKeys.has(`${item.bucket}::${item.key}`));
+}
+function updateBatchControls(){
+  const visible=visibleSelectableItems();
+  const selected=selectedItems();
+  const selectedVisible=visible.filter(item=>state.selectedKeys.has(`${item.bucket}::${item.key}`));
+  $("batchCount").textContent=`${selected.length} selected`;
+  $("clearSelectionBtn").disabled=selected.length===0;
+  $("batchHideBtn").disabled=!selected.some(item=>item.media_status!=="hidden");
+  $("batchRestoreBtn").disabled=!selected.some(item=>item.media_status==="hidden");
+  $("selectAllVisible").checked=visible.length>0&&selectedVisible.length===visible.length;
+  $("selectAllVisible").indeterminate=selectedVisible.length>0&&selectedVisible.length<visible.length;
+}
+function selectVisible(){
+  visibleSelectableItems().forEach(item=>state.selectedKeys.add(`${item.bucket}::${item.key}`));
+  render();
+}
+function clearSelection(){state.selectedKeys.clear();render()}
+async function runBatch(action){
+  const candidates=selectedItems().filter(item=>action==="hide"?item.media_status!=="hidden":item.media_status==="hidden");
+  if(!candidates.length)return toast(`No selected files can be ${action==="hide"?"hidden":"restored"}.`,"error");
+  const verb=action==="hide"?"Hide":"Restore";
+  if(!confirm(`${verb} ${candidates.length} selected file${candidates.length===1?"":"s"}?`))return;
+  $("batchHideBtn").disabled=true;$("batchRestoreBtn").disabled=true;$("selectVisibleBtn").disabled=true;$("clearSelectionBtn").disabled=true;
+  let success=0,failed=0;
+  for(let i=0;i<candidates.length;i++){
+    const item=candidates[i];
+    $("batchProgress").textContent=`${verb}: ${i+1} of ${candidates.length}`;
+    try{
+      const r=await apiFetch(`${CLOUD_URL}/manage`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bucket:item.bucket,object_key:item.key,action})});
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok)throw new Error(j.error||`${verb} failed`);
+      success++;state.selectedKeys.delete(`${item.bucket}::${item.key}`);
+    }catch(e){failed++;if(e.message==="Unauthorized")break}
+  }
+  $("batchProgress").textContent="";$("selectVisibleBtn").disabled=false;
+  await loadData();
+  toast(`${success} completed${failed?`, ${failed} failed`:""}.`,failed?"error":"success");
+}
+
+const actionInfo={
+  replace:{label:"Replace file",description:"Upload a new file over this R2 object while preserving its key and linked database references.",confirm:"Replace File"},
+  hide:{label:"Hide",description:"Keep the R2 file and database reference, but mark the media as hidden.",confirm:"Hide"},
+  restore:{label:"Restore",description:"Return this hidden media to active status.",confirm:"Restore"},
+  delete_data:{label:"Delete data only",description:"Remove the Story/Product database reference. Keep the hidden R2 file as detached media.",confirm:"Delete Data"},
+  delete_photo:{label:"Delete photo only",description:"Permanently delete the R2 object. Any database reference remains and may become broken.",confirm:"Delete Photo"},
+  delete_both:{label:"Delete both",description:"Permanently remove both the database reference and the R2 object.",confirm:"Delete Both"}
+};
+
+function openManage(bucket,key){
+  const item=state.files.find(x=>x.bucket===bucket&&x.key===key);
+  if(!item)return toast("File information was not found.","error");
+  state.selected=item;
+  $("manageFilename").textContent=item.filename||item.key;
+  $("manageBucket").textContent=item.bucket||"—";
+  $("manageOwner").textContent=item.owner_name?`${item.owner_name}${item.owner_id?` • ${item.owner_id}`:""}`:"No linked record";
+  $("manageStatus").textContent=`${item.reference_status||"unknown"} • ${item.media_status||"active"}`;
+  $("manageSize").textContent=bytes(item.size);
+  $("manageContentType").textContent=item.content_type||"—";
+  $("manageUploaded").textContent=date(item.uploaded_at);
+  $("manageUpdated").textContent=date(item.updated_at);
+  $("manageRoute").textContent=item.route||"—";
+  $("manageUrl").textContent=item.url||"—";
+  $("manageKey").textContent=item.key||"—";
+  $("manageOpen").disabled=!item.url;
+  $("manageOpen").dataset.url=versionedMediaUrl(item);
+  $("manageCopyUrl").disabled=!item.url;
+  const isHidden=item.media_status==="hidden";
+  const actions=isHidden?["replace","restore","delete_data","delete_photo","delete_both"]:["replace","hide"];
+  $("manageActions").innerHTML=actions.map(action=>{
+    const destructive=action.startsWith("delete_");
+    const disabled=destructive&&!state.permanentDeleteEnabled;
+    return `<label class="manage-option ${disabled?"disabled":""}"><input type="radio" name="manageAction" value="${action}" ${disabled?"disabled":""}><span><strong>${actionInfo[action].label}</strong><span>${actionInfo[action].description}</span></span></label>`;
+  }).join("");
+  $("manageWarning").hidden=isHidden;
+  $("manageWarning").textContent="Hide this file first. Permanent actions are available only after it has been moved to the Recycle Bin.";
+  $("replaceFileBox").hidden=true;
+  $("replaceFileInput").value="";
+  $("replaceFileHelp").textContent=item.bucket==="PRODUCT_DOCUMENTS"?"PDF, TXT, CSV, Word, or Excel • maximum 25 MB":"JPG, PNG, WebP, or GIF • maximum 10 MB";
+  $("replaceFileInput").accept=item.bucket==="PRODUCT_DOCUMENTS"?".pdf,.txt,.csv,.doc,.docx,.xls,.xlsx":"image/jpeg,image/png,image/webp,image/gif";
+  $("deleteConfirmBox").hidden=true;
+  $("deleteConfirmInput").value="";
+  state.selectedAction="";
+  $("manageConfirm").disabled=true;
+  $("manageConfirm").textContent="Confirm";
+  $("manageConfirm").classList.remove("danger");
+  $("manageActions").querySelectorAll('input[name="manageAction"]').forEach(r=>r.addEventListener("change",()=>{
+    state.selectedAction=r.value;
+    const destructive=r.value.startsWith("delete_");
+    const replacing=r.value==="replace";
+    $("replaceFileBox").hidden=!replacing;
+    if(!replacing)$("replaceFileInput").value="";
+    $("deleteConfirmBox").hidden=!destructive;
+    $("deleteConfirmInput").value="";
+    $("manageConfirm").disabled=destructive||replacing;
+    $("manageConfirm").textContent=actionInfo[r.value].confirm;
+    $("manageConfirm").classList.toggle("danger",destructive);
+    if(destructive)setTimeout(()=>$("deleteConfirmInput").focus(),0);
+    if(replacing)setTimeout(()=>$("replaceFileInput").click(),0);
+  }));
+  $("manageOverlay").hidden=false;
+  document.body.style.overflow="hidden";
+}
+
+function closeManage(){
+  $("manageOverlay").hidden=true;
+  document.body.style.overflow="";
+  state.selected=null;
+}
+
+async function confirmManage(){
+  const item=state.selected;
+  const selected=document.querySelector('input[name="manageAction"]:checked');
+  if(!item||!selected)return;
+  const action=selected.value;
+  if(action.startsWith("delete_")&&$("deleteConfirmInput").value.trim().toUpperCase()!=="DELETE"){
+    return toast("Type DELETE to confirm this permanent action.","error");
+  }
+  if(action.startsWith("delete_")&&!confirm(`${actionInfo[action].label}? This action cannot be undone.`))return;
+  if(action==="replace"&&!$("replaceFileInput").files?.[0])return toast("Select a replacement file.","error");
+  if(action==="replace"&&!confirm("Replace this file while preserving its current object key and references?"))return;
+  $("manageConfirm").disabled=true;
+  try{
+    let r;
+    if(action==="replace"){
+      const form=new FormData();
+      form.append("bucket",item.bucket);
+      form.append("object_key",item.key);
+      form.append("file",$("replaceFileInput").files[0]);
+      r=await apiFetch(`${CLOUD_URL}/media/replace`,{method:"POST",body:form});
+    }else{
+      r=await apiFetch(`${CLOUD_URL}/manage`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          bucket:item.bucket,
+          object_key:item.key,
+          action,
+          confirm_text:action.startsWith("delete_")?$("deleteConfirmInput").value:""
+        })
+      });
+    }
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||`${actionInfo[action].label} failed.`);
+    closeManage();
+    toast(j.message||`${actionInfo[action].label} completed.`,"success");
+    await loadData();
+  }catch(e){
+    if(e.message!=="Unauthorized")toast(e.message||"Management action failed.","error");
+    $("manageConfirm").disabled=false;
+  }
+}
+
+
+async function copyText(value,successMessage){
+  if(!value)return toast("Nothing to copy.","error");
+  try{await navigator.clipboard.writeText(value);toast(successMessage,"success")}catch(_){toast("Could not copy to the clipboard.","error")}
+}
+
+function switchSection(name){
+  state.active=name;
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.section===name));
+  $("dashboard").classList.toggle("active",name==="dashboard");
+  $("manager").classList.toggle("active",name!=="dashboard");
+  const titles={dashboard:"Dashboard",all:"All Files",story:"Story Images",product:"Product Images",documents:"Product Documents",detached:"Detached Files",hidden:"Hidden Files",broken:"Broken References"};
+  $("sectionTitle").textContent=titles[name]||"CloudflareMe";
+  if(name==="story"||name==="product"||name==="documents")$("bucketFilter").value=name;
+  else $("bucketFilter").value="all";
+  if(name==="detached")$("statusFilter").value="detached";
+  else if(name==="hidden")$("statusFilter").value="hidden";
+  else if(name==="broken")$("statusFilter").value="broken";
+  else $("statusFilter").value="all";
+  render();
+}
+
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchSection(b.dataset.section)));
+["searchInput","bucketFilter","statusFilter","sortSelect"].forEach(id=>$(id).addEventListener(id==="searchInput"?"input":"change",render));
+$("refreshBtn").addEventListener("click",loadData);
+$("selectVisibleBtn").addEventListener("click",selectVisible);
+$("clearSelectionBtn").addEventListener("click",clearSelection);
+$("replaceFileInput").addEventListener("change",()=>{
+  const file=$("replaceFileInput").files?.[0];
+  $("manageConfirm").disabled=state.selectedAction==="replace"&&!file;
+  if(file)$("replaceFileHelp").textContent=`Selected: ${file.name} • ${bytes(file.size)}`;
+});
+$("deleteConfirmInput").addEventListener("input",()=>{
+  const destructive=state.selectedAction.startsWith("delete_");
+  $("manageConfirm").disabled=destructive&&$("deleteConfirmInput").value.trim().toUpperCase()!=="DELETE";
+});
+$("batchHideBtn").addEventListener("click",()=>runBatch("hide"));
+$("batchRestoreBtn").addEventListener("click",()=>runBatch("restore"));
+$("selectAllVisible").addEventListener("change",e=>{
+  const visible=visibleSelectableItems();
+  visible.forEach(item=>{const k=`${item.bucket}::${item.key}`;if(e.target.checked)state.selectedKeys.add(k);else state.selectedKeys.delete(k)});
+  render();
+});
+
+$("logoutBtn").addEventListener("click",()=>{localStorage.removeItem(TOKEN_KEY);showLogin("You are logged out.")});
+$("loginBtn").addEventListener("click",login);
+$("password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+$("manageClose").addEventListener("click",closeManage);
+$("manageCancel").addEventListener("click",closeManage);
+$("manageConfirm").addEventListener("click",confirmManage);
+$("manageOpen").addEventListener("click",()=>{const url=$("manageOpen").dataset.url||versionedMediaUrl(state.selected);if(url)window.open(url,"_blank","noopener")});
+$("manageCopyUrl").addEventListener("click",()=>copyText(state.selected?.url,"Public URL copied."));
+$("manageCopyKey").addEventListener("click",()=>copyText(state.selected?.key,"Object key copied."));
+$("manageOverlay").addEventListener("click",e=>{if(e.target===$("manageOverlay"))closeManage()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("manageOverlay").hidden)closeManage()});
+if(token()){hideLogin();loadData()}else showLogin();
+</script>
+</body>
+</html>
