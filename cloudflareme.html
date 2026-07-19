@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050015">
+<title>CloudflareMe | CHAYNOVA</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#050015;--panel:#10142e;--panel2:#151b3e;--line:rgba(255,255,255,.13);
+  --text:#f7fbff;--muted:#a9bad1;--cyan:#00d9ff;--pink:#ff2fcf;--purple:#7b2cff;
+  --green:#5ee59d;--yellow:#ffd966;--red:#ff6d83;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 12% 3%,rgba(255,47,207,.2),transparent 28%),
+    radial-gradient(circle at 90% 4%,rgba(0,217,255,.2),transparent 28%),
+    linear-gradient(135deg,#03000c,#09002c,#00142c);
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{
+  position:sticky;top:0;height:100vh;padding:18px 14px;border-right:1px solid var(--line);
+  background:rgba(5,0,21,.86);backdrop-filter:blur(16px);overflow:auto
+}
+.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 20px;color:white;text-decoration:none}
+.brand img{width:43px;height:43px;object-fit:contain}
+.brand strong{display:block;letter-spacing:.08em}
+.brand small{display:block;color:var(--muted);margin-top:3px}
+.nav-title{padding:16px 10px 7px;color:#768aa7;font-size:.7rem;text-transform:uppercase;letter-spacing:.12em}
+.nav-btn{
+  width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;margin:3px 0;
+  color:#dfeaff;background:transparent;border:1px solid transparent;border-radius:11px;text-align:left
+}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.08);border-color:var(--line)}
+.nav-btn.active{color:white;box-shadow:inset 3px 0 0 var(--cyan)}
+.main{min-width:0}
+.topbar{
+  position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:13px clamp(14px,3vw,28px);border-bottom:1px solid var(--line);
+  background:rgba(5,0,21,.78);backdrop-filter:blur(16px)
+}
+.topbar h1{margin:0;font-size:1.15rem}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn,.file-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:39px;
+  padding:8px 13px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.08);color:white;text-decoration:none;font-weight:750
+}
+.btn:hover,.file-btn:hover{background:rgba(255,255,255,.14)}
+.btn.primary{border:0;background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan))}
+.btn.danger{border-color:rgba(255,109,131,.45);color:#ffdce2;background:rgba(255,109,131,.11)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.content{width:min(1500px,96%);margin:auto;padding:27px 0 70px}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px}
+.hero h2{margin:0;font-size:clamp(1.9rem,4vw,3rem);background:linear-gradient(90deg,#ffb000,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:780px;line-height:1.6;margin:7px 0 0}
+.sync{padding:9px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.stat{padding:16px;border:1px solid var(--line);border-radius:15px;background:rgba(16,20,46,.82)}
+.stat span{display:block;color:var(--muted);font-size:.8rem}
+.stat strong{display:block;margin-top:8px;font-size:1.6rem}
+.toolbar{
+  display:grid;grid-template-columns:minmax(220px,1fr) repeat(3,minmax(140px,auto)) auto;
+  gap:9px;padding:13px;margin-bottom:15px;border:1px solid var(--line);border-radius:15px;background:rgba(16,20,46,.82)
+}
+.control{width:100%;min-height:42px;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:white;outline:none}
+.control:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,217,255,.12)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:17px;background:rgba(16,20,46,.82)}
+table{width:100%;border-collapse:collapse;min-width:1240px}
+th,td{padding:12px 11px;border-bottom:1px solid rgba(255,255,255,.09);vertical-align:middle;text-align:left}
+th{position:sticky;top:0;z-index:2;background:#111737;color:#cbe9ff;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em}
+.thumb{width:78px;height:60px;border-radius:9px;object-fit:cover;border:1px solid var(--line);background:rgba(255,255,255,.07)}
+.doc-thumb{width:78px;height:60px;border-radius:9px;display:grid;place-items:center;border:1px solid var(--line);background:rgba(255,255,255,.07);font-size:1.45rem}
+.name{font-weight:800;max-width:230px;overflow-wrap:anywhere}
+.sub{margin-top:4px;color:var(--muted);font-size:.76rem;line-height:1.4}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:.74rem;font-weight:850}
+.badge.attached{color:#caffdf;background:rgba(94,229,157,.12);border:1px solid rgba(94,229,157,.35)}
+.badge.detached{color:#ffefb3;background:rgba(255,217,102,.11);border:1px solid rgba(255,217,102,.35)}
+.badge.broken{color:#ffd8df;background:rgba(255,109,131,.12);border:1px solid rgba(255,109,131,.4)}
+.badge.unknown{color:#d9e4ff;background:rgba(120,155,255,.12);border:1px solid rgba(120,155,255,.35)}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}
+.row-actions .btn,.row-actions .file-btn{min-height:33px;padding:6px 9px;font-size:.77rem}
+.file-btn input{display:none}
+.empty{padding:42px 18px;text-align:center;color:var(--muted)}
+.notice{padding:13px 14px;margin-bottom:15px;border:1px solid rgba(255,217,102,.35);border-radius:12px;background:rgba(255,217,102,.1);color:#fff0b7;line-height:1.55}
+.overlay{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:20px;background:rgba(0,0,18,.87);backdrop-filter:blur(10px)}
+.login{width:min(430px,94vw);padding:26px;border-radius:20px;border:1px solid var(--line);background:#10142e}
+.login h2{margin:0 0 7px}.login p{color:var(--muted);line-height:1.5}
+.login .control{margin-top:9px}.login .btn{width:100%;margin-top:11px}
+.err{min-height:22px;margin-top:10px;color:#ffb9c4;text-align:center;font-weight:750}
+.toast{position:fixed;right:18px;bottom:18px;z-index:3000;max-width:380px;padding:13px 15px;border-radius:10px;background:#2a3c51;opacity:0;transform:translateY(12px);transition:.2s;pointer-events:none}
+.toast.show{opacity:1;transform:none}.toast.success{background:#247452}.toast.error{background:#a53f4d}
+.section{display:none}.section.active{display:block}
+@media(max-width:980px){
+  .shell{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar nav{display:flex;overflow:auto;gap:5px}.nav-title{display:none}.nav-btn{white-space:nowrap;width:auto}
+  .stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search{grid-column:1/-1}
+}
+@media(max-width:580px){
+  .topbar{align-items:flex-start}.content{width:calc(100% - 18px)}.hero{align-items:flex-start;flex-direction:column}
+  .stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}
+  .btn,.control{min-height:46px;font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="loginOverlay" class="overlay" hidden>
+  <section class="login">
+    <h2>CloudflareMe Login</h2>
+    <p>Uses the same protected admin login as your CHAYNOVA story and product tools.</p>
+    <input id="username" class="control" autocomplete="username" placeholder="Username">
+    <input id="password" class="control" type="password" autocomplete="current-password" placeholder="Password">
+    <button id="loginBtn" class="btn primary" type="button">Log In</button>
+    <div id="loginError" class="err" aria-live="polite"></div>
+  </section>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="admin.html">
+      <img src="logo/SMLOGOTRANSS.png" alt="CHAYNOVA logo">
+      <span><strong>CloudflareMe</strong><small>CHAYNOVA Control Center</small></span>
+    </a>
+    <nav>
+      <div class="nav-title">Overview</div>
+      <button class="nav-btn active" data-section="dashboard">⌂ Dashboard</button>
+      <div class="nav-title">Storage</div>
+      <button class="nav-btn" data-section="all">☁ All Files</button>
+      <button class="nav-btn" data-section="story">▧ Story Images</button>
+      <button class="nav-btn" data-section="product">▣ Product Images</button>
+      <button class="nav-btn" data-section="documents">▤ Product Documents</button>
+      <div class="nav-title">Health</div>
+      <button class="nav-btn" data-section="detached">🧹 Detached Files</button>
+      <button class="nav-btn" data-section="broken">⚠ Broken References</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h1 id="sectionTitle">Dashboard</h1>
+      <div class="actions">
+        <a class="btn" href="admin.html">Admin</a>
+        <button id="refreshBtn" class="btn" type="button">↻ Refresh</button>
+        <button id="logoutBtn" class="btn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="hero">
+        <div>
+          <h2>CloudflareMe</h2>
+          <p>One place to inspect your Story Images, Product Images, Product Documents, database attachments, unused files, and broken references.</p>
+        </div>
+        <div id="lastSync" class="sync">Not refreshed yet</div>
+      </section>
+
+      <div id="apiNotice" class="notice" hidden>
+        The page is ready, but the Worker route <code>/cloudflareme</code> is not active yet. Add the companion Worker code and connect its authentication function.
+      </div>
+
+      <section id="dashboard" class="section active">
+        <div class="stats">
+          <article class="stat"><span>Story images</span><strong id="storyCount">0</strong></article>
+          <article class="stat"><span>Product images</span><strong id="productCount">0</strong></article>
+          <article class="stat"><span>Documents</span><strong id="documentCount">0</strong></article>
+          <article class="stat"><span>Total storage</span><strong id="storageTotal">0 B</strong></article>
+          <article class="stat"><span>Attached</span><strong id="attachedCount">0</strong></article>
+          <article class="stat"><span>Detached</span><strong id="detachedCount">0</strong></article>
+          <article class="stat"><span>Broken references</span><strong id="brokenCount">0</strong></article>
+          <article class="stat"><span>Total files</span><strong id="totalCount">0</strong></article>
+        </div>
+      </section>
+
+      <section id="manager" class="section">
+        <div class="toolbar">
+          <input id="searchInput" class="control search" type="search" placeholder="Search filename, owner, route, bucket, ID…">
+          <select id="bucketFilter" class="control">
+            <option value="all">All buckets</option>
+            <option value="story">Story images</option>
+            <option value="product">Product images</option>
+            <option value="documents">Documents</option>
+          </select>
+          <select id="statusFilter" class="control">
+            <option value="all">All status</option>
+            <option value="attached">Attached</option>
+            <option value="detached">Detached</option>
+            <option value="broken">Broken</option>
+          </select>
+          <select id="sortSelect" class="control">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name">Filename A–Z</option>
+            <option value="size">Largest first</option>
+          </select>
+          <button id="deleteDetachedBtn" class="btn danger" type="button">Delete detached</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Preview</th><th>File</th><th>Bucket</th><th>Owner</th><th>Status</th>
+                <th>Route</th><th>Uploaded</th><th>Size</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fileBody"></tbody>
+          </table>
+          <div id="emptyState" class="empty">Loading Cloudflare data…</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+const API="https://chay1api.mikebewise.workers.dev";
+const LOGIN_URL=`${API}/login`;
+const CLOUD_URL=`${API}/cloudflareme`;
+const TOKEN_KEY="chaynovaAdminToken";
+const state={files:[],broken:[],active:"dashboard"};
+const $=id=>document.getElementById(id);
+
+function token(){return localStorage.getItem(TOKEN_KEY)||""}
+function esc(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function bytes(n=0){n=Number(n)||0;if(!n)return"0 B";const u=["B","KB","MB","GB"];const i=Math.min(Math.floor(Math.log(n)/Math.log(1024)),3);return`${(n/1024**i).toFixed(i?1:0)} ${u[i]}`}
+function date(v){if(!v)return"—";const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"})}
+function toast(m,t=""){const e=$("toast");e.textContent=m;e.className=`toast show ${t}`;clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.className="toast",3000)}
+function showLogin(m=""){$("loginOverlay").hidden=false;$("loginError").textContent=m}
+function hideLogin(){$("loginOverlay").hidden=true;$("loginError").textContent=""}
+async function apiFetch(url,opt={}){const h={...(opt.headers||{}),...(token()?{Authorization:`Bearer ${token()}`}:{})};const r=await fetch(url,{...opt,headers:h,cache:"no-store"});if(r.status===401||r.status===403){localStorage.removeItem(TOKEN_KEY);showLogin("Your login expired.");throw new Error("Unauthorized")}return r}
+
+async function login(){
+  $("loginBtn").disabled=true;
+  try{
+    const r=await fetch(LOGIN_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:$("username").value.trim(),password:$("password").value})});
+    const j=await r.json().catch(()=>({}));if(!r.ok||!j.token)throw new Error(j.error||"Login failed.");
+    localStorage.setItem(TOKEN_KEY,j.token);$("password").value="";hideLogin();await loadData();
+  }catch(e){$("loginError").textContent=e.message||"Login failed."}finally{$("loginBtn").disabled=false}
+}
+
+async function loadData(){
+  $("refreshBtn").disabled=true;$("apiNotice").hidden=true;
+  try{
+    const r=await apiFetch(CLOUD_URL);const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||`Request failed (${r.status})`);
+    state.files=Array.isArray(j.files)?j.files:[];
+    state.broken=Array.isArray(j.broken_references)?j.broken_references:[];
+    $("lastSync").textContent=`Refreshed ${new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`;
+    updateStats();render();
+  }catch(e){
+    if(e.message!=="Unauthorized"){$("apiNotice").hidden=false;toast(e.message||"Could not load Cloudflare data.","error")}
+  }finally{$("refreshBtn").disabled=false}
+}
+
+function updateStats(){
+  const all=[...state.files,...state.broken];
+  $("storyCount").textContent=state.files.filter(x=>x.bucket_type==="story").length;
+  $("productCount").textContent=state.files.filter(x=>x.bucket_type==="product").length;
+  $("documentCount").textContent=state.files.filter(x=>x.bucket_type==="documents").length;
+  $("storageTotal").textContent=bytes(state.files.reduce((s,x)=>s+Number(x.size||0),0));
+  $("attachedCount").textContent=state.files.filter(x=>x.status==="attached").length;
+  $("detachedCount").textContent=state.files.filter(x=>x.status==="detached").length;
+  $("brokenCount").textContent=state.broken.length;
+  $("totalCount").textContent=state.files.length;
+}
+
+function selectedRows(){
+  let list=state.active==="broken"?state.broken:[...state.files];
+  const q=$("searchInput").value.trim().toLowerCase();
+  const bucket=$("bucketFilter").value,status=$("statusFilter").value,sort=$("sortSelect").value;
+  list=list.filter(x=>{
+    const hay=[x.filename,x.key,x.bucket,x.bucket_type,x.owner_type,x.owner_id,x.owner_name,x.route].join(" ").toLowerCase();
+    return(!q||hay.includes(q))&&(bucket==="all"||x.bucket_type===bucket)&&(status==="all"||x.status===status);
+  });
+  list.sort((a,b)=>{
+    if(sort==="name")return String(a.filename).localeCompare(String(b.filename));
+    if(sort==="size")return Number(b.size||0)-Number(a.size||0);
+    const ad=new Date(a.uploaded_at||0).getTime(),bd=new Date(b.uploaded_at||0).getTime();
+    return sort==="oldest"?ad-bd:bd-ad;
+  });
+  return list;
+}
+
+function render(){
+  if(state.active==="dashboard")return;
+  const list=selectedRows(),body=$("fileBody");
+  body.innerHTML=list.map(item=>{
+    const isDoc=item.bucket_type==="documents";
+    const preview=isDoc?`<div class="doc-thumb">📄</div>`:`<a href="${esc(item.url||"#")}" target="_blank" rel="noopener"><img class="thumb" src="${esc(item.url||"")}" alt="${esc(item.filename||"file")}" onerror="this.style.visibility='hidden'"></a>`;
+    const replace=isDoc?"":`<label class="file-btn">Replace<input type="file" accept="image/*" data-replace="${esc(item.bucket_type)}|${esc(item.key)}"></label>`;
+    return `<tr>
+      <td>${preview}</td>
+      <td><div class="name">${esc(item.filename||item.key)}</div><div class="sub">${esc(item.content_type||item.key||"")}</div></td>
+      <td><strong>${esc(item.bucket||"")}</strong><div class="sub">${esc(item.bucket_type||"")}</div></td>
+      <td><strong>${esc(item.owner_type||"—")}</strong><div class="sub">${esc(item.owner_name||"No linked record")} ${item.owner_id?`• ${esc(item.owner_id)}`:""}</div></td>
+      <td><span class="badge ${esc(item.status||"unknown")}">${esc(item.status||"unknown")}</span></td>
+      <td><div class="name">${esc(item.route||"—")}</div></td>
+      <td>${date(item.uploaded_at)}</td>
+      <td>${bytes(item.size)}</td>
+      <td><div class="row-actions">
+        ${item.url?`<a class="btn" href="${esc(item.url)}" target="_blank" rel="noopener">${isDoc?"Download":"View"}</a>`:""}
+        ${replace}
+        ${item.status!=="broken"?`<button class="btn danger" type="button" data-delete="${esc(item.bucket_type)}|${esc(item.key)}">Delete</button>`:""}
+      </div></td>
+    </tr>`;
+  }).join("");
+  $("emptyState").hidden=list.length>0;
+  $("emptyState").textContent=list.length?"":"No matching files found.";
+  body.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>{const[t,k]=b.dataset.delete.split("|");deleteFile(t,k)}));
+  body.querySelectorAll("[data-replace]").forEach(i=>i.addEventListener("change",()=>{const[t,k]=i.dataset.replace.split("|");replaceFile(t,k,i.files[0],i)}));
+}
+
+async function deleteFile(type,key){
+  const item=state.files.find(x=>x.bucket_type===type&&x.key===key);if(!item)return;
+  const warning=item.status==="attached"?"This file is attached and deletion should be blocked by the Worker.":"This file appears detached.";
+  if(!confirm(`${warning}\n\nDelete ${item.filename||key}?`))return;
+  try{
+    const r=await apiFetch(`${CLOUD_URL}/file?bucket=${encodeURIComponent(type)}&key=${encodeURIComponent(key)}`,{method:"DELETE"});
+    const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"Delete failed.");
+    toast("File deleted.","success");await loadData();
+  }catch(e){if(e.message!=="Unauthorized")toast(e.message||"Delete failed.","error")}
+}
+
+async function replaceFile(type,key,file,input){
+  if(!file)return;
+  if(!confirm(`Replace ${key} with ${file.name}?`)){input.value="";return}
+  const fd=new FormData();fd.append("image",file,file.name);fd.append("bucket",type);fd.append("key",key);
+  try{
+    const r=await apiFetch(`${CLOUD_URL}/replace`,{method:"POST",body:fd});const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||"Replace failed.");toast("Image replaced.","success");await loadData();
+  }catch(e){if(e.message!=="Unauthorized")toast(e.message||"Replace failed.","error")}finally{input.value=""}
+}
+
+async function deleteDetached(){
+  const list=state.files.filter(x=>x.status==="detached"&&(state.active==="all"||x.bucket_type===state.active));
+  if(!list.length)return toast("No detached files in this view.");
+  if(!confirm(`Delete ${list.length} detached files? This cannot be undone.`))return;
+  $("deleteDetachedBtn").disabled=true;let ok=0,fail=0;
+  for(const x of list){try{const r=await apiFetch(`${CLOUD_URL}/file?bucket=${encodeURIComponent(x.bucket_type)}&key=${encodeURIComponent(x.key)}`,{method:"DELETE"});r.ok?ok++:fail++}catch(e){fail++}}
+  $("deleteDetachedBtn").disabled=false;toast(`Deleted ${ok}. Failed ${fail}.`,fail?"error":"success");await loadData();
+}
+
+function switchSection(name){
+  state.active=name;
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.section===name));
+  $("dashboard").classList.toggle("active",name==="dashboard");
+  $("manager").classList.toggle("active",name!=="dashboard");
+  const titles={dashboard:"Dashboard",all:"All Files",story:"Story Images",product:"Product Images",documents:"Product Documents",detached:"Detached Files",broken:"Broken References"};
+  $("sectionTitle").textContent=titles[name]||"CloudflareMe";
+  if(name==="story"||name==="product"||name==="documents")$("bucketFilter").value=name;
+  else $("bucketFilter").value="all";
+  if(name==="detached")$("statusFilter").value="detached";
+  else if(name==="broken")$("statusFilter").value="broken";
+  else $("statusFilter").value="all";
+  render();
+}
+
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchSection(b.dataset.section)));
+["searchInput","bucketFilter","statusFilter","sortSelect"].forEach(id=>$(id).addEventListener(id==="searchInput"?"input":"change",render));
+$("refreshBtn").addEventListener("click",loadData);
+$("deleteDetachedBtn").addEventListener("click",deleteDetached);
+$("logoutBtn").addEventListener("click",()=>{localStorage.removeItem(TOKEN_KEY);showLogin("You are logged out.")});
+$("loginBtn").addEventListener("click",login);
+$("password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+if(token()){hideLogin();loadData()}else showLogin();
+</script>
+</body>
+</html>
