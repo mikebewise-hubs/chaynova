@@ -2035,10 +2035,10 @@
 
         .barcode-preview-box svg {
             display: block;
-            width: max-content;
-            max-width: none;
-            min-width: 260px;
-            height: 82px;
+            width: 100% !important;
+            max-width: 100%;
+            min-width: 0;
+            height: auto !important;
             margin: 0 auto;
         }
 
@@ -2166,6 +2166,12 @@
                                 <div class="input-row">
                                     <input id="productId" name="productId" placeholder="CHA-000001">
                                     <button class="mini-btn" type="button" id="generateId">Generate</button>
+                                </div>
+
+                                <div id="productIdBarcodeBox" class="barcode-preview-box"
+                                    aria-label="Product ID barcode image">
+                                    <svg id="productIdBarcodeImage"></svg>
+                                    <div class="barcode-preview-note">Product ID barcode image</div>
                                 </div>
                             </div>
                             <div class="field store-sku-field">
@@ -3064,6 +3070,12 @@
         }
 
         function renderProductBarcodes() {
+            renderBarcode(
+                "productId",
+                "productIdBarcodeImage",
+                "productIdBarcodeBox"
+            );
+
             renderBarcode(
                 "sku",
                 "skuBarcodeImage",
