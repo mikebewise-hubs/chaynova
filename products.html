@@ -1327,7 +1327,497 @@
         }
     }
 
+
+.manage-modal{
+    position:fixed;inset:0;z-index:5000;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    background:rgba(0,0,20,.82);backdrop-filter:blur(10px);
+}
+.manage-modal.open{display:flex;}
+.manage-dialog{
+    width:min(94vw,520px);padding:25px;border-radius:22px;
+    background:#11152a;color:white;border:1px solid rgba(255,255,255,.24);
+    box-shadow:0 0 38px rgba(0,217,255,.35);
+}
+.manage-dialog h2{margin-bottom:8px;color:#9df4ff;}
+.manage-dialog p{line-height:1.5;color:#d7eef7;}
+.manage-dialog select{
+    width:100%;margin-top:18px;padding:13px;border-radius:10px;
+    border:1px solid #00d9ff;background:#0a0d1a;color:white;font:inherit;
+}
+.manage-warning{min-height:54px;margin-top:13px;padding:12px;border-radius:10px;
+    background:rgba(255,255,255,.07);color:#d7eef7;}
+.manage-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+.manage-actions button{min-width:110px;}
+.manage-confirm.danger-choice{background:linear-gradient(90deg,#8b101d,#ff5f73);}
+.status-badge{
+    display:inline-flex;margin-left:8px;padding:3px 8px;border-radius:999px;
+    font-size:.7rem;text-transform:uppercase;background:rgba(255,217,102,.16);
+    color:#ffd966;border:1px solid rgba(255,217,102,.35);
+}
+
+
+/* =========================================================
+   Product thumbnails + printable barcode viewer
+   ========================================================= */
+.code-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 4px 7px;
+    margin: -4px -7px;
+    border: 0;
+    border-radius: 8px;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.code-button:hover {
+    color: #9df4ff;
+    background: rgba(0, 217, 255, 0.10);
+}
+
+body.work-mode .code-button:hover {
+    color: #245e76;
+    background: rgba(40, 120, 149, 0.09);
+}
+
+.code-button .barcode-emoji {
+    flex: 0 0 auto;
+    font-size: .9rem;
+}
+
+.product-id.code-button {
+    display: inline-flex;
+}
+
+.sku-stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.product-gallery {
+    display: block;
+    width: 56px;
+    height: 56px;
+    padding: 3px;
+    overflow: visible;
+}
+
+.gallery-thumb-wrap {
+    position: relative;
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+
+.gallery-thumb {
+    display: block;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .08);
+    cursor: pointer;
+}
+
+.gallery-thumb:hover,
+.gallery-thumb:focus-visible {
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px rgba(0, 217, 255, .28);
+}
+
+.gallery-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-count {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    min-width: 21px;
+    height: 21px;
+    display: grid;
+    place-items: center;
+    padding: 0 5px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(7, 10, 39, .94);
+    font-size: .63rem;
+    font-weight: 800;
+    pointer-events: none;
+}
+
+body.work-mode .gallery-thumb {
+    border-color: rgba(31, 55, 76, .18);
+    background: #fff;
+}
+
+body.work-mode .gallery-count {
+    background: #294252;
+}
+
+/* Floating thumbnail strip.
+   It is fixed outside the table, so opening it never changes row height
+   or column width. */
+.image-gallery-popover {
+    position: fixed;
+    z-index: 7600;
+    display: none;
+    width: min(92vw, 520px);
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    color: var(--text);
+    background: var(--glass-strong);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .34);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.image-gallery-popover.open {
+    display: block;
+}
+
+.image-gallery-popover::after {
+    content: "";
+    position: absolute;
+    left: var(--gallery-arrow-left, 28px);
+    bottom: -8px;
+    width: 14px;
+    height: 14px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--glass-strong);
+    transform: rotate(45deg);
+}
+
+.image-gallery-popover.below::after {
+    top: -8px;
+    bottom: auto;
+    border: 0;
+    border-left: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+}
+
+.image-gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.image-gallery-header strong {
+    min-width: 0;
+    overflow: hidden;
+    font-family: "Oxanium", sans-serif;
+    font-size: .82rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.image-gallery-close {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    background: rgba(255, 255, 255, .08);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.image-gallery-strip {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    max-width: 100%;
+    min-height: 70px;
+    overflow-x: auto;
+    padding: 4px 3px 8px;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.image-gallery-item {
+    flex: 0 0 auto;
+    width: 68px;
+    height: 68px;
+    padding: 0;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, .08);
+    cursor: pointer;
+}
+
+.image-gallery-item:hover,
+.image-gallery-item:focus-visible {
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px rgba(0, 217, 255, .25);
+}
+
+.image-gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 680px) {
+    .sku-stack {
+        align-items: flex-end;
+    }
+
+    .image-gallery-popover {
+        width: min(calc(100vw - 20px), 520px);
+    }
+}
+
+/* Barcode popup */
+.barcode-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+    background: rgba(0, 0, 20, .82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.barcode-modal.open {
+    display: flex;
+}
+
+.barcode-dialog {
+    width: min(94vw, 760px);
+    max-height: 90dvh;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    color: var(--text);
+    background: var(--glass-strong);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
+}
+
+.barcode-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.barcode-dialog-title h3 {
+    margin: 0;
+    font-family: "Oxanium", sans-serif;
+    font-size: 1rem;
+}
+
+.barcode-dialog-title p {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: .78rem;
+}
+
+.barcode-close {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    background: rgba(255, 255, 255, .08);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.barcode-stage {
+    display: grid;
+    place-items: center;
+    min-height: 300px;
+    max-height: 52dvh;
+    padding: 28px;
+    overflow: auto;
+    background: #fff;
+}
+
+.barcode-zoom-layer {
+    width: max-content;
+    transform: scale(1);
+    transform-origin: center;
+    transition: transform .16s ease;
+}
+
+#barcodeModalImage {
+    display: block;
+    width: auto;
+    min-width: 360px;
+    max-width: none;
+    height: auto;
+}
+
+.barcode-controls {
+    display: grid;
+    grid-template-columns: auto auto minmax(120px, 1fr) auto auto;
+    align-items: center;
+    gap: 9px;
+    padding: 14px 18px 18px;
+}
+
+.barcode-control {
+    min-height: 42px;
+    padding: 8px 13px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    color: var(--text);
+    background: rgba(255, 255, 255, .09);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.barcode-control.primary {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(135deg, #ff2fcf, #7b2cff, #00d9ff);
+}
+
+body.work-mode .barcode-control.primary {
+    background: linear-gradient(135deg, #577c90, #426d82);
+}
+
+#barcodeZoomRange {
+    width: 100%;
+    accent-color: var(--cyan);
+}
+
+.barcode-zoom-value {
+    min-width: 52px;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+@media (max-width: 680px) {
+    .sku-stack {
+        align-items: flex-end;
+    }
+
+    .product-gallery {
+        justify-content: flex-end;
+        max-width: min(100%, 280px);
+    }
+
+    .barcode-dialog {
+        width: 100%;
+        max-height: 92dvh;
+        border-radius: 18px;
+    }
+
+    .barcode-stage {
+        min-height: 250px;
+        padding: 20px 12px;
+    }
+
+    #barcodeModalImage {
+        min-width: 300px;
+    }
+
+    .barcode-controls {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    #barcodeZoomRange {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .barcode-zoom-value {
+        display: none;
+    }
+}
+
+@media print {
+    body > *:not(#barcodeModal) {
+        display: none !important;
+    }
+
+    #barcodeModal {
+        position: static !important;
+        display: block !important;
+        padding: 0 !important;
+        background: #fff !important;
+    }
+
+    .barcode-dialog {
+        width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        background: #fff !important;
+    }
+
+    .barcode-dialog-header {
+        color: #000 !important;
+        border: 0 !important;
+        padding: 0 0 18px !important;
+    }
+
+    .barcode-dialog-title h3,
+    .barcode-dialog-title p {
+        color: #000 !important;
+    }
+
+    .barcode-close,
+    .barcode-controls {
+        display: none !important;
+    }
+
+    .barcode-stage {
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding: 0 !important;
+    }
+
+    .barcode-zoom-layer {
+        transform: none !important;
+    }
+
+    #barcodeModalImage {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 680px !important;
+        margin: 0 auto !important;
+    }
+}
+
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
 </head>
 
@@ -1503,9 +1993,141 @@
     <footer>© 2026 CHAYNOVA • Secure internal product catalog</footer>
 </div>
 
+
+<div class="manage-modal" id="manageModal" role="dialog" aria-modal="true" aria-labelledby="manageTitle">
+  <div class="manage-dialog">
+    <h2 id="manageTitle">Manage item</h2>
+    <p id="manageName"></p>
+    <label for="manageAction" style="margin-top:18px;">Select action</label>
+    <select id="manageAction">
+      <option value="hide">Hide everything</option>
+      <option value="delete_data">Delete data only</option>
+      <option value="delete_photo">Delete photo only</option>
+      <option value="delete_both">Delete both data and photo</option>
+    </select>
+    <div class="manage-warning" id="manageWarning"></div>
+    <div class="manage-actions">
+      <button type="button" class="secondary" id="manageCancel">Cancel</button>
+      <button type="button" class="manage-confirm" id="manageConfirm">Hide</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="imageGalleryPopover" class="image-gallery-popover" aria-hidden="true">
+    <div class="image-gallery-header">
+        <strong id="imageGalleryTitle">Product photos</strong>
+        <button id="imageGalleryClose" class="image-gallery-close" type="button"
+            aria-label="Close product photos">×</button>
+    </div>
+    <div id="imageGalleryStrip" class="image-gallery-strip"></div>
+</div>
+
+<div id="barcodeModal" class="barcode-modal" aria-hidden="true">
+    <section class="barcode-dialog" role="dialog" aria-modal="true" aria-labelledby="barcodeModalTitle">
+        <div class="barcode-dialog-header">
+            <div class="barcode-dialog-title">
+                <h3 id="barcodeModalTitle">Barcode</h3>
+                <p id="barcodeModalValue"></p>
+            </div>
+            <button id="barcodeModalClose" class="barcode-close" type="button"
+                aria-label="Close barcode viewer">×</button>
+        </div>
+
+        <div class="barcode-stage">
+            <div id="barcodeZoomLayer" class="barcode-zoom-layer">
+                <svg id="barcodeModalImage" aria-label="Generated barcode"></svg>
+            </div>
+        </div>
+
+        <div class="barcode-controls" aria-label="Barcode controls">
+            <button id="barcodeZoomOut" class="barcode-control" type="button" aria-label="Zoom out">−</button>
+            <button id="barcodeZoomIn" class="barcode-control" type="button" aria-label="Zoom in">+</button>
+            <input id="barcodeZoomRange" type="range" min="50" max="250" step="10" value="100"
+                aria-label="Barcode zoom">
+            <span id="barcodeZoomValue" class="barcode-zoom-value">100%</span>
+            <button id="barcodePrint" class="barcode-control primary" type="button">Print</button>
+        </div>
+    </section>
+</div>
+
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
+
+const manageModal = document.getElementById("manageModal");
+const manageTitle = document.getElementById("manageTitle");
+const manageName = document.getElementById("manageName");
+const manageAction = document.getElementById("manageAction");
+const manageWarning = document.getElementById("manageWarning");
+const manageCancel = document.getElementById("manageCancel");
+const manageConfirm = document.getElementById("manageConfirm");
+
+const manageDescriptions = {
+    hide: {
+        button: "Hide",
+        text: "Keeps all data and photos, but hides the item from the public website."
+    },
+    delete_data: {
+        button: "Delete Data",
+        text: "Permanently deletes the database record. Photos remain in Cloudflare as detached files."
+    },
+    delete_photo: {
+        button: "Delete Photo",
+        text: "Permanently deletes the attached photo or photos. The database record remains."
+    },
+    delete_both: {
+        button: "Delete Both",
+        text: "Permanently deletes both the database record and all attached photos."
+    }
+};
+
+function updateManageModal(){
+    const config = manageDescriptions[manageAction.value];
+    manageWarning.textContent = config.text;
+    manageConfirm.textContent = config.button;
+    manageConfirm.classList.toggle(
+        "danger-choice",
+        manageAction.value !== "hide"
+    );
+}
+
+function chooseManageAction(title, name, hasPhoto = true){
+    manageTitle.textContent = title;
+    manageName.textContent = name;
+
+    const deletePhotoOption = manageAction.querySelector('[value="delete_photo"]');
+    deletePhotoOption.disabled = false;
+    deletePhotoOption.hidden = false;
+    deletePhotoOption.textContent = hasPhoto
+        ? "Delete photo only"
+        : "Delete photo only — photo count unavailable";
+
+    manageAction.value = "hide";
+    updateManageModal();
+    manageModal.classList.add("open");
+
+    return new Promise(resolve => {
+        const finish = value => {
+            manageModal.classList.remove("open");
+            manageConfirm.onclick = null;
+            manageCancel.onclick = null;
+            resolve(value);
+        };
+
+        manageConfirm.onclick = () => finish(manageAction.value);
+        manageCancel.onclick = () => finish(null);
+    });
+}
+
+manageAction.addEventListener("change", updateManageModal);
+manageModal.addEventListener("click", event => {
+    if(event.target === manageModal && manageCancel.onclick){
+        manageCancel.click();
+    }
+});
+
     "use strict";
 
     const API = "https://chay1api.mikebewise.workers.dev";
@@ -1544,6 +2166,356 @@
     let products = [];
     let visibleProducts = [];
     let toastTimer = null;
+
+    const barcodeModal = document.getElementById("barcodeModal");
+    const barcodeModalImage = document.getElementById("barcodeModalImage");
+    const barcodeZoomLayer = document.getElementById("barcodeZoomLayer");
+    const barcodeZoomRange = document.getElementById("barcodeZoomRange");
+    const barcodeZoomValue = document.getElementById("barcodeZoomValue");
+
+    let barcodeZoom = 1;
+    let lastBarcodeTrigger = null;
+
+
+    const imageGalleryPopover =
+        document.getElementById("imageGalleryPopover");
+
+    const imageGalleryTitle =
+        document.getElementById("imageGalleryTitle");
+
+    const imageGalleryStrip =
+        document.getElementById("imageGalleryStrip");
+
+    const imageGalleryClose =
+        document.getElementById("imageGalleryClose");
+
+    let activeGalleryTrigger = null;
+
+    function closeImageGallery() {
+        imageGalleryPopover.classList.remove(
+            "open",
+            "below"
+        );
+
+        imageGalleryPopover.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        imageGalleryStrip.innerHTML = "";
+
+        if (activeGalleryTrigger) {
+            activeGalleryTrigger.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+        }
+
+        activeGalleryTrigger = null;
+    }
+
+    function positionImageGallery(trigger) {
+        const triggerRect =
+            trigger.getBoundingClientRect();
+
+        const popoverRect =
+            imageGalleryPopover.getBoundingClientRect();
+
+        const viewportPadding = 10;
+        const preferredLeft =
+            triggerRect.left - 16;
+
+        const left = Math.min(
+            window.innerWidth -
+                popoverRect.width -
+                viewportPadding,
+            Math.max(
+                viewportPadding,
+                preferredLeft
+            )
+        );
+
+        const roomAbove =
+            triggerRect.top - viewportPadding;
+
+        const shouldOpenBelow =
+            roomAbove < popoverRect.height + 12;
+
+        const top = shouldOpenBelow
+            ? Math.min(
+                window.innerHeight -
+                    popoverRect.height -
+                    viewportPadding,
+                triggerRect.bottom + 10
+            )
+            : triggerRect.top -
+                popoverRect.height -
+                10;
+
+        imageGalleryPopover.style.left =
+            `${Math.round(left)}px`;
+
+        imageGalleryPopover.style.top =
+            `${Math.round(Math.max(viewportPadding, top))}px`;
+
+        imageGalleryPopover.classList.toggle(
+            "below",
+            shouldOpenBelow
+        );
+
+        const arrowLeft = Math.min(
+            popoverRect.width - 30,
+            Math.max(
+                18,
+                triggerRect.left +
+                    triggerRect.width / 2 -
+                    left -
+                    7
+            )
+        );
+
+        imageGalleryPopover.style.setProperty(
+            "--gallery-arrow-left",
+            `${Math.round(arrowLeft)}px`
+        );
+    }
+
+    function openImageGallery(product, trigger) {
+        if (
+            !product ||
+            !Array.isArray(product.images) ||
+            !product.images.length
+        ) {
+            return;
+        }
+
+        if (product.images.length === 1) {
+            window.open(
+                product.images[0].url,
+                "_blank",
+                "noopener,noreferrer"
+            );
+            return;
+        }
+
+        if (
+            activeGalleryTrigger === trigger &&
+            imageGalleryPopover.classList.contains("open")
+        ) {
+            closeImageGallery();
+            return;
+        }
+
+        if (activeGalleryTrigger) {
+            activeGalleryTrigger.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+        }
+
+        activeGalleryTrigger = trigger;
+        trigger.setAttribute("aria-expanded", "true");
+
+        imageGalleryTitle.textContent =
+            `${product.product_name} · ${product.images.length} photos`;
+
+        imageGalleryStrip.innerHTML =
+            product.images
+                .map((image, index) => `
+                    <button
+                        class="image-gallery-item"
+                        type="button"
+                        data-image-url="${escapeHtml(image.url)}"
+                        title="Open ${escapeHtml(image.original_name || `product image ${index + 1}`)}"
+                        aria-label="Open product image ${index + 1}">
+                        <img
+                            src="${escapeHtml(image.url)}"
+                            alt="${escapeHtml(image.alt_text || `${product.product_name} image ${index + 1}`)}"
+                            loading="lazy"
+                            decoding="async">
+                    </button>
+                `)
+                .join("");
+
+        imageGalleryPopover.classList.add("open");
+        imageGalleryPopover.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        positionImageGallery(trigger);
+
+        imageGalleryStrip
+            .querySelectorAll(".image-gallery-item")
+            .forEach(button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        const imageUrl =
+                            button.dataset.imageUrl || "";
+
+                        if (imageUrl) {
+                            window.open(
+                                imageUrl,
+                                "_blank",
+                                "noopener,noreferrer"
+                            );
+                        }
+                    }
+                );
+            });
+    }
+
+    imageGalleryClose.addEventListener(
+        "click",
+        closeImageGallery
+    );
+
+    window.addEventListener("resize", () => {
+        if (
+            activeGalleryTrigger &&
+            imageGalleryPopover.classList.contains("open")
+        ) {
+            positionImageGallery(activeGalleryTrigger);
+        }
+    });
+
+    window.addEventListener(
+        "scroll",
+        () => {
+            if (
+                activeGalleryTrigger &&
+                imageGalleryPopover.classList.contains("open")
+            ) {
+                positionImageGallery(activeGalleryTrigger);
+            }
+        },
+        true
+    );
+
+    document.addEventListener("click", event => {
+        if (
+            !imageGalleryPopover.classList.contains("open")
+        ) {
+            return;
+        }
+
+        if (
+            imageGalleryPopover.contains(event.target) ||
+            activeGalleryTrigger?.contains(event.target)
+        ) {
+            return;
+        }
+
+        closeImageGallery();
+    });
+
+    function setBarcodeZoom(nextZoom) {
+        barcodeZoom = Math.min(2.5, Math.max(.5, nextZoom));
+        barcodeZoomLayer.style.transform = `scale(${barcodeZoom})`;
+        barcodeZoomRange.value = String(Math.round(barcodeZoom * 100));
+        barcodeZoomValue.textContent = `${Math.round(barcodeZoom * 100)}%`;
+    }
+
+    function openBarcodeModal(value, title, trigger) {
+        const cleanValue = String(value || "").trim();
+
+        if (!cleanValue) {
+            showToast("This product does not have a barcode value.");
+            return;
+        }
+
+        if (typeof JsBarcode !== "function") {
+            showToast("Barcode library did not load.");
+            return;
+        }
+
+        try {
+            barcodeModalImage.innerHTML = "";
+
+            JsBarcode(barcodeModalImage, cleanValue, {
+                format: "CODE128",
+                displayValue: true,
+                font: "Arial",
+                fontSize: 18,
+                textMargin: 6,
+                height: 90,
+                width: 2.4,
+                margin: 16,
+                background: "#ffffff",
+                lineColor: "#111111"
+            });
+
+            document.getElementById("barcodeModalTitle").textContent = title;
+            document.getElementById("barcodeModalValue").textContent = cleanValue;
+
+            lastBarcodeTrigger = trigger || null;
+            setBarcodeZoom(1);
+            barcodeModal.classList.add("open");
+            barcodeModal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+            document.getElementById("barcodeModalClose").focus();
+        } catch (error) {
+            console.error("Barcode error:", error);
+            showToast("This value could not be converted into a barcode.");
+        }
+    }
+
+    function closeBarcodeModal() {
+        barcodeModal.classList.remove("open");
+        barcodeModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+
+        if (lastBarcodeTrigger) {
+            lastBarcodeTrigger.focus();
+        }
+    }
+
+    document.getElementById("barcodeModalClose").addEventListener("click", closeBarcodeModal);
+
+    barcodeModal.addEventListener("click", event => {
+        if (event.target === barcodeModal) {
+            closeBarcodeModal();
+        }
+    });
+
+    document.getElementById("barcodeZoomOut").addEventListener(
+        "click",
+        () => setBarcodeZoom(barcodeZoom - .1)
+    );
+
+    document.getElementById("barcodeZoomIn").addEventListener(
+        "click",
+        () => setBarcodeZoom(barcodeZoom + .1)
+    );
+
+    barcodeZoomRange.addEventListener("input", () => {
+        setBarcodeZoom(Number(barcodeZoomRange.value) / 100);
+    });
+
+    document.getElementById("barcodePrint").addEventListener(
+        "click",
+        () => window.print()
+    );
+
+    document.addEventListener("keydown", event => {
+        if (!barcodeModal.classList.contains("open")) return;
+
+        if (event.key === "Escape") {
+            closeBarcodeModal();
+        }
+
+        if (event.key === "+" || event.key === "=") {
+            event.preventDefault();
+            setBarcodeZoom(barcodeZoom + .1);
+        }
+
+        if (event.key === "-") {
+            event.preventDefault();
+            setBarcodeZoom(barcodeZoom - .1);
+        }
+    });
+
 
 
     function getTheme() {
@@ -1658,7 +2630,238 @@
         }).format(date);
     }
 
+    function normalizeImageUrl(value) {
+        if (!value) return "";
+
+        if (typeof value === "string") {
+            return value.trim();
+        }
+
+        return String(
+            value.url ??
+            value.image_url ??
+            value.public_url ??
+            value.src ??
+            value.key ??
+            ""
+        ).trim();
+    }
+
+    function extractProductImages(item) {
+        const possibleCollections = [
+            item.images,
+            item.product_images,
+            item.photos,
+            item.media
+        ];
+
+        let images = [];
+
+        for (const source of possibleCollections) {
+            if (Array.isArray(source)) {
+                images = source
+                    .map(normalizeImageUrl)
+                    .filter(Boolean);
+
+                if (images.length) break;
+            }
+
+            if (typeof source === "string" && source.trim()) {
+                try {
+                    const parsed = JSON.parse(source);
+
+                    if (Array.isArray(parsed)) {
+                        images = parsed
+                            .map(normalizeImageUrl)
+                            .filter(Boolean);
+                    }
+                } catch (_) {
+                    images = source
+                        .split(",")
+                        .map(value => value.trim())
+                        .filter(Boolean);
+                }
+
+                if (images.length) break;
+            }
+        }
+
+        const singleImages = [
+            item.first_image_url,
+            item.primary_image_url,
+            item.image_url,
+            item.photo_url,
+            item.thumbnail_url,
+            item.featured_image
+        ]
+            .map(normalizeImageUrl)
+            .filter(Boolean);
+
+        return [...new Set([...singleImages, ...images])];
+    }
+
+    function getVersionedProductImageUrl(image) {
+        const rawUrl = String(image?.url || "").trim();
+
+        if (!rawUrl) {
+            return "";
+        }
+
+        const version = String(
+            image?.etag ||
+            image?.updated_at ||
+            image?.uploaded_at ||
+            Date.now()
+        ).replace(/["']/g, "");
+
+        const separator = rawUrl.includes("?") ? "&" : "?";
+
+        return (
+            `${rawUrl}${separator}` +
+            `v=${encodeURIComponent(version)}`
+        );
+    }
+
+    function normalizeSavedProductImages(images = []) {
+        const savedImages = Array.isArray(images)
+            ? images
+            : [];
+
+        return savedImages
+            .filter(image => image && image.url)
+            .sort((first, second) => {
+                return (
+                    Number(second.is_primary || 0) -
+                    Number(first.is_primary || 0)
+                );
+            })
+            .map(image => ({
+                id: String(image.id || ""),
+                url: getVersionedProductImageUrl(image),
+                original_url: String(image.url || ""),
+                alt_text: String(
+                    image.alt_text ||
+                    image.original_name ||
+                    "Product image"
+                ),
+                original_name: String(
+                    image.original_name || ""
+                ),
+                is_primary:
+                    Number(image.is_primary || 0) === 1
+            }))
+            .filter(image => image.url);
+    }
+
+    async function loadImagesForProduct(product) {
+        if (!product?.id) {
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${PRODUCTS_URL}/` +
+                `${encodeURIComponent(product.id)}/images`,
+                {
+                    method: "GET",
+                    headers: authHeaders(),
+                    cache: "no-store"
+                }
+            );
+
+            let result = {};
+
+            try {
+                result = await response.json();
+            } catch (_) {
+                throw new Error(
+                    `Image list returned ${response.status} without valid JSON.`
+                );
+            }
+
+            if (response.status === 401) {
+                logout(
+                    "Your login expired. Please log in again."
+                );
+                throw new Error("Not authorized.");
+            }
+
+            if (response.status === 403) {
+                throw new Error(
+                    result.error ||
+                    result.message ||
+                    "You do not have permission to view product images."
+                );
+            }
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.error ||
+                    result.message ||
+                    "Could not load product images."
+                );
+            }
+
+            product.images =
+                normalizeSavedProductImages(
+                    result.images || []
+                );
+
+            product.image_count =
+                product.images.length;
+
+        } catch (error) {
+            if (
+                error.message !== "Not authorized."
+            ) {
+                console.warn(
+                    `Could not load images for product ${product.id}:`,
+                    error
+                );
+            }
+
+            product.images =
+                Array.isArray(product.images)
+                    ? product.images
+                    : [];
+        }
+    }
+
+    async function loadAllProductImages(productList) {
+        const queue = [...productList];
+        const workerCount = Math.min(6, queue.length);
+
+        async function worker() {
+            while (queue.length) {
+                const product = queue.shift();
+
+                if (!product) {
+                    return;
+                }
+
+                await loadImagesForProduct(product);
+            }
+        }
+
+        await Promise.all(
+            Array.from(
+                { length: workerCount },
+                () => worker()
+            )
+        );
+    }
+
     function normalizeProduct(item) {
+        const images = extractProductImages(item);
+
+        const imageCount = Number(
+            item.image_count ??
+            item.photo_count ??
+            item.images_count ??
+            item.total_images ??
+            images.length
+        );
+
         return {
             id: String(item.id || ""),
             product_id: String(item.product_id || ""),
@@ -1674,6 +2877,15 @@
             reorder_level: Math.max(0, Number(item.reorder_level || 0)),
             status: String(item.status || "draft").toLowerCase(),
             featured: Boolean(item.featured),
+            image_count: Number.isFinite(imageCount) ? Math.max(0, imageCount) : images.length,
+            images: images.map((url, index) => ({
+                id: "",
+                url,
+                original_url: url,
+                alt_text: `${String(item.product_name || "Product")} image ${index + 1}`,
+                original_name: "",
+                is_primary: index === 0
+            })),
             created_at: String(item.created_at || ""),
             updated_at: String(item.updated_at || "")
         };
@@ -1689,9 +2901,17 @@
             throw new Error(`Server returned ${response.status} without valid JSON.`);
         }
 
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
             logout("Your login expired. Please log in again.");
             throw new Error("Not authorized.");
+        }
+
+        if (response.status === 403) {
+            throw new Error(
+                data.error ||
+                data.message ||
+                "You do not have permission for this action."
+            );
         }
 
         if (!response.ok) {
@@ -1758,6 +2978,13 @@
 
             products = list.map(normalizeProduct);
             updateSummary(statsData);
+
+            setApiStatus(
+                "",
+                "Loading product photos…"
+            );
+
+            await loadAllProductImages(products);
             applyFilters();
 
             loadingState.classList.add("hidden");
@@ -1827,7 +3054,48 @@
         renderProducts();
     }
 
+    function renderProductImages(product) {
+        if (
+            !Array.isArray(product.images) ||
+            !product.images.length
+        ) {
+            return "";
+        }
+
+        const firstImage = product.images[0];
+        const remainingCount = product.images.length - 1;
+
+        return `
+            <div class="product-gallery">
+                <span class="gallery-thumb-wrap">
+                    <button
+                        class="gallery-thumb"
+                        type="button"
+                        data-product-id="${escapeHtml(product.id)}"
+                        data-image-url="${escapeHtml(firstImage.url)}"
+                        title="${remainingCount > 0
+                            ? `Show all ${product.images.length} product photos`
+                            : "Open product image"}"
+                        aria-label="${remainingCount > 0
+                            ? `Show all ${product.images.length} product photos`
+                            : "Open product image"}">
+                        <img
+                            src="${escapeHtml(firstImage.url)}"
+                            alt="${escapeHtml(firstImage.alt_text || `${product.product_name} image 1`)}"
+                            loading="lazy"
+                            decoding="async">
+                    </button>
+
+                    ${remainingCount > 0
+                        ? `<span class="gallery-count">+${remainingCount}</span>`
+                        : ""}
+                </span>
+            </div>
+        `;
+    }
+
     function renderProducts() {
+        closeImageGallery();
         productRows.innerHTML = "";
 
         visibleProducts.forEach(product => {
@@ -1848,9 +3116,31 @@
             row.innerHTML = `
       <td class="product-cell" data-label="Product">
         <span class="product-name">${escapeHtml(product.product_name)}</span>
-        <span class="product-id">${escapeHtml(product.product_id || product.id)}</span>
+        <button
+            class="product-id code-button barcode-trigger"
+            type="button"
+            data-barcode-value="${escapeHtml(product.product_id || product.id)}"
+            data-barcode-title="Product ID Barcode">
+            <span>${escapeHtml(product.product_id || product.id)}</span>
+            <span class="barcode-emoji" aria-hidden="true">🏷️</span>
+        </button>
       </td>
-      <td data-label="SKU"><span class="sku">${escapeHtml(product.sku || "—")}</span></td>
+      <td data-label="SKU">
+        <div class="sku-stack">
+            ${renderProductImages(product)}
+
+            ${product.sku
+                ? `<button
+                    class="sku code-button barcode-trigger"
+                    type="button"
+                    data-barcode-value="${escapeHtml(product.sku)}"
+                    data-barcode-title="Store SKU Barcode">
+                    <span>${escapeHtml(product.sku)}</span>
+                    <span class="barcode-emoji" aria-hidden="true">🏷️</span>
+                  </button>`
+                : `<span class="sku">—</span>`}
+        </div>
+      </td>
       <td data-label="Brand">${escapeHtml(product.brand || "—")}</td>
       <td data-label="Category">${escapeHtml(product.category || "—")}</td>
       <td data-label="Price" class="money">${money(product.selling_price)}</td>
@@ -1867,11 +3157,14 @@
  type="button"
  data-id="${escapeHtml(product.id)}">Copy ID</button>
 
-<button
+${product.status === "hidden"
+        ? `<button type="button" class="restore-product" data-id="${escapeHtml(product.id)}">Restore</button>`
+        : ""}
+      <button
  class="small-btn emergency-delete"
  type="button"
  data-id="${escapeHtml(product.id)}"
- data-name="${escapeHtml(product.product_name)}">Emergency Delete</button>
+ data-name="${escapeHtml(product.product_name)}">Manage</button>
 
 </div>
           </td>
@@ -1882,6 +3175,35 @@
 
         emptyState.classList.toggle("hidden", visibleProducts.length !== 0);
         resultCount.textContent = `Showing ${visibleProducts.length.toLocaleString()} of ${products.length.toLocaleString()} products`;
+
+        document.querySelectorAll(".gallery-thumb").forEach(button => {
+            button.setAttribute("aria-expanded", "false");
+
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+
+                const productId =
+                    button.dataset.productId || "";
+
+                const product =
+                    products.find(item =>
+                        String(item.id) ===
+                        String(productId)
+                    );
+
+                openImageGallery(product, button);
+            });
+        });
+
+        document.querySelectorAll(".barcode-trigger").forEach(button => {
+            button.addEventListener("click", () => {
+                openBarcodeModal(
+                    button.dataset.barcodeValue || "",
+                    button.dataset.barcodeTitle || "Barcode",
+                    button
+                );
+            });
+        });
 
         document.querySelectorAll(".copy-id").forEach(button => {
             button.addEventListener("click", async () => {
@@ -1895,48 +3217,96 @@
             });
         });
 
-document.querySelectorAll(".emergency-delete").forEach(button => {button.addEventListener("click", async () => {const id = button.dataset.id || "";const productName = button.dataset.name || "this product";
+document.querySelectorAll(".emergency-delete").forEach(button => {
+    button.addEventListener("click", async () => {
+        const id = button.dataset.id || "";
+        const productName = button.dataset.name || "this product";
+        const product = products.find(item =>
+            String(item.id) === String(id) ||
+            String(item.product_id) === String(id)
+        );
+        const hasPhoto = Number(product?.image_count || 0) > 0;
 
-const firstConfirm = confirm(
-  `EMERGENCY DELETE\n\nPermanently delete "${productName}"?\n\nThis cannot be undone.`
-);
+        const action = await chooseManageAction(
+            "Manage Product",
+            productName,
+            hasPhoto
+        );
 
-if (!firstConfirm) return;
+        if (!action) {
+            showToast("Action cancelled.");
+            return;
+        }
 
-const typedName = prompt(
-  `To confirm permanent deletion, type the product name exactly:\n\n${productName}`
-);
+        if (action === "delete_both") {
+            const typed = prompt(
+                `Type DELETE to permanently delete "${productName}" and all its photos.`
+            );
 
-if (typedName !== productName) {
-  showToast("Delete cancelled. Product name did not match.");
-  return;
-}
+            if (typed !== "DELETE") {
+                showToast("Action cancelled.");
+                return;
+            }
+        }
 
-button.disabled = true;
-button.textContent = "Deleting…";
+        button.disabled = true;
+        button.textContent = "Working…";
 
-try {
-  const result = await requestJson(
-    `${PRODUCTS_URL}/${encodeURIComponent(id)}`,
-    {
-      method: "DELETE",
-      headers: authHeaders()
-    }
-  );
+        try {
+            const result = await requestJson(
+                `${PRODUCTS_URL}/${encodeURIComponent(id)}?action=${encodeURIComponent(action)}`,
+                {
+                    method: "DELETE",
+                    headers: authHeaders()
+                }
+            );
 
-  products = products.filter(product => product.id !== id);
+            if (action === "hide") {
+                const found = products.find(item => String(item.id) === String(id));
+                if (found) found.status = "hidden";
+            } else if (action === "delete_photo") {
+                const found = products.find(item => String(item.id) === String(id));
+                if (found) found.image_count = 0;
+            } else {
+                products = products.filter(product => String(product.id) !== String(id));
+            }
 
-  applyFilters();
-  updateSummary({});
-  showToast(result.message || "Product permanently deleted.");
-} catch (error) {
-  showToast(error.message || "Delete failed.");
-  button.disabled = false;
-  button.textContent = "Emergency Delete";
-}
+            applyFilters();
+            updateSummary({});
+            showToast(result.message || "Action completed.");
+        } catch (error) {
+            showToast(error.message || "Action failed.");
+            button.disabled = false;
+            button.textContent = "Manage";
+        }
+    });
+});
 
-});});
+document.querySelectorAll(".restore-product").forEach(button => {
+    button.addEventListener("click", async () => {
+        const id = button.dataset.id || "";
+        button.disabled = true;
 
+        try {
+            const result = await requestJson(
+                `${PRODUCTS_URL}/${encodeURIComponent(id)}/restore`,
+                {
+                    method: "POST",
+                    headers: authHeaders()
+                }
+            );
+
+            const found = products.find(item => String(item.id) === String(id));
+            if (found) found.status = "active";
+
+            applyFilters();
+            showToast(result.message || "Product restored.");
+        } catch (error) {
+            showToast(error.message || "Restore failed.");
+            button.disabled = false;
+        }
+    });
+});
 
 
     }
